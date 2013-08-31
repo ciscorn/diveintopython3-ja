@@ -1,0 +1,615 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#xml>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#xml>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+en:<title>XML - Dive Into Python 3</title>
+ja:<title>XML - Dive Into Python 3 日本語版</title>
+
+
+en:<h1>XML</h1>
+ja:<h1>XML</h1>
+
+
+en:<p><span class=u>&#x275D;</span> In the archonship of Aristaechmus, Draco enacted his ordinances. <span class=u>&#x275E;</span><br>&mdash; <a href='http://www.perseus.tufts.edu/cgi-bin/ptext?doc=Perseus:text:1999.01.0046;query=chapter%3D%235;layout=;loc=3.1'>Aristotle</a>
+ja:<p><span class=u>&#x275D;</span>アリスタイクモスがアルコンの座に在りし時、ドラコンは法を打ち立てり。<span class=u>&#x275E;</span><br>&mdash; <a href='http://www.perseus.tufts.edu/cgi-bin/ptext?doc=Perseus:text:1999.01.0046;query=chapter%3D%235;layout=;loc=3.1'>アリストテレス</a>
+
+
+en:<p class=f>Nearly all the chapters in this book revolve around a piece of sample code. But <abbr>XML</abbr> isn&#8217;t about code; it&#8217;s about data. One common use of <abbr>XML</abbr> is &#8220;syndication feeds&#8221; that list the latest articles on a blog, forum, or other frequently-updated website. Most popular blogging software can produce a feed and update it whenever new articles, discussion threads, or blog posts are published. You can follow a blog by &#8220;subscribing&#8221; to its feed, and you can follow multiple blogs with a dedicated &#8220;<a href=http://en.wikipedia.org/wiki/List_of_feed_aggregators>feed aggregator</a>&#8221; like <a href=http://www.google.com/reader/>Google Reader</a>.
+ja:<p class=f>この本のほとんどの章はサンプルコードを中心に話をしている。しかし<abbr>XML</abbr>というのは、コードというよりは、データに関するものだ。<abbr>XML</abbr>の一般的な用例として、ブログやフォーラム、その他の頻繁に更新されるウェブサイトの最新記事をリストアップするのに使われる「フィード」がある。有名なブログ用ソフトウェアのほとんどは、フィードを生成して、新しい記事やスレッドや投稿が公開されるたびにフィードの内容を更新する機能を備えている。皆さんがそのブログのフィードを「購読」すれば、そのブログの更新を追うことができ、<a href=http://www.google.com/reader/>Google Reader</a>のような専用の「<a href=http://en.wikipedia.org/wiki/list_of_feed_aggregators>フィードアグリゲータ</a>」を使うことで多数のブログを追いかけることもできる。
+
+
+en:<p>Here, then, is the <abbr>XML</abbr> data we&#8217;ll be working with in this chapter. It&#8217;s a feed&nbsp;&mdash;&nbsp;specifically, an <a href=http://atompub.org/rfc4287.html>Atom syndication feed</a>.
+ja:<p>さて、ここに私たちがこの章で扱っていく<abbr>XML</abbr>データがある。このデータはフィード&nbsp;&mdash;&nbsp;具体的に言うと<a href=http://atompub.org/rfc4287.html>Atomフィード</a>というものだ。
+
+
+en:<p class=d>[<a href=examples/feed.xml>download <code>feed.xml</code></a>]
+ja:<p class=d>[<a href=examples/feed.xml><code>feed.xml</code>をダウンロードする</a>]
+
+
+en:<h2 id=xml-intro>A 5-Minute Crash Course in XML</h2>
+ja:<h2 id=xml-intro>5分間短期集中XML入門コース</h2>
+
+
+en:<p>If you already know about <abbr>XML</abbr>, you can skip this section.
+ja:<p>すでに<abbr>XML</abbr>について知っているのであれば、この節は飛ばしてもかまわない。
+
+
+en:<p><abbr>XML</abbr> is a generalized way of describing hierarchical structured data. An <abbr>XML</abbr> <i>document</i> contains one or more <i>elements</i>, which are delimited by <i>start and end tags</i>. This is a complete (albeit boring) <abbr>XML</abbr> document:
+ja:<p><abbr>XML</abbr>は、階層構造をもつデータを記述するための汎用的な手法だ。<abbr>XML</abbr><em>文書 (document)</em> は1つ以上の<em>要素 (element)</em>を含んでおり、これらの要素は<em>開始タグ</em>と<em>終了タグ</em>によって区切られる。以下は、（退屈だが）完全な<abbr>XML</abbr>文書だ：
+
+
+en:<li>This is the <i>start tag</i> of the <code>foo</code> element.
+ja:<li><code>foo</code>要素の<em>開始タグ</em>だ。
+
+
+en:<li>This is the matching <i>end tag</i> of the <code>foo</code> element. Like balancing parentheses in writing or mathematics or code, every start tag must be <i>closed</i> (matched) by a corresponding end tag.
+ja:<li>そして、こちらは<code>foo</code>要素の開始タグに対応する<em>終了タグ</em>だ。文章や数学やコードにおいて括弧を釣り合わせるのと同じように、すべての開始タグは対応する終了タグによって閉じられなければならない。
+
+
+en:<p>Elements can be <i>nested</i> to any depth. An element <code>bar</code> inside an element <code>foo</code> is said to be a <i>subelement</i> or <i>child</i> of <code>foo</code>.
+ja:<p>要素はどんな深さにまで<em>ネスト</em>されていても良い。<code>foo</code>要素の内部にある<code>bar</code>要素は、<code>foo</code>の<em>子</em> (child) ないし<em>下位要素</em> (subelement) と呼ばれる。
+
+
+en:<p>The first element in every <abbr>XML</abbr> document is called the <i>root element</i>. An <abbr>XML</abbr> document can only have one root element. The following is <strong>not an <abbr>XML</abbr> document</strong>, because it has two root elements:
+ja:<p>あらゆる<abbr>XML</abbr>文書において、一番初めの要素は<em>ルート要素 (root element)</em> と呼ばれる。<abbr>XML</abbr>はルート要素を1つだけ持つことができる。以下は2つのルート要素を持っているので、<strong><abbr>XML</abbr>文書ではない</strong>。
+
+
+en:<p>Elements can have <i>attributes</i>, which are name-value pairs. Attributes are listed within the start tag of an element and separated by whitespace. <i>Attribute names</i> can not be repeated within an element. <i>Attribute values</i> must be quoted. You may use either single or double quotes.
+ja:<p>要素は<em>属性 (attributes)</em> を持つことができる。属性というのは名前と値のペアだ。属性は、開始タグのなかで、空白で区切られて列挙される。同じ<em>属性名</em>を1つの要素の中で繰り返し使うことは許されず、<em>属性値</em>はクォート文字で囲む必要がある。クォートは、シングルクォートとダブルクォートのどちらでもかまわない。
+
+
+en:<li>The <code>foo</code> element has one attribute, named <code>lang</code>. The value of its <code>lang</code> attribute is <code>en</code>.
+ja:<li><code>foo</code>要素は、<code>lang</code>という名前の1つの属性を持っている。この<code>lang</code>属性の値は<code>en</code>だ。
+
+
+en:<li>The <code>bar</code> element has two attributes, named <code>id</code> and <code>lang</code>. The value of its <code>lang</code> attribute is <code>fr</code>. This doesn&#8217;t conflict with the <code>foo</code> element in any way. Each element has its own set of attributes.
+ja:<li><code>bar</code>要素は、<code>id</code>および<code>lang</code>という名前の2つの属性を持っている。<code>lang</code>属性の値は<code>fr</code>になっているが、これが<code>foo</code>要素の<code>lang</code>属性と衝突することは絶対にない。個々の要素の属性は、その要素に固有のものだからだ。
+
+
+en:<p>If an element has more than one attribute, the ordering of the attributes is not significant. An element&#8217;s attributes form an unordered set of keys and values, like a Python dictionary. There is no limit to the number of attributes you can define on each element.
+ja:<p>要素が2つ以上の属性を持っているとき、それらの属性の並び順は意味を持たない。要素の属性というのは、Pythonの辞書のような順序づけされていないキーと値の集合だととらえられる。なお、個々の要素の上に定義できる属性の数に制限はない。
+
+
+en:<p>Elements can have <i>text content</i>.
+ja:<p>要素は<em>テキスト内容</em> (text content) を持つことができる。
+
+
+en:<p>Elements that contain no text and no children are <i>empty</i>.
+ja:<p>テキストも子も持たない要素は<em>空要素</em> (empty element) だ。
+
+
+en:<p>There is a shorthand for writing empty elements. By putting a <code>/</code> character in the start tag, you can skip the end tag altogther. The <abbr>XML</abbr> document in the previous example could be written like this instead:
+ja:<p>空要素を書くための省略表現がある。<code>/</code>を開始タグに付けることで、終了タグを完全に省略することができるのだ。先ほどの<abbr>XML</abbr>文書は、代わりに次のように書くことができる：
+
+
+en:<p>Like Python functions can be declared in different <i>modules</i>, <abbr>XML</abbr> elements can be declared in different <i>namespaces</i>. Namespaces usually look like URLs. You use an <code>xmlns</code> declaration to define a <i>default namespace</i>. A namespace declaration looks similar to an attribute, but it has a different purpose.
+ja:<p>Pythonの関数を異なる<i>モジュール</i>に定義できるのと同様に、<abbr>XML</abbr>要素も異なる<em>名前空間 (namespace)</em>に定義することができる。名前空間は普通はURLのような見た目をしている。<em>デフォルトの名前空間</em>を定義するには、<code>xmlns</code>宣言を使用する。名前空間の宣言は属性に似ているが、異なる目的を持っている。
+
+
+en:<li>The <code>feed</code> element is in the <code>http://www.w3.org/2005/Atom</code> namespace.
+ja:<li><code>feed</code>要素は、<code>http://www.w3.org/2005/Atom</code>名前空間の中にある。
+
+
+en:<li>The <code>title</code> element is also in the <code>http://www.w3.org/2005/Atom</code> namespace. The namespace declaration affects the element where it&#8217;s declared, plus all child elements.
+ja:<li><code>title</code>要素も、<code>http://www.w3.org/2005/Atom</code>名前空間の中にある。名前空間の宣言は、それが定義された要素に加えて、すべての子要素にも影響する。
+
+
+en:<p>You can also use an <code>xmlns:<var>prefix</var></code> declaration to define a namespace and associate it with a <i>prefix</i>. Then each element in that namespace must be explicitly declared with the prefix.
+ja:<p><code>xmlns:<var>prefix</var></code>宣言を使うと、宣言した名前空間を<em>接頭辞 (prefix)</em>に関連づけることができる。その場合、その名前空間にある各要素は、明示的に接頭辞を付けて宣言しなければならなくなる。
+
+
+en:<li>The <code>feed</code> element is in the <code>http://www.w3.org/2005/Atom</code> namespace.
+ja:<li><code>feed</code>要素は、<code>http://www.w3.org/2005/Atom</code>名前空間の中にある。
+
+
+en:<li>The <code>title</code> element is also in the <code>http://www.w3.org/2005/Atom</code> namespace.
+ja:<li><code>title</code>要素も、<code>http://www.w3.org/2005/Atom</code>名前空間の中にある。
+
+
+en:<p>As far as an <abbr>XML</abbr> parser is concerned, the previous two <abbr>XML</abbr> documents are <em>identical</em>. Namespace + element name = <abbr>XML</abbr> identity. Prefixes only exist to refer to namespaces, so the actual prefix name (<code>atom:</code>) is irrelevant. The namespaces match, the element names match, the attributes (or lack of attributes) match, and each element&#8217;s text content matches, therefore the <abbr>XML</abbr> documents are the same.
+ja:<p><abbr>XML</abbr>パーサにとっては、先に示した2つの<abbr>XML</abbr>文書は<em>同一</em>だ。名前空間 + 要素名 = <abbr>XML</abbr>の同一性なのだ。接頭辞は名前空間を参照するためだけに存在しているので、接頭辞の名前 (<code>atom:</code>) 自体は意味を持たない。名前空間が一致し、要素名が一致し、属性の有無と値が一致し、各々の要素のテキスト内容が一致していれば、<abbr>XML</abbr>文書は同一だ。
+
+
+en:<p>Finally, <abbr>XML</abbr> documents can contain <a href=strings.html#one-ring-to-rule-them-all>character encoding information</a> on the first line, before the root element. (If you&#8217;re curious how a document can contain information which needs to be known before the document can be parsed, <a href=http://www.w3.org/TR/REC-xml/#sec-guessing-no-ext-info>Section F of the <abbr>XML</abbr> specification</a> details how to resolve this Catch-22.)
+ja:<p>最後に、<abbr>XML</abbr>文書の最初の行（つまりルート要素の前）には<a href=strings.html#one-ring-to-rule-them-all>文字コード情報</a>を入れることができる（文書をパースするのに必要な情報を、まさにその文書の中に埋め込んで大丈夫なのかと思った人は、<a href=http://www.w3.org/TR/REC-xml/#sec-guessing-no-ext-info><abbr>XML</abbr>仕様書のセクションF</a>にこのジレンマを解決する方法が詳細に説明されているので、そちらを参照してほしい）。
+
+
+en:<p>And now you know just enough <abbr>XML</abbr> to be dangerous!
+ja:<p>さて、あなたは危険に足を踏み入れるには十分なくらい<abbr>XML</abbr>のことを知ったのだ！
+
+
+en:<h2 id=xml-structure>The Structure Of An Atom Feed</h2>
+ja:<h2 id=xml-structure>Atomフィードの構造</h2>
+
+
+en:<p>Think of a weblog, or in fact any website with frequently updated content, like <a href=http://www.cnn.com/>CNN.com</a>. The site itself has a title (&#8220;CNN.com&#8221;), a subtitle (&#8220;Breaking News, U.S., World, Weather, Entertainment <i class=baa>&amp;</i> Video News&#8221;), a last-updated date (&#8220;updated 12:43 p.m. EDT, Sat May 16, 2009&#8221;), and a list of articles posted at different times. Each article also has a title, a first-published date (and maybe also a last-updated date, if they published a correction or fixed a typo), and a unique URL.
+ja:<p>ウェブログのことを思い浮かべてみよう。いや、実際には頻繁に更新されるコンテンツを持ったウェブサイトなら何でもいい。このようなサイトとしては例えば、<a href=http://www.cnn.com/>CNN.com</a>がある。このサイトは、タイトル (&#8220;CNN.com&#8221;) と、サブタイトル (&#8220;Breaking News, U.S., World, Weather, Entertainment <i class=baa>&amp;</i> Video News&#8221;)、最終更新日 (&#8220;updated 12:43 p.m.EDT, Sat May 16, 2009&#8221;) と、異なる時間に投稿された記事のリストを持っている。それぞれの記事もまた、タイトルと、最初に投稿された日時（公開後に訂正されたり誤字が修正された場合は最終更新日時も）と、固有のURLを持っている。
+
+
+en:<p>The Atom syndication format is designed to capture all of this information in a standard format. My weblog and CNN.com are wildly different in design, scope, and audience, but they both have the same basic structure. CNN.com has a title; my blog has a title. CNN.com publishes articles; I publish articles.
+ja:<p>Atom形式は、このすべての情報を標準形式で記録するように設計されている。私のブログとCNN.comは、デザイン・対象領域・読者の点で大きく異なっているが、両者とも同じような基本構造を持っている。CNN.comはタイトルを持ち、私のブログもタイトルを持つ。CNN.comは記事を公開し、私も記事を公開する。
+
+
+en:<p>At the top level is the <i>root element</i>, which every Atom feed shares: the <code>feed</code> element in the <code>http://www.w3.org/2005/Atom</code> namespace.
+ja:<p>トップレベルにあるのは<em>ルート要素</em>だ。この要素（<code>http://www.w3.org/2005/Atom</code>名前空間の<code>feed</code>要素）はどのAtomフィードでも同じだ。
+
+
+en:<li><code>http://www.w3.org/2005/Atom</code> is the Atom namespace.
+ja:<li><code>http://www.w3.org/2005/Atom</code>はAtomの名前空間だ。
+
+
+en:<li>Any element can contain an <code>xml:lang</code> attribute, which declares the language of the element and its children. In this case, the <code>xml:lang</code> attribute is declared once on the root element, which means the entire feed is in English.
+ja:<li>どんな要素にも<code>xml:lang</code>属性を加えることができる。この属性は、その要素とその子要素の言語を宣言する。この例では、<code>xml:lang</code>属性はルート要素で一度だけ宣言されているので、フィード全体が英語で書かれていることがわかる。
+
+
+en:<p>An Atom feed contains several pieces of information about the feed itself. These are declared as children of the root-level <code>feed</code> element.
+ja:<p>Atomフィードの中にはフィード自身に関する情報もいくつか存在している。これらは、ルートレベルの<code>feed</code>要素の子供として宣言されている。
+
+
+en:<li>The title of this feed is <code>dive into mark</code>.
+ja:<li>フィードのタイトルは<code>dive into mark</code>だ。
+
+
+en:<li>The subtitle of this feed is <code>currently between addictions</code>.
+ja:<li>フィードのサブタイトルは<code>currently between addictions</code>だ。
+
+
+en:<li>Every feed needs a globally unique identifier. See <a href=http://www.ietf.org/rfc/rfc4151.txt>RFC 4151</a> for how to create one.
+ja:<li>どのフィードにも識別子をつける必要があるが、この識別子はネット上においてユニークでなければならない。これの作り方については<a href=http://www.ietf.org/rfc/rfc4151.txt>RFC 4151</a>を見てほしい。
+
+
+en:<li>This feed was last updated on March 27, 2009, at 21:56 GMT. This is usually equivalent to the last-modified date of the most recent article.
+ja:<li>このフィードが最後に更新されたのは2009年3月27日の21:56 GMTだ。通常、これは最新記事の最終変更日時と等しい。
+
+
+en:<li>Now things start to get interesting. This <code>link</code> element has no text content, but it has three attributes: <code>rel</code>, <code>type</code>, and <code>href</code>. The <code>rel</code> value tells you what kind of link this is; <code>rel='alternate'</code> means that this is a link to an alternate representation of this feed. The <code>type='text/html'</code> attribute means that this is a link to an <abbr>HTML</abbr> page. And the link target is given in the <code>href</code> attribute.
+ja:<li>面白くなるのはここからだ。この<code>link</code>要素はテキスト内容を持っていないが、3つの属性<code>rel</code>, <code>type</code>, <code>href</code>を持っている。<code>rel</code>の値はこのリンクの種類を伝えている。<code>rel='alternate'</code>というのは、これがこのフィードの代替表現へのリンクだということを意味している。<code>type='text/html'</code>属性は、これが<abbr>HTML</abbr>ページへのリンクだということを意味している。そして、リンクのターゲットは<code>href</code>属性で与えられている。
+
+
+en:<p>Now we know that this is a feed for a site named &#8220;dive into mark&#8220; which is available at <a href=http://diveintomark.org/><code>http://diveintomark.org/</code></a> and was last updated on March 27, 2009.
+ja:<p>私たちは、これが &#8220;dive into mark&#8220; という名前のサイトのフィードであり、そのサイトは<a href=http://diveintomark.org/><code>http://diveintomark.org/</code></a>で利用でき、そのサイトの最終更新日は2009年3月27日だということを知ったのだ。
+
+
+en:<p><span class=u>&#x261E;</span>Although the order of elements can be relevant in some <abbr>XML</abbr> documents, it is not relevant in an Atom feed.
+ja:<p><span class=u>&#x261E;</span>一部の<abbr>XML</abbr>文書では要素の順序が意味を持つことがあるが、Atomフィードでは要素の順序は意味を持たない。
+
+
+en:<p>After the feed-level metadata is the list of the most recent articles. An article looks like this:
+ja:<p>フィード自体に関するメタデータの後は、最新記事のリストになっている。一つ一つの記事は次のように表されている：
+
+
+en:<li>The <code>author</code> element tells who wrote this article: some guy named Mark, whom you can find loafing at <code>http://diveintomark.org/</code>. (This is the same as the alternate link in the feed metadata, but it doesn&#8217;t have to be. Many weblogs have multiple authors, each with their own personal website.)
+ja:<li><code>author</code>要素は、誰がこの記事を書いたのかを伝えている。そいつはMarkという名前で、<code>http://diveintomark.org/</code>に行けばぶらついている彼に会うことができる（このURLはフィードのメタデータにある代替リンクと同じだが、かならずしも同じである必要はない。実際、多くのウェブログは、自分のウェブサイトを持つ執筆者が何人か集まって書いている）。
+
+
+en:<li>The <code>title</code> element gives the title of the article, &#8220;Dive into history, 2009 edition&#8221;.
+ja:<li><code>title</code>要素は記事のタイトル &#8220;Dive into history, 2009 edition&#8221; を表している。
+
+
+en:<li>As with the feed-level alternate link, this <code>link</code> element gives the address of the <abbr>HTML</abbr> version of this article.
+ja:<li>フィードレベルの代替リンクと同様に、この<code>link</code>要素は記事の<abbr>HTML</abbr>版のアドレスを示している。
+
+
+en:<li>Entries, like feeds, need a unique identifier.
+ja:<li>フィードと同様に、エントリには固有の識別子が必要だ。
+
+
+en:<li>Entries have two dates: a first-published date (<code>published</code>) and a last-modified date (<code>updated</code>).
+ja:<li>エントリは2つの日付を持っている: 初めて公開された日時（<code>published</code>）と、最終更新日時（<code>updated</code>）だ。
+
+
+en:<li>Entries can have an arbitrary number of categories. This article is filed under <code>diveintopython</code>, <code>docbook</code>, and <code>html</code>.
+ja:<li>エントリは任意の数のカテゴリを持つことができる。この記事は<code>diveintopython</code>、<code>docbook</code>、<code>html</code>に分類されている。
+
+
+en:<li>The <code>summary</code> element gives a brief summary of the article. (There is also a <code>content</code> element, not shown here, if you want to include the complete article text in your feed.) This <code>summary</code> element has the Atom-specific <code>type='html'</code> attribute, which specifies that this summary is a snippet of <abbr>HTML</abbr>, not plain text. This is important, since it has <abbr>HTML</abbr>-specific entities in it (<code>&amp;mdash;</code> and <code>&amp;hellip;</code>) which should be rendered as &#8220;&mdash;&#8221; and &#8220;&hellip;&#8221; rather than displayed directly.
+ja:<li><code>summary</code>要素は記事の短い要約を与える（ここには示されていないが、フィードに記事の全文を含めたい場合のための<code>content</code>要素も存在する）。この<code>summary</code>要素にはAtom特有の<code>type='html'</code>属性が含まれており、これはこの要約がプレーンテキストではなく<abbr>HTML</abbr>で書かれていることを示している。この属性は見落とすべきではない。なぜなら、この要約には、<abbr>HTML</abbr>特有の実体参照（<code>&amp;mdash;</code>と<code>&amp;hellip;</code>）が含まれているからだ。これらの記号は、そのままの形ではなく、&#8220;&mdash;&#8221; と &#8220;&hellip;&hellip;&#8221; に変換した上で表示しなくてはならない。
+
+
+en:<li>Finally, the end tag for the <code>entry</code> element, signaling the end of the metadata for this article.
+ja:<li>最後に、<code>entry</code>要素の終了タグがこの記事のメタデータの終わりを伝えている。
+
+
+en:<h2 id=xml-parse>Parsing XML</h2>
+ja:<h2 id=xml-parse>XMLをパースする</h2>
+
+
+en:<p>Python can parse <abbr>XML</abbr> documents in several ways. It has traditional <a href=http://en.wikipedia.org/wiki/XML#DOM><abbr>DOM</abbr></a> and <a href=http://en.wikipedia.org/wiki/Simple_API_for_XML><abbr>SAX</abbr></a> parsers, but I will focus on a different library called ElementTree.
+ja:<p>Pythonで<abbr>XML</abbr>文書をパースする方法は何種類かある。これまで伝統的に用いられてきた<a href=http://en.wikipedia.org/wiki/XML#DOM><abbr>DOM</abbr></a>パーサと<a href=http://en.wikipedia.org/wiki/Simple_API_for_XML><abbr>SAX</abbr></a>パーサも使えるが、ここではElementTreeと呼ばれる別のライブラリに注目したい。
+
+
+en:<p class=d>[<a href=examples/feed.xml>download <code>feed.xml</code></a>]
+ja:<p class=d>[<a href=examples/feed.xml><code>feed.xml</code>をダウンロードする</a>]
+
+
+en:<li>The ElementTree library is part of the Python standard library, in <code>xml.etree.ElementTree</code>.
+ja:<li>ElementTreeライブラリはPython標準ライブラリの一部であり、<code>xml.etree.ElementTree</code>に含まれている。
+
+
+en:<li>The primary entry point for the ElementTree library is the <code>parse()</code> function, which can take a filename or a <a href=files.html#file-like-objects>file-like object</a>. This function parses the entire document at once. If memory is tight, there are ways to <a href=http://effbot.org/zone/element-iterparse.htm>parse an <abbr>XML</abbr> document incrementally instead</a>.
+ja:<li>ElementTreeライブラリのメインのエントリポイントは<code>parse()</code>関数であり、この関数はファイル名、もしくは<a href=files.html#file-like-objects>ファイルライクオブジェクト</a>を引数に取る。この関数は文書全体を一度にパースするが、メモリが限られている場合は、<a href=http://effbot.org/zone/element-iterparse.htm><abbr>XML</abbr>文書をインクリメンタルにパースする</a>方法も用意されている。
+
+
+en:<li>The <code>parse()</code> function returns an object which represents the entire document. This is <em>not</em> the root element. To get a reference to the root element, call the <code>getroot()</code> method.
+ja:<li><code>parse()</code>関数は文書全体を表すオブジェクトを返す。このオブジェクトはルート要素<em>ではない</em>。ルート要素の参照を取得するには、<code>getroot()</code>メソッドを呼び出せばいい。
+
+
+en:<li>As expected, the root element is the <code>feed</code> element in the <code>http://www.w3.org/2005/Atom</code> namespace. The string representation of this object reinforces an important point: an <abbr>XML</abbr> element is a combination of its namespace and its tag name (also called the <i>local name</i>). Every element in this document is in the Atom namespace, so the root element is represented as <code>{http://www.w3.org/2005/Atom}feed</code>.
+ja:<li>期待の通り、ルート要素は<code>http://www.w3.org/2005/Atom</code>名前空間にある<code>feed</code>要素だ。このオブジェクトの文字列表現は重要なポイントを強調している。すなわち、<abbr>XML</abbr>要素というのは名前空間とタグ名（ローカル名とも呼ばれる）の組み合わせだということだ。この文書のすべてのタグはAtomの名前空間の中にあるので、ルート要素は<code>{http://www.w3.org/2005/Atom}feed</code>と表現される。
+
+
+en:<p><span class=u>&#x261E;</span>ElementTree represents <abbr>XML</abbr> elements as <code>{<var>namespace</var>}<var>localname</var></code>. You&#8217;ll see and use this format in multiple places in the ElementTree <abbr>API</abbr>.
+ja:<p><span class=u>&#x261E;</span>ElementTreeは<abbr>XML</abbr>要素を<code>{<var>namespace</var>}<var>localname</var></code>と表現する。この形式は、ElementTree <abbr>API</abbr>の様々な場所で見たり使ったりすることになる。
+
+
+en:<h3 id=xml-elements>Elements Are Lists</h3>
+ja:<h3 id=xml-elements>要素はリスト</h3>
+
+
+en:<p>In the ElementTree API, an element acts like a list. The items of the list are the element&#8217;s children.
+ja:<p>ElementTree APIでは、要素はリストのように振る舞う。そのリストのアイテムは、その要素の子供になっている。
+
+
+en:<li>Continuing from the previous example, the root element is <code>{http://www.w3.org/2005/Atom}feed</code>.
+ja:<li>前の例から続けよう。ルート要素は<code>{http://www.w3.org/2005/Atom}feed</code>だ。
+
+
+en:<li>The &#8220;length&#8221; of the root element is the number of child elements.
+ja:<li>ルート要素の「長さ」は子要素の数だ。
+
+
+en:<li>You can use the element itself as an iterator to loop through all of its child elements.
+ja:<li>要素自体をイテレータとして使って、すべての子要素を取得することもできる。
+
+
+en:<li>As you can see from the output, there are indeed 8 child elements: all of the feed-level metadata (<code>title</code>, <code>subtitle</code>, <code>id</code>, <code>updated</code>, and <code>link</code>) followed by the three <code>entry</code> elements.
+ja:<li>この出力から分かるように、実際に8つの子要素がある。最初の5つにはフィードのメタデータがすべて入っており (<code>title</code>, <code>subtitle</code>, <code>id</code>, <code>updated</code>, <code>link</code>)、その後に3つの<code>entry</code>要素が続いている。
+
+
+en:<p>You may have guessed this already, but I want to point it out explicitly: the list of child elements only includes <em>direct</em> children. Each of the <code>entry</code> elements contain their own children, but those are not included in the list. They would be included in the list of each <code>entry</code>&#8217;s children, but they are not included in the list of the <code>feed</code>&#8217;s children. There are ways to find elements no matter how deeply nested they are; we&#8217;ll look at two such ways later in this chapter.
+ja:<p>もうお分かりかもしれないが、子要素のリストは<em>直接の</em>子供だけを含んでいるということを明確に指摘しておきたい。各々の<code>entry</code>要素はさらに子要素を持っているが、それらはこのリストには含まれていない。それらは各々の<code>entry</code>の子供のリストには含まれるだろうが、<code>feed</code>の子供のリストには含まれないのだ。ネストされている要素を、たとえどれだけ深くネストされていても、見つけ出す方法は存在する。のちほど、そのような方法を2つお見せする。
+
+
+en:<h3 id=xml-attributes>Attributes Are Dictonaries</h3>
+ja:<h3 id=xml-attributes>属性は辞書</h3>
+
+
+en:<p><abbr>XML</abbr> isn&#8217;t just a collection of elements; each element can also have its own set of attributes. Once you have a reference to a specific element, you can easily get its attributes as a Python dictionary.
+ja:<p><abbr>XML</abbr>は要素だけで成り立っているわけではない。個々の要素には、それぞれ属性をつけることができるからだ。特定の要素への参照を取得すれば、その要素の属性をPythonの辞書として簡単に取得することができる。
+
+
+en:<li>The <code>attrib</code> property is a dictionary of the element&#8217;s attributes. The original markup here was <code>&lt;feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'></code>. The <code>xml:</code> prefix refers to a built-in namespace that every <abbr>XML</abbr> document can use without declaring it.
+ja:<li><code>attrib</code>プロパティは、この要素の属性の辞書だ。元々のマークアップは<code>&lt;feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'></code>であった。<code>xml:</code>接頭辞は、すべての<abbr>XML</abbr>文書が宣言なしに使用できる組み込みの名前空間を参照している。
+
+
+en:<li>The fifth child&nbsp;&mdash;&nbsp;<code>[4]</code> in a 0-based list&nbsp;&mdash;&nbsp;is the <code>link</code> element.
+ja:<li>5番目の子（インデックスが0から始まるリストの<code>[4]</code>）は<code>link</code>要素だ。
+
+
+en:<li>The <code>link</code> element has three attributes: <code>href</code>, <code>type</code>, and <code>rel</code>.
+ja:<li><code>link</code>要素は3つの属性を持っている：<code>href</code>、<code>type</code>、<code>rel</code>だ。
+
+
+en:<li>The fourth child&nbsp;&mdash;&nbsp;<code>[3]</code> in a 0-based list&nbsp;&mdash;&nbsp;is the <code>updated</code> element.
+ja:<li>4番目の子（インデックスが0から始まるリストの<code>[3]</code>）は<code>updated</code>要素だ。
+
+
+en:<li>The <code>updated</code> element has no attributes, so its <code>.attrib</code> is just an empty dictionary.
+ja:<li><code>updated</code>要素は属性を持っていないので、<code>.attrib</code>は単なる空の辞書だ。
+
+
+en:<h2 id=xml-find>Searching For Nodes Within An XML Document</h2>
+ja:<h2 id=xml-find>XML文書の中からノードを検索する</h2>
+
+
+en:<p>So far, we&#8217;ve worked with this <abbr>XML</abbr> document &#8220;from the top down,&#8221; starting with the root element, getting its child elements, and so on throughout the document. But many uses of <abbr>XML</abbr> require you to find specific elements. Etree can do that, too.
+ja:<p>ここまでは、<abbr>XML</abbr>文章を「トップダウン」方式で扱ってきた。ルート要素から始めて、その子要素を取得して、という過程を文書全体で繰り返していくというわけだ。しかし、<abbr>XML</abbr>の多くの用途では、特定の要素を検索することが必要になる。ElementTreeは、もちろんそれを行うことができる。
+
+
+en:<li>The <code>findall()</code> method finds child elements that match a specific query. (More on the query format in a minute.)
+ja:<li><code>findall()</code>メソッドは、指定されたクエリにマッチする子要素を見つけ出す（クエリの形式はすぐ後で説明する）。
+
+
+en:<li>Each element&nbsp;&mdash;&nbsp;including the root element, but also child elements&nbsp;&mdash;&nbsp;has a <code>findall()</code> method. It finds all matching elements among the element&#8217;s children. But why aren&#8217;t there any results? Although it may not be obvious, this particular query only searches the element&#8217;s children. Since the root <code>feed</code> element has no child named <code>feed</code>, this query returns an empty list.
+ja:<li>すべての要素（ルート要素だけでなく子要素も）が<code>findall()</code>メソッドを持っている。このメソッドはクエリにマッチするすべての要素を子要素の中から見つけ出す。しかし、どうして結果が一つも得られないのだろうか？ わかりにくいかもしれないが、このクエリは要素の子供だけを検索するのだ。ルート要素<code>feed</code>は、<code>feed</code>という名前の子を持っていないので、このクエリは空のリストを返す。
+
+
+en:<li>This result may also surprise you. <a href=#divingin>There is an <code>author</code> element</a> in this document; in fact, there are three (one in each <code>entry</code>). But those <code>author</code> elements are not <em>direct children</em> of the root element; they are &#8220;grandchildren&#8221; (literally, a child element of a child element). If you want to look for <code>author</code> elements at any nesting level, you can do that, but the query format is slightly different.
+ja:<li>この結果も意外かもしれない。この文書には<a href=#divingin><code>author</code>要素が含まれているはずだからだ</a>。実際、この文書の中に<code>author</code>要素は3つ存在する（それぞれの<code>entry</code>にある）。しかし、これらの<code>author</code>要素はルート要素の<em>直接の子供</em>ではなく、「孫」（文字通り、子要素の子要素）にあたる。すべてのネストレベルの<code>author</code>要素を探したいのであれば、もちろんそれは可能だが、クエリの形式は少し違ったものになる。
+
+
+en:<li>For convenience, the <code>tree</code> object (returned from the <code>etree.parse()</code> function) has several methods that mirror the methods on the root element. The results are the same as if you had called the <code>tree.getroot().findall()</code> method.
+ja:<li>便宜上、（<code>etree.parse()</code>関数から返される）<code>tree</code>オブジェクトには、ルート要素のメソッドがいくつかそのまま移植されている。このメソッドを実行すると、<code>tree.getroot().findall()</code>を呼び出したときとまったく同じ結果がえられる。
+
+
+en:<li>Perhaps surprisingly, this query does not find the <code>author</code> elements in this document. Why not? Because this is just a shortcut for <code>tree.getroot().findall('{http://www.w3.org/2005/Atom}author')</code>, which means &#8220;find all the <code>author</code> elements that are children of the root element.&#8221; The <code>author</code> elements are not children of the root element; they&#8217;re children of the <code>entry</code> elements. Thus the query doesn&#8217;t return any matches.
+ja:<li>意外かもしれないが、このクエリはこの文書の<code>author</code>要素を探し出さない。なぜだろう？ なぜならこれは<code>tree.getroot().findall('{http://www.w3.org/2005/Atom}author')</code>のショートカットに過ぎず、「ルート要素の子供の<code>author</code>要素を探す」ことを意味しているからだ。<code>author</code>要素はルート要素の子供でななく、<code>entry</code>要素の子供だ。従って、このクエリはマッチする要素を一つも返さない。
+
+
+en:<p>There is also a <code>find()</code> method which returns the first matching element. This is useful for situations where you are only expecting one match, or if there are multiple matches, you only care about the first one.
+ja:<p>最初にマッチした要素を返す<code>find()</code>メソッドもある。このメソッドは、マッチするのは1つだけだと考えられる場合や、複数のマッチがあったとしても、その1つ目にしか興味がないときに便利だ。
+
+
+en:<li>You saw this in the previous example. It finds all the <code>atom:entry</code> elements.
+ja:<li>これは前の例で見ている。これはすべての<code>atom:entry</code>要素を見つけ出す。
+
+
+en:<li>The <code>find()</code> method takes an ElementTree query and returns the first matching element.
+ja:<li><code>find()</code>メソッドはElementTreeのクエリを引数に取り、最初にマッチする要素を返す。
+
+
+en:<li>There are no elements in this entry named <code>foo</code>, so this returns <code>None</code>.
+ja:<li>このエントリに<code>foo</code>という要素は存在しないので、これは<code>None</code>を返す。
+
+
+en:<p><span class=u>&#x261E;</span>There is a &#8220;gotcha&#8221; with the <code>find()</code> method that will eventually bite you. In a boolean context, ElementTree element objects will evaluate to <code>False</code> if they contain no children (<i>i.e.</i> if <code>len(element)</code> is 0). This means that <code>if element.find('...')</code> is not testing whether the <code>find()</code> method found a matching element; it&#8217;s testing whether that matching element has any child elements! To test whether the <code>find()</code> method returned an element, use <code>if element.find('...') is not None</code>.
+ja:<p><span class=u>&#x261E;</span><code>find()</code>メソッドには、いつかあなたを噛むであろう「ワナ」が存在する。ブール値のコンテクストにおいて、ElementTreeの要素オブジェクトは子要素を含んでいないときに（つまり<code>len(element)</code>が0のときに）<code>False</code>と評価されるのだ。したがって、<code>if element.find('...')</code>は、<code>find()</code>メソッドがマッチする要素を見つけたかどうかをテストしているのではなく、マッチした要素が子要素を持つかどうかをテストしているのだ！ <code>find()</code>メソッドが要素を返したかどうかテストしたいなら、<code>if element.find('...') is not None</code>を使おう。
+
+
+en:<p>There <em>is</em> a way to search for <em>descendant</em> elements, <i>i.e.</i> children, grandchildren, and any element at any nesting level.
+ja:<p><em>子孫</em>要素（つまり、子供・孫・任意のネストレベルの要素）を検索する方法は<em>実際に存在する</em>。
+
+
+en:<li>This query&nbsp;&mdash;&nbsp;<code>//{http://www.w3.org/2005/Atom}link</code>&nbsp;&mdash;&nbsp;is very similar to the previous examples, except for the two slashes at the beginning of the query. Those two slashes mean &#8220;don&#8217;t just look for direct children; I want <em>any</em> elements, regardless of nesting level.&#8221; So the result is a list of four <code>link</code> elements, not just one.
+ja:<li>このクエリ<code>//{http://www.w3.org/2005/Atom}link</code>は先ほどの例と非常に似ているが、クエリの先頭に2つのスラッシュが付いている。これら2つのスラッシュは、「直接の子供だけを探さないでほしい。ネストレベルに関係なく、<em>すべての</em>要素を探したいのだ」ということを意味している。したがって、結果は1つだけではなく、4つの<code>link</code>要素のリストになる。
+
+
+en:<li>The first result <em>is</em> a direct child of the root element. As you can see from its attributes, this is the feed-level alternate link that points to the <abbr>HTML</abbr> version of the website that the feed describes.
+ja:<li>1つ目の結果はルート要素の直接の子だ。この属性から分かるとおり、これはフィードが表しているウェブサイトの<abbr>HTML</abbr>版を指すフィードレベルの代替リンクだ。
+
+
+en:<li>The other three results are each entry-level alternate links. Each <code>entry</code> has a single <code>link</code> child element, and because of the double slash at the beginning of the query, this query finds all of them.
+ja:<li>他の3つはそれぞれエントリレベルの代替リンクだ。各々の<code>entry</code>は単一の<code>link</code>子要素を持っており、クエリの先頭に2つのスラッシュによって、このクエリはこれらすべてを探し出す。
+
+
+en:<p>Overall, ElementTree&#8217;s <code>findall()</code> method is a very powerful feature, but the query language can be a bit surprising. It is officially described as &#8220;<a href=http://effbot.org/zone/element-xpath.htm>limited support for XPath expressions</a>.&#8221; <a href=http://www.w3.org/TR/xpath>XPath</a> is a W3C standard for querying <abbr>XML</abbr> documents. ElementTree&#8217;s query language is similar enough to XPath to do basic searching, but dissimilar enough that it may annoy you if you already know XPath. Now let&#8217;s look at a third-party <abbr>XML</abbr> library that extends the ElementTree <abbr>API</abbr> with full XPath support.
+ja:<p>総じてみると、ElementTreeの<code>findall()</code>メソッドは強力な機能だと言えるが、クエリ言語には少し分かりづらい部分がある。この点については公式に「<a href=http://effbot.org/zone/element-xpath.htm>XPath式を限定的にサポートする</a>」と説明されている。<a href=http://www.w3.org/TR/xpath>XPath</a>はW3C標準の<abbr>XML</abbr>用クエリ言語だ。ElementTreeのクエリ言語は基本的な検索には十分なくらいXPathに似ているが、すでにXPathを知っている人にとっては、十分に煩わしい程度の違いもある。今度は、XPathを完全にサポートするようにElementTree APIを拡張した、サードパーティ製の<abbr>XML</abbr>ライブラリを見てみよう。
+
+
+en:<h2 id=xml-lxml>Going Further With lxml</h2>
+ja:<h2 id=xml-lxml>lxmlを使ってさらに踏み込む</h2>
+
+
+en:<p><a href=http://codespeak.net/lxml/><code>lxml</code></a> is an open source third-party library that builds on the popular <a href=http://www.xmlsoft.org/>libxml2 parser</a>. It provides a 100% compatible ElementTree <abbr>API</abbr>, then extends it with full XPath 1.0 support and a few other niceties. There are <a href=http://pypi.python.org/pypi/lxml/>installers available for Windows</a>; Linux users should always try to use distribution-specific tools like <code>yum</code> or <code>apt-get</code> to install precompiled binaries from their repositories. Otherwise you&#8217;ll need to <a href=http://codespeak.net/lxml/installation.html>install <code>lxml</code> manually</a>.
+ja:<p><a href=http://codespeak.net/lxml/><code>lxml</code></a>は広く使われている<a href=http://www.xmlsoft.org/>libxml2パーサ</a>の上に構築されたオープンソースのサードパーティ製ライブラリだ。このライブラリは、100%の互換性を持たせる形でElementTree <abbr>API</abbr>を実装しており、さらにそこへXPath 1.0のフルサポートと細かな改良を付け加えている。<a href=http://pypi.python.org/pypi/lxml/>Windowsにはインストーラが用意されている</a>。Linuxユーザは、できるだけ各ディストリビューションに付属している<code>yum</code>や<code>apt-get</code>などのツールを使って、リポジトリからコンパイル済バイナリを取得するようにしてほしい。さもないと、<a href=http://codespeak.net/lxml/installation.html><code>lxml</code>を手動でインストールすることになる。
+
+
+en:<li>Once imported, <code>lxml</code> provides the same <abbr>API</abbr> as the built-in ElementTree library.
+ja:<li>インポートすれば、あとは組み込みのElementTreeライブラリと同じ<abbr>API</abbr>が使える。
+
+
+en:<li><code>parse()</code> function: same as ElementTree.
+ja:<li><code>parse()</code>関数：ElementTreeと同じ。
+
+
+en:<li><code>getroot()</code> method: also the same.
+ja:<li><code>getroot()</code>メソッド：これも同じ。
+
+
+en:<li><code>findall()</code> method: exactly the same.
+ja:<li><code>findall()</code>メソッド：まったく同じ。
+
+
+en:<p>For large <abbr>XML</abbr> documents, <code>lxml</code> is significantly faster than the built-in ElementTree library. If you&#8217;re only using the ElementTree <abbr>API</abbr> and want to use the fastest available implementation, you can try to import <code>lxml</code> and fall back to the built-in ElementTree.
+ja:<p>巨大な<abbr>XML</abbr>文書を扱う場合、<code>lxml</code>の処理は組み込みのElementTreeライブラリよりもはるかに高速だ。ElementTreeの<abbr>API</abbr>だけを使っていて、かつ利用できるライブラリの中で最も速い実装を使いたいのであれば、まずは<code>lxml</code>をインポートしてみて、エラーが出るようなら組み込みのElementTreeにフォールバックするといい。
+
+
+en:<p>But <code>lxml</code> is more than just a faster ElementTree. Its <code>findall()</code> method includes support for more complicated expressions.
+ja:<p>しかし<code>lxml</code>はElementTreeより高速なだけではない。<code>lxml</code>の<code>findall()</code>メソッドはもっと複雑な式をサポートしている。
+
+
+en:<li>In this example, I&#8217;m going to <code>import lxml.etree</code> (instead of, say, <code>from lxml import etree</code>), to emphasize that these features are specific to <code>lxml</code>.
+ja:<li>この例では、（<code>from lxml import etree</code>とする代わりに）<code>import lxml.etree</code>することで、以下の機能が<code>lxml</code>特有のものだということを強調している。
+
+
+en:<li>This query finds all elements in the Atom namespace, anywhere in the document, that have an <code>href</code> attribute. The <code>//</code> at the beginning of the query means &#8220;elements anywhere (not just as children of the root element).&#8221; <code>{http://www.w3.org/2005/Atom}</code> means &#8220;only elements in the Atom namespace.&#8221; <code>*</code> means &#8220;elements with any local name.&#8221; And <code>[@href]</code> means &#8220;has an <code>href</code> attribute.&#8221;
+ja:<li>このクエリは、<abbr>XML</abbr>文書全体を対象として、<code>href</code>属性を持つAtom名前空間の要素をすべて探し出す。クエリの先頭にある<code>//</code>は、「（ルート要素の子供だけではなく）あらゆる要素を探索する」ことを意味する。<code>{http://www.w3.org/2005/Atom}</code>は、「Atomの名前空間の要素だけ」を意味する。<code>*</code>は「どんなローカル名を持つ要素でもいい」ことを意味する。そして、<code>[@href]</code>は「<code>href</code>属性を持っている」ことを意味する。
+
+
+en:<li>The query finds all Atom elements with an <code>href</code> whose value is <code>http://diveintomark.org/</code>.
+ja:<li>このクエリは、<code>http://diveintomark.org/</code>を値とする<code>href</code>属性を持つAtom要素を全て探し出す。
+
+
+en:<li>After doing some quick <a href=strings.html#formatting-strings>string formatting</a> (because otherwise these compound queries get ridiculously long), this query searches for Atom <code>author</code> elements that have an Atom <code>uri</code> element as a child. This only returns two <code>author</code> elements, the ones in the first and second <code>entry</code>. The <code>author</code> in the last <code>entry</code> contains only a <code>name</code>, not a <code>uri</code>.
+ja:<li>ちょっとした<a href=strings.html#formatting-strings>文字列フォーマット</a>を施した上で（これをしないと、合成したクエリはばかばかしいほど長くなってしまう）、このクエリは、Atomの<code>uri</code>要素を子要素として持つAtomの<code>author</code>要素を検索する。これは、1つ目と2つ目の<code>entry</code>要素の中にある2つの<code>author</code>要素だけを返す。最後の<code>entry</code>にある<code>author</code>は<code>name</code>だけを含んでおり、<code>uri</code>は含んでいないからだ。
+
+
+en:<p>Not enough for you? <code>lxml</code> also integrates support for arbitrary XPath 1.0 expressions. I&#8217;m not going to go into depth about XPath syntax; that could be a whole book unto itself! But I will show you how it integrates into <code>lxml</code>.
+ja:<p>これだけでは満足できないだろうか？ <code>lxml</code>はあらゆるXPath 1.0式をサポートしているのだが、ここでXPathの構文に深入りするつもりはない。真面目に書こうとすれば、それだけで一冊の本になってしまうからだ！ しかし、<code>lxml</code>がどのようにXPathをサポートしているのかは示しておこう。
+
+
+en:<li>To perform XPath queries on namespaced elements, you need to define a namespace prefix mapping. This is just a Python dictionary.
+ja:<li>名前空間の付いた要素の上でXPathのクエリを実行するには、名前空間の接頭辞のマッピングを定義する必要がある。これは単なるPythonの辞書だ。
+
+
+en:<li>Here is an XPath query. The XPath expression searches for <code>category</code> elements (in the Atom namespace) that contain a <code>term</code> attribute with the value <code>accessibility</code>. But that&#8217;s not actually the query result. Look at the very end of the query string; did you notice the <code>/..</code> bit? That means &#8220;and then return the parent element of the <code>category</code> element you just found.&#8221; So this single XPath query will find all entries with a child element of <code>&lt;category term='accessibility'></code>.
+ja:<li>これがXPathのクエリだ。このXPath式は、<code>accessibility</code>という値を持つ<code>term</code>属性を含んだ（Atomの名前空間の）<code>category</code>要素を探し出す。しかし、実際に返されるのは<code>category</code>要素のリストではない。クエリ文字列の一番最後を見てほしい。<code>/..</code>という部分に気づいただろうか？ これは「見つけた<code>category</code>要素の親要素を返してくれ」という意味だ。つまり、このXPathクエリを実行すると、<code>&lt;category term='accessibility'></code>という子要素を持つすべての要素が返されるのだ。
+
+
+en:<li>The <code>xpath()</code> function returns a list of ElementTree objects. In this document, there is only one entry with a <code>category</code> whose <code>term</code> is <code>accessibility</code>.
+ja:<li><code>xpath()</code>関数はElementTreeオブジェクトのリストを返す。この文書には、<code>term</code>属性の値が<code>accessibility</code>である<code>category</code>要素は1つだけ存在する。
+
+
+en:<li>XPath expressions don&#8217;t always return a list of elements. Technically, the <abbr>DOM</abbr> of a parsed <abbr>XML</abbr> document doesn&#8217;t contain elements; it contains <i>nodes</i>. Depending on their type, nodes can be elements, attributes, or even text content. The result of an XPath query is a list of nodes. This query returns a list of text nodes: the text content (<code>text()</code>) of the <code>title</code> element (<code>atom:title</code>) that is a child of the current element (<code>./</code>).
+ja:<li>XPath式は常に要素のリストを返すわけではない。厳密に言えば、パースした<abbr>XML</abbr>文書の<abbr>DOM</abbr>に含まれているのは要素ではなく、<i>ノード</i>だからだ。ノードの種類に応じて、ノードの内容は要素であったり、属性であったり、テキスト内容であったりする。XPathクエリを実行することで得られるのはノードのリストなのだ。実際、このクエリはテキストノードのリストを返しており、その中身は現在の要素の子 (<code>./</code>) の<code>title</code>要素 (<code>atom:title</code>) のテキスト内容 (<code>text()</code>) になっている。
+
+
+en:<h2 id=xml-generate>Generating XML</h2>
+ja:<h2 id=xml-generate>XMLを生成する</h2>
+
+
+en:<p>Python&#8217;s support for <abbr>XML</abbr> is not limited to parsing existing documents. You can also create <abbr>XML</abbr> documents from scratch.
+ja:<p>Pythonがサポートするのは、既存の<abbr>XML</abbr>文書をパースすることだけに留まらない。<abbr>XML</abbr>文書をゼロから作成することもできるのだ。
+
+
+en:<li>To create a new element, instantiate the <code>Element</code> class. You pass the element name (namespace + local name) as the first argument. This statement creates a <code>feed</code> element in the Atom namespace. This will be our new document&#8217;s root element.
+ja:<li>新しい要素を作るには、<code>Element</code>クラスをインスタンス化すればいい。最初の引数として要素名（名前区間 + ローカル名）を渡そう。この文はAtomの名前区間にある<code>feed</code>要素を作成するが、これが私たちの新しい文書のルート要素になる。
+
+
+en:<li>To add attributes to the newly created element, pass a dictionary of attribute names and values in the <var>attrib</var> argument. Note that the attribute name should be in the standard ElementTree format, <code>{<var>namespace</var>}<var>localname</var></code>.
+ja:<li>新しく作成した要素に属性を追加するには、属性名と属性値の辞書を<var>attrib</var>引数で渡せばいい。属性名はElementTreeの標準形式<code>{<var>namespace</var>}<var>localname</var></code>で書かなければいけないことに注意しよう。
+
+
+en:<li>At any time, you can serialize any element (and its children) with the ElementTree <code>tostring()</code> function.
+ja:<li>ElementTreeの<code>tostring()</code>関数を使えば、任意の要素（とその子供）をいつでもシリアライズできる。
+
+
+en:<p>Was that serialization surprising to you? The way ElementTree serializes namespaced <abbr>XML</abbr> elements is technically accurate but not optimal. The sample <abbr>XML</abbr> document at the beginning of this chapter defined a <i>default namespace</i> (<code>xmlns='http://www.w3.org/2005/Atom'</code>). Defining a default namespace is useful for documents&nbsp;&mdash;&nbsp;like Atom feeds&nbsp;&mdash;&nbsp;where every element is in the same namespace, because you can declare the namespace once and declare each element with just its local name (<code>&lt;feed></code>, <code>&lt;link></code>, <code>&lt;entry></code>). There is no need to use any prefixes unless you want to declare elements from another namespace.
+ja:<p>このシリアライズ結果は意外だっただろうか？ ElementTreeが名前空間付きの<abbr>XML</abbr>要素をシリアライズする方法は、技術的には正確だが最適なものではない。この章のはじめに載せた<abbr>XML</abbr>文書のサンプルでは、「デフォルトの名前空間」(<code>xmlns='http://www.w3.org/2005/Atom'</code>) を定義していた。このようにデフォルトの名前空間を定義することは、Atomフィードのようにすべての要素が同じ名前空間にある文書にとっては有用だ。なぜなら、名前区間を一度だけ定義すれば、各々の要素はローカル名 (<code>&lt;feed></code>、<code>&lt;link></code>、<code>&lt;entry></code>) だけで宣言することができるからだ。他の名前空間の要素を宣言するのでなければ、接頭辞をつける必要はまったく無いのだ。
+
+
+en:<p>An <abbr>XML</abbr> parser won&#8217;t &#8220;see&#8221; any difference between an <abbr>XML</abbr> document with a default namespace and an <abbr>XML</abbr> document with a prefixed namespace. The resulting <abbr>DOM</abbr> of this serialization:
+ja:<p><abbr>XML</abbr>パーサは、デフォルト名前空間をもつ<abbr>XML</abbr>文書と、接頭辞のついた<abbr>XML</abbr>文書の違いを「理解しない」。次のシリアライズの<abbr>DOM</abbr>は：
+
+
+en:<p>is identical to the <abbr>DOM</abbr> of this serialization:
+ja:<p>次のシリアライズの<abbr>DOM</abbr>と同一だ：
+
+
+en:<p>The only practical difference is that the second serialization is several characters shorter. If we were to recast our entire sample feed with a <code>ns0:</code> prefix in every start and end tag, it would add 4 characters per start tag &times; 79 tags + 4 characters for the namespace declaration itself, for a total of 320 characters. Assuming <a href=strings.html#byte-arrays>UTF-8 encoding</a>, that&#8217;s 320 extra bytes. (After gzipping, the difference drops to 21 bytes, but still, 21 bytes is 21 bytes.) Maybe that doesn&#8217;t matter to you, but for something like an Atom feed, which may be downloaded several thousand times whenever it changes, saving a few bytes per request can quickly add up.
+ja:<p>実用上問題となる違いは、2番目のシリアライズの方が何文字か短いということだけだ。サンプルフィード中の開始タグと終了タグすべてに<code>ns0:</code>接頭辞を付けると、開始タグごとに4文字 &times; 79タグ + 名前空間の宣言に使う4文字で、合計320文字になる。<a href=strings.html#byte-arrays>UTF-8エンコーディング</a>を使うとすると、この余分な文字だけで320バイトになる（gzip圧縮すると増分は21バイトになるが、それでも21バイトは21バイトだ）。だから何なのかと思うかもしれないが、Atomフィードのように、更新されるたびに何千回もダウンロードされるようなものについては、数バイト減らすだけでもすぐに大きな差につながりうるのだ。
+
+
+en:<p>The built-in ElementTree library does not offer this fine-grained control over serializing namespaced elements, but <code>lxml</code> does.
+ja:<p>組み込みのElementTreeでは、名前空間のついた要素のシリアライズを細かく制御することはできないが、<code>lxml</code>を使えばそれができる。
+
+
+en:<li>To start, define a namespace mapping as a dictionary. Dictionary values are namespaces; dictionary keys are the desired prefix. Using <code>None</code> as a prefix effectively declares a default namespace.
+ja:<li>準備として、名前空間のマッピングを辞書として定義する。辞書の値は名前空間で、辞書のキーは使用したい接頭辞だ。接頭辞として<code>None</code>を使うと、結果的にデフォルト名前区間を定義することになる。
+
+
+en:<li>Now you can pass the <code>lxml</code>-specific <var>nsmap</var> argument when you create an element, and <code>lxml</code> will respect the namespace prefixes you&#8217;ve defined.
+ja:<li>要素を作成するときに<var>nsmap</var>引数（この引数は<code>lxml</code>にしかない）を渡せば、<code>lxml</code>は定義した接頭辞を考慮してくれる。
+
+
+en:<li>As expected, this serialization defines the Atom namespace as the default namespace and declares the <code>feed</code> element without a namespace prefix.
+ja:<li>予想通り、このシリアライズはAtomの名前空間をデフォルトの名前空間として定義しており、名前空間の接頭辞を使わずに<code>feed</code>要素を宣言している。
+
+
+en:<li>Oops, we forgot to add the <code>xml:lang</code> attribute. You can always add attributes to any element with the <code>set()</code> method. It takes two arguments: the attribute name in standard ElementTree format, then the attribute value. (This method is not <code>lxml</code>-specific. The only <code>lxml</code>-specific part of this example was the <var>nsmap</var> argument to control the namespace prefixes in the serialized output.)
+ja:<li>おっと、<code>xml:lang</code>属性を追加するのを忘れていた。<code>set()</code>メソッドを使えば任意の要素にいつでも属性を追加できる。このメソッドは2つの引数をとる: ElementTreeの標準形式での属性名と、属性の値だ（このメソッドは<code>lxml</code>固有のものではない。この例で<code>lxml</code>に特有な部分は、シリアライズ出力の名前空間の接頭辞を制御するための<var>nsmap</var>引数だけだ）。
+
+
+en:<p>Are <abbr>XML</abbr> documents limited to one element per document? No, of course not. You can easily create child elements, too.
+ja:<p>1つの<abbr>XML</abbr>文書には1つの要素しか宣言できないのだろうか？ もちろんそんなはずはない。子要素も簡単に作成できる。
+
+
+en:<li>To create a child element of an existing element, instantiate the <code>SubElement</code> class. The only required arguments are the parent element (<var>new_feed</var> in this case) and the new element&#8217;s name. Since this child element will inherit the namespace mapping of its parent, there is no need to redeclare the namespace or prefix here.
+ja:<li>既存の要素の子要素を作るには、<code>SubElement</code>クラスをインスタンス化すればいい。要求される引数は親要素（この場合は<var>new_feed</var>）と新しい要素の名前だけだ。この子要素は、親要素の名前空間のマッピングを継承するので、名前空間や接頭語を再び宣言する必要はない。
+
+
+en:<li>You can also pass in an attribute dictionary. Keys are attribute names; values are attribute values.
+ja:<li>属性の辞書を渡すこともできる。キーは属性名で、値は属性値だ。
+
+
+en:<li>As expected, the new <code>title</code> element was created in the Atom namespace, and it was inserted as a child of the <code>feed</code> element. Since the <code>title</code> element has no text content and no children of its own, <code>lxml</code> serializes it as an empty element (with the <code>/></code> shortcut).
+ja:<li>予想通り、新しい<code>title</code>要素はAtomの名前空間の中に作られ、<code>feed</code>要素の子として挿入されている。<code>title</code>要素はテキスト内容や自身の子供を持たないので、<code>lxml</code>はこれを（<code>/></code>ショートカットを使った）空要素としてシリアライズする。
+
+
+en:<li>To set the text content of an element, simply set its <code>.text</code> property.
+ja:<li>要素のテキスト内容を設定するには、単にその要素の<code>.text</code>プロパティを設定すればいい。
+
+
+en:<li>Now the <code>title</code> element is serialized with its text content. Any text content that contains less-than signs or ampersands needs to be escaped when serialized. <code>lxml</code> handles this escaping automatically.
+ja:<li>ここで<code>title</code>要素はテキスト内容と共にシリアライズされている。小なり記号やアンパサンドを含んだテキスト内容は、シリアライズ時にエスケープされる必要がある。<code>lxml</code>はこのエスケープを自動的に処理してくれる。
+
+
+en:<li>You can also apply &#8220;pretty printing&#8221; to the serialization, which inserts line breaks after end tags, and after start tags of elements that contain child elements but no text content. In technical terms, <code>lxml</code> adds &#8220;insignificant whitespace&#8221; to make the output more readable.
+ja:<li>シリアライズ処理に&#8220;pretty printing&#8221;を適用することもできる。これは、終了タグの後ろや、子要素を持つがテキスト内容を持たない要素の開始タグの後ろに改行を挿入する。専門用語で言えば、<code>lxml</code>は「意味のない空白 (insignificant whitespace)」を加えることによって、結果をより読みやすいものにするのだ。
+
+
+en:<p><span class=u>&#x261E;</span>You might also want to check out <a href=http://github.com/galvez/xmlwitch/tree/master>xmlwitch</a>, another third-party library for generating <abbr>XML</abbr>. It makes extensive use of <a href=special-method-names.html#context-managers>the <code>with</code> statement</a> to make <abbr>XML</abbr> generation code more readable.
+ja:<p><span class=u>&#x261E;</span><abbr>XML</abbr>を生成するための別のサードパーティ製ライブラリである<a href=http://github.com/galvez/xmlwitch/tree/master>xmlwitch</a>を調べてみるのもよいだろう。このライブラリは<abbr>XML</abbr>の生成コードをより読みやすくするために、<a href=special-method-names.html#context-managers><code>with</code>文</a>を広く活用している。
+
+
+en:<h2 id=xml-custom-parser>Parsing Broken XML</h2>
+ja:<h2 id=xml-custom-parser>壊れたXMLをパースする</h2>
+
+
+en:<p>The <abbr>XML</abbr> specification mandates that all conforming <abbr>XML</abbr> parsers employ &#8220;draconian error handling.&#8221; That is, they must halt and catch fire as soon as they detect any sort of wellformedness error in the <abbr>XML</abbr> document. Wellformedness errors include mismatched start and end tags, undefined entities, illegal Unicode characters, and a number of other esoteric rules. This is in stark contrast to other common formats like <abbr>HTML</abbr>&nbsp;&mdash;&nbsp;your browser doesn&#8217;t stop rendering a web page if you forget to close an <abbr>HTML</abbr> tag or escape an ampersand in an attribute value. (It is a common misconception that <abbr>HTML</abbr> has no defined error handling. <a href=http://www.whatwg.org/specs/web-apps/current-work/multipage/syntax.html#parsing><abbr>HTML</abbr> error handling</a> is actually quite well-defined, but it&#8217;s significantly more complicated than &#8220;halt and catch fire on first error.&#8221;)
+ja:<p><abbr>XML</abbr>の仕様によれば、仕様に準拠した<abbr>XML</abbr>パーサは「厳格なエラー処理」を行わなくてはならないものとされている。つまり、<abbr>XML</abbr>文書の中に何か一つでも整形式性エラーが見つかれば、すぐさま処理を停止して例外を送出しなくてはならないのだ。整形式性エラーとは、開始タグと終了タグのミスマッチや、未定義の実体、不正なUnicode文字列といったものであり、他にも数々の難解な規則が存在している。これは<abbr>HTML</abbr>のようなほかの一般的なデータ形式とはまったく対照的だ&nbsp;&mdash;&nbsp;ブラウザは、<abbr>HTML</abbr>タグを閉じ忘れたり、属性値の中でアンパサンド (&amp;) をエスケープし忘れても、ウェブページのレンダリングを中断することはない（<abbr>HTML</abbr>にエラー処理が定義されていないというのは良くある誤解だ。<a href=http://www.whatwg.org/specs/web-apps/current-work/multipage/syntax.html#parsing><abbr>HTML</abbr>のエラー処理</a>は実は非常に明確に定義されているのだが、「エラーが見つかりしだい処理を停止する」よりも著しく複雑なのだ）。
+
+
+en:<p>Some people (myself included) believe that it was a mistake for the inventors of <abbr>XML</abbr> to mandate draconian error handling. Don&#8217;t get me wrong; I can certainly see the allure of simplifying the error handling rules. But in practice, the concept of &#8220;wellformedness&#8221; is trickier than it sounds, especially for <abbr>XML</abbr> documents (like Atom feeds) that are published on the web and served over <abbr>HTTP</abbr>. Despite the maturity of <abbr>XML</abbr>, which standardized on draconian error handling in 1997, surveys continually show a significant fraction of Atom feeds on the web are plagued with wellformedness errors.
+ja:<p>一部の人々（私もその一人）は、<abbr>XML</abbr>が厳格なエラー処理を採用したのは間違いだったと考えている。誤解しないでほしいが、エラー処理の規則を単純なものにする利点が分からないわけではない。しかし、実際問題として、「整形式性」の概念は思ったよりも扱いにくいものであり、とりわけ、ウェブ上で公開され、<abbr>HTTP</abbr>を通して送信される（Atomフィード）のような<abbr>XML</abbr>文書についてはそれが言える。厳格なエラー処理は1997年に標準化されており、<abbr>XML</abbr>は規格としては既に成熟していると言えるが、調査は一貫として、Web上で公開されている少なからぬ割合のAtomフィードに整形式エラーが存在していることを示している。
+
+
+en:<p>So, I have both theoretical and practical reasons to parse <abbr>XML</abbr> documents &#8220;at any cost,&#8221; that is, <em>not</em> to halt and catch fire at the first wellformedness error. If you find yourself wanting to do this too, <code>lxml</code> can help.
+ja:<p>したがって、私は理論的にも実用的にも<abbr>XML</abbr>はエラーがあろうともパースされるべきだと考えている。つまり、整形式性エラーを見つけたとしても、即座に処理を<em>停止しない</em>のだ。もしこの考え方に共感を覚えるなら、<code>lxml</code>を使えばこの方式でパースすることができる。
+
+
+en:<p>Here is a fragment of a broken <abbr>XML</abbr> document. I&#8217;ve highlighted the wellformedness error.
+ja:<p>ここに壊れた<abbr>XML</abbr>文書の断片がある。整形式性エラーの部分をハイライトしてある。
+
+
+en:<p>That&#8217;s an error, because the <code>&amp;hellip;</code> entity is not defined in <abbr>XML</abbr>. (It is defined in <abbr>HTML</abbr>.) If you try to parse this broken feed with the default settings, <code>lxml</code> will choke on the undefined entity.
+ja:<p><code>&amp;hellip;</code>という実体参照は、<abbr>XML</abbr>では定義されていないので（<abbr>HTML</abbr>では定義されている）、これはエラーになる。この壊れたフィードをデフォルトの設定でパースしようとすると、<code>lxml</code>は未定義の実体を喉につまらせて窒息してしまう。
+
+
+en:<p>To parse this broken <abbr>XML</abbr> document, despite its wellformedness error, you need to create a custom <abbr>XML</abbr> parser.
+ja:<p>整形式性のエラーを無視して、この破損した<abbr>XML</abbr>文書を読み込むには、カスタムの<abbr>XML</abbr>パーサを作る必要がある。
+
+
+en:<li>To create a custom parser, instantiate the <code>lxml.etree.XMLParser</code> class. It can take <a href=http://codespeak.net/lxml/parsing.html#parser-options>a number of different named arguments</a>. The one we&#8217;re interested in here is the <var>recover</var> argument. When set to <code>True</code>, the <abbr>XML</abbr> parser will try its best to &#8220;recover&#8221; from wellformedness errors.
+ja:<li>カスタムのパーサを作るには、<code>lxml.etree.XMLParser</code>クラスをインスタンス化すればいい。このクラスは<a href=http://codespeak.net/lxml/parsing.html#parser-options>様々な名前付き引数</a>を取ることができる。ここで興味があるのは<var>recover</var>引数だ。この引数を<code>True</code>に設定すると、<abbr>XML</abbr>パーサは整形式性のエラーから「回復する」ために最善を尽くすようになる。
+
+
+en:<li>To parse an <abbr>XML</abbr> document with your custom parser, pass the <var>parser</var> object as the second argument to the <code>parse()</code> function. Note that <code>lxml</code> does not raise an exception about the undefined <code>&amp;hellip;</code> entity.
+ja:<li>カスタムパーサを使って<abbr>XML</abbr>文書をパースするには、2番目の引数として<var>parser</var>オブジェクトを<code>parse()</code>関数に渡せばいい。<code>lxml</code>は未定義の<code>&amp;hellip;</code>実体に関する例外を送出していないことに注意しよう。
+
+
+en:<li>The parser keeps a log of the wellformedness errors that it has encountered. (This is actually true regardless of whether it is set to recover from those errors or not.)
+ja:<li>パーサは遭遇した整形式性エラーのログを記録する（実は、パーサがエラーから回復するように設定されていない場合も、エラーはログに記録されている）。
+
+
+en:<li>Since it didn&#8217;t know what to do with the undefined <code>&amp;hellip;</code> entity, the parser just silently dropped it. The text content of the <code>title</code> element becomes <code>'dive into '</code>.
+ja:<li>未定義の<code>&amp;hellip;</code>実体をどう扱えばよいのか分からないので、パーサは端的にこの部分を無視する。<code>title</code>要素のテキスト内容は<code>'dive into '</code>になる。
+
+
+en:<li>As you can see from the serialization, the <code>&amp;hellip;</code> entity didn&#8217;t get moved; it was simply dropped.
+ja:<li>シリアライズ結果から分かるように、<code>&amp;hellip;</code>実体は取り込まれていない。パースの時点で無視されたのだ。
+
+
+en:<p>It is important to reiterate that there is <strong>no guarantee of interoperability</strong> with &#8220;recovering&#8221; <abbr>XML</abbr> parsers. A different parser might decide that it recognized the <code>&amp;hellip;</code> entity from <abbr>HTML</abbr>, and replace it with <code>&amp;amp;hellip;</code> instead. Is that &#8220;better&#8221;? Maybe. Is it &#8220;more correct&#8221;? No, they are both equally incorrect. The correct behavior (according to the <abbr>XML</abbr> specification) is to halt and catch fire. If you&#8217;ve decided not to do that, you&#8217;re on your own.
+ja:<p>重要なので繰り返し言っておくが、<abbr>XML</abbr>パーサの「回復」処理には<strong>相互運用性の保証はない</strong>。別のパーサは<abbr>HTML</abbr>の<code>&amp;hellip;</code>を認識することにして、これを<code>&amp;amp;hellip;</code>で置き換えるかもしれない。これは「より良い」のだろうか？ おそらくそうだ。これは「より正しい」のだろうか？ いや違う、これらは両方とも等しく誤りなのだ。（XMLの仕様に従った）正しい振る舞いは即座に処理を停止した上で例外を送出することだ。もしそうしないことに決めたのなら、それは自分の責任で行わなければならない。
+
+
+en:<li><a href=http://en.wikipedia.org/wiki/XML><abbr>XML</abbr> on Wikipedia.org</a>
+ja:<li><a href=http://en.wikipedia.org/wiki/XML>Wikipedia.orgの<abbr>XML</abbr></a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/xml.etree.elementtree.html>The ElementTree <abbr>XML</abbr> API</a>
+ja:<li><a href=http://docs.python.org/3.1/library/xml.etree.elementtree.html>ElementTree <abbr>XML</abbr> API</a>
+
+
+en:<li><a href=http://effbot.org/zone/element.htm>Elements and Element Trees</a>
+ja:<li><a href=http://effbot.org/zone/element.htm>Elements and Element Trees</a>
+
+
+en:<li><a href=http://effbot.org/zone/element-xpath.htm>XPath Support in ElementTree</a>
+ja:<li><a href=http://effbot.org/zone/element-xpath.htm>XPath Support in ElementTree</a>
+
+
+en:<li><a href=http://effbot.org/zone/element-iterparse.htm>The ElementTree iterparse Function</a>
+ja:<li><a href=http://effbot.org/zone/element-iterparse.htm>ElementTree iterparse Function</a>
+
+
+en:<li><a href=http://codespeak.net/lxml/><code>lxml</code></a>
+ja:<li><a href=http://codespeak.net/lxml/><code>lxml</code></a>
+
+
+en:<li><a href=http://codespeak.net/lxml/1.3/parsing.html>Parsing <abbr>XML</abbr> and <abbr>HTML</abbr> with <code>lxml</code></a>
+ja:<li><a href=http://codespeak.net/lxml/1.3/parsing.html>Parsing <abbr>XML</abbr> and <abbr>HTML</abbr> with <code>lxml</code></a>
+
+
+en:<li><a href=http://codespeak.net/lxml/1.3/xpathxslt.html>XPath and <abbr>XSLT</abbr> with <code>lxml</code></a>
+ja:<li><a href=http://codespeak.net/lxml/1.3/xpathxslt.html>XPath and <abbr>XSLT</abbr> with <code>lxml</code></a>
+
+
+en:<li><a href=http://github.com/galvez/xmlwitch/tree/master>xmlwitch</a>
+ja:<li><a href=http://github.com/galvez/xmlwitch/tree/master>xmlwitch</a>
+
+
+en:<p class=v><a rel=prev href=files.html title='back to &#8220;Files&#8221;'><span class=u>&#x261C;</span></a> <a rel=next href=serializing.html title='onward to &#8220;Serializing Python Objects&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a rel=prev href=files.html title='「ファイル」へ戻る'><span class=u>&#x261C;</span></a> <a rel=next href=serializing.html title='「Pythonオブジェクトをシリアライズする」へ進む'><span class=u>&#x261E;</span></a>
+
+

@@ -1,0 +1,123 @@
+en:<title>Dive Into Python 3</title>
+ja:<title>Dive Into Python 3 日本語版</title>
+
+
+en:<p>You are here:&nbsp;&nbsp;<span title="Ce n'est pas un point" style='cursor:default'>&bull;</span>
+ja:<p>現在地:&nbsp;&nbsp;<span title="Ce n'est pas un point" style='cursor:default'>&bull;</span>
+
+
+en:<h1>Dive Into Python 3</h1>
+ja:<h1>Dive Into Python 3 日本語版</h1>
+
+
+en:<p><cite>Dive Into Python 3</cite> covers Python 3 and its differences from Python 2. Compared to <cite><a href=http://diveintopython.org/>Dive Into Python</a></cite>, it&#8217;s about 20% revised and 80% new material. The book is now complete, but <a href=about.html>feedback is always welcome</a>.
+ja:<p><cite>Dive Into Python 3</cite> は、プログラミング経験者向けのPythonの入門書であり、Python 3 および Python 3とPython 2の違いを扱う。本書の約20%は <cite><a href=http://diveintopython.org/>Dive Into Python</a></cite> を改訂したもので、残りの80%は新しく書き下ろしたものだ。<!--この本は既に完成しているが、<a href=about.html>フィードバックはいつでも歓迎する</a>。-->
+
+
+en:<h2>Table of Contents (<a href=table-of-contents.html>expand</a>)</h2>
+ja:<h2>目次（<a href=table-of-contents.html>展開する</a>）</h2>
+
+
+en:<p style="float:right;width:245px;text-align:center;margin:0 0 0 1.75em"><a style="border:0" href="http://www.amazon.com/gp/product/1430224150?ie=UTF8&amp;tag=diveintomark-20&amp;creativeASIN=1430224150" title="Affiliate link = I earn an extra buck"><em>Also available on dead trees!</em><br><img src="i/cover.jpg" alt="Dive Into Python 3" width=245 height=300></a>
+ja:<p style="float:right;width:242px;text-align:center;margin:0 0 0 1.75em"><a style="border:0" href="http://www.amazon.co.jp/gp/product/1430224150?ie=UTF8&amp;tag=diveintomark-20&amp;creativeASIN=1430224150" title="アフィリエイトリンク = Markに臨時収入が入る"><em>英語版なら紙媒体でも手に入るよ！</em><br><img src="i/cover.jpg" alt="Dive Into Python 3" width=242 height=300></a>
+
+
+en:<li><a href=whats-new.html>What&#8217;s New in &#8220;Dive Into Python 3&#8221;</a>
+ja:<li><a href=whats-new.html>&#8220;Dive Into Python 3&#8221; で新しくなったこと</a>
+
+
+en:<li><a href=installing-python.html>Installing Python</a>
+ja:<li><a href=installing-python.html>Pythonをインストールする</a>
+
+
+
+en:<li><a href=your-first-python-program.html>Your First Python Program</a>
+ja:<li><a href=your-first-python-program.html>初めてのPythonプログラム</a>
+
+
+en:<li><a href=native-datatypes.html>Native Datatypes</a>
+ja:<li><a href=native-datatypes.html>ネイティブデータ型</a>
+
+
+en:<li><a href=comprehensions.html>Comprehensions</a>
+ja:<li><a href=comprehensions.html>内包表記</a>
+
+
+en:<li><a href=strings.html>Strings</a>
+ja:<li><a href=strings.html>文字列</a>
+
+
+en:<li><a href=regular-expressions.html>Regular Expressions</a>
+ja:<li><a href=regular-expressions.html>正規表現</a>
+
+
+en:<li><a href=generators.html>Closures <i class=baa>&amp;</i> Generators</a>
+ja:<li><a href=generators.html>クロージャとジェネレータ</a>
+
+
+en:<li><a href=iterators.html>Classes <i class=baa>&amp;</i> Iterators</a>
+ja:<li><a href=iterators.html>クラスとイテレータ</a>
+
+
+en:<li><a href=advanced-iterators.html>Advanced Iterators</a>
+ja:<li><a href=advanced-iterators.html>高度なイテレータ</a>
+
+
+en:<li><a href=unit-testing.html>Unit Testing</a>
+ja:<li><a href=unit-testing.html>ユニットテスト</a>
+
+
+en:<li><a href=refactoring.html>Refactoring</a>
+ja:<li><a href=refactoring.html>リファクタリング</a>
+
+
+en:<li><a href=files.html>Files</a>
+ja:<li><a href=files.html>ファイル</a>
+
+
+en:<li><a href=xml.html>XML</a>
+ja:<li><a href=xml.html>XML</a>
+
+
+en:<li><a href=serializing.html>Serializing Python Objects</a>
+ja:<li><a href=serializing.html>Pythonオブジェクトをシリアライズする</a>
+
+
+en:<li><a href=http-web-services.html>HTTP Web Services</a>
+ja:<li><a href=http-web-services.html>HTTPウェブサービス</a>
+
+
+en:<li><a href=case-study-porting-chardet-to-python-3.html>Case Study: Porting <code>chardet</code> to Python 3</a>
+ja:<li><a href=case-study-porting-chardet-to-python-3.html>ケーススタディ: <code>chardet</code>をPython 3に移植する</a>
+
+
+en:<li><a href=packaging.html>Packaging Python Libraries</a>
+ja:<li><a href=packaging.html>Pythonライブラリをパッケージ化する</a>
+
+
+en:<li id=a><a href=porting-code-to-python-3-with-2to3.html>Porting Code to Python 3 with <code>2to3</code></a>
+ja:<li id=a><a href=porting-code-to-python-3-with-2to3.html><code>2to3</code>を使ってコードをPython 3に移植する</a>
+
+
+en:<li id=b><a href=special-method-names.html>Special Method Names</a>
+ja:<li id=b><a href=special-method-names.html>特殊メソッド名</a>
+
+
+en:<li id=c><a href=where-to-go-from-here.html>Where to Go From Here</a>
+ja:<li id=c><a href=where-to-go-from-here.html>ここからどこへ進むか</a>
+
+
+en:<li id=d><a href=troubleshooting.html>Troubleshooting</a>
+ja:<li id=d><a href=troubleshooting.html>トラブルシューティング</a>
+
+
+en:<p>The book is freely licensed under the <a rel=license href=http://creativecommons.org/licenses/by-sa/3.0/>Creative Commons Attribution Share-Alike</a> license. You can download it as <a href=d/diveintopython3-html-latest.zip><abbr>HTML</abbr></a> or <a href=d/diveintopython3-pdf-latest.zip><abbr>PDF</abbr></a>. &Uuml;ber-geeks can also clone the Mercurial repository:
+ja:<p>この本は、<a rel=license href=http://creativecommons.org/licenses/by-sa/3.0/deed.ja>クリエイティブ・コモンズ 表示-継承 3.0 非移植</a>というフリーなライセンスを採用している。
+
+
+en:<pre><samp class=p>you@localhost:~$ </samp><kbd>hg clone <a href=http://hg.diveintopython3.org/>http://hg.diveintopython3.org/</a> diveintopython3</kbd></pre>
+ja:<!--<pre><samp class=p>you@localhost:~$ </samp><kbd>hg clone <a href=http://hg.diveintopython3.org/>http://hg.diveintopython3.org/</a> diveintopython3</kbd></pre>-->
+
+
+en:<p class=c>Translations: <a href=http://code.google.com/p/inmersionenpython3/ lang=es hreflang=es>en espa&ntilde;ol</a>, <a href=http://gpiancastelli.altervista.org/dip3-it/ lang=it hreflang=it>in italiano</a>, <a href="http://ru.wikisource.org/wiki/%D0%9F%D0%BE%D0%B3%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B2_Python_3_(%D0%9F%D0%B8%D0%BB%D0%B3%D1%80%D0%B8%D0%BC)" lang=ru hreflang=ru>на русском языке</a>, <a href=http://www.diveintopython3.ir/ lang=fa hreflang=fa dir=rtl>به پارسی</a>
+ja:<p class=c>原書: <a href=http://getpython3.com/diveintopython3/ lang=en hreflang=en>in English</a> 翻訳版: <a href=http://code.google.com/p/inmersionenpython3/ lang=es hreflang=es>en espa&ntilde;ol</a>, <a href=http://gpiancastelli.altervista.org/dip3-it/ lang=it hreflang=it>in italiano</a>, <a href="http://ru.wikisource.org/wiki/%D0%9F%D0%BE%D0%B3%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B2_Python_3_(%D0%9F%D0%B8%D0%BB%D0%B3%D1%80%D0%B8%D0%BC)" lang=ru hreflang=ru>на русском языке</a>, <a href=http://www.diveintopython3.ir/ lang=fa hreflang=fa dir=rtl>به پارسی</a>

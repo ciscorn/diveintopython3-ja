@@ -1,0 +1,425 @@
+en:<title>Your first Python program - Dive Into Python 3</title>
+ja:<title>初めてのPythonプログラム - Dive Into Python 3 日本語版</title>
+
+
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#your-first-python-program>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#your-first-python-program>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<p id=level>Difficulty level: <span class=u title=novice>&#x2666;&#x2662;&#x2662;&#x2662;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=入門>&#x2666;&#x2662;&#x2662;&#x2662;&#x2662;</span>
+
+
+en:<h1>Your First Python Program</h1>
+ja:<h1>初めてのPythonプログラム</h1>
+
+
+en:<p><span class=u>&#x275D;</span> Don&#8217;t bury your burden in saintly silence. You have a problem?  Great. Rejoice, dive in, and investigate. <span class=u>&#x275E;</span><br>&mdash; <a href=http://en.wikiquote.org/wiki/Buddhism>Ven. Henepola Gunaratana</a>
+ja:<p><span class=u>&#x275D;</span> 抱えた重荷を聖なる静寂へと葬り去ってはならない。問題を抱えている？ それは良いことだ。喜び、飛び込み、調べよう。<span class=u>&#x275E;</span><br>&mdash; <a href=http://en.wikiquote.org/wiki/Buddhism>Ven. Henepola Gunaratana</a>
+
+
+en:<h2 id=divingin>Diving In</h2>
+ja:<h2 id=divingin>飛び込む</h2>
+
+
+en:<p class=f>Convention dictates that I should bore you with the fundamental building blocks of programming, so we can slowly work up to building something useful. Let&#8217;s skip all that. Here is a complete, working Python program. It probably makes absolutely no sense to you. Don&#8217;t worry about that, because you&#8217;re going to dissect it line by line. But read through it first and see what, if anything, you can make of it.
+ja:<p class=f>慣わしに従うならば、私はプログラミングの基本的要素を教えて皆さんをうんざりさせなければならない。そうやって、役に立つものが作れるようになるまで、少しずつ進めていくというわけだ。だが、そんなものはすべて飛ばしてしまおう。以下には完全で、しかもちゃんと動作するPythonのプログラムがある。このプログラムをまったく理解できないとしても、心配はご無用。これから一行ずつ調べていくからだ。しかし、まずはこのプログラムに目を通して、できる範囲でいいので意味を汲み取ってみてほしい。
+
+en:<p class=d>[<a href=examples/humansize.py>download <code>humansize.py</code></a>]
+ja:<p class=d>[<a href=examples/humansize.py><code>humansize.py</code>をダウンロードする</a>]
+
+
+en:<p>Now let&#8217;s run this program on the command line. On Windows, it will look something like this:
+ja:<p>では、このプログラムをコマンドライン上で実行してみよう。Windowsでは次のようにする：
+
+
+en:<p>On Mac OS X or Linux, it would look something like this:
+ja:<p>Mac OS XやLinuxでは次のようにする：
+
+
+en:<p>What just happened? You executed your first Python program. You called the Python interpreter on the command line, and you passed the name of the script you wanted Python to execute. The script defines a single function, the <code>approximate_size()</code> function, which takes an exact file size in bytes and calculates a &#8220;pretty&#8221; (but approximate) size. (You&#8217;ve probably seen this in Windows Explorer, or the Mac OS X Finder, or Nautilus or Dolphin or Thunar on Linux. If you display a folder of documents as a multi-column list, it will display a table with the document icon, the document name, the size, type, last-modified date, and so on. If the folder contains a 1093-byte file named <code>TODO</code>, your file manager won&#8217;t display <code>TODO 1093 bytes</code>; it&#8217;ll say something like <code>TODO 1 KB</code> instead. That&#8217;s what the <code>approximate_size()</code> function does.)
+ja:<p>いったい何が起きたのだろうか？ 初めてのPythonプログラムを実行したのだ。Pythonインタプリタをコマンドライン上で呼び出して、実行してほしいスクリプトの名前をPythonに渡したのだ。このスクリプトは1つの関数<code>approximate_size()</code>を定義している。この関数は、正確なファイルサイズをバイト単位で受け取って、（正確ではないが）「美しい」表記のサイズを求める（WindowsのExplorerや、Mac OS XのFinder、LinuxのNautilus/Dolphin/Thunarでこれを見たことがあるだろう。ドキュメントを含むフォルダをマルチカラム形式で表示すると、ドキュメントのアイコン・ドキュメント名・サイズ・ファイルタイプ・最終更新日などを含む表が表示される。仮に、そのフォルダに1093バイトの<code>TODO</code>という名前のファイルが入っているとしたら、ファイルマネージャは<code>TODO 1093 bytes</code>のかわりに<code>TODO 1 KB</code>と表示するだろう。これが<code>approximate_size()</code>関数の行う処理だ）。
+
+
+en:<p>Look at the bottom of the script, and you&#8217;ll see two calls to <code>print(approximate_size(<var>arguments</var>))</code>. These are function calls&nbsp;&mdash;&nbsp;first calling the <code>approximate_size()</code> function and passing a number of arguments, then taking the return value and passing it straight on to the <code>print()</code> function. The <code>print()</code> function is built-in; you&#8217;ll never see an explicit declaration of it. You can just use it, anytime, anywhere. (There are lots of built-in functions, and lots more functions that are separated into <i>modules</i>. Patience, grasshopper.)
+ja:<p>スクリプトの最後を見ると、<code>print(approximate_size(<var>引数</var>))</code>という2つの呼び出しが目にとまるだろう。これらは関数呼び出しだ。まず、いくつかの引数と共に<code>approximate_size()</code>関数を呼び出して、受け取った戻り値を直接<code>print()</code>関数に渡している。<code>print()</code>関数はPythonの組み込み関数なので、この関数の宣言はどこにも存在しない。この<code>print()</code>関数はいつでもどこでも使うことができる（組み込みの関数はたくさんあるし、更にもっと多くの関数が<em>モジュール</em>に分けられて存在している。落ち着きなさい、バッタさん）。
+
+
+en:<p>So why does running the script on the command line give you the same output every time? We&#8217;ll get to that. First, let&#8217;s look at that <code>approximate_size()</code> function.
+ja:<p>ところで、スクリプトを実行すると毎回同じ結果が返ってくるのはなぜだろう？ それをこれから調べていくのだ。まずは<code>approximate_size()</code>関数を見ていこう。
+
+
+en:<h2 id=declaringfunctions>Declaring Functions</h2>
+ja:<h2 id=declaringfunctions>関数を定義する</h2>
+
+
+en:<p>Python has functions like most other languages, but it does not have separate header files like <abbr>C++</abbr> or <code>interface</code>/<code>implementation</code> sections like Pascal. When you need a function, just declare it, like this:
+ja:<p>Pythonは、他の大多数の言語と同様に関数を持っている。しかし、<abbr>C++</abbr>のような別個のヘッダファイルや、Palcalのような<code>interface</code>/<code>implementation</code>セクションはない。関数が必要なときは、単に次のように定義するだけでいい：
+
+
+en:<aside>When you need a function, just declare it.</aside>
+ja:<aside>関数が必要なら、ただ定義するだけでいい。</aside>
+
+
+en:<p>The keyword <code>def</code> starts the function declaration, followed by the function name, followed by the arguments in parentheses. Multiple arguments are separated with commas.
+ja:<p>関数定義はキーワード<code>def</code>によって始まり、その次に関数名が続き、更にその次に括弧で包まれた引数が続く。複数の引数はカンマによって区切られる。
+
+
+en:<p>Also note that the function doesn&#8217;t define a return datatype. Python functions do not specify the datatype of their return value; they don&#8217;t even specify whether or not they return a value. (In fact, every Python function returns a value; if the function ever executes a <code>return</code> statement, it will return that value, otherwise it will return <code>None</code>, the Python null value.)
+ja:<p>関数が戻り値の型を定義していないことにも注意しよう。Pythonの関数は戻り値のデータ型を指定しないし、戻り値を返すかどうかさえも指定しない（実際にはPythonのすべての関数は値を返す。関数が<code>return</code>文を実行する場合はその値を返し、実行しない場合はPythonのNull値である<code>None</code>を返すのだ）。
+
+
+en:<p><span class=u>&#x261E;</span>In some languages, functions (that return a value) start with <code>function</code>, and subroutines (that do not return a value) start with <code>sub</code>. There are no subroutines in Python. Everything is a function, all functions return a value (even if it&#8217;s <code>None</code>), and all functions start with <code>def</code>.
+ja:<p><span class=u>&#x261E;</span>一部の言語では、関数（戻り値を返す）は<code>function</code>で始まり、サブルーチン（戻り値を返さない）は<code>sub</code>で始まる。Pythonにサブルーチンは存在しない。Pythonではすべてが関数であり、すべての関数は戻り値（それは<code>None</code>かもしれない）を返し、すべての関数が<code>def</code>で始まる。
+
+
+en:<p>The <code>approximate_size()</code> function takes the two arguments&nbsp;&mdash;&nbsp;<var>size</var> and <var>a_kilobyte_is_1024_bytes</var>&nbsp;&mdash;&nbsp;but neither argument specifies a datatype. In Python, variables are never explicitly typed. Python figures out what type a variable is and keeps track of it internally.
+ja:<p><code>approximate_size()</code>は２つの引数（<var>size</var>と<var>a_kilobyte_is_1024_bytes</var>）を受け取るが、そのどちらにもデータ型は指定されていない。Pythonでは、変数が明示的に型付けされることは絶対にない。Pythonが変数の型を判断して内部的に追跡するのだ。
+
+
+en:<p><span class=u>&#x261E;</span>In Java and other statically-typed languages, you must specify the datatype of the function return value and each function argument. In Python, you never explicitly specify the datatype of anything. Based on what value you assign, Python keeps track of the datatype internally.
+ja:<p><span class=u>&#x261E;</span>Javaやその他の静的型付け言語では、関数の戻り値や引数のデータ型を指定しなければならない。Pythonでは、どんなものに対しても明示的にデータ型を指定することは決してない。代入した値に基づいて、Pythonが内部的にデータ型を追跡するのだ。
+
+
+en:<h3 id=optional-arguments>Optional and Named Arguments</h3>
+ja:<h3 id=optional-arguments>オプション引数と名前付き引数</h3>
+
+
+en:<p>Python allows function arguments to have default values; if the function is called without the argument, the argument gets its default value. Furthermore, arguments can be specified in any order by using named arguments.
+ja:<p>Pythonでは関数の引数にデフォルト値を持たせることができる。つまり、引数に対応する値無しで関数が呼び出された場合には、その引数にデフォルト値が割り当てられるのだ。これに加えて、名前付き引数を使うことによって引数を任意の順序で指定することもできる。
+
+
+en:<p>Let&#8217;s take another look at that <code>approximate_size()</code> function declaration:
+ja:<p><code>approximate_size()</code>の関数宣言を別の視点から見てみよう：
+
+
+en:<p>The second argument, <var>a_kilobyte_is_1024_bytes</var>, specifies a default value of <code>True</code>. This means the argument is <i>optional</i>; you can call the function without it, and Python will act as if you had called it with <code>True</code> as a second parameter.
+ja:<p>2番目の引数<var>a_kilobyte_is_1024_bytes</var>には、デフォルト値として<code>True</code>が割り当てられている。これは、この引数が<em>オプション</em>だということを意味している。つまり、この関数は、この引数を与えなくとも呼び出すことができ、その場合には第二引数に<code>True</code>が渡されたものとPythonは解釈するのだ。
+
+
+en:<p>Now look at the bottom of the script:
+ja:<p>今度はスクリプトの最後の部分を見てみよう：
+
+
+en:<li>This calls the <code>approximate_size()</code> function with two arguments. Within the <code>approximate_size()</code> function, <var>a_kilobyte_is_1024_bytes</var> will be <code>False</code>, since you explicitly passed <code>False</code> as the second argument.
+ja:<li>これは<code>approximate_size()</code>関数を2つの引数と共に呼び出している。第二引数として明示的に<code>False</code>を渡しているので、<code>approximate_size()</code>関数の中での<var>a_kilobyte_is_1024_bytes</var>の値は<code>False</code>になる。
+
+
+en:<li>This calls the <code>approximate_size()</code> function with only one argument. But that&#8217;s OK, because the second argument is optional! Since the caller doesn&#8217;t specify, the second argument defaults to <code>True</code>, as defined by the function declaration.
+ja:<li>ここでは<code>approximate_size()</code>関数には1つの引数しか渡されていない。しかし、これでも問題はない。第二引数はオプションだからだ！ 呼び出し側は第二引数を指定していないので、第二引数は関数宣言で定めた通り、デフォルト値の<code>True</code>となる。
+
+
+en:<p>You can also pass values into a function by name.
+ja:<p>引数の名前を指定して値を関数に渡すこともできる。
+
+
+en:<li>This calls the <code>approximate_size()</code> function with <code>4000</code> for the first argument (<var>size</var>) and <code>False</code> for the argument named <var>a_kilobyte_is_1024_bytes</var>. (That happens to be the second argument, but doesn&#8217;t matter, as you&#8217;ll see in a minute.)
+ja:<li>これは、第一引数 (<var>size</var>) に<code>4000</code>を渡し、<var>a_kilobyte_is_1024_bytes</var>という名前の引数に<code>False</code>を渡した上で、<code>approximate_size()</code>関数を呼び出している（<var>a_kilobyte_is_1024_bytes</var>という名前の引数は偶然にも第二引数だが、それに意味がないことはすぐに分かる）。
+
+
+en:<li>This calls the <code>approximate_size()</code> function with <code>4000</code> for the argument named <var>size</var> and <code>False</code> for the argument named <var>a_kilobyte_is_1024_bytes</var>. (These named arguments happen to be in the same order as the arguments are listed in the function declaration, but that doesn&#8217;t matter either.)
+ja:<li>これは、<var>size</var>という名前の引数 に<code>4000</code>を渡し、<var>a_kilobyte_is_1024_bytes</var>という名前の引数に<code>False</code>を渡した上で、<code>approximate_size()</code>関数を呼び出している（これらの引数は関数定義で並べたのと同じ順序で並んでいるが、これにも意味はない）。
+
+
+en:<li>This calls the <code>approximate_size()</code> function with <code>False</code> for the argument named <var>a_kilobyte_is_1024_bytes</var> and <code>4000</code> for the argument named <var>size</var>. (See? I told you the order didn&#8217;t matter.)
+ja:<li>これは、<var>a_kilobyte_is_1024_bytes</var>という名前の引数に<code>False</code>を渡し、<var>size</var> という名前の引数に<code>4000</code>を渡して、<code>approximate_size()</code>関数を呼び出している（順序は関係ないと言った意味が分かっただろうか？）。
+
+
+en:<li>This call fails, because you have a named argument followed by an unnamed (positional) argument, and that never works. Reading the argument list from left to right, once you have a single named argument, the rest of the arguments must also be named.
+ja:<li>この呼び出しは失敗する。その理由は、名前付き引数の後ろに名前付けされていない（位置に依存する）引数が置かれているからで、こういう書き方はPythonでは許されていないのだ。引数リストを左から右へ読んだときに名前付き引数が現れたら、それ以降の引数には必ず名前を付けなければならない。
+
+
+en:<li>This call fails too, for the same reason as the previous call. Is that surprising? After all, you passed <code>4000</code> for the argument named <code>size</code>, then &#8220;obviously&#8221; that <code>False</code> value was meant for the <var>a_kilobyte_is_1024_bytes</var> argument. But Python doesn&#8217;t work that way. As soon as you have a named argument, all arguments to the right of that need to be named arguments, too.
+ja:<li>一つ前の呼び出しと同様の理由で、この呼び出しも失敗する。これは意外だろうか？ 引数<code>size</code>として<code>4000</code>という値を渡したので、<code>False</code>が<var>a_kilobyte_is_1024_bytes</var>を意味するのは「明らか」なのだが、Pythonはそのように解釈しないのだ。名前付き引数を使ったら、その右にある引数にはすべて名前を付けなければならない。
+
+
+en:<h2 id=readability>Writing Readable Code</h2>
+ja:<h2 id=readability>読みやすいコードを書く</h2>
+
+
+en:<p>I won&#8217;t bore you with a long finger-wagging speech about the importance of documenting your code. Just know that code is written once but read many times, and the most important audience for your code is yourself, six months after writing it (<i>i.e.</i> after you&#8217;ve forgotten everything but need to fix something). Python makes it easy to write readable code, so take advantage of it. You&#8217;ll thank me in six months.
+ja:<p>「コードのドキュメントを書くことの重要性」についての長ったらしいスピーチをして、あなたを退屈させたくはない。知っておいて欲しいのは、コードは一度だけ書かれるが何度も読まれるということと、コードの最も重要な読者というのは、コードを書いてから6ヶ月後の（<i>i.e.</i>どこかを修正する必要があるのだけど、コードの中身をすっかり忘れてしまってる）あなた自身だということだけだ。Pythonは読みやすいコードを容易に書けるようになっているので、この利点をちゃんと生かそう。きっと6ヶ月もすれば私に感謝することになるよ。
+
+
+en:<h3 id=docstrings>Documentation Strings</h3>
+ja:<h3 id=docstrings>ドキュメンテーション文字列</h3>
+
+
+en:<p>You can document a Python function by giving it a documentation string (<code>docstring</code> for short). In this program, the <code>approximate_size()</code> function has a <code>docstring</code>:
+ja:<p>Pythonの関数にドキュメンテーション文字列（略して<code>docstring</code>という）を与えることで、その関数のドキュメントを書くことができる。このプログラムでは<code>approximate_size()</code>関数が<code>docstring</code>を持っている：
+
+
+en:<aside>Every function deserves a decent docstring.</aside>
+ja:<aside>すべての関数にきちんとしたdocstringを与えよう。</aside>
+
+
+en:<p>Triple quotes signify a multi-line string. Everything between the start and end quotes is part of a single string, including carriage returns, leading white space, and other quote characters. You can use them anywhere, but you&#8217;ll see them most often used when defining a <code>docstring</code>.
+ja:<p>三重クォートは複数行文字列を表す。開始クォートと終了クォートの間にあるすべてのものが単一の文字列の一部と解釈され、改行文字や行の先頭にある空白、その他のクォート文字も文字列とみなされる。複数行文字列はどんな場所でも使えるが、一番よく目にするのは<code>docstring</code>を定義するために使われているものだろう。
+
+
+en:<p><span class=u>&#x261E;</span>Triple quotes are also an easy way to define a string with both single and double quotes, like <code>qq/.../</code> in Perl 5.
+ja:<p><span class=u>&#x261E;</span>三重クォートは、シングルクォートとダブルクォートの両方を含んだ文字列を定義する簡易な方法でもある。これはPerl 5の<code>qq/.../</code>に似ている。
+
+
+en:<p>Everything between the triple quotes is the function&#8217;s <code>docstring</code>, which documents what the function does. A <code>docstring</code>, if it exists, must be the first thing defined in a function (that is, on the next line after the function declaration). You don&#8217;t technically need to give your function a <code>docstring</code>, but you always should. I know you&#8217;ve heard this in every programming class you&#8217;ve ever taken, but Python gives you an added incentive: the <code>docstring</code> is available at runtime as an attribute of the function.
+ja:<p>三重クォートの中にあるすべてのものがこの関数の<code>docstring</code>であり、この関数が何をするのかに関するドキュメントになっている。<code>docstring</code>をもし付けるなら、関数の一番初め（つまり関数宣言の次の行）で定義しなければならない。形式的には、<code>docstring</code>が無くてもプログラムは動くのだが、これは常に付けておいたほうがいい。今までに受講したどのプログラミングの授業でもこれをさんざん聞かされていることは知っている。しかし、Pythonではドキュメントを付ける意義が更にもう一つ存在する。<code>docstring</code>は実行時に関数の属性として利用できるのだ。
+
+
+en:<p><span class=u>&#x261E;</span>Many Python <abbr>IDE</abbr>s use the <code>docstring</code> to provide context-sensitive documentation, so that when you type a function name, its <code>docstring</code> appears as a tooltip. This can be incredibly helpful, but it&#8217;s only as good as the <code>docstring</code>s you write.
+ja:<p><span class=u>&#x261E;</span>多くのPython用<abbr>IDE</abbr>は、文脈依存のドキュメントを提供するために<code>docstring</code>を使っているので、関数名を入力すると、その関数の<code>docstring</code>がツールチップとして表示される。これは非常に便利なものになり得るが、そのためには良い<code>docstring</code>を書いておかなければならない。
+
+
+en:<h2 id=importsearchpath>The <code>import</code> Search Path</h2>
+ja:<h2 id=importsearchpath><code>import</code>検索パス</h2>
+
+
+en:<p>Before this goes any further, I want to briefly mention the library search path. Python looks in several places when you try to import a module. Specifically, it looks in all the directories defined in <code>sys.path</code>. This is just a list, and you can easily view it or modify it with standard list methods. (You&#8217;ll learn more about lists in <a href=native-datatypes.html#lists>Native Datatypes</a>.)
+ja:<p>先へ進む前に、ライブラリの検索パスについて簡単に触れておきたい。モジュールをインポートしようとすると、Pythonは何ヶ所かを参照する。具体的に言うと、Pythonは<code>sys.path</code>に定められたすべてのディレクトリの中を見る。<code>sys.path</code>は単なるリストなので、標準的なリストのメソッドを使って、簡単にそれを見たり、内容を変更したりできる（リストについては<a href=native-datatypes.html#lists>ネイティブデータ型</a>で詳しく学ぶ）。
+
+
+en:<li>Importing the <code>sys</code> module makes all of its functions and attributes available.
+ja:<li><code>sys</code>モジュールをインポートすることで、そのモジュールのすべての関数と属性が利用できるようになる。
+
+
+en:<li><code>sys.path</code> is a list of directory names that constitute the current search path. (Yours will look different, depending on your operating system, what version of Python you&#8217;re running, and where it was originally installed.)  Python will look through these directories (in this order) for a <code>.py</code> file whose name matches what you&#8217;re trying to import.
+ja:<li><code>sys.path</code>は現在の検索パスを構成しているディレクトリ名のリストだ（皆さんの環境では違うものが表示されるだろう。これはOSや、Pythonのバージョン、Pythonがインストールされた場所に依存する）。Pythonはこれらのディレクトリを（この順番で）見ていき、インポートしようとしている名前にマッチする<code>.py</code>ファイルを探す。
+
+
+en:<li>Actually, I lied; the truth is more complicated than that, because not all modules are stored as <code>.py</code> files. Some, like the <code>sys</code> module, are <i>built-in modules</i>; they are actually baked right into Python itself. Built-in modules behave just like regular modules, but their Python source code is not available, because they are not written in Python! (The <code>sys</code> module is written in <abbr>C</abbr>.)
+ja:<li>実を言うと、今述べたことは正しくない。真相はもっと複雑で、すべてのモジュールが<code>.py</code> ファイルの形で格納されているとは限らないのだ。たとえば<code>sys</code>のようないくつかのモジュールは、<em>組み込みモジュール</em>というものであり、これらは実際にはPython自体に埋め込まれている。組み込みモジュールは通常のモジュールと同じように振る舞うが、このモジュールのPythonのソースコードを手に入れることはできない。組み込みモジュールはPythonでは書かれていないのだ！（<code>sys</code>モジュールは<abbr>C</abbr>言語で書かれている）
+
+
+en:<li>You can add a new directory to Python&#8217;s search path at runtime by adding the directory name to <code>sys.path</code>, and then Python will look in that directory as well, whenever you try to import a module. The effect lasts as long as Python is running.
+ja:<li><code>sys.path</code>にディレクトリ名を追加することによって、実行時に新たなディレクトリをPythonの検索パスに追加できる。これによって、Pythonはモジュールをインポートするときに、そのディレクトリも参照するようになる。この効果はPythonの実行が終了するまで続く。
+
+
+en:<li>By using <code>sys.path.insert(0, <var>new_path</var>)</code>, you inserted a new directory as the first item of the <code>sys.path</code> list, and therefore at the beginning of Python&#8217;s search path. This is almost always what you want. In case of naming conflicts (for example, if Python ships with version 2 of a particular library but you want to use version 3), this ensures that your modules will be found and used instead of the modules that came with Python.
+ja:<li><code>sys.path.insert(0, <var>new_path</var>)</code>を使用して、新しいディレクトリを<code>sys.path</code>リストの先頭に追加した。これで、このディレクトリがPythonの検索パスの一番初めに来ることになる。ほとんどの場合はこれで用が済んでしまうだろう。万が一、名前の衝突が起きたとしても（例えば、あるライブラリのバージョン2がPythonに搭載されているが、あなたはバージョン3を使いたいという場合)、こうすれば確実にお望みのモジュールが発見され、Python付属のモジュールの代わりに使われることになる。
+
+
+en:<h2 id=everythingisanobject>Everything Is An Object</h2>
+ja:<h2 id=everythingisanobject>あらゆるものがオブジェクト</h2>
+
+
+en:<p>In case you missed it, I just said that Python functions have attributes, and that those attributes are available at runtime. A function, like everything else in Python, is an object.
+ja:<p>忘れてしまった人のためにもう一度言っておくと、Pythonの関数は属性を持っており、それらの属性は実行時に利用できる。Pythonでは、他のあらゆるものと同様に、関数もオブジェクトだ。
+
+
+en:<p>Run the interactive Python shell and follow along:
+ja:<p>Pythonの対話シェルを起動し、次のようにしよう：
+
+
+en:<li>The first line imports the <code>humansize</code> program as a module&nbsp;&mdash;&nbsp;a chunk of code that you can use interactively, or from a larger Python program. Once you import a module, you can reference any of its public functions, classes, or attributes. Modules can do this to access functionality in other modules, and you can do it in the Python interactive shell too. This is an important concept, and you&#8217;ll see a lot more of it throughout this book.
+ja:<li>1行目は<code>humansize</code>プログラムをモジュールとしてインポートしている。モジュールはコードのかたまりであり、対話的に使うこともできるし、より大きなプログラムから使うこともできる。モジュールをインポートすると、そのモジュールが公開している関数・クラス・属性を参照できるようになる。あるモジュールの中で他のモジュールにある機能にアクセスしたい場合にもこれと同じようにすればいいし、この操作をPython対話シェルの中で行うこともできる。これは重要な概念であり、この本を通して何度も目にすることになる。
+
+
+en:<li>When you want to use functions defined in imported modules, you need to include the module name. So you can&#8217;t just say <code>approximate_size</code>; it must be <code>humansize.approximate_size</code>. If you&#8217;ve used classes in Java, this should feel vaguely familiar.
+ja:<li>インポートされたモジュールの中で定義された関数を使いたいときは、モジュール名を含めて書く必要がある。つまり、単に<code>approximate_size</code>と書くことはできず、<code>humansize.approximate_size</code>と書かなければならない。もし、Javaのクラスを使ったことがあるなら、なんとなく見慣れた感じがするだろう。
+
+
+en:<li>Instead of calling the function as you would expect to, you asked for one of the function&#8217;s attributes, <code>__doc__</code>.
+ja:<li>関数を呼び出すのではなく、関数の属性の1つである<code>__doc__</code>を呼び出している。
+
+
+en:<p><span class=u>&#x261E;</span><code>import</code> in Python is like <code>require</code> in Perl. Once you <code>import</code> a Python module, you access its functions with <code><var>module</var>.<var>function</var></code>; once you <code>require</code> a Perl module, you access its functions with <code><var>module</var>::<var>function</var></code>.
+ja:<p><span class=u>&#x261E;</span>Pythonの<code>import</code>は、Perlの<code>require</code>に似ている。Pythonのモジュールを<code>import</code>すると、モジュールの関数は<code><var>モジュール</var>.<var>関数</var></code>でアクセスできる。Perlのモジュールを<code>require</code>すると、モジュールの関数は <code><var>モジュール</var>::<var>関数</var></code>でアクセスできる。
+
+
+en:<h3 id=whatsanobject>What&#8217;s An Object?</h3>
+ja:<h3 id=whatsanobject>オブジェクトとは何か？</h3>
+
+
+en:<p>Everything in Python is an object, and everything can have attributes and methods. All functions have a built-in attribute <code>__doc__</code>, which returns the <var>docstring</var> defined in the function&#8217;s source code. The <code>sys</code> module is an object which has (among other things) an attribute called <var>path</var>. And so forth.
+ja:<p>Pythonではあらゆるものがオブジェクトであり、すべてのオブジェクトは属性とメソッドを持つことができる。すべての関数は組み込み属性の<code>__doc__</code>を持っており、これはその関数のソースコード上に定義された<var>docstring</var> を返す。<code>sys</code>モジュールは（他の属性に混じって）<code>path</code>という属性を持つオブジェクトだ。その他も同じだ。
+
+
+en:<p>Still, this doesn&#8217;t answer the more fundamental question: what is an object?  Different programming languages define &#8220;object&#8221; in different ways. In some, it means that <em>all</em> objects <em>must</em> have attributes and methods; in others, it means that all objects are subclassable. In Python, the definition is looser. Some objects have neither attributes nor methods, <em>but they could</em>. Not all objects are subclassable. But everything is an object in the sense that it can be assigned to a variable or passed as an argument to a function.
+ja:<p>ところで、まだ根本的な質問に答えていなかった: オブジェクトとは何なのか？ この「オブジェクト」の定義はプログラミング言語によってまちまちだ。一部の言語では、<em>すべて</em>のオブジェクトは属性とメソッドを<em>持たなければならない</em>と定めている。別の言語では、オブジェクトはサブクラス化できるものを指している。Pythonでは、オブジェクトの定義はもっと緩くなっている。一部のオブジェクトは属性もメソッドも持たないが、持つ<em>こともできる</em>。全てのオブジェクトがサブクラス化できるわけではないが、それを変数に代入することができ、関数の引数として渡すことができるという意味では、すべてがオブジェクトなのだ。
+
+
+en:<p>You may have heard the term &#8220;first-class object&#8221; in other programming contexts. In Python, functions are <i>first-class objects</i>. You can pass a function as an argument to another function. Modules are <i>first-class objects</i>. You can pass an entire module as an argument to a function. Classes are first-class objects, and individual instances of a class are also first-class objects.
+ja:<p>何らかのプログラミングの文脈で「ファーストクラスオブジェクト」という用語を聞いたことがある人もいるだろう。Pythonでは、関数は<em>ファーストクラスオブジェクト</em>だ。したがって、関数を他の関数の引数として渡すことができる。モジュールも<em>ファーストクラスオブジェクト</em>だ。したがって、モジュールをまるごと関数の引数として渡すことができる。クラスもファーストクラスオブジェクトであるし、クラスの個々のインスタンスもファーストクラスオブジェクトだ。
+
+
+en:<p>This is important, so I&#8217;m going to repeat it in case you missed it the first few times: <em>everything in Python is an object</em>. Strings are objects. Lists are objects. Functions are objects. Classes are objects. Class instances are objects. Even modules are objects.
+ja:<p>これは重要なことなので、<em>Pythonではあらゆるのものがオブジェクト</em>という言葉を忘れないように、私はこれからも何度か繰り返して言うつもりだ。文字列はオブジェクト。リストはオブジェクト。関数はオブジェクト。クラスはオブジェクト。クラスインスタンスはオブジェクト。モジュールでさえもオブジェクトだ。
+
+
+en:<h2 id=indentingcode>Indenting Code</h2>
+ja:<h2 id=indentingcode>コードをインデントする</h2>
+
+
+en:<p>Python functions have no explicit <code>begin</code> or <code>end</code>, and no curly braces to mark where the function code starts and stops. The only delimiter is a colon (<code>:</code>) and the indentation of the code itself.
+ja:<p>Pythonの関数は、関数コードの開始と終了を示すための明示的な<code>begin</code>/<code>end</code>や波括弧<code>{}</code>を持たない。唯一の区切り文字はコロン (<code>:</code>) とコード自体のインデントだけだ。
+
+
+en:<li>Code blocks are defined by their indentation. By &#8220;code block,&#8221; I mean functions, <code>if</code> statements, <code>for</code> loops, <code>while</code> loops, and so forth. Indenting starts a block and unindenting ends it. There are no explicit braces, brackets, or keywords. This means that whitespace is significant, and must be consistent. In this example, the function code is indented four spaces. It doesn&#8217;t need to be four spaces, it just needs to be consistent. The first line that is not indented marks the end of the function.
+ja:<li>コードブロックはインデントによって定められる。ここでは「コードブロック」という言葉は、関数、<code>if</code>文、<code>for</code>ループ、<code>while</code>ループなどを表している。インデントでブロックが始まり、インデントの解除でブロックが終わる。ブロックを明示するための波括弧・括弧・キーワードなどは存在しない。ゆえに、Pythonでは空白が重要な意味を持ち、空白に一貫性を持たせなければならないことになる。この例では、関数コードは4個のスペースでインデントされている。インデントは必ずしも4個のスペースである必要はなく、空白の数に一貫性がありさえすればよい。次にインデントされていない行が現れたら、それが関数の終了を示す印となる。
+
+
+en:<li>In Python, an <code>if</code> statement is followed by a code block. If the <code>if</code> expression evaluates to true, the indented block is executed, otherwise it falls to the <code>else</code> block (if any). Note the lack of parentheses around the expression.
+ja:<li>Pythonでは、<code>if</code> 文はコードブロックを伴う。もし <code>if</code> 文が真と評価されれば、インデントされたブロックが実行され、そうでなければ<code>else</code>ブロックが（もしあれば）実行される。式の周りに括弧がないないことに注意しよう。
+
+
+en:<li>This line is inside the <code>if</code> code block. This <code>raise</code> statement will raise an exception (of type <code>ValueError</code>), but only if <code>size &lt; 0</code>.
+ja:<li>この行は<code>if</code>コードブロックの中にある。この<code>raise</code>文は、<code>size &lt; 0</code>のときに限って（<code>ValueError</code>型の）例外を送出するのだ。
+
+
+en:<li>This is <em>not</em> the end of the function. Completely blank lines don&#8217;t count. They can make the code more readable, but they don&#8217;t count as code block delimiters. The function continues on the next line.
+ja:<li>これは関数の終わり<em>ではない</em>。完全に空白の行は無視される。空行はコードを読みやすくしてくれるが、コードブロックの終了とはみなされない。この関数は次行以降も継続する。
+
+
+en:<li>The <code>for</code> loop also marks the start of a code block. Code blocks can contain multiple lines, as long as they are all indented the same amount. This <code>for</code> loop has three lines of code in it. There is no other special syntax for multi-line code blocks. Just indent and get on with your life.
+ja:<li><code>for</code>ループもコードブロックの開始を示す印だ。コードブロックは複数の行を含むことができ、同じインデント量にしている限り継続する。この<code>for</code>ループは3行のコードを含んでいる。インデント以外に複数行のコードブロックを表す記法は存在しない。だから、インデントだけを整えて、後は気にせず進めていけばいい。
+
+en:<p>After some initial protests and several snide analogies to Fortran, you will make peace with this and start seeing its benefits. One major benefit is that all Python programs look similar, since indentation is a language requirement and not a matter of style. This makes it easier to read and understand other people&#8217;s Python code.
+ja:<p>初めはインデントに抵抗を感じたり、Fortranとの類似性を意地悪く言いたてたりするかもしれないが、次第にこのインデントを受け入れて、その利点を理解するようになろうだろう。インデントの大きな利点の一つは、すべてのPythonプログラムが同じような体裁を持つようになることだ。これはインデントが単なるスタイルではなく言語上の要求であることの帰結であり、他人が書いたコードを読んで理解することをより容易にしてくれる。
+
+
+en:<p><span class=u>&#x261E;</span>Python uses carriage returns to separate statements and a colon and indentation to separate code blocks. <abbr>C++</abbr> and Java use semicolons to separate statements and curly braces to separate code blocks.
+ja:<p><span class=u>&#x261E;</span>Pythonは、文を分けるために改行を使い、コードブロックを分けるためにコロンとインデントを使う。<abbr>C++</abbr>やJavaは文を分けるためにセミコロンを使い、コードブロックを分けるのに波括弧を使う。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=exceptions>Exceptions</h2>
+ja:<h2 id=exceptions>例外</h2>
+
+
+en:<p>Exceptions are everywhere in Python. Virtually every module in the standard Python library uses them, and Python itself will raise them in a lot of different circumstances. You&#8217;ll see them repeatedly throughout this book.
+ja:<p>例外はPythonのあらゆる所にある。Pythonの事実上すべての標準モジュールが例外を使用しているし、Python自体も実に様々な状況において例外を送出する。この本を通してそれを何度も見かけることになる。
+
+
+en:<p>What is an exception? Usually it&#8217;s an error, an indication that something went wrong. (Not all exceptions are errors, but never mind that for now.) Some programming languages encourage the use of error return codes, which you <em>check</em>. Python encourages the use of exceptions, which you <em>handle</em>.
+ja:<p>例外とは何か？ 通常これはエラーであり、何かがうまくいかなかったことを知らせるものだ（エラーではない例外もあるが、現時点ではそれは気にしないでおこう）。一部のプログラミング言語は、エラーを戻り値として返すことを奨励しており、あなたは戻り値を<em>チェック</em>する。Pythonは例外の使用を奨励しており、あなたはそれを<em>処理</em>するのだ。
+
+
+en:<p>When an error occurs in the Python Shell, it prints out some details about the exception and how it happened, and that&#8217;s that. This is called an <em>unhandled</em> exception. When the exception was raised, there was no code to explicitly notice it and deal with it, so it bubbled its way back up to the top level of the Python Shell, which spits out some debugging information and calls it a day. In the shell, that's no big deal, but if that happened while your actual Python program was running, the entire program would come to a screeching halt if nothing handles the exception. Maybe that&#8217;s what you want, maybe it isn&#8217;t.
+ja:<p>Pythonシェルでエラーが起きたときは、シェルは例外の詳細とそれがどうやって起きたのかを表示し、処理を止めてしまう。これは<em>未処理</em>例外とよばれる。例外が発生したときに、これを明示的に見つけて処理するコードが1つも存在しない場合は、例外がPythonシェルのトップレベルまで浮き上がってきて、デバッグ情報を吐き出し、それで実行が終了する。シェルでは、これはたいした問題にはならないが、実際のPythonプログラムが動作している最中にこれが起きた場合には、例外が処理されない限り、プログラムが悲鳴を上げて停止することになる。これは望ましい動作かもしれないし、そうでないかもしれない。
+
+
+en:<p><span class=u>&#x261E;</span>Unlike Java, Python functions don&#8217;t declare which exceptions they might raise. It&#8217;s up to you to determine what possible exceptions you need to catch.
+ja:<p><span class=u>&#x261E;</span>Javaとは違い、Pythonの関数は、自身がどのような例外を送出するのかを宣言しない。発生しうる例外のうち捕捉すべきものを見定めるのはあなたの責任だ。
+
+
+en:<p>An exception doesn&#8217;t need to result in a complete program crash, though. Exceptions can be <em>handled</em>. Sometimes an exception is really because you have a bug in your code (like accessing a variable that doesn&#8217;t exist), but sometimes an exception is something you can anticipate. If you&#8217;re opening a file, it might not exist. If you&#8217;re importing a module, it might not be installed. If you&#8217;re connecting to a database, it might be unavailable, or you might not have the correct security credentials to access it. If you know a line of code may raise an exception, you should handle the exception using a <code>try...except</code> block.
+ja:<p>例外は、必ずしもプログラムのクラッシュを引き起こすわけではない。例外は<em>処理</em>できるのだ。例外の原因が完全にコードのバグ（存在しない変数にアクセスするなどの）であることもあるが、例外の発生が予期できることもある。ファイルを開こうとしたとき、そのファイルは存在しないかもしれない。モジュールをインポートしようとするとき、そのモジュールはインストールされていないかもしれない。データベースに接続しようとしたとき、そのデータベースは利用できないかもしれないし、アクセスするための適切なセキュリティ証明書を持っていないかもしれない。もし、そのコードが例外を発生させることを知っているのならば、<code>try...except</code>ブロックを使って例外を処理すべきだ。
+
+
+en:<p><span class=u>&#x261E;</span>Python uses <code>try...except</code> blocks to handle exceptions, and the <code>raise</code> statement to generate them. Java and <abbr>C++</abbr> use <code>try...catch</code> blocks to handle exceptions, and the <code>throw</code> statement to generate them.
+ja:<p><span class=u>&#x261E;</span>Pythonでは、例外を処理するために<code>try...except</code>ブロック使い、例外を生成するために<code>raise</code>文を使う。Javaや<abbr>C++</abbr>では、例外を処理するために<code>try...catch</code>ブロック使い、例外を生成するために<code>throw</code>文を使う。
+
+
+en:<p>The <code>approximate_size()</code> function raises exceptions in two different cases: if the given <var>size</var> is larger than the function is designed to handle, or if it&#8217;s less than zero.
+ja:<p><code>approximate_size()</code>は2つの異なる状況において例外を発生する: <var>size</var>が想定よりも大きい場合と、ゼロより小さい場合だ。
+
+
+en:<p>The syntax for raising an exception is simple enough. Use the <code>raise</code> statement, followed by the exception name, and an optional human-readable string for debugging purposes. The syntax is reminiscent of calling a function. (In reality, exceptions are implemented as classes, and this <code>raise</code> statement is actually creating an instance of the <code>ValueError</code> class and passing the string <code>'number must be non-negative'</code> to its initialization method. But <a href=iterators.html#defining-classes>we&#8217;re getting ahead of ourselves</a>!)
+ja:<p>例外を発生させる構文は実にシンプルだ。<code>raise</code>文を使い、その後に例外名と、オプションでデバッグ用の人間が読める文字列を置く。この構文は関数呼び出しに似ている（実際に、例外はクラスとして実装されており、<code>raise</code>は<code>ValueError</code>クラスのインスタンスを生成し、<code>'number must be non-negative'</code>という文字列をインスタンスの初期化メソッドに渡す。しかしこの話は<a href=iterators.html#defining-classes>先走りすぎ</a>だ！）。
+
+
+en:<p><span class=u>&#x261E;</span>You don&#8217;t need to handle an exception in the function that raises it. If one function doesn&#8217;t handle it, the exception is passed to the calling function, then that function&#8217;s calling function, and so on &#8220;up the stack.&#8221; If the exception is never handled, your program will crash, Python will print a &#8220;traceback&#8221; to standard error, and that&#8217;s the end of that. Again, maybe that&#8217;s what you want; it depends on what your program does.
+ja:<p><span class=u>&#x261E;</span>例外は、それを発生させた関数の中で処理される必要はない。もし、その関数が例外を処理しない場合は、例外はその関数を呼び出している関数へ渡され、更にその関数を呼び出している関数に渡され、以降同様に「スタックをさかのぼる」。もしどの関数でも例外が処理されない場合は、プログラムはクラッシュし、Pythonが "Traceback" というものを標準エラー出力に出力し、一連の流れが終わる。繰り返すが、これは望む結果かもしれない。それはあなたのプログラムが何をするのかによるのだ。
+
+
+en:<h3 id=importerror>Catching Import Errors</h3>
+ja:<h3 id=importerror>インポートエラーを捕捉する</h3>
+
+
+en:<p>One of Python&#8217;s built-in exceptions is <code>ImportError</code>, which is raised when you try to import a module and fail. This can happen for a variety of reasons, but the simplest case is when the module doesn&#8217;t exist in your <a href=#importsearchpath>import search path</a>. You can use this to include optional features in your program. For example, <a href=case-study-porting-chardet-to-python-3.html>the <code>chardet</code> library</a> provides character encoding auto-detection. Perhaps your program wants to use this library <em>if it exists</em>, but continue gracefully if the user hasn&#8217;t installed it. You can do this with a <code>try..except</code> block.
+ja:<p>Pythonの組み込み例外の１つに <code>ImportError</code> があり、これはモジュールをインポートしようとして失敗したときに発生する。これは様々な理由で起きうるが、最も単純なケースは、インポートしようとしたモジュールが<a href=#importsearchpath>import検索パス</a>のなかに見つからない場合だ。これを使えば、プログラムにオプション機能を追加できる。例えば、<a href=case-study-porting-chardet-to-python-3.html><code>chardet</code>ライブラリ</a>は文字コードの自動判定を行う機能を備えている。あなたのプログラムは、このライブラリが<em>もし存在すれば</em>これを使いたいが、ユーザがこれをインストールしていない場合でもそのまま実行を続けたいかもしれない。このような処理は <code>try...except</code> ブロックを使えば実現できる。
+
+
+en:<p>Later, you can check for the presence of the <code>chardet</code> module with a simple <code>if</code> statement:
+ja:<p>これ以降、<code>chardet</code>モジュールの存在を単純な<code>if</code>文で判断できる。
+
+
+en:<p>Another common use of the <code>ImportError</code> exception is when two modules implement a common <abbr>API</abbr>, but one is more desirable than the other. (Maybe it&#8217;s faster, or it uses less memory.) You can try to import one module but fall back to a different module if the first import fails. For example, <a href=xml.html>the XML chapter</a> talks about two modules that implement a common <abbr>API</abbr>, called the <code>ElementTree</code> <abbr>API</abbr>. The first, <code>lxml</code>, is a third-party module that you need to download and install yourself. The second, <code>xml.etree.ElementTree</code>, is slower but is part of the Python 3 standard library.
+ja:<p><code>ImportError</code>例外が使われるもう一つの一般的な場面は、2つのモジュールが共通の<abbr>API</abbr>を実装しているが、どちらか一方が他方より望ましい（高速だったり、メモリ使用が少ないなど）という場合だ。この時、まず一方のモジュールをインポートしようとしてみて、それが失敗したときには、もう一方のモジュールへフォールバックできる。例えば、<a href=xml.html>XMLの章</a>では<code>ElementTree</code> <abbr>API</abbr>と呼ばれる共通の<abbr>API</abbr>を実装した2つのモジュールについて触れることになる。1つは<code>lxml</code>というサードパーティのモジュールで、自分でインストールしなければ使えない。2つ目は<code>xml.etree.ElementTree</code>というモジュールで、これはPython 3の標準ライブラリに入っているものの処理速度が遅い。
+
+
+en:<p>By the end of this <code>try..except</code> block, you have imported <em>some</em> module and named it <var>etree</var>. Since both modules implement a common <abbr>API</abbr>, the rest of your code doesn&#8217;t need to keep checking which module got imported. And since the module that <em>did</em> get imported is always called <var>etree</var>, the rest of your code doesn&#8217;t need to be littered with <code>if</code> statements to call differently-named modules.
+ja:<p>この<code>try...except</code>ブロックを抜けるころには、<em>何らかの</em>モジュールがインポートされて、それを<var>etree</var>という名前で呼び出せるようになっている。両者のモジュールは共通の<abbr>API</abbr>を実装しているので、コードの他の部分では、どちらのモジュールがインポートされたのかを気にする必要はない。そして、モジュールは常に<var>etree</var>という名前でインポートされるので、違う名前のモジュールを呼び分けるために、コードのあちこちを<code>if</code>文で汚す必要はない。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=nameerror>Unbound Variables</h2>
+ja:<h2 id=nameerror>未束縛の変数</h2>
+
+
+en:<p>Take another look at this line of code from the <code>approximate_size()</code> function:
+ja:<p><code>approximate_size()</code>関数の次の行を別の視点から見てみよう：
+
+
+en:<p>You never declare the variable <var>multiple</var>, you just assign a value to it. That&#8217;s OK, because Python lets you do that. What Python will <em>not</em> let you do is reference a variable that has never been assigned a value. Trying to do so will raise a <code>NameError</code> exception.
+ja:<p>変数<var>multiple</var>の宣言はどこにも行なっておらず、単に<var>multiple</var>に値を代入しているだけだ。これで問題ない。Pythonはそうできるようになっているのだ。Pythonが<em>許さない</em>のは、値がまだ代入されていない変数を参照することだ。それをしようとすると、<code>NameError</code>例外が発生する。
+
+
+en:<p>You will thank Python for this one day.
+ja:<p>いつかこのことでPythonに感謝することになるだろう。
+
+
+en:<h2 id=case>Everything is Case-Sensitive</h2>
+ja:<h2 id=case>あらゆるものにおいて大文字と小文字が区別される</h2>
+
+
+en:<p>All names in Python are case-sensitive: variable names, function names, class names, module names, exception names. If you can get it, set it, call it, construct it, import it, or raise it, it&#8217;s case-sensitive.
+ja:<p>Pythonにおけるすべての名前: 変数名・関数名・クラス名・モジュール名・例外名では大文字と小文字が区別される。取得・設定・呼び出し・生成・インポート・送出ができるものなら、大文字と小文字が区別されるのだ。
+
+en:<p>And so on.
+ja:<p>などなど。
+
+
+en:<h2 id=runningscripts>Running Scripts</h2>
+ja:<h2 id=runningscripts>スクリプトを実行する</h2>
+
+
+en:<aside>Everything in Python is an object.</aside>
+ja:<aside>Pythonではあらゆるのものがオブジェクト。</aside>
+
+
+en:<p>Python modules are objects and have several useful attributes. You can use this to easily test your modules as you write them, by including a special block of code that executes when you run the Python file on the command line. Take the last few lines of <code>humansize.py</code>:
+ja:<p>Pythonのモジュールはオブジェクトであり、いくつかの便利な属性を持っている。これを使えば、モジュールを書いたときに、そのモジュールを簡単にテストできるようになる。Pythonファイルをコマンドライン上で走らせた場合だけに実行される特別なブロックを書き加えればいいのだ。<code>humansize.py</code>の最後の数行を見てみよう：
+
+
+en:<p><span class=u>&#x261E;</span>Like <abbr>C</abbr>, Python uses <code>==</code> for comparison and <code>=</code> for assignment. Unlike <abbr>C</abbr>, Python does not support in-line assignment, so there&#8217;s no chance of accidentally assigning the value you thought you were comparing.
+ja:<p><span class=u>&#x261E;</span><abbr>C</abbr>言語と同様に、Pythonは<code>==</code>を比較のために使い、<code>=</code>を代入のために使う。<abbr>C</abbr>言語とは違い、Pythonはインラインの代入をサポートしていないので、比較をするつもりで誤って代入をしてしまう可能性はない。
+
+
+en:<p>So what makes this <code>if</code> statement special?  Well, modules are objects, and all modules have a built-in attribute <code>__name__</code>. A module&#8217;s <code>__name__</code> depends on how you&#8217;re using the module. If you <code>import</code> the module, then <code>__name__</code> is the module&#8217;s filename, without a directory path or file extension.
+ja:<p>この<code>if</code>文がやっている特殊なこととは何だろう？ まず、モジュールはオブジェクトであり、すべてのモジュールは<code>__name__</code>という組み込みの属性を持っている。モジュールの<code>__name__</code>の値は、そのモジュールをどのように使っているかに応じて決まる。そのモジュールを <code>import</code> した場合は、<code>__name__</code>はモジュールのファイル名からディレクトリ名や拡張子を取り除いたものになる。
+
+
+en:<p>But you can also run the module directly as a standalone program, in which case <code>__name__</code> will be a special default value, <code>__main__</code>. Python will evaluate this <code>if</code> statement, find a true expression, and execute the <code>if</code> code block. In this case, to print two values.
+ja:<p>しかしモジュールは、スタンドアローンのプログラムとして直接実行することもできる。この場合には<code>__name__</code>は特別なデフォルト値の<code>"__main__"</code>になる。Pythonはこの <code>if</code> 文を評価し、その式が真だということを知り、<code>if</code>のコードブロックを実行する。この例では、2つの値が表示される。
+
+
+en:<p>And that&#8217;s your first Python program!
+ja:<p>そして、これがあなたの初めてのPythonプログラムだ！
+
+
+en:<li><a href=http://www.python.org/dev/peps/pep-0257/>PEP 257: Docstring Conventions</a> explains what distinguishes a good <code>docstring</code> from a great <code>docstring</code>.
+ja:<li><a href=http://www.python.org/dev/peps/pep-0257/>PEP 257: Docstring Conventions</a> は、良い<code>docstring</code>と最高の<code>docstring</code>の違いについて説明している。
+
+
+en:<li><a href=http://docs.python.org/3.1/tutorial/controlflow.html#documentation-strings>Python Tutorial: Documentation Strings</a> also touches on the subject.
+ja:<li><a href=http://docs.python.org/3.1/tutorial/controlflow.html#documentation-strings>Python Tutorial: Documentation Strings</a> もその話題に触れている。
+
+
+en:<li><a href=http://www.python.org/dev/peps/pep-0008/>PEP 8: Style Guide for Python Code</a> discusses good indentation style.
+ja:<li><a href=http://www.python.org/dev/peps/pep-0008/>PEP 8: Style Guide for Python Code</a> は、良いインデントスタイルについて議論している。
+
+
+en:<li><a href=http://docs.python.org/3.1/reference/><cite>Python Reference Manual</cite></a> explains what it means to say that <a href=http://docs.python.org/3.1/reference/datamodel.html#objects-values-and-types>everything in Python is an object</a>, because some people are <a href=http://www.douglasadams.com/dna/pedants.html>pedants</a> and like to discuss that sort of thing at great length.
+ja:<li><a href=http://docs.python.org/3.1/reference/><cite>Python Reference Manual</cite></a> は、<a href=http://docs.python.org/3.1/reference/datamodel.html#objects-values-and-types>Pythonではあらゆるものがオブジェクト</a>と言ったことが何を意味するのかを説明している。これは一部の<a href=http://www.douglasadams.com/dna/pedants.html>ペダンチックな</a>人々が好き好んで、この類のことを長々と議論するからだ。
+
+
+en:<p class=v><a rel=prev href=installing-python.html title='back to &#8220;Installing Python&#8221;'><span class=u>&#x261C;</span></a> <a rel=next href=native-datatypes.html title='onward to &#8220;Native Datatypes&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a rel=prev href=installing-python.html title='「Pythonをインストールする」に戻る'><span class=u>&#x261C;</span></a> <a rel=next href=native-datatypes.html title='「ネイティブデータ型」に進む'><span class=u>&#x261E;</span></a>
+
+

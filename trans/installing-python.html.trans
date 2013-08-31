@@ -1,0 +1,553 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#installing-python>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#installing-python>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<title>Installing Python - Dive Into Python 3</title>
+ja:<title>Pythonをインストールする - Dive Into Python 3 日本語版</title>
+
+
+en:<h1>Installing Python</h1>
+ja:<h1>Pythonをインストールする</h1>
+
+
+en:<p><span class=u>&#x275D;</span> <i lang=la>Tempora mutantur nos et mutamur in illis.</i> (Times change, and we change with them.) <span class=u>&#x275E;</span><br>&mdash; ancient Roman proverb
+ja:<p><span class=u>&#x275D;</span> <i lang=la>Tempora mutantur nos et mutamur in illis.</i>（時勢は変わり、我々もそれとともに変わる）<span class=u>&#x275E;</span><br>&mdash; 古代ローマのことわざ
+
+
+en:<p class=f>Before you can start programming in Python 3, you need to install it. Or do you?
+ja:<p class=f>Python 3でのプログラミングを始める前に、まずはPython 3をインストールする必要がある。それとも、もうインストールしてあるだろうか？
+
+
+en:<h2 id=which>Which Python Is Right For You?</h2>
+ja:<h2 id=which>どのPythonを使えばよいのだろうか？</h2>
+
+en:<p>If you're using an account on a hosted server, your <abbr>ISP</abbr> may have already installed Python 3. If you&#8217;re running Linux at home, you may already have Python 3, too. Most popular GNU/Linux distributions come with Python 2 in the default installation; a small but growing number of distributions also include Python 3. Mac OS X includes a command-line version of Python 2, but as of this writing it does not include Python 3. Microsoft Windows does not come with any version of Python. But don&#8217;t despair! You can point-and-click your way through installing Python, regardless of what operating system you have.
+ja:<p>ホスティングサーバのアカウントを持っている人は、その<abbr>ISP</abbr>がPython 3をすでにインストールしているかもしれない。もし自宅でLinuxを使っているのなら、同様にPython 3がすでにインストールされているかもしれない。ほとんどの有名なGNU/LinuxディストリビューションにはデフォルトインストールでPython 2が導入されているが、Python 3を含むディストリビューションも少ないながら存在しており、その数はしだいに増えてきている。Mac OS XにはコマンドラインバージョンのPython 2が入っているが、いまこれを書いている時点ではPython 3は入っていない。Microsoft Windowsには、どのバーションのPythonも付属していない。でも、諦めないように！ あなたがどのOSを使っているとしても、マウス操作だけでPythonをインストールできる。
+
+
+en:<p>The easiest way to check for Python 3 on your Linux or Mac OS X system is to get to a command line. On Linux, look in your <b><code>Applications</code></b> menu for a program called <b><code>Terminal</code></b>. (It may be in a submenu like <b><code>Accessories</code></b> or <b><code>System</code></b>.) On Mac OS X, there is an application called <b><code>Terminal.app</code></b> in your <code>/Application/Utilities/</code> folder.
+ja:<p>あなたのLinuxやMac OS XにPython 3が入っているかどうかを確認するには、コマンドラインを使ってみるのが一番簡単だ。Linuxの場合は、<b><code>アプリケーション</code></b>メニューから<b><code>端末</code></b>と呼ばれるプログラムを探してほしい（もしかしたら<b><code>アクセサリ</code></b>や<b><code>システム</code></b>といったサブメニューの中に入っているかも）。Mac OS Xの場合は、<code>/Application/Utilities</code>フォルダに<b><code>Terminal.app</code></b>というアプリケーションが存在する。
+
+
+en:<p>Once you&#8217;re at a command line prompt, just type <kbd>python3</kbd> (all lowercase, no spaces) and see what happens. On my home Linux system, Python 3 is already installed, and this command gets me into the <i>Python <dfn>interactive shell</dfn></i>.
+ja:<p>コマンドラインプロンプトが表示されたら、ただ<kbd>python3</kbd>（すべて小文字、空白なし）と入力し、何が起きるかを確認してほしい。私の自宅のLinuxシステムにはすでにPython 3がインストールされているので、このコマンドによって「<dfn>Python対話シェル</dfn>」が起動する。
+
+
+en:<p>(Type <kbd>exit()</kbd> and press <kbd>ENTER</kbd> to exit the Python interactive shell.)
+ja:<p>（Python対話シェルを終了するには、<kbd>exit()</kbd>と入力して<kbd>ENTER</kbd>キーを押そう）
+
+
+en:<p>My <a href=http://cornerhost.com/>web hosting provider</a> also runs Linux and provides command-line access, but my server does not have Python 3 installed. (Boo!)
+ja:<p>私の<a href=http://cornerhost.com/>ウェブホスティングプロバイダ</a>もLinuxが動作していて、コマンドラインへのアクセスが提供されているが、このサーバにはPython 3がインストールされていない（ちぇっ！）。
+
+
+en:<p>So back to the question that started this section, &#8220;Which Python is right for you?&#8221;  Whichever one runs on the computer you already have.
+ja:<p>では、この節の初めの質問へ戻ろう。「どのPythonをつかえば良いのだろうか？」 その答えは、「使っているコンピュータで動作するならどれでも良い」だ。
+
+
+en:<p>[Read on for Windows instructions, or skip to <a href=#macosx>Installing on Mac OS X</a>, <a href=#ubuntu>Installing on Ubuntu Linux</a>, or <a href=#other>Installing on Other Platforms</a>.]
+ja:<p>[次節では、Windowsへのインストール方法を説明する。その他のOSについては、<a href=#macosx>Mac OS Xにインストールする</a>、<a href=#ubuntu>Ubuntu Linuxにインストールする</a>、<a href=#other>その他のプラットフォームにインストールする</a>まで進んで欲しい。]
+
+
+en:<h2 id=windows>Installing on Microsoft Windows</h2>
+ja:<h2 id=windows>Microsoft Windowsにインストールする</h2>
+
+
+en:<p>Windows comes in two architectures these days: 32-bit and 64-bit. Of course, there are lots of different <i>versions</i> of Windows&nbsp;&mdash;&nbsp;XP, Vista, Windows 7&nbsp;&mdash;&nbsp;but Python runs on all of them. The more important distinction is 32-bit v. 64-bit. If you have no idea what architecture you&#8217;re running, it&#8217;s probably 32-bit.
+ja:<p>Windowsは現在、32ビット版と64ビット版の2つのアーキテクチャで提供されている。もちろんWindowsにはたくさんの異なる「バージョン」、すなわちXP, Vista, Windows 7が存在するが、Pythonはこの中のどれの上でも動作する。それよりも、32ビットと64ビットのどちらであるかの方が重要だ。もし実行しているアーキテクチャがどちらなのか分からないなら、おそらく32ビットの方だろう。
+
+
+en:<p>Visit <a href=http://python.org/download/><code>python.org/download/</code></a> and download the appropriate Python 3 Windows installer for your architecture. Your choices will look something like this:
+ja:<p><a href=http://python.org/download/><code>python.org/download/</code></a>を訪れ、アーキテクチャに合ったPython 3のWindows用インストーラをダウンロードして欲しい。次のようなものを選ぶことになるだろう：
+
+
+en:<li><b>Python 3.1 Windows installer</b> (Windows binary&nbsp;&mdash;&nbsp;does not include source)
+ja:<li><b>Python 3.1 Windows installer</b> (Windows binary&nbsp;&mdash;&nbsp;does not include source)
+
+
+en:<li><b>Python 3.1 Windows AMD64 installer</b> (Windows AMD64 binary&nbsp;&mdash;&nbsp;does not include source)
+ja:<li><b>Python 3.1 Windows AMD64 installer</b> (Windows AMD64 binary&nbsp;&mdash;&nbsp;does not include source)
+
+
+en:<p>I don&#8217;t want to include direct download links here, because minor updates of Python happen all the time and I don&#8217;t want to be responsible for you missing important updates. You should always install the most recent version of Python 3.x unless you have some esoteric reason not to.
+ja:<p>インストーラを直接ダウンロードするためのリンクはここに書かないでおきたい。というのは、Pythonのマイナーアップデートは日常茶飯事であり、あなたが重要なアップデートを逃すことになっても責任がとれないからだ。何か深遠なる意図がある場合は別として、常に最新バーションの Python 3.x をインストールするのがよいだろう。
+
+
+en:<p class='ss nm'><img src=i/win-install-0-security-warning.png width=409 height=309 alt='[Windows dialog: open file security warning]'>
+ja:<p class='ss nm'><img src=i/win-install-0-security-warning.png width=409 height=309 alt='[Windows ダイアログ: open file security warning]'>
+
+
+en:<p>Once your download is complete, double-click the <code>.msi</code> file. Windows will pop up a security alert, since you&#8217;re about to be running executable code. The official Python installer is digitally signed by the <a href=http://www.python.org/psf/>Python Software Foundation</a>, the non-profit corporation that oversees Python development. Don&#8217;t accept imitations!
+ja:<p>ダウンロードが完了したら<code>.msi</code>ファイルをダブルクリックしよう。実行可能ファイルを実行しようとしているので、Windowsはセキュリティ警告を表示するだろう。公式のPythonインストーラは、Pythonの開発を監督している非営利企業の<a href=http://www.python.org/psf/>Python Software Foundation</a>によってディジタル署名されている。偽物を実行させたらダメだよ！
+
+
+en:<p>Click the <code>Run</code> button to launch the Python 3 installer.
+ja:<p><code>実行</code>ボタンをクリックしてPython 3インストーラを起動しよう。
+
+
+en:<p class='ss nm'><img src=i/win-install-1-all-users-or-just-me.png width=499 height=432 alt='[Python installer: select whether to install Python 3.1 for all users of this computer]'>
+ja:<p class='ss nm'><img src=i/win-install-1-all-users-or-just-me.png width=499 height=432 alt='[Pythonインストーラ: select whether to install Python 3.1 for all users of this computer]'>
+
+
+en:<p>The first question the installer will ask you is whether you want to install Python 3 for all users or just for you. The default choice is &#8220;install for all users,&#8221; which is the best choice unless you have a good reason to choose otherwise. (One possible reason why you would want to &#8220;install just for me&#8221; is that you are installing Python on your company&#8217;s computer and you don&#8217;t have administrative rights on your Windows account. But then, why are you installing Python without permission from your company&#8217;s Windows administrator? Don&#8217;t get me in trouble here!)
+ja:<p>インストーラの最初の質問は、Python 3をすべてのユーザのためにインストールするのか、あなただけのためにインストールするのかを選択するものだ。デフォルトでは &#8220;install for all users&#8220; が選択されていて、別段何か理由がなければこれが最適な選択だ（&#8220;install just for me&#8221; を選ぶ理由の1つとしては、会社のコンピュータにPythonをインストールしようとしているが、あなたのWindowsアカウントには管理者権限が与えられていないという状況が考えられる。しかしなぜ会社のWindows管理者の許可を得ずにPythonをインストールしようとしているんだろう。私をトラブルに巻き込まないでくれよ！）。
+
+
+en:<p>Click the <code>Next</code> button to accept your choice of installation type.
+ja:<p><code>次へ</code>ボタンをクリックして、選択したインストールの種類を確定しよう。
+
+
+en:<p class='ss nm'><img src=i/win-install-2-destination-directory.png width=499 height=432 alt='[Python installer: select destination directory]'>
+ja:<p class='ss nm'><img src=i/win-install-2-destination-directory.png width=499 height=432 alt='[Pythonインストーラ: インストール先ディレクトリの選択]'>
+
+
+en:<p>Next, the installer will prompt you to choose a destination directory. The default for all versions of Python 3.1.x is <code>C:\Python31\</code>, which should work well for most users unless you have a specific reason to change it. If you maintain a separate drive letter for installing applications, you can browse to it using the embedded controls, or simply type the pathname in the box below. You are not limited to installing Python on the <code>C:</code> drive; you can install it on any drive, in any folder.
+ja:<p>インストーラは次に、インストール先のディレクトリを選択するように指示してくる。Python 3.1.xのすべてのバージョンでは、そのデフォルト値は<code>C:\Python31\</code>になっている。これを変更する特別の理由がない限り、ほとんどのユーザはこのままの設定でうまくいくはずだ。アプリケーションを他のドライブにインストールしている人は、埋め込みのファイルブラウザを使ってその場所まで移動するか、あるいはその下のボックスにパス名を直接入力してほしい。別にPythonのインストール先は<code>C:</code>ドライブに制限されておらず、任意のドライブの任意のフォルダにインストールできる。
+
+
+en:<p>Click the <code>Next</code> button to accept your choice of destination directory.
+ja:<p><code>次へ</code> ボタンをクリックしてインストール先のディレクトリを確定する。
+
+
+en:<p class='ss nm'><img src=i/win-install-3-customize.png width=499 height=432 alt='[Python installer: customize Python 3.1]'>
+ja:<p class='ss nm'><img src=i/win-install-3-customize.png width=499 height=432 alt='[Python installer: customize Python 3.1]'>
+
+
+en:<p>The next page looks complicated, but it&#8217;s not really. Like many installers, you have the option not to install every single component of Python 3. If disk space is especially tight, you can exclude certain components.
+ja:<p>次のページは複雑そうに見えるが、実はそうでもない。他の多くのインストーラと同様に、Python 3を構成する個々のコンポーネントについて、それをインストールしないという選択ができる。もしディスクスペースの空きが非常に少ないのであれば、特定のコンポーネントを除外できる。
+
+
+en:<li><b>Register Extensions</b> allows you to double-click Python scripts (<code>.py</code> files) and run them. Recommended but not required. (This option doesn&#8217;t require any disk space, so there is little point in excluding it.)
+ja:<li><b>Register Extensions</b>は、Pythonスクリプト (<code>.py</code> ファイル) をダブルクリックで実行できるようにする。有効にしておくことを奨めるが必須ではない（ただしこのオプションはディスクスペースを要求しないので、あえてこれを除外する理由はほとんどない）。
+
+
+en:<li><b>Tcl/Tk</b> is the graphics library used by the Python Shell, which you will use throughout this book. I strongly recommend keeping this option.
+ja:<li><b>Tcl/Tk</b>は、Pythonシェルによって使われているPythonのグラフィックライブラリだ。このPythonシェルはこの本を通して使うことになる。このオプションは有効にしておくことを強く奨める。
+
+
+en:<li><b>Documentation</b> installs a help file that contains much of the information on <a href=http://docs.python.org/><code>docs.python.org</code></a>. Recommended if you are on dialup or have limited Internet access.
+ja:<li><b>Documentation</b>は、<a href=http://docs.python.org/><code>docs.python.org</code></a> にあるほとんどの情報を含んだヘルプファイルだ。ダイアルアップ回線や制限されたインターネット接続を使っているのであれば有効にしておくことを奨める。
+
+
+en:<li><b>Utility Scripts</b> includes the <code>2to3.py</code> script which you&#8217;ll learn about <a href=case-study-porting-chardet-to-python-3.html>later in this book</a>. Required if you want to learn about migrating existing Python 2 code to Python 3. If you have no existing Python 2 code, you can skip this option.
+ja:<li><b>Utility Scripts</b>は<code>2to3.py</code>を含んでいる。これの使い方は<a href=case-study-porting-chardet-to-python-3.html>この本の後の章</a>で学ぶことになる。もしPython 2の既存のコードをPython 3へ移行する方法を学びたいのであればこのオプションは必要だ。Python 2のコードを持っていないのであればこのオプションは無効にしてもよい。
+
+
+en:<li><b>Test Suite</b> is a collection of scripts used to test the Python interpreter itself. We will not use it in this book, nor have I ever used it in the course of programming in Python. Completely optional.
+ja:<li><b>Test Suite</b>は、Pythonのインタプリタ自体をテストするためのスクリプト群だ。この本でこれを使う機会はないし、私がプログラミングをするときにこれを使ったこともない。インストールするかどうかは完全に任意だ。
+
+
+en:<p class='ss nm'><img src=i/win-install-3a-disk-usage.png width=499 height=432 alt='[Python installer: disk space requirements]'>
+ja:<p class='ss nm'><img src=i/win-install-3a-disk-usage.png width=499 height=432 alt='[Pythonインストーラ: disk space requirements]'>
+
+
+en:<p>If you&#8217;re unsure how much disk space you have, click the <code>Disk Usage</code> button. The installer will list your drive letters, compute how much space is available on each drive, and calculate how much would be left after installation.
+ja:<p>ディスクスペースにどれくらいの空きがあるかが不安であれば、<code>Disk Usage</code>ボタンをクリックするとよい。インストーラがドライブレターの一覧を表示し、各ディスクの現在の空きスペースと、インストール後の空きスペースを計算してくれる。
+
+
+en:<p>Click the <code>OK</code> button to return to the &#8220;Customizing Python&#8221; page.
+ja:<p><code>OK</code>ボタンをクリックして、&#8220;Customizing Python&#8221; ページに戻ろう。
+
+
+en:<p class='ss nm'><img src=i/win-install-3b-test-suite.png width=499 height=432 alt='[Python installer: removing Test Suite option will save 7908KB on your hard drive]'>
+ja:<p class='ss nm'><img src=i/win-install-3b-test-suite.png width=499 height=432 alt='[Pythonインストーラ: テストスイートを除外すると7908KBのディスク使用量を節約できる]'>
+
+
+en:<p>If you decide to exclude an option, select the drop-down button before the option and select &#8220;Entire feature will be unavailable.&#8221; For example, excluding the test suite will save you a whopping 7908<abbr>KB</abbr> of disk space.
+ja:<p>除外したいオプションがある場合は、そのオプションの前にあるドロップダウンボタンを押して、"Entire feature will be unavailable" を選択しよう。例えばテストスイートを除外すると、7908<abbr>KB</abbr>というかなりのディスクスペースが節約できる。
+
+
+en:<p>Click the <code>Next</code> button to accept your choice of options.
+ja:<p><code>次へ</code>ボタンをクリックして選択を確定しよう。
+
+
+en:<p class='ss nm'><img src=i/win-install-4-copying.png width=499 height=432 alt='[Python installer: progress meter]'>
+ja:<p class='ss nm'><img src=i/win-install-4-copying.png width=499 height=432 alt='[Pythonインストーラ: プログレスメータ]'>
+
+
+en:<p>The installer will copy all the necessary files to your chosen destination directory. (This happens so quickly, I had to try it three times to even get a screenshot of it!)
+ja:<p>インストーラは、すべての必要なファイルを選択したインストール先ディレクトリにコピーする（これは本当に一瞬で終わる。スクリーンショットを撮影するのに三回も挑戦する羽目になったぐらいだ！）。
+
+
+en:<p class='ss nm'><img src=i/win-install-5-finish.png width=499 height=432 alt='[Python installer: installation completed. Special Windows thanks to Mark Hammond, without whose years of freely shared Windows expertise, Python for Windows would still be Python for DOS.]'>
+ja:<p class='ss nm'><img src=i/win-install-5-finish.png width=499 height=432 alt='[Python installer: installation completed。Special Windows thanks to Mark Hammond、without whose years of freely shared Windows expertise、Python for Windows would still be Python for DOS.]'>
+
+
+en:<p>Click the <code>Finish</code> button to exit the installer.
+ja:<p><code>終了</code>ボタンをクリックしてインストーラを終了しよう。
+
+
+en:<p class='ss nm'><img src=i/win-interactive-shell.png width=677 height=715 alt='[Windows Python Shell, a graphical interactive shell for Python]'>
+ja:<p class='ss nm'><img src=i/win-interactive-shell.png width=677 height=715 alt='[Windows Pythonシェル、Python用のグラフィカルなシェル]'>
+
+
+en:<p>In your <code>Start</code> menu, there should be a new item called <code>Python 3.1</code>. Within that, there is a program called <abbr>IDLE</abbr>. Select this item to run the interactive Python Shell.
+ja:<p><code>スタート</code>メニューの中に、<code>Python 3.1</code>という新しいアイテムがあるはずだ。その中に<abbr>IDLE</abbr>というアプリケーションがある。これを選択してPython対話シェルを起動しよう。
+
+en:<p>[Skip to <a href=#idle>using the Python Shell</a>]
+ja:<p>[<a href=#idle>Pythonシェルを使う</a>へスキップする]
+
+
+en:<h2 id=macosx>Installing on Mac OS X</h2>
+ja:<h2 id=macosx>Mac OS Xにインストールする</h2>
+
+
+en:<p>All modern Macintosh computers use the Intel chip (like most Windows PCs). Older Macs used PowerPC chips. You don&#8217;t need to understand the difference, because there&#8217;s just one Mac Python installer for all Macs.
+ja:<p>最近のすべてのMacintoshコンピュータは（ほとんどのWindows PCと同様に）Intelチップを使っている。かつてのMacはPowerPCチップを使っていた。あなたがこの違いを気にする必要はない。というのも、１つのMac用PythonインストーラだけですべてのMacに対応できるようになっているからだ。
+
+
+en:<p>Visit <a href=http://python.org/download/><code>python.org/download/</code></a> and download the Mac installer. It will be called something like <b>Python 3.1 Mac Installer Disk Image</b>, although the version number may vary. Be sure to download version 3.x, not 2.x.
+ja:<p><a href=http://python.org/download/><code>python.org/download/</code></a>へ行き、Mac用インストーラをダウンロードしよう。バージョン番号は違うかもしれないが、これは<b>Python 3.1 Mac Installer Disk Image</b>などと書かれているはずだ。バージョン2.x系ではなく、3.x系をダウンロードすることに注意しよう。
+
+
+en:<p class='ss nm'><img src=i/mac-install-0-dmg-contents.png width=752 height=438 alt='[contents of Python installer disk image]'>
+ja:<p class='ss nm'><img src=i/mac-install-0-dmg-contents.png width=752 height=438 alt='[Pythonインストーラのディスクイメージの内容]'>
+
+
+en:<p>Your browser should automatically mount the disk image and open a Finder window to show you the contents. (If this doesn&#8217;t happen, you&#8217;ll need to find the disk image in your downloads folder and double-click to mount it. It will be named something like <code>python-3.1.dmg</code>.) The disk image contains a number of text files (<code>Build.txt</code>, <code>License.txt</code>, <code>ReadMe.txt</code>), and the actual installer package, <code>Python.mpkg</code>.
+ja:<p>おそらくブラウザは、ディスクイメージを自動的にマウントし、Finderのウィンドウを開いて内容を表示するだろう（もしそうならなければ、ダウンロードフォルダにあるディスクイメージを見つけ、それをダブルクリックしてマウントする必要がある。ディスクイメージは<code>python-3.1.dmg</code>のような名前であるはずだ）。このディスクイメージは、いくつかのテキストファイル (<code>Build.txt</code>、<code>License.txt</code>、<code>ReadMe.txt</code>) と、実際のインストーラパッケージである<code>Python.mpkg</code>を含んでいる。
+
+
+en:<p>Double-click the <code>Python.mpkg</code> installer package to launch the Mac Python installer.
+ja:<p>インストーラパッケージ<code>Python.mpkg</code>をダブルクリックすると、Mac用のPythonインストーラが起動する。
+
+
+en:<p class='ss nm'><img src=i/mac-install-1-welcome.png width=622 height=442 alt='[Python installer: welcome screen]'>
+ja:<p class='ss nm'><img src=i/mac-install-1-welcome.png width=622 height=442 alt='[Pythonインストーラ: ようこそ画面]'>
+
+
+en:<p>The first page of the installer gives a brief description of Python itself, then refers you to the <code>ReadMe.txt</code> file (which you didn&#8217;t read, did you?) for more details.
+ja:<p>インストーラの最初のページはPython自体の簡単な説明だ。詳細を知りたい場合は<code>ReadMe.txt</code>ファイルを読んでほしい（まだ読んでいないよね？）と書かれている。
+
+
+en:<p>Click the <code>Continue</code> button to move along.
+ja:<p><code>続ける</code> ボタンをクリックして先へ進もう。
+
+
+en:<p class='ss nm'><img src=i/mac-install-2-information.png width=622 height=442 alt='[Python installer: information about supported architectures, disk space, and acceptable destination folders]'>
+ja:<p class='ss nm'><img src=i/mac-install-2-information.png width=622 height=442 alt='[Pythonインストーラ: サポートするアーキテクチャに関する情報、ディスク容量、インストール可能な場所]'>
+
+
+en:<p>The next page actually contains some important information: Python requires Mac OS X 10.3 or later. If you are still running Mac OS X 10.2, you should really upgrade. Apple no longer provides security updates for your operating system, and your computer is probably at risk if you ever go online. Also, you can&#8217;t run Python 3.
+ja:<p>次のページは実は重要な情報を含んでいる。「Pythonを動かすにはMac OS X 10.3以降が必要です」というものだ。まだMac OS X 10.2を使っているのなら、早くアップグレードしたほうがいい。Appleは、これのセキュリティアップデートをすでに終了していて、コンピュータをオンラインにするのは危険を伴う。加えて、Python 3を実行することもできない。
+
+
+en:<p>Click the <code>Continue</code> button to advance.
+ja:<p><code>続ける</code>ボタンをクリックして先へ進む。
+
+
+en:<p class='ss nm'><img src=i/mac-install-3-license.png width=622 height=442 alt='[Python installer: software license agreement]'>
+ja:<p class='ss nm'><img src=i/mac-install-3-license.png width=622 height=442 alt='[Pythonインストーラ: ソフトウェア使用許諾契約]'>
+
+
+en:<p>Like all good installers, the Python installer displays the software license agreement. Python is open source, and its license is <a href=http://opensource.org/licenses/>approved by the Open Source Initiative</a>. Python has had a number of owners and sponsors throughout its history, each of which has left its mark on the software license. But the end result is this: Python is open source, and you may use it on any platform, for any purpose, without fee or obligation of reciprocity.
+ja:<p>すべての優れたインストーラがそうであるように、Pythonのインストーラもソフトウエア使用許諾契約を表示する。Pythonはオープンソースであり、そのライセンスは<a href=http://opensource.org/licenses/>Open Source Initiative</a>の認可を受けている。Pythonの歴史には数々の権利者やスポンサーが存在していて、彼らは皆、このソフトウエアライセンスに名前を残している。しかし、現在においてもなおPythonはオープンソースであり、どのプラットフォームでも、どんな利用目的でも、料金や代償的な義務なしに使用できる。
+
+
+en:<p>Click the <code>Continue</code> button once again.
+ja:<p><code>続ける</code>ボタンをもう一度クリックしよう。
+
+
+en:<p class='ss nm'><img src=i/mac-install-4-license-dialog.png width=622 height=442 alt='[Python installer: dialog to accept license agreement]'>
+ja:<p class='ss nm'><img src=i/mac-install-4-license-dialog.png width=622 height=442 alt='[Pythonインストーラ: 使用許諾契約に同意するダイアログ]'>
+
+
+en:<p>Due to quirks in the standard Apple installer framework, you must &#8220;agree&#8221; to the software license in order to complete the installation. Since Python is open source, you are really &#8220;agreeing&#8221; that the license is granting you additional rights, rather than taking them away.
+ja:<p>Appleの標準インストーラフレームワークが奇妙な作りをしているせいで、インストールを完了するにはソフトウエア契約に「同意」しなければならない。Pythonはオープンソースなので、権利を奪われるというより、むしろ更なる権利を受け取ることに「同意」することになる。
+
+
+en:<p>Click the <code>Agree</code> button to continue.
+ja:<p><code>同意する</code>を押して次へ進もう。
+
+
+en:<p class='ss nm'><img src=i/mac-install-5-standard-install.png width=622 height=442 alt='[Python installer: standard install screen]'>
+ja:<p class='ss nm'><img src=i/mac-install-5-standard-install.png width=622 height=442 alt='[Pythonインストーラ: 標準インストールの画面]'>
+
+
+en:<p>The next screen allows you to change your install location. You <strong>must</strong> install Python on your boot drive, but due to limitations of the installer, it does not enforce this. In truth, I have never had the need to change the install location.
+ja:<p>次の画面ではインストールする場所を変更できる。Pythonは起動ドライブにインストール<strong>しなければならない</strong>のだが、インストーラの制約によってこれが強制されない。実際のところ、私がインストール先を変更する必要に迫られたことはない。
+
+
+en:<p>From this screen, you can also customize the installation to exclude certain features. If you want to do this, click the <code>Customize</code> button; otherwise click the <code>Install</code> button.
+ja:<p>この画面からは、インストール設定をカスタマイズして特定の機能を除外することもできる。カスタマイズしたい場合は<code>Customize</code>ボタンを、そうでなければ<code>Install</code>ボタンをクリックしよう。
+
+
+en:<p class='ss nm'><img src=i/mac-install-6-custom-install.png width=622 height=442 alt='[Python installer: custom install screen]'>
+ja:<p class='ss nm'><img src=i/mac-install-6-custom-install.png width=622 height=442 alt='[Pythonインストーラ: カスタムインストールの画面]'>
+
+
+en:<p>If you choose a Custom Install, the installer will present you with the following list of features:
+ja:<p>カスタムインストールを選択した場合は、インストーラは、以下の機能の一覧を表示する：
+
+
+en:<li><b>Python Framework</b>. This is the guts of Python, and is both selected and disabled because it must be installed.
+ja:<li><b>Python Framework</b>。これはPython本体だ。必ずインストールしなければいけないので、チェックボックスは選択された状態で変更できないようにされている。
+
+
+en:<li><b>GUI Applications</b> includes IDLE, the graphical Python Shell which you will use throughout this book. I strongly recommend keeping this option selected.
+ja:<li><b>GUI Applications</b>は、グラフィカルなPythonシェルのIDLEを含んでいる。IDLEはこの本を通して使うことになる。このオプションは有効にしておくことを強く奨める。
+
+
+en:<li><b>UNIX command-line tools</b> includes the command-line <code>python3</code> application. I strongly recommend keeping this option, too.
+ja:<li><b>UNIX command-line tools</b>は、コマンドラインの<code>python3</code>アプリケーションを含んでいる。これもインストールすることを強く奨める。
+
+
+en:<li><b>Python Documentation</b> contains much of the information on <a href=http://docs.python.org/><code>docs.python.org</code></a>. Recommended if you are on dialup or have limited Internet access.
+ja:<li><b>Python Documentation</b>は、<a href=http://docs.python.org/><code>docs.python.org</code></a> にあるほとんどの情報を含むヘルプファイルだ。ダイアルアップ回線や制限されたインターネット接続を使っているのであれば有効にしておくことを奨める。
+
+
+en:<li><b>Shell profile updater</b> controls whether to update your shell profile (used in <code>Terminal.app</code>) to ensure that this version of Python is on the search path of your shell. You probably don&#8217;t need to change this.
+ja:<li><b>Shell profile updater</b>は、このバージョンのPythonがシェルの検索パスにあることを保証するために、シェルプロファイルを更新するかどうかを管理する。おそらくこれを変更する必要はない。
+
+
+en:<li><b>Fix system Python</b> should not be changed. (It tells your Mac to use Python 3 as the default Python for all scripts, including built-in system scripts from Apple. This would be very bad, since most of those scripts are written for Python 2, and they would fail to run properly under Python 3.)
+ja:<li><b>Fix system Python</b>は変更すべきでない（このオプションは、Appleによる組み込みのシステムスクリプトを含むあらゆるPythonスクリプトをPython 3で実行すべしとMac OSに命ずるものだ。おそらくこれはとても酷いことになる。というのも、これらのスクリプトのほとんどはPython 2用に書かれているので、Python 3だと正常に動作しなくなってしまうからだ）。
+
+
+en:<p>Click the <code>Install</code> button to continue.
+ja:<p><code>Install</code> をクリックして次へ進もう。
+
+
+en:<p class='ss nm'><img src=i/mac-install-7-admin-password.png width=622 height=457 alt='[Python installer: dialog to enter administrative password]'>
+ja:<p class='ss nm'><img src=i/mac-install-7-admin-password.png width=622 height=457 alt='[Pythonインストーラ: 管理者パスワードを入力するダイアログ]'>
+
+
+en:<p>Because it installs system-wide frameworks and binaries in <code>/usr/local/bin/</code>, the installer will ask you for an administrative password. There is no way to install Mac Python without administrator privileges.
+ja:<p>システム全体に影響するフレームワークとバイナリを<code>/usr/local/bin/</code>へインストールするので、インストーラは、管理者権限のパスワードを尋ねてくる。管理者権限なしにMacへPythonをインストールする方法はない。
+
+
+en:<p>Click the <code>OK</code> button to begin the installation.
+ja:<p><code>OK</code> ボタンをクリックして次へ進もう。
+
+
+en:<p class='ss nm'><img src=i/mac-install-8-progress.png width=622 height=442 alt='[Python installer: progress meter]'>
+ja:<p class='ss nm'><img src=i/mac-install-8-progress.png width=622 height=442 alt='[Pythonインストーラー: プログレスバー]'>
+
+
+en:<p>The installer will display a progress meter while it installs the features you&#8217;ve selected.
+ja:<p>選択した機能をインストールしているあいだ、インストーラは、その進捗状況を示すメータを表示する。
+
+
+en:<p class='ss nm'><img src=i/mac-install-9-succeeded.png width=622 height=442 alt='[Python installer: install succeeded]'>
+ja:<p class='ss nm'><img src=i/mac-install-9-succeeded.png width=622 height=442 alt='[Python installer: install succeeded]'>
+
+
+en:<p>Assuming all went well, the installer will give you a big green checkmark to tell you that the installation completed successfully.
+ja:<p>すべてがうまくいけば、インストーラは、大きな緑のチェックマークを表示して、インストールが正常に完了したことを教えてくれる。
+
+
+en:<p>Click the <code>Close</code> button to exit the installer.
+ja:<p><code>Close</code> ボタンをクリックしてインストーラを終了しよう。
+
+
+en:<p class='ss nm'><img src=i/mac-install-10-application-folder.png width=488 height=482 alt='[contents of /Applications/Python 3.1/ folder]'>
+ja:<p class='ss nm'><img src=i/mac-install-10-application-folder.png width=488 height=482 alt='[/Applications/Python 3.1/ フォルダの中身]'>
+
+
+en:<p>Assuming you didn&#8217;t change the install location, you can find the newly installed files in the <code>Python 3.1</code> folder within your <code>/Applications</code> folder. The most important piece is <abbr>IDLE</abbr>, the graphical Python Shell.
+ja:<p>インストールする場所を変更していなければ、新しくインストールされたファイルは、<code>/Applications</code>フォルダにある<code>Python 3.1</code>フォルダの中にあるだろう。この中で一番重要なものはグラフィカルなPythonシェルである<abbr>IDLE</abbr>だ。
+
+
+en:<p>Double-click <abbr>IDLE</abbr> to launch the Python Shell.
+ja:<p><abbr>IDLE</abbr>をダブルクリックしてPythonシェルを起動しよう。
+
+
+en:<p class='ss nm'><img src=i/mac-interactive-shell.png width=522 height=538 alt='[Mac Python Shell, a graphical interactive shell for Python]'>
+ja:<p class='ss nm'><img src=i/mac-interactive-shell.png width=522 height=538 alt='[Mac Python Shell、グラフィティカルなPython用対話シェル]'>
+
+
+en:<p>The Python Shell is where you will spend most of your time exploring Python. Examples throughout this book will assume that you can find your way into the Python Shell.
+ja:<p>これからPythonの世界を探索していく道のりのうち、ほとんどの時間はPythonシェル上で過ごすことになる。この本のいたるところに掲載されているサンプルは、あなたが自分でPythonシェルを使っていけることを前提としている。
+
+
+en:<h2 id=ubuntu>Installing on Ubuntu Linux</h2>
+ja:<h2 id=ubuntu>Ubuntu Linuxにインストールする</h2>
+
+
+en:<p>Modern Linux distributions are backed by vast repositories of precompiled applications, ready to install. The exact details vary by distribution. In Ubuntu Linux, the easiest way to install Python 3 is through the <code>Add/Remove</code> application in your <code>Applications</code> menu.
+ja:<p>現代的なLinuxディストリビューションは、すぐにインストールできるコンパイル済みアプリケーションがつまった巨大なリポジトリ群に支えられている。この中身の細目はディストリビューションごとに異なる。Ubuntu LinuxでPython 3をインストールするには、<code>アプリケーション</code>メニューにある<code>追加と削除</code>というアプリケーションを使用するのが最も簡単だ。
+
+
+en:<p class='ss nm'><img src=i/ubu-install-0-add-remove-programs.png width=920 height=473 alt='[Add/Remove: Canonical-maintained applications]'>
+ja:<p class='ss nm'><img src=i/ubu-install-0-add-remove-programs.png width=920 height=473 alt='[追加と削除: Canonicalが保守するアプリケーション]'>
+
+
+en:<p>When you first launch the <code>Add/Remove</code> application, it will show you a list of preselected applications in different categories. Some are already installed; most are not. Because the repository contains over 10,000 applications, there are different filters you can apply to see small parts of the repository. The default filter is &#8220;Canonical-maintained applications,&#8221; which is a small subset of the total number of applications that are officially supported by Canonical, the company that creates and maintains Ubuntu Linux.
+ja:<p><code>追加と削除</code>というアプリケーションを起動すると、あらかじめ選び出されたアプリケーションのリストがカテゴリごとに分類されて表示される。その一部はすでにインストールされているが、大部分はインストールされていない。リポジトリには10000以上のアプリケーションが存在するので、その一部だけを選びとれるように様々なフィルタが用意されている。デフォルトのフィルタは「Canonicalによって保守されているアプリケーション」になっている。これは全アプリケーションのうちのほんの一部であり、Ubuntu Linuxを開発・保守しているCanonical社によって公式にサポートされているアプリケーションから構成されている。
+
+
+en:<p class='ss nm'><img src=i/ubu-install-1-all-open-source-applications.png width=920 height=473 alt='[Add/Remove: all open source applications]'>
+ja:<p class='ss nm'><img src=i/ubu-install-1-all-open-source-applications.png width=920 height=473 alt='[追加と削除: 全部オープンソースのアプリケーションだ]'>
+
+
+en:<p>Python 3 is not maintained by Canonical, so the first step is to drop down this filter menu and select &#8220;All Open Source applications.&#8221;
+ja:<p>Python 3はCanonical社によって保守されていないので、まずはフィルタメニューから「すべてのオープンソースソフトウエア」を選択して開こう。
+
+
+en:<p class='ss nm'><img src=i/ubu-install-2-search-python-3.png width=920 height=473 alt='[Add/Remove: search for Python 3]'>
+ja:<p class='ss nm'><img src=i/ubu-install-2-search-python-3.png width=920 height=473 alt='[追加と削除: Python 3の探索]'>
+
+
+en:<p>Once you&#8217;ve widened the filter to include all open source applications, use the Search box immediately after the filter menu to search for <kbd>Python 3</kbd>.
+ja:<p>すべてのオープンソースソフトウエアが入るようにフィルタを変更したら、フィルタメニューのすぐ隣にある検索ボックスに<kbd>Python 3</kbd>と入力しよう。
+
+
+en:<p class='ss nm'><img src=i/ubu-install-3-select-python-3.png width=920 height=473 alt='[Add/Remove: select Python 3.0 package]'>
+ja:<p class='ss nm'><img src=i/ubu-install-3-select-python-3.png width=920 height=473 alt='[追加と削除: Python 3.0のパッケージを選択する]'>
+
+
+en:<p>Now the list of applications narrows to just those matching <kbd>Python 3</kbd>. You&#8217;re going to check two packages. The first is <code>Python (v3.0)</code>. This contains the Python interpreter itself.
+ja:<p>アプリケーションのリストが絞り込まれて、<kbd>Python 3</kbd>にマッチするアプリケーションだけになったはずだ。ここで2つのパッケージにチェックを付けよう。1つ目は<code>Python (v3.0)</code>で、このパッケージはPythonのインタプリタを含んでいる。
+
+
+en:<p class='ss nm'><img src=i/ubu-install-4-select-idle.png width=920 height=473 alt='[Add/Remove: select IDLE for Python 3.0 package]'>
+ja:<p class='ss nm'><img src=i/ubu-install-4-select-idle.png width=920 height=473 alt='[追加と削除: Python 3.0用のIDLEパッケージを選択する]'>
+
+
+en:<p>The second package you want is immediately above: <code>IDLE (using Python-3.0)</code>. This is a graphical Python Shell that you will use throughout this book.
+ja:<p>2つ目のパッケージはすぐ上にある<code>IDLE (using Python-3.0)</code>だ。これは、この本を通して使うことになるグラフィカルなPythonシェルだ。
+
+
+en:<p>After you&#8217;ve checked those two packages, click the <code>Apply Changes</code> button to continue.
+ja:<p>2つのパッケージにチェックを付けたら、<code>変更の適用</code>ボタンをクリックして次へ進もう。
+
+
+en:<p class='ss nm'><img src=i/ubu-install-5-apply-changes.png width=635 height=364 alt='[Add/Remove: apply changes]'>
+ja:<p class='ss nm'><img src=i/ubu-install-5-apply-changes.png width=635 height=364 alt='[追加と削除: 変更の適用]'>
+
+
+en:<p>The package manager will ask you to confirm that you want to add both <code>IDLE (using Python-3.0)</code> and <code>Python (v3.0)</code>.
+ja:<p>パッケージマネージャは、<code>IDLE (using Python-3.0)</code>と<code>Python (v3.0)</code>を本当にインストールするかどうかを確認してくる。
+
+
+en:<p>Click the <code>Apply</code> button to continue.
+ja:<p><code>適用</code> ボタンをクリックして次へ進もう。
+
+
+en:<p class='ss nm'><img src=i/ubu-install-6-download-progress.png width=287 height=211 alt='[Add/Remove: download progress meter]'>
+ja:<p class='ss nm'><img src=i/ubu-install-6-download-progress.png width=287 height=211 alt='[追加と削除: ダウンロードの進捗度を表すプログレスバー]'>
+
+
+en:<p>The package manager will show you a progress meter while it downloads the necessary packages from Canonical&#8217;s Internet repository.
+ja:<p>パッケージマネージャがCanonicalのインターネットリポジトリから必要なパッケージをダウンロードしているあいだ、インストールの進捗度を示すバーが表示される。
+
+
+en:<p class='ss nm'><img src=i/ubu-install-7-install-progress.png width=486 height=258 alt='[Add/Remove: installation progress meter]'>
+ja:<p class='ss nm'><img src=i/ubu-install-7-install-progress.png width=486 height=258 alt='[追加と削除: インストールの進捗度を表すバー]'>
+
+
+en:<p>Once the packages are downloaded, the package manager will automatically begin installing them.
+ja:<p>パッケージをダウンロードし終わると、パッケージマネージャは自動的にインストールを開始する。
+
+
+en:<p class='ss nm'><img src=i/ubu-install-8-success.png width=591 height=296 alt='[Add/Remove: new applications have been installed]'>
+ja:<p class='ss nm'><img src=i/ubu-install-8-success.png width=591 height=296 alt='[追加と削除: 新しいアプリケーションがインストールされている]'>
+
+
+en:<p>If all went well, the package manager will confirm that both packages were successfully installed. From here, you can double-click <abbr>IDLE</abbr> to launch the Python Shell, or click the <code>Close</code> button to exit the package manager.
+ja:<p>すべてが無事完了すると、パッケージマネージャは、2つのパッケージが正常にインストールされたことを知らせてくる。ここで<abbr>IDLE</abbr>をダブルクリックすればPythonシェルを起動できるし、<code>閉じる</code>ボタンをクリックすればパッケージマネージャが終了する。
+
+
+en:<p>You can always relaunch the Python Shell by going to your <code>Applications</code> menu, then the <code>Programming</code> submenu, and selecting <abbr>IDLE</abbr>.
+ja:<p><code>アプリケーション</code>メニューの<code>プログラミング</code>サブメニューから<abbr>IDLE</abbr>を選択することで、Pythonシェルをいつでも起動できる。
+
+
+en:<p class='ss nm'><img src=i/ubu-interactive-shell.png width=679 height=687 alt='[Linux Python Shell, a graphical interactive shell for Python]'>
+ja:<p class='ss nm'><img src=i/ubu-interactive-shell.png width=679 height=687 alt='[グラフィティカルなPython用対話シェルのLinux Python Shell]'>
+
+
+en:<h2 id=other>Installing on Other Platforms</h2>
+ja:<h2 id=other>その他のプラットフォームにインストールする</h2>
+
+
+en:<p>Python 3 is available on a number of different platforms. In particular, it is available in virtually every Linux, <abbr>BSD</abbr>, and Solaris-based distribution. For example, RedHat Linux uses the <code>yum</code> package manager; FreeBSD has its <a href=http://www.freebsd.org/ports/>ports and packages collection</a>; Solaris has <code>pkgadd</code> and friends. A quick web search for <code>Python 3</code> + <i>your operating system</i> will tell you whether a Python 3 package is available, and how to install it.
+ja:<p>Python 3は、いくつもの異なるプラットフォームの上で利用できる。特に、事実上すべてのLinux, <abbr>BSD</abbr>, Solarisベースのディストリビューションで利用可能だ。例えば、RedHat Linuxは<code>yum</code>というパッケージマネージャを使用していて、FreeBSDは<a href=http://www.freebsd.org/ports/>Portsとパッケージコレクション</a>を持っていて、Solarisは<code>pkgadd</code>とかその類を持っている。検索エンジンで<code>Python 3 + オペレーティングシステム名</code>を検索すれば、あなたの環境でPython 3のパッケージを利用できるかどうかと、そのパッケージのインストール方法を知ることができるだろう。
+
+
+en:<h2 id=idle>Using The Python Shell</h2>
+ja:<h2 id=idle>Pythonシェルを使う</h2>
+
+
+en:<p>The Python Shell is where you can explore Python syntax, get interactive help on commands, and debug short programs. The graphical Python Shell (named <abbr>IDLE</abbr>) also contains a decent text editor that supports Python syntax coloring and integrates with the Python Shell. If you don&#8217;t already have a favorite text editor, you should give <abbr>IDLE</abbr> a try.
+ja:<p>Pythonシェルは、Pythonの構文を探求したり、コマンドについての対話的なヘルプを得たり、短いプログラムをデバッグしたりできる場所だ。グラフィカルなPythonシェル（<abbr>IDLE</abbr>）には優れたテキストエディタも入っている。このエディタはPythonシェルに統合されており、Pythonの構文に色付けする機能もサポートしている。お気に入りのテキストエディタがまだ無いのであれば、まずは<abbr>IDLE</abbr>を試してみよう。
+
+
+en:<p>First things first. The Python Shell itself is an amazing interactive playground. Throughout this book, you&#8217;ll see examples like this:
+ja:<p>重要なことから始めよう。Pythonシェルはとても良くできたインタラクティブな遊び場だ。この本を通して、あなたは次のような例を見ることになる：
+
+
+en:<p>The three angle brackets, <samp class=p>>>></samp>, denote the Python Shell prompt. Don&#8217;t type that part. That&#8217;s just to let you know that this example is meant to be followed in the Python Shell.
+ja:<p>三つの山括弧<samp class=p>>>></samp>はPythonシェルのプロンプトを表している。この部分を入力してはいけない。これは単に、この例はPythonシェルでたどる必要がある、ということを知らせているだけだ。
+
+
+en:<p><kbd class=pp>1 + 1</kbd> is the part you type. You can type any valid Python expression or command in the Python Shell. Don&#8217;t be shy; it won&#8217;t bite! The worst that will happen is you&#8217;ll get an error message. Commands get executed immediately (once you press <kbd>ENTER</kbd>); expressions get evaluated immediately, and the Python Shell prints out the result.
+ja:<p><kbd class=pp>1 + 1</kbd>が入力する部分だ。正しいPythonの式やコマンドであればどんなものでもPythonシェルに入力できる。恐れることなかれ。Pythonシェルは噛みついたりしないよ！ 悪いことが起きるとしても、せいぜいエラーメッセージが表示されるくらいだ。コマンドは（<kbd>ENTER</kbd>キーを押すと）即座に実行され、式は即座に評価され、Pythonシェルがその結果を表示する。
+
+
+en:<p><samp class=pp>2</samp> is the result of evaluating this expression. As it happens, <kbd class=pp>1 + 1</kbd> is a valid Python expression. The result, of course, is <samp class=pp>2</samp>.
+ja:<p><samp class=pp>2</samp> がこの式を評価した結果だ。偶然にも<kbd class=pp>1 + 1</kbd>は正しいPythonの式だ。結果はもちろん<samp class=pp>2</samp>だ。
+
+
+en:<p>Let&#8217;s try another one.
+ja:<p>違うことを試してみよう。
+
+
+en:<p>Pretty simple, no? But there&#8217;s lots more you can do in the Python shell. If you ever get stuck&nbsp;&mdash;&nbsp;you can&#8217;t remember a command, or you can&#8217;t remember the proper arguments to pass a certain function&nbsp;&mdash;&nbsp;you can get interactive help in the Python Shell. Just type <kbd>help</kbd> and press <kbd>ENTER</kbd>.
+ja:<p>とても単純でしょ？ だけれど、Pythonシェルの中でできることはもっとたくさんある。もし行き詰まったときは&mdash;例えばコマンドが思い出せないときや、関数の適切な引数を思い出せないときは&mdash;Pythonシェルで対話的なヘルプが得られる。それには<kbd>help</kbd>と入力して、<kbd>ENTER</kbd>キーを押せばいい。
+
+
+en:<p>There are two modes of help. You can get help about a single object, which just prints out the documentation and returns you to the Python Shell prompt. You can also enter <i>help mode</i>, where instead of evaluating Python expressions, you just type keywords or command names and it will print out whatever it knows about that command.
+ja:<p>ヘルプには2つのモードが存在する。その1つは、単一のオブジェクトについてのヘルプを得るもので、これは単にそのドキュメントを表示してPythonシェルのプロンプトへ戻る。「ヘルプモード」に入ることもでき、そこではPythonの式を評価する代わりにキーワードやコマンド名を入力することで、そのコマンドについて知っていることをヘルプが表示してくれる。
+
+
+en:<p>To enter the interactive help mode, type <kbd>help()</kbd> and press <kbd>ENTER</kbd>.
+ja:<p>対話ヘルプモードに入るために、<kbd>help</kbd>と入力して<kbd>ENTER</kbd>キーを押そう。
+
+
+en:<p>Note how the prompt changes from <samp class=p>>>></samp> to <samp class=p>help></samp>. This reminds you that you&#8217;re in the interactive help mode. Now you can enter any keyword, command, module name, function name&nbsp;&mdash;&nbsp;pretty much anything Python understands&nbsp;&mdash;&nbsp;and read documentation on it.
+ja:<p>プロンプトが<samp class=p>>>></samp>から<samp class=p>help></samp>に変化したことに注意しよう。これは、いま対話ヘルプモードに入っていることを知らせている。ここでは、キーワード・コマンド・モジュール名・関数名&nbsp;&mdash;&nbsp;つまりPythonが理解することならほとんど何でも入力でき、それについての説明を読むことができる。
+
+
+en:<li>To get documentation on the <code>print()</code> function, just type <kbd>print</kbd> and press <kbd>ENTER</kbd>. The interactive help mode will display something akin to a man page: the function name, a brief synopsis, the function&#8217;s arguments and their default values, and so on. If the documentation seems opaque to you, don&#8217;t panic. You&#8217;ll learn more about all these concepts in the next few chapters.
+ja:<li><code>print()</code>関数のドキュメントを得るために、<kbd>print</kbd> と入力して<kbd>ENTER</kbd>を押そう。対話ヘルプモードはmanページのようなもの&nbsp;&mdash;&nbsp;関数名・簡潔な概要・関数の引数とそのデフォルト値などを表示する。このドキュメントに書かれていることが理解できなくても、慌てないように。これらについては後のいくつかの章で説明するから。
+
+
+en:<li>Of course, the interactive help mode doesn&#8217;t know everything. If you type something that isn&#8217;t a Python command, module, function, or other built-in keyword, the interactive help mode will just shrug its virtual shoulders.
+ja:<li>もちろん、対話ヘルプモードがあらゆることを知っているわけはない。Pythonのコマンド・モジュール・関数・その他の組み込みキーワードと関係のないことを聞かれたら、対話ヘルプモードは(仮想上の)肩をすくめてしまうだろう。
+
+
+en:<li>To quit the interactive help mode, type <kbd>quit</kbd> and press <kbd>ENTER</kbd>.
+ja:<li>対話ヘルプモードを終了するために、<kbd>quit</kbd>と入力して<kbd>ENTER</kbd> を押そう。
+
+
+en:<li>The prompt changes back to <samp class=p>>>></samp> to signal that you&#8217;ve left the interactive help mode and returned to the Python Shell.
+ja:<li>対話ヘルプモードを離れてPythonシェルに戻ったことを知らせるために、プロンプトは再び<samp class=p>>>></samp>に戻る。
+
+
+en:<p><abbr>IDLE</abbr>, the graphical Python Shell, also includes a Python-aware text editor.
+ja:<p>グラフィカルなPythonシェルの<abbr>IDLE</abbr>はPythonに対応したテキストエディタも含んでいる。
+
+
+en:<h2 id=editors>Python Editors and IDEs</h2>
+ja:<h2 id=editors>PythonのエディタとIDE</h2>
+
+
+en:<p><abbr>IDLE</abbr> is not the only game in town when it comes to writing programs in Python. While it&#8217;s useful to get started with learning the language itself, many developers prefer other text editors or Integrated Development Environments (<abbr>IDE</abbr>s). I won&#8217;t cover them here, but the Python community maintains <a href=http://wiki.python.org/moin/PythonEditors>a list of Python-aware editors</a> that covers a wide range of supported platforms and software licenses.
+ja:<p>Pythonのプログラムを書くためのエディタは<abbr>IDLE</abbr>だけというわけではない。<abbr>IDLE</abbr>は言語自体を学ぶときには便利だが、多くの開発者は他のテキストエディタや統合開発環境（<abbr>IDE</abbr>）を好んで使っている。それらをここで取り上げるつもりはないが、Pythonコミュニティは、広範囲のプラットフォームとソフトウエアライセンスを網羅した<a href=http://wiki.python.org/moin/PythonEditors>Python対応エディタのリスト</a>を管理している。
+
+
+en:<p>You might also want to check out the <a href=http://wiki.python.org/moin/IntegratedDevelopmentEnvironments>list of Python-aware <abbr>IDE</abbr>s</a>, although few of them support Python 3 yet. One that does is <a href=http://pydev.sourceforge.net/>PyDev</a>, a plugin for <a href=http://eclipse.org/>Eclipse</a> that turns Eclipse into a full-fledged Python <abbr>IDE</abbr>. Both Eclipse and PyDev are cross-platform and open source.
+ja:<p>Python 3に対応するものは少ないものの、<a href=http://wiki.python.org/moin/IntegratedDevelopmentEnvironments>Pythonに対応した<abbr>IDE</abbr>のリスト</a>を見たい人もいるだろう。対応しているものの1つに<a href=http://pydev.sourceforge.net/>PyDev</a>があり、これは<a href=http://eclipse.org/>Eclipse</a>を本格的なPython用<abbr>IDE</abbr>に変えるEclipseのプラグインだ。EclipseとPyDevは、どちらもクロスプラットフォームでオープンソースなソフトウェアだ。
+
+
+en:<p>On the commercial front, there is ActiveState&#8217;s <a href=http://www.activestate.com/komodo/>Komodo <abbr>IDE</abbr></a>. It has per-user licensing, but students can get a discount, and a free time-limited trial version is available.
+ja:<p>商用のソフトウエアとしてはActiveStateの<a href=http://www.activestate.com/komodo/>Komodo <abbr>IDE</abbr></a>が存在する。ユーザごとにライセンスが必要だが、学割を適用できるし、時間制限付きの体験版も無償で利用できる。
+
+
+en:<p>I&#8217;ve been programming in Python for nine years, and I edit my Python programs in <a href=http://www.gnu.org/software/emacs/>GNU Emacs</a> and debug them in the command-line Python Shell. There&#8217;s no right or wrong way to develop in Python. Find a way that works for you!
+ja:<p>私は9年間Pythonでプログラミングをしているが、Pythonのプログラムは<a href=http://www.gnu.org/software/emacs/>GNU Emacs</a>を使って編集し、デバッグにはコマンドラインのPythonシェルを使っている。Pythonで開発を行う正しい方法や間違った方法はない。自分に合ったやり方を見つけよう！
+
+
+en:<p class=v><a href=whats-new.html rel=prev title='back to &#8220;What&#8217;s New In Dive Into Python 3&#8221;'><span class=u>&#x261C;</span></a> <a href=your-first-python-program.html rel=next title='onward to &#8220;Your First Python Program&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=whats-new.html rel=prev title='「『Dive Into Python 3』で新しくなったこと」に戻る'><span class=u>&#x261C;</span></a> <a href=your-first-python-program.html rel=next title='「初めてのPythonプログラム」に進む'><span class=u>&#x261E;</span></a>
+

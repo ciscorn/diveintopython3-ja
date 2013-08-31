@@ -1,0 +1,690 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#regular-expressions>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#regular-expressions>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<p id=level>Difficulty level: <span class=u title=intermediate>&#x2666;&#x2666;&#x2666;&#x2662;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=intermediate>&#x2666;&#x2666;&#x2666;&#x2662;&#x2662;</span>
+
+
+en:<title>Regular expressions - Dive Into Python 3</title>
+ja:<title>正規表現 - Dive Into Python 3 日本語版</title>
+
+
+en:<h1>Regular Expressions</h1>
+ja:<h1>正規表現</h1>
+
+
+en:<p><span class=u>&#x275D;</span> Some people, when confronted with a problem, think &#8220;I know, I&#8217;ll use regular expressions.&#8221;  Now they have two problems. <span class=u>&#x275E;</span><br>&mdash; <a href=http://www.jwz.org/hacks/marginal.html>Jamie Zawinski</a>
+ja:<p><span class=u>&#x275D;</span>ある人々は問題に直面すると、「そうか、正規表現を使うんだ」と考える。こうして彼らは２つの問題を抱えることになる。<span class=u>&#x275E;</span><br>&mdash; <a href=http://www.jwz.org/hacks/marginal.html>Jamie Zawinski</a>
+
+
+en:<p class=f>Getting a small bit of text out of a large block of text is a challenge. In Python, strings have methods for searching and replacing: <code>index()</code>, <code>find()</code>, <code>split()</code>, <code>count()</code>, <code>replace()</code>, <i class=baa>&amp;</i>c. But these methods are limited to the simplest of cases. For example, the <code>index()</code> method looks for a single, hard-coded substring, and the search is always case-sensitive. To do case-insensitive searches of a string <var>s</var>, you must call <code>s.lower()</code> or <code>s.upper()</code> and make sure your search strings are the appropriate case to match. The <code>replace()</code> and <code>split()</code> methods have the same limitations.
+ja:<p class=f>大きなテキストのかたまりから小さなテキストのかけらを取り出すのは挑戦的な課題だ。Pythonの文字列は、検索や置換のためのメソッドとして<code>index()</code>, <code>find()</code>, <code>split()</code>, <code>count()</code>, <code>replace()</code>などを持っている。しかし、これらのメソッドが機能するのは最も単純な場合に限られる。例えば、<code>index()</code>メソッドはハードコードされた1つの部分文字列を探すものだが、その検索は常に大文字と小文字が区別される。大文字と小文字を区別しないで検索したいときは、<code>s.lower()</code>または<code>s.upper()</code>を呼び出して、さらに検索文字列の大文字と小文字もそれに合わせなければならない。<code>replace()</code>メソッドや<code>split()</code>メソッドも同様の制限を持っている。
+
+
+en:<p>If your goal can be accomplished with string methods, you should use them. They&#8217;re fast and simple and easy to read, and there&#8217;s a lot to be said for fast, simple, readable code. But if you find yourself using a lot of different string functions with <code>if</code> statements to handle special cases, or if you&#8217;re chaining calls to <code>split()</code> and <code>join()</code> to slice-and-dice your strings, you may need to move up to regular expressions.
+ja:<p>文字列のメソッドで目的が達成できるのであればそれを使うべきだ。文字列のメソッドは高速でシンプルで読みやすく、それには数多くの利点がある。しかし、<code>if</code>文や様々な文字列関数を組み合わせて特殊な場合に対処している場合や、文字列を切り刻むために<code>split()</code>や<code>join()</code>を連鎖して呼びだしている場合は、正規表現へ移行する必要があるかもしれない。
+
+
+en:<p>Regular expressions are a powerful and (mostly) standardized way of searching, replacing, and parsing text with complex patterns of characters. Although the regular expression syntax is tight and unlike normal code, the result can end up being <em>more</em> readable than a hand-rolled solution that uses a long chain of string functions. There are even ways of embedding comments within regular expressions, so you can include fine-grained documentation within them.
+ja:<p>正規表現はパワフルであり、複雑な文字パターンを使って文字列を検索、置換、パースするための（ほぼ）統一された方法だ。正規表現の構文はギチギチしていて普通のコードとは似つかないものだが、結果としては長々と文字列関数を連ねる自前の解法よりも<em>もっと</em>読みやすいものになりうる。正規表現の中にコメントを埋め込む方法さえあるので、きめ細かいドキュメントを中に含めておくこともできる。
+
+
+en:<p><span class=u>&#x261E;</span>If you&#8217;ve used regular expressions in other languages (like Perl, JavaScript, or PHP), Python&#8217;s syntax will be very familiar. Read the summary of the <a href=http://docs.python.org/dev/library/re.html#module-contents><code>re</code> module</a> to get an overview of the available functions and their arguments.
+ja:<p><span class=u>&#x261E;</span>正規表現を他の言語（例えば Perl, JavaScript, PHP）で使ったことがあるのなら、Pythonでの構文もそれに非常に良く似たものだ。reモジュールの概要を読んで、利用可能な関数とそれらの引数についての概観を得てほしい。
+
+
+en:<h2 id=streetaddresses>Case Study: Street Addresses</h2>
+ja:<h2 id=streetaddresses>ケーススタディ: 番地</h2>
+
+
+en:<p>This series of examples was inspired by a real-life problem I had in my day job several years ago, when I needed to scrub and standardize street addresses exported from a legacy system before importing them into a newer system. (See, I don&#8217;t just make this stuff up; it&#8217;s actually useful.)  This example shows how I approached the problem.
+ja:<p>この一連の例は、何年か前に私が仕事で出くわした実際の問題から着想を得ている。その時、私は古いシステムからエクスポートされた番地をきれいに標準化して新しいシステムへインポートしなければならなかった（ほら、だからこれは説明のために作り上げられた例なんかではなく、現実に役立つものなんだ）。この例は私がその問題にどのようにアプローチしたのかを示している。
+
+en:<li>My goal is to standardize a street address so that <code>'ROAD'</code> is always abbreviated as <code>'RD.'</code>. At first glance, I thought this was simple enough that I could just use the string method <code>replace()</code>. After all, all the data was already uppercase, so case mismatches would not be a problem. And the search string, <code>'ROAD'</code>, was a constant. And in this deceptively simple example, <code>s.replace()</code> does indeed work.
+ja:<li>私の目標は番地の標準化を行い、<code>'ROAD'</code>が常に省略形の<code>'RD.'</code>になるようにすることだ。一見したところ、私は文字列メソッドの<code>replace()</code>を使えば十分だと思った。何にせよ、すべてのデータが既に大文字になっているので、大文字と小文字の違いは問題にならない。検索文字列は定数<code>'ROAD'</code>でよい。そして、この簡単そうな例では、<code>s.replace()</code>は実際に動作する。
+
+
+en:<li>Life, unfortunately, is full of counterexamples, and I quickly discovered this one. The problem here is that <code>'ROAD'</code> appears twice in the address, once as part of the street name <code>'BROAD'</code> and once as its own word. The <code>replace()</code> method sees these two occurrences and blindly replaces both of them; meanwhile, I see my addresses getting destroyed.
+ja:<li>人生は不幸にも反例に満ちており、私はすぐにこれを発見することになった。ここでの問題は<code>'ROAD'</code>が番地の中で2度現れることに起因している。1つは通りの名前<code>'BROAD'</code>の一部として現れ、もう1つは<code>'ROAD'</code>単独で現れる。<code>replace()</code>メソッドはこれら2つを見つけ出し、両方を機械的に置換してしまう。つまり、破壊された番地が得られてしまうのだ。
+
+
+en:<li>To solve the problem of addresses with more than one <code>'ROAD'</code> substring, you could resort to something like this: only search and replace <code>'ROAD'</code> in the last four characters of the address (<code>s[-4:]</code>), and leave the string alone (<code>s[:-4]</code>). But you can see that this is already getting unwieldy. For example, the pattern is dependent on the length of the string you&#8217;re replacing. (If you were replacing <code>'STREET'</code> with <code>'ST.'</code>, you would need to use <code>s[:-6]</code> and <code>s[-6:].replace(...)</code>.) Would you like to come back in six months and debug this?  I know I wouldn&#8217;t.
+ja:<li><code>'ROAD'</code>という部分文字列を複数含む番地の問題を解決するために、次のような解法に頼ることができる。番地の最後の4文字 (<code>s[-4:]</code>) にある<code>'ROAD'</code>についてのみ検索と置換を行い、その他の部分 (<code>s[:-4]</code>) はそのままにしておくのだ。しかし、やり方がすでに不格好になってきていることが分かるだろう。例えば、この方式は置換しようとしている文字列の長さに依存している（仮に<code>'STREET'</code>を<code>'ST.'</code>で置換したいとすると、<code>s[:-6]</code>と<code>s[-6:].replace(...)</code>を使わなければならない）。6ヶ月後に戻ってきたときにこんなものをデバッグしたいだろうか？ 私はいやだね。
+
+
+en:<li>It&#8217;s time to move up to regular expressions. In Python, all functionality related to regular expressions is contained in the <code>re</code> module.
+ja:<li>正規表現へ移行する時がきたようだ。Pythonでは、正規表現に関するすべての機能は<code>re</code>モジュールに入っている。
+
+
+en:<li>Take a look at the first parameter: <code>'ROAD$'</code>. This is a simple regular expression that matches <code>'ROAD'</code> only when it occurs at the end of a string. The <code>$</code> means &#8220;end of the string.&#8221; (There is a corresponding character, the caret <code>^</code>, which means &#8220;beginning of the string.&#8221;) Using the <code>re.sub()</code> function, you search the string <var>s</var> for the regular expression <code>'ROAD$'</code> and replace it with <code>'RD.'</code>. This matches the <code>ROAD</code> at the end of the string <var>s</var>, but does <em>not</em> match the <code>ROAD</code> that&#8217;s part of the word <code>BROAD</code>, because that&#8217;s in the middle of <var>s</var>.
+ja:<li>1つ目のパラメータを見て欲しい。<code>'ROAD$'</code>だ。この単純な正規表現は、文字列の末尾に出現する<code>'ROAD'</code>だけにマッチする。<code>$</code>は「文字列の末尾」を意味するのだ（これと対称な文字として、キャレット文字<code>^</code>があり、これは「文字列の先頭」を意味する）。<code>re.sub()</code>を使って<var>s</var>から正規表現<code>'ROAD$'</code>を探して、それを<code>'RD.'</code>で置換する。これは文字列<var>s</var>の末尾にある<code>ROAD</code>にはマッチするが、<code>BROAD</code>の一部として含まれる<code>ROAD</code>は文字列の中間にあるのでマッチ<em>しない</em>。
+
+
+en:<aside>^ matches the start of a string. $ matches the end of a string.</aside>
+ja:<aside>^は文字列の先頭にマッチする。$は文字列の末尾にマッチする。</aside>
+
+
+en:<p>Continuing with my story of scrubbing addresses, I soon discovered that the previous example, matching <code>'ROAD'</code> at the end of the address, was not good enough, because not all addresses included a street designation at all. Some addresses simply ended with the street name. I got away with it most of the time, but if the street name was <code>'BROAD'</code>, then the regular expression would match <code>'ROAD'</code> at the end of the string as part of the word <code>'BROAD'</code>, which is not what I wanted.
+ja:<p>番地をきれいにする話を続けると、私はすぐに、前の例のように文字列の末尾にある<code>'ROAD'</code>にマッチするだけでは不十分であることを発見した。なぜなら、すべての番地に街路表示があるわけではないからだ。いくつかの番地は単に街路名で終わっている。これは多くの場合に無視できたのだが、街路名が<code>'BROAD'</code>の場合、この正規表現だと文字列の末尾にある<code>'BROAD'</code>のうちの<code>'ROAD'</code>にマッチしてしまう。これは私の望む結果ではない。
+
+
+en:<li>What I <em>really</em> wanted was to match <code>'ROAD'</code> when it was at the end of the string <em>and</em> it was its own word (and not a part of some larger word). To express this in a regular expression, you use <code>\b</code>, which means &#8220;a word boundary must occur right here.&#8221; In Python, this is complicated by the fact that the <code>'\'</code> character in a string must itself be escaped. This is sometimes referred to as the backslash plague, and it is one reason why regular expressions are easier in Perl than in Python. On the down side, Perl mixes regular expressions with other syntax, so if you have a bug, it may be hard to tell whether it&#8217;s a bug in syntax or a bug in your regular expression.
+ja:<li>私が<em>本当に</em>望んでいたことは、文字列の末尾にあり、<em>なおかつ</em>（他の単語の一部としてではなく）それ単独で出現する<code>'ROAD'</code>にマッチすることだ。これを正規表現で表現するには<code>\b</code>を使えばよい。この記号は「ここに単語境界がある」ことを意味する。Pythonでは文字列中の<code>'\'</code>という文字がエスケープされるので話が複雑になる。これはバックスラッシュの災いと呼ばれることもあり、PythonよりもPerlのほうが正規表現が使いやすい1つの理由でもある。反対の面では、Perlは正規表現を他の構文と混ぜ合わせているので、バグ存在するときに、構文にバグがあるのか正規表現にバグがあるのかを区別しにくいかもしれない。
+
+
+en:<li>To work around the backslash plague, you can use what is called a <i>raw string</i>, by prefixing the string with the letter <code>r</code>. This tells Python that nothing in this string should be escaped; <code>'\t'</code> is a tab character, but <code>r'\t'</code> is really the backslash character <code>\</code> followed by the letter <code>t</code>. I recommend always using raw strings when dealing with regular expressions; otherwise, things get too confusing too quickly (and regular expressions are confusing enough already).
+ja:<li>バックスラッシュの災いに対処するために、<i>Raw文字列</i>というものを使うことができる。これを使うには文字列の前に<code>r</code>という文字を付ければよい。これは「その文字列の中でエスケープしてはいけない」ということをPythonに伝えるもので、例えば、通常<code>'\t'</code>はタブ文字であるが、<code>r'\t'</code>は本当のバックスラッシュ<code>\</code>とそれに続く<code>t</code>になる。正規表現を使うときは常にRaw文字列を使うことをおすすめする。さもなければ、一瞬でわけが分からなくなってしまう（それでなくとも、正規表現自体がすでにややこしいのだ）。
+
+
+en:<li><em>*sigh*</em>  Unfortunately, I soon found more cases that contradicted my logic. In this case, the street address contained the word <code>'ROAD'</code> as a whole word by itself, but it wasn&#8217;t at the end, because the address had an apartment number after the street designation. Because <code>'ROAD'</code> isn&#8217;t at the very end of the string, it doesn&#8217;t match, so the entire call to <code>re.sub()</code> ends up replacing nothing at all, and you get the original string back, which is not what you want.
+ja:<li><em>やれやれ。</em>悲しいことに、すぐに私の論理に反するケースを見つけてしまった。このケースでは、<code>'ROAD'</code>は番地に1つの単語として含まれているにも関わらず、街路表記の後ろにアパートの番号があるために、文字列の末尾に現れない。そして<code>'ROAD'</code>が文字列の末尾にないので、正規表現はマッチせず、<code>re.sub()</code>を呼び出してもまったく何も置換しないで元の文字列をそのまま返してしまうのだ。
+
+
+en:<li>To solve this problem, I removed the <code>$</code> character and added another <code>\b</code>. Now the regular expression reads &#8220;match <code>'ROAD'</code> when it&#8217;s a whole word by itself anywhere in the string,&#8221; whether at the end, the beginning, or somewhere in the middle.
+ja:<li>これを解決するために、私は<code>$</code>文字を取り除いて、もう一つの<code>\b</code>を加えた。この正規表現はこう読める「文字列中のどこであっても、<code>'ROAD'</code>を1つの単語として含むものにマッチする」。先頭でも、末尾でも、途中のどこでも、だ。
+
+
+en:<h2 id=romannumerals>Case Study: Roman Numerals</h2>
+ja:<h2 id=romannumerals>ケーススタディ: ローマ数字</h2>
+
+
+en:<p>You&#8217;ve most likely seen Roman numerals, even if you didn&#8217;t recognize them. You may have seen them in copyrights of old movies and television shows (&#8220;Copyright <code>MCMXLVI</code>&#8221; instead of &#8220;Copyright <code>1946</code>&#8221;), or on the dedication walls of libraries or universities (&#8220;established <code>MDCCCLXXXVIII</code>&#8221; instead of &#8220;established <code>1888</code>&#8221;). You may also have seen them in outlines and bibliographical references. It&#8217;s a system of representing numbers that really does date back to the ancient Roman empire (hence the name).
+ja:<p>ローマ数字というものを、たとえ読むことはできなくても、見たことくらいはあるだろう。古い映画やテレビ番組の著作権表示で見たことがあるかもしれないし（"Copyright <code>1946</code>" の代わりに "Copyright <code>MCMXLVI</code>" になっている）、図書館や大学に貢献した人の名前を連ねた壁に書かれているのを見たことがあるかもしれないし（"established <code>1888</code>" の代わりに "established <code>MDCCCLXXXVIII</code>" になっている）、書誌参照の中で見たことがあるかもしれない。このローマ数字は、数を表現するための体系の1つで、実際に古代ローマ帝国時代に使われていたものだ（それゆえにローマ数字と呼ばれる）。
+
+
+en:<p>In Roman numerals, there are seven characters that are repeated and combined in various ways to represent numbers.
+ja:<p>ローマ数字には、数を表現するために繰り返されたり組み合わせられたりする文字が7つある。
+
+
+en:<p>The following are some general rules for constructing Roman numerals:
+ja:<p>以下はローマ数字を構築するための一般的な規則である：
+
+
+en:<li>Sometimes characters are additive. <code>I</code> is <code>1</code>, <code>II</code> is <code>2</code>, and <code>III</code> is <code>3</code>. <code>VI</code> is <code>6</code> (literally, &#8220;<code>5</code> and <code>1</code>&#8221;), <code>VII</code> is <code>7</code>, and <code>VIII</code> is <code>8</code>.
+ja:<li>時に文字は足し算のように働く。<code>I</code>は<code>1</code>、<code>II</code>は<code>2</code>、そして<code>III</code>は<code>3</code>だ。<code>VI</code>は<code>6</code>で（文字通り「<code>5</code>と<code>1</code>」だ）、<code>VII</code>は<code>7</code>、<code>VIII</code>は<code>8</code>。
+
+
+en:<li>The tens characters (<code>I</code>, <code>X</code>, <code>C</code>, and <code>M</code>) can be repeated up to three times. At <code>4</code>, you need to subtract from the next highest fives character. You can't represent <code>4</code> as <code>IIII</code>; instead, it is represented as <code>IV</code> (&#8220;<code>1</code> less than <code>5</code>&#8221;). <code>40</code> is written as <code>XL</code> (&#8220;<code>10</code> less than <code>50</code>&#8221;), <code>41</code> as <code>XLI</code>, <code>42</code> as <code>XLII</code>, <code>43</code> as <code>XLIII</code>, and then <code>44</code> as <code>XLIV</code> (&#8220;<code>10</code> less than <code>50</code>, then <code>1</code> less than <code>5</code>&#8221;).
+ja:<li>10の文字（<code>I</code>、<code>X</code>、<code>C</code>、<code>M</code>）は三回まで繰り返せる。<code>4</code>については、次の5の文字から引いて表さなければならない。つまり、<code>4</code>を<code>IIII</code>と表すことはできず、代わりに<code>IV</code>としなければならないのだ（「<code>5</code>引く<code>1</code>」）。<code>40</code>は<code>XL</code>と書かれ（「<code>50</code>引く<code>10</code>」）、<code>41</code>は<code>XLI</code>、<code>42</code>は<code>XLII</code>、<code>43</code>は<code>XLIII</code>、そして<code>44</code>は<code>XLIV</code>と表せられる（「<code>50</code>引く<code>10</code>と<code>5</code>引く<code>1</code>」）。
+
+
+en:<li>Sometimes characters are&hellip; the opposite of additive. By putting certain characters before others, you subtract from the final value. For example, at <code>9</code>, you need to subtract from the next highest tens character: <code>8</code> is <code>VIII</code>, but <code>9</code> is <code>IX</code> (&#8220;<code>1</code> less than <code>10</code>&#8221;), not <code>VIIII</code> (since the <code>I</code> character can not be repeated four times). <code>90</code> is <code>XC</code>, <code>900</code> is <code>CM</code>.
+ja:<li>時に文字は&hellip;&hellip;足し算とは逆の役割を果たす。ある文字を他の文字の前に置くと、後の文字から値を引いたことになるのだ。例えば、<code>9</code>を作るには、次の10の数から引き算をしなければならない。つまり、<code>8</code>は<code>VIII</code>だが、<code>9</code>は<code>IX</code>となり（「<code>10</code>引く<code>1</code>」）、<code>VIIII</code>とは書けないのだ（なぜなら<code>I</code>の文字を4回繰り返すことはできないから）。<code>90</code>は<code>XC</code>、<code>900</code>は<code>CM</code>となる。
+
+
+en:<li>The fives characters can not be repeated. <code>10</code> is always represented as <code>X</code>, never as <code>VV</code>. <code>100</code> is always <code>C</code>, never <code>LL</code>.
+ja:<li>5の文字は繰り返すことができない。<code>10</code>は必ず<code>X</code>と表し、<code>VV</code>とすることはできない。<code>100</code>も<code>C</code>であって、<code>LL</code>とはならない。
+
+
+en:<li>Roman numerals are read left to right, so the order of characters matters very much. <code>DC</code> is <code>600</code>; <code>CD</code> is a completely different number (<code>400</code>, &#8220;<code>100</code> less than <code>500</code>&#8221;). <code>CI</code> is <code>101</code>; <code>IC</code> is not even a valid Roman numeral (because you can't subtract <code>1</code> directly from <code>100</code>; you would need to write it as <code>XCIX</code>, &#8220;<code>10</code> less than <code>100</code>, then <code>1</code> less than <code>10</code>&#8221;).
+ja:<li>ローマ数字は左から右に読むので、文字の並べ方が非常に重要になる。<code>DC</code>は<code>600</code>だが、<code>CD</code>はそれとは全く異なる数を表すのだ（<code>400</code>、「<code>500</code>引く<code>100</code>」）。また、<code>CI</code>は<code>101</code>だが<code>IC</code>は適切なローマ数字ですらない（<code>1</code>を直接<code>100</code>から引くことはできないからだ。代わりに<code>XCIX</code>と書かなくてはならない、「<code>100</code>引く<code>10</code>、加えて<code>10</code>引く<code>1</code>」）。
+
+
+en:<h3 id=thousands>Checking For Thousands</h3>
+ja:<h3 id=thousands>1000の位をチェックする</h3>
+
+
+en:<p>What would it take to validate that an arbitrary string is a valid Roman numeral?  Let&#8217;s take it one digit at a time. Since Roman numerals are always written highest to lowest, let&#8217;s start with the highest: the thousands place. For numbers 1000 and higher, the thousands are represented by a series of <code>M</code> characters.
+ja:<p>任意の文字列が正しいローマ数字であることを検証するにはどうしたらよいのだろうか？ 1桁ごとに考えていこう。ローマ数字は常に大きい位から小さい位へと書かれるので、まずは最も大きな位である1000の位から始めていこう。1000以上の数では、1000の位は<code>M</code>という文字の並びで表される。
+
+
+en:<li>This pattern has three parts. <code>^</code> matches what follows only at the beginning of the string. If this were not specified, the pattern would match no matter where the <code>M</code> characters were, which is not what you want. You want to make sure that the <code>M</code> characters, if they&#8217;re there, are at the beginning of the string. <code>M?</code> optionally matches a single <code>M</code> character. Since this is repeated three times, you&#8217;re matching anywhere from zero to three <code>M</code> characters in a row. And <code>$</code> matches the end of the string. When combined with the <code>^</code> character at the beginning, this means that the pattern must match the entire string, with no other characters before or after the <code>M</code> characters.
+ja:<li>このパターンは3つの部分からなる。<code>^</code>は文字列の先頭から始まるものにマッチする。もしこれがないと、パターンは<code>M</code>という文字がどこにあってもマッチしてしまう。これは望む結果ではない。<code>M</code>という文字が存在するのであれば、それが文字列の先頭にあることを確認したい。<code>M?</code>は1つの<code>M</code>という文字に任意でマッチする（つまり、<code>M</code>が0回または1回現れるものにマッチする）。それが3回繰り返されているので、0回から3回<code>M</code>が連続しているところにマッチすることになる。そして<code>$</code>は文字列の末尾にマッチする。これが先頭にある<code>^</code>と同時に使われると、パターンが文字列全体にマッチしなければならなくなり、<code>M</code>の前後に他の文字が入ったものにはマッチしなくなる。
+
+
+en:<li>The essence of the <code>re</code> module is the <code>search()</code> function, that takes a regular expression (<var>pattern</var>) and a string (<code>'M'</code>) to try to match against the regular expression. If a match is found, <code>search()</code> returns an object which has various methods to describe the match; if no match is found, <code>search()</code> returns <code>None</code>, the Python null value. All you care about at the moment is whether the pattern matches, which you can tell by just looking at the return value of <code>search()</code>. <code>'M'</code> matches this regular expression, because the first optional <code>M</code> matches and the second and third optional <code>M</code> characters are ignored.
+ja:<li><code>re</code>モジュールの核心となるのが<code>search()</code>関数だ。この関数は正規表現（<var>pattern</var>）と、その正規表現とマッチさせるための文字列（<code>'M'</code>）を引数に取る。マッチがもし見つかれば、<code>search()</code>はマッチを表現するための様々なメソッドを持ったオブジェクトを返す。マッチが1つも見つからなければ、<code>search()</code>はPythonのNull値である<code>None</code>を返す。現段階で関心があるのはパターンがマッチするかどうかだけであり、それは<code>search()</code>の戻り値を見るだけで判断できる。<code>'M'</code>はこの正規表現にマッチする。なぜなら1つ目の省略可能な<code>M</code>はマッチし、2つ目と3つ目の省略可能な<code>M</code>は無視されるからだ。
+
+
+en:<li><code>'MM'</code> matches because the first and second optional <code>M</code> characters match and the third <code>M</code> is ignored.
+ja:<li><code>'MM'</code>はマッチする。1つ目と2つ目の省略可能な<code>M</code>がマッチし、3つ目の<code>M</code>は無視されるからだ。
+
+
+en:<li><code>'MMM'</code> matches because all three <code>M</code> characters match.
+ja:<li><code>'MMM'</code>はマッチする。3つすべての<code>M</code>がマッチするからだ。
+
+
+en:<li><code>'MMMM'</code> does not match. All three <code>M</code> characters match, but then the regular expression insists on the string ending (because of the <code>$</code> character), and the string doesn&#8217;t end yet (because of the fourth <code>M</code>). So <code>search()</code> returns <code>None</code>.
+ja:<li><code>'MMMM'</code>はマッチしない。3つすべての<code>M</code>がマッチするが、この正規表現は更に文字列がそこで終わっていることを要求している（<code>$</code>という文字があるからだ）。しかし文字列はまだ終わっていない（4番目の<code>M</code>がある）。したがって<code>search()</code>は<code>None</code>を返す。
+
+
+en:<li>Interestingly, an empty string also matches this regular expression, since all the <code>M</code> characters are optional.
+ja:<li>面白いことに、空の文字列もこの正規表現にマッチする。すべての<code>M</code>は省略可能だからだ。
+
+
+en:<h3 id=hundreds>Checking For Hundreds</h3>
+ja:<h3 id=hundreds>100の位をチェックする</h3>
+
+
+en:<aside>? makes a pattern optional.</aside>
+ja:<aside>?はパターンを省略可能にする。</aside>
+
+
+en:<p>The hundreds place is more difficult than the thousands, because there are several mutually exclusive ways it could be expressed, depending on its value.
+ja:<p>100の位は1000の位よりも難しい。なぜなら、それぞれの値に応じていくつかの異なる表現方法が使われるからだ。
+
+
+en:<li><code>100 = C</code>
+ja:<li><code>100 = C</code>
+
+
+en:<li><code>200 = CC</code>
+ja:<li><code>200 = CC</code>
+
+
+en:<li><code>300 = CCC</code>
+ja:<li><code>300 = CCC</code>
+
+
+en:<li><code>400 = CD</code>
+ja:<li><code>400 = CD</code>
+
+
+en:<li><code>500 = D</code>
+ja:<li><code>500 = D</code>
+
+
+en:<li><code>600 = DC</code>
+ja:<li><code>600 = DC</code>
+
+
+en:<li><code>700 = DCC</code>
+ja:<li><code>700 = DCC</code>
+
+
+en:<li><code>800 = DCCC</code>
+ja:<li><code>800 = DCCC</code>
+
+
+en:<li><code>900 = CM</code>
+ja:<li><code>900 = CM</code>
+
+
+en:<p>So there are four possible patterns:
+ja:<p>つまり、あり得るパターンは4つある：
+
+
+en:<li><code>CM</code>
+ja:<li><code>CM</code>
+
+
+en:<li><code>CD</code>
+ja:<li><code>CD</code>
+
+
+en:<li>Zero to three <code>C</code> characters (zero if the hundreds place is 0)
+ja:<li>0個から3個の<code>C</code> （100の位が0の場合に0個になる）
+
+
+en:<li><code>D</code>, followed by zero to three <code>C</code> characters
+ja:<li><code>D</code>の後に、0個から3個の<code>C</code>が続いたもの。
+
+
+en:<p>The last two patterns can be combined:
+ja:<p>最後の2つのパターンは1つにまとめることができる。
+
+
+en:<li>an optional <code>D</code>, followed by zero to three <code>C</code> characters
+ja:<li>省略可能な<code>D</code>の後に、0個から3個の<code>C</code>が続いたもの。
+
+
+en:<p>This example shows how to validate the hundreds place of a Roman numeral.
+ja:<p>次の例はローマ数字の100の位をどうやって検証するのかを示している。
+
+
+en:<li>This pattern starts out the same as the previous one, checking for the beginning of the string (<code>^</code>), then the thousands place (<code>M?M?M?</code>). Then it has the new part, in parentheses, which defines a set of three mutually exclusive patterns, separated by vertical bars: <code>CM</code>, <code>CD</code>, and <code>D?C?C?C?</code> (which is an optional <code>D</code> followed by zero to three optional <code>C</code> characters). The regular expression parser checks for each of these patterns in order (from left to right), takes the first one that matches, and ignores the rest.
+ja:<li>このパターンは前の例と同じように始まっており、まず文字列の最初であることをチェックし (<code>^</code>)、次に1000の位をチェックする (<code>M?M?M?</code>)。ここからの括弧の中が新しい部分であり、同時に使われることのない3種類のパターン、すなわち<code>CM</code>、<code>CD</code>、そして<code>D?C?C?C?</code>（これは省略可能な<code>D</code>の後に、0個から3個の<code>C</code>が続いたもの）の3つが縦棒によって区切られて定義されている。正規表現のパーサはこれら3つそれぞれのパターンを（右から左へ）順番にチェックし、最初にマッチしたものを取り上げて、残りは無視する。
+
+
+en:<li><code>'MCM'</code> matches because the first <code>M</code> matches, the second and third <code>M</code> characters are ignored, and the <code>CM</code> matches (so the <code>CD</code> and <code>D?C?C?C?</code> patterns are never even considered). <code>MCM</code> is the Roman numeral representation of <code>1900</code>.
+ja:<li><code>'MCM'</code>はマッチする。なぜなら最初の<code>M</code>はマッチし、2番目と3番目の<code>M</code>は無視され、そして<code>CM</code>がマッチするからだ（従って<code>CD</code>と<code>D?C?C?C?</code>のパターンは試されてすらいない）。<code>MCM</code>は<code>1900</code>をローマ数字で表したものだ。
+
+
+en:<li><code>'MD'</code> matches because the first <code>M</code> matches, the second and third <code>M</code> characters are ignored, and the <code>D?C?C?C?</code> pattern matches <code>D</code> (each of the three <code>C</code> characters are optional and are ignored). <code>MD</code> is the Roman numeral representation of <code>1500</code>.
+ja:<li><code>'MD'</code>はマッチする。なぜなら最初の<code>M</code>はマッチし、2つ目と3つ目の<code>M</code>は無視され、<code>D?C?C?C?</code>のパターンは<code>D</code>にマッチするからだ（3つの<code>C</code>はそれぞれが省略可能なので無視される）。<code>MD</code>は<code>1500</code>をローマ数字で表したものだ。
+
+
+en:<li><code>'MMMCCC'</code> matches because all three <code>M</code> characters match, and the <code>D?C?C?C?</code> pattern matches <code>CCC</code> (the <code>D</code> is optional and is ignored). <code>MMMCCC</code> is the Roman numeral representation of <code>3300</code>.
+ja:<li><code>'MMMCCC'</code>はマッチする。なぜなら3つの<code>M</code>全部がマッチし、<code>D?C?C?C?</code>パターンが<code>CCC</code>にマッチするからだ（<code>D</code>は省略可能なので無視される）。<code>MMMCCC</code>は<code>3300</code>をローマ数字で表したものだ。
+
+
+en:<li><code>'MCMC'</code> does not match. The first <code>M</code> matches, the second and third <code>M</code> characters are ignored, and the <code>CM</code> matches, but then the <code>$</code> does not match because you&#8217;re not at the end of the string yet (you still have an unmatched <code>C</code> character). The <code>C</code> does <em>not</em> match as part of the <code>D?C?C?C?</code> pattern, because the mutually exclusive <code>CM</code> pattern has already matched.
+ja:<li><code>'MCMC'</code>はマッチしない。最初の<code>M</code>はマッチし、2つ目と3つ目の<code>M</code>は無視され、<code>CM</code>はマッチする。しかし、まだ文字列の末尾に到達していない（まだマッチしていない<code>C</code>がある）ので、<code>$</code>はマッチしない。<code>C</code>はパターン<code>D?C?C?C?</code>の一部としてはマッチ<em>しない</em>。なぜなら<code>CM</code>のパターンが既にマッチしているので、<code>D?C?C?C?</code>のパターンを用いる余地は無いからだ。
+
+
+en:<li>Interestingly, an empty string still matches this pattern, because all the <code>M</code> characters are optional and ignored, and the empty string matches the <code>D?C?C?C?</code> pattern where all the characters are optional and ignored.
+ja:<li>面白いことに、空の文字列は依然としてこのパターンにマッチする。なぜなら全ての<code>M</code>は省略可能なので無視され、しかも空文字列はパターン<code>D?C?C?C?</code>(これらの文字はどれも省略可能なので無視される)にマッチするからだ。
+
+
+en:<p>Whew! See how quickly regular expressions can get nasty?  And you&#8217;ve only covered the thousands and hundreds places of Roman numerals. But if you followed all that, the tens and ones places are easy, because they&#8217;re exactly the same pattern. But let&#8217;s look at another way to express the pattern.
+ja:<p>やーれやれ！ 正規表現がたちどころに汚くなってしまうことが分かっただろうか？ そして、これでもまだローマ数字の1000の位と100の位をカバーしただけなのだ。だが、ここまでくれば、後の10の位と1の位は簡単にできるだろう。というのも、これらはまったく同じようなパターンだからだ。しかし、次はパターンを表現する別の方法を見てみよう。
+
+
+en:<h2 id=nmsyntax>Using The <code>{n,m}</code> Syntax</h2>
+ja:<h2 id=nmsyntax><code>{n,m}</code>構文を使う</h2>
+
+
+en:<aside>{1,4} matches between 1 and 4 occurrences of a pattern.</aside>
+ja:<aside>{1,4} はパターンの1回以上4回以下の出現にマッチする。</aside>
+
+
+en:<p>In the previous section, you were dealing with a pattern where the same character could be repeated up to three times. There is another way to express this in regular expressions, which some people find more readable. First look at the method we already used in the previous example.
+ja:<p>前節では、同じ文字が最高で3回まで繰り返されるパターンを扱った。正規表現には、これを表現する別の方法が存在し、人によってはこちらの方が読みやすいだろう。まずは前の例で使ったやり方を見てみよう。
+
+
+en:<li>This matches the start of the string, and then the first optional <code>M</code>, but not the second and third <code>M</code> (but that&#8217;s okay because they&#8217;re optional), and then the end of the string.
+ja:<li>これは文字列の先頭にマッチし、次に省略可能な<code>M</code>にマッチする。しかし、2番目と3番目の<code>M</code>にはマッチせず（しかしこれは省略可能なので問題ない）、そして文字列の末尾にマッチする。
+
+
+en:<li>This matches the start of the string, and then the first and second optional <code>M</code>, but not the third <code>M</code> (but that&#8217;s okay because it&#8217;s optional), and then the end of the string.
+ja:<li>これは文字列の先頭にマッチし、次に1番目と2番目の省略可能な<code>M</code>にマッチする。しかし3番目の<code>M</code>にはマッチせず（しかしこれは省略可能なので問題ない）、そして文字列の末尾にマッチする。
+
+
+en:<li>This matches the start of the string, and then all three optional <code>M</code>, and then the end of the string.
+ja:<li>これは文字列の先頭にマッチし、次にすべての省略可能な<code>M</code>にマッチし、次に文字列の末尾にマッチする。
+
+
+en:<li>This matches the start of the string, and then all three optional <code>M</code>, but then does not match the end of the string (because there is still one unmatched <code>M</code>), so the pattern does not match and returns <code>None</code>.
+ja:<li>これは文字列の先頭にマッチし、次にすべての省略可能な<code>M</code>にマッチする。しかし文字列の終わりにはマッチしないので（まだマッチしていない<code>M</code>があるから）、パターンはマッチせず<code>None</code>が返る。
+
+
+en:<li>This pattern says: &#8220;Match the start of the string, then anywhere from zero to three <code>M</code> characters, then the end of the string.&#8221;  The 0 and 3 can be any numbers; if you want to match at least one but no more than three <code>M</code> characters, you could say <code>M{1,3}</code>.
+ja:<li>このパターンは「文字列の先頭にマッチし、0個以上3個以下の<code>M</code>にマッチし、次に文字列の終わりにマッチする」と言っている。この0と3はどんな数値であっても構わない。もし1個以上3個以下の<code>M</code>にマッチさせたいのであれば、<code>M{1,3}</code>にすればよい。
+
+
+en:<li>This matches the start of the string, then one <code>M</code> out of a possible three, then the end of the string.
+ja:<li>これは文字列の先頭にマッチし、次にありうる3つのうちの1つの<code>M</code>にマッチし、次に文字列の末尾にマッチする。
+
+
+en:<li>This matches the start of the string, then two <code>M</code> out of a possible three, then the end of the string.
+ja:<li>これは文字列の先頭にマッチし、次にありうる3つのうちの2つの<code>M</code>にマッチし、次に文字列の末尾にマッチする。
+
+
+en:<li>This matches the start of the string, then three <code>M</code> out of a possible three, then the end of the string.
+ja:<li>これは文字列の先頭にマッチし、次にありうる3つのうちの3つの<code>M</code>にマッチし、次に文字列の末尾にマッチする。
+
+
+en:<li>This matches the start of the string, then three <code>M</code> out of a possible three, but then <em>does not match</em> the end of the string. The regular expression allows for up to only three <code>M</code> characters before the end of the string, but you have four, so the pattern does not match and returns <code>None</code>.
+ja:<li>これは文字列の先頭にマッチし、次にありうる3つのうちの3つの<code>M</code>にマッチする。しかし、文字列の末尾にはマッチ<em>しない</em>。この正規表現は文字列の末尾の前に最高で3つまでの<code>M</code>を許容するが、ここでは4つあるので、パターンはマッチせず<code>None</code>が返る。
+
+
+en:<h3 id=tensandones>Checking For Tens And Ones</h3>
+ja:<h3 id=tensandones>10の位と1の位をチェックする</h3>
+
+
+en:<p>Now let&#8217;s expand the Roman numeral regular expression to cover the tens and ones place. This example shows the check for tens.
+ja:<p>それでは、ローマ数字の正規表現を拡張して10の位と1の位も扱えるようにしよう。次の例は10の位をチェックするものだ。
+
+
+en:<li>This matches the start of the string, then the first optional <code>M</code>, then <code>CM</code>, then <code>XL</code>, then the end of the string. Remember, the <code>(A|B|C)</code> syntax means &#8220;match exactly one of A, B, or C&#8221;. You match <code>XL</code>, so you ignore the <code>XC</code> and <code>L?X?X?X?</code> choices, and then move on to the end of the string. <code>MCMXL</code> is the Roman numeral representation of <code>1940</code>.
+ja:<li>これは文字列の先頭にマッチし、次に最初の省略可能な<code>M</code>にマッチし、次に<code>CM</code>にマッチし、次に<code>XL</code>にマッチし、次に文字列の末尾にマッチする。<code>(A|B|C)</code>構文が「AかBかCのどれか1つだけにマッチする」というものだったことを思いだそう。ここでは<code>XL</code>にマッチしたので、<code>XC</code>と<code>L?X?X?X?</code>の選択肢は無視されて、文字列の末尾へ進む。<code>MCMXL</code>は<code>1940</code>をローマ数字で表したものだ。
+
+
+en:<li>This matches the start of the string, then the first optional <code>M</code>, then <code>CM</code>, then <code>L?X?X?X?</code>. Of the <code>L?X?X?X?</code>, it matches the <code>L</code> and skips all three optional <code>X</code> characters. Then you move to the end of the string. <code>MCML</code> is the Roman numeral representation of <code>1950</code>.
+ja:<li>これは文字列の先頭にマッチし、次に最初の省略可能な<code>M</code>にマッチし、次に<code>CM</code>にマッチし、次に<code>L?X?X?X?</code>にマッチする。<code>L?X?X?X?</code>では、<code>L</code>にマッチして選択的な<code>X</code>をすべてスキップする。そして文字列の末尾に到達する。<code>MCML</code>は<code>1950</code>をローマ数字で表したものだ。
+
+
+en:<li>This matches the start of the string, then the first optional <code>M</code>, then <code>CM</code>, then the optional <code>L</code> and the first optional <code>X</code>, skips the second and third optional <code>X</code>, then the end of the string. <code>MCMLX</code> is the Roman numeral representation of <code>1960</code>.
+ja:<li>これは文字列の先頭にマッチし、次に最初の省略可能な<code>M</code>にマッチし、次に<code>CM</code>にマッチし、次に省略可能な<code>L</code>にマッチし、次に1つ目の省略可能な<code>X</code>にマッチし、2つ目と3つ目の省略可能な<code>X</code>は無視され、次に文字列の末尾にマッチする。<code>MCMLX</code>は<code>1960</code>をローマ数字で表したものだ。
+
+
+en:<li>This matches the start of the string, then the first optional <code>M</code>, then <code>CM</code>, then the optional <code>L</code> and all three optional <code>X</code> characters, then the end of the string. <code>MCMLXXX</code> is the Roman numeral representation of <code>1980</code>.
+ja:<li>これは文字列の先頭にマッチし、次に最初の省略可能な<code>M</code>にマッチし、次に<code>CM</code>にマッチし、次に省略可能な<code>L</code>にマッチし、次に3つすべての省略可能な<code>X</code>にマッチし、次に文字列の末尾にマッチする。<code>MCMLXXX</code>は<code>1980</code>をローマ数字で表したものだ。
+
+
+en:<li>This matches the start of the string, then the first optional <code>M</code>, then <code>CM</code>, then the optional <code>L</code> and all three optional <code>X</code> characters, then <em>fails to match</em> the end of the string because there is still one more <code>X</code> unaccounted for. So the entire pattern fails to match, and returns <code>None</code>. <code>MCMLXXXX</code> is not a valid Roman numeral.
+ja:<li>これは文字列の先頭にマッチし、次に最初の省略可能な<code>M</code>にマッチし、次に<code>CM</code>にマッチし、次に省略可能な<code>L</code>にマッチし、次に3つすべての省略可能な<code>X</code>にマッチするが、文字列の末尾にはマッチ<em>しない</em>。なぜなら、まだマッチしていない<code>X</code>が残っているからだ。従ってパターン全体はマッチせず、<code>None</code>を返す。<code>MCMLXXX</code>は有効なローマ数字ではない。
+
+
+en:<aside>(A|B) matches either pattern A or pattern B, but not both.</aside>
+ja:<aside>(A|B)はパターンAかパターンBのどちらか一方だけにマッチする。</aside>
+
+
+en:<p>The expression for the ones place follows the same pattern. I&#8217;ll spare you the details and show you the end result.
+ja:<p>1の位の表現もこれと同様だ。詳細は省いて結果だけを示そう。
+
+
+en:</pre><p>So what does that look like using this alternate <code>{n,m}</code> syntax?  This example shows the new syntax.
+ja:</pre><p>それでは、<code>{n,m}</code>構文を使った場合はどうなるのだろうか？ 次の例ではこの新しい構文を使っている。
+
+
+en:<li>This matches the start of the string, then one of a possible three <code>M</code> characters, then <code>D?C{0,3}</code>. Of that, it matches the optional <code>D</code> and zero of three possible <code>C</code> characters. Moving on, it matches <code>L?X{0,3}</code> by matching the optional <code>L</code> and zero of three possible <code>X</code> characters. Then it matches <code>V?I{0,3}</code> by matching the optional <code>V</code> and zero of three possible <code>I</code> characters, and finally the end of the string. <code>MDLV</code> is the Roman numeral representation of <code>1555</code>.
+ja:<li>これは文字列の先頭にマッチし、3つあり得るうちの1つの<code>M</code>にマッチし、<code>D?C{0,3}</code>にマッチする。つまり、これは省略可能な<code>D</code>と3つあり得るうちの0個の<code>C</code>にマッチしている。続けて、省略可能な<code>L</code>と3つありうるうちの0個の<code>X</code>にマッチすることで<code>L?X{0,3}</code>にマッチする。次に、省略可能な<code>V</code>と3つあり得るうちの0個の<code>I</code>にマッチすることで<code>V?I{0,3}</code>にマッチする、そして、最後に文字列の末尾にマッチする。<code>MDLV</code>は<code>1555</code>をローマ数字で表したものだ。
+
+
+en:<li>This matches the start of the string, then two of a possible three <code>M</code> characters, then the <code>D?C{0,3}</code> with a <code>D</code> and one of three possible <code>C</code> characters; then <code>L?X{0,3}</code> with an <code>L</code> and one of three possible <code>X</code> characters; then <code>V?I{0,3}</code> with a <code>V</code> and one of three possible <code>I</code> characters; then the end of the string. <code>MMDCLXVI</code> is the Roman numeral representation of <code>2666</code>.
+ja:<li>これは文字列の先頭にマッチし、3つあり得るうちの2つの<code>M</code>にマッチし、<code>D?C{0,3}</code>に<code>D</code>と3つあり得るうちの1つの<code>C</code>でマッチし、<code>L?X{0,3}</code>に<code>L</code>と3つあり得るうちの1つの<code>X</code>でマッチし、<code>V?I{0,3}</code>に<code>V</code>と3つあり得るうちの1つの<code>I</code>でマッチし、文字列の末尾にマッチする。<code>MMDCLXVI</code>は<code>2666</code>をローマ数字で表したものだ。
+
+
+en:<li>This matches the start of the string, then three out of three <code>M</code> characters, then <code>D?C{0,3}</code> with a <code>D</code> and three out of three <code>C</code> characters; then <code>L?X{0,3}</code> with an <code>L</code> and three out of three <code>X</code> characters; then <code>V?I{0,3}</code> with a <code>V</code> and three out of three <code>I</code> characters; then the end of the string. <code>MMMDCCCLXXXVIII</code> is the Roman numeral representation of <code>3888</code>, and it&#8217;s the longest Roman numeral you can write without extended syntax.
+ja:<li>これは文字列の先頭にマッチし、3つあり得るうちの2つの<code>M</code>にマッチし、<code>D?C{0,3}</code>に<code>D</code>と3つあり得るうちの3つの<code>C</code>でマッチし、<code>L?X{0,3}</code>に<code>L</code>と3つあり得るうちの3つの<code>X</code>でマッチし、<code>V?I{0,3}</code>に<code>V</code>と3つあり得るうちの3つの<code>I</code>でマッチし、文字列の末尾にマッチする。<code>MMMDCCCLXXXVIII</code>は<code>3888</code>をローマ数字で表したものであり、これは拡張された構文を用いずに表すことができる最も長いローマ数字だ。
+
+
+en:<li>Watch closely. (I feel like a magician. &#8220;Watch closely, kids, I&#8217;m going to pull a rabbit out of my hat.&#8221;)  This matches the start of the string, then zero out of three <code>M</code>, then matches <code>D?C{0,3}</code> by skipping the optional <code>D</code> and matching zero out of three <code>C</code>, then matches <code>L?X{0,3}</code> by skipping the optional <code>L</code> and matching zero out of three <code>X</code>, then matches <code>V?I{0,3}</code> by skipping the optional <code>V</code> and matching one out of three <code>I</code>. Then the end of the string. Whoa.
+ja:<li>じっと見て欲しい（私はマジシャンになった気分だ。「よく見て、坊や、帽子からウサギを取り出してみせるよ」）。これは文字列の先頭にマッチし、3個あり得るうちの0個の<code>M</code>にマッチし、次の<code>D?C{0,3}</code>には、省略可能な<code>D</code>を飛ばして3個あり得るうちの0個の<code>C</code>でマッチし、次の<code>L?X{0,3}</code>には、省略可能な<code>L</code>を飛ばして3個あり得るうちの0個の<code>X</code>でマッチし、次の<code>V?I{0,3}</code>には、省略可能な<code>V</code>を飛ばして3個あり得るうちの1個の<code>I</code>でマッチし、文字列の末尾にマッチする。おおー。
+
+en:<p>If you followed all that and understood it on the first try, you&#8217;re doing better than I did. Now imagine trying to understand someone else&#8217;s regular expressions, in the middle of a critical function of a large program. Or even imagine coming back to your own regular expressions a few months later. I&#8217;ve done it, and it&#8217;s not a pretty sight.
+ja:<p>もし初挑戦でこれを全て理解できたのなら、私が初めて学んだときよりも上手くやっているよ。さて今度は、他の人が書いた正規表現を読む時のことを考えてみよう。それも、巨大なプログラムのとりわけ重要な関数の中ほどあたりにあるやつを。あるいは、自分自身で書いた正規表現を何ヶ月か後に見かえすときのことを想像してもいい。私の経験を言えば、とても読めたものではなかったね。
+
+
+en:<p>Now let&#8217;s explore an alternate syntax that can help keep your expressions maintainable.
+ja:<p>今度は、正規表現をより保守しやすくしてくれる構文について学ぼう。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=verbosere>Verbose Regular Expressions</h2>
+ja:<h2 id=verbosere>冗長な正規表現</h2>
+
+
+en:<p>So far you&#8217;ve just been dealing with what I&#8217;ll call &#8220;compact&#8221; regular expressions. As you&#8217;ve seen, they are difficult to read, and even if you figure out what one does, that&#8217;s no guarantee that you&#8217;ll be able to understand it six months later. What you really need is inline documentation.
+ja:<p>これまでは、私が「コンパクトな」正規表現と呼んでいるものを扱ってきた。以上の例を見て分かったように、このような正規表現は読み難く、たとえその内容を一旦は理解できたとしても、6ヶ月後にまた理解できる保証が無いような代物だった。ここで本当に必要なものはインラインのドキュメントだ。
+
+
+en:<p>Python allows you to do this with something called <i>verbose regular expressions</i>. A verbose regular expression is different from a compact regular expression in two ways:
+ja:<p>Pythonでは<em>冗長な正規表現</em>と呼ばれるものを使ってこれを行うことができる。冗長な正規表現はコンパクトな正規表現とは2つの点で異なる：
+
+
+en:<li>Whitespace is ignored. Spaces, tabs, and carriage returns are not matched as spaces, tabs, and carriage returns. They&#8217;re not matched at all. (If you want to match a space in a verbose regular expression, you&#8217;ll need to escape it by putting a backslash in front of it.)
+ja:<li>空白は無視される。スペース、タブ、そして改行は、スペース、タブ、改行としてはマッチしない。これらは絶対にマッチしないのだ（冗長な正規表現でスペースにマッチさせたい場合は、その前にスラッシュを付けてエスケープする必要がある）。
+
+
+en:<li>Comments are ignored. A comment in a verbose regular expression is just like a comment in Python code: it starts with a <code>#</code> character and goes until the end of the line. In this case it&#8217;s a comment within a multi-line string instead of within your source code, but it works the same way.
+ja:<li>コメントは無視される。冗長な正規表現におけるコメントはPythonコードのコメントと同じようなもので、<code>#</code>という文字から始まり、その行の終わりまで続く。これはソースコードではなく複数行文字列の中にあるコメントだが、同じように機能する。
+
+
+en:<p>This will be more clear with an example. Let&#8217;s revisit the compact regular expression you&#8217;ve been working with, and make it a verbose regular expression. This example shows how.
+ja:<p>これは実際の例を見ればよく分かる。もう一度いままでのコンパクトな正規表現を見てみよう。そして、それを冗長な正規表現にするのだ。この例はそのやり方を示している。
+
+
+en:<li>The most important thing to remember when using verbose regular expressions is that you need to pass an extra argument when working with them: <code>re.VERBOSE</code> is a constant defined in the <code>re</code> module that signals that the pattern should be treated as a verbose regular expression. As you can see, this pattern has quite a bit of whitespace (all of which is ignored), and several comments (all of which are ignored). Once you ignore the whitespace and the comments, this is exactly the same regular expression as you saw in the previous section, but it&#8217;s a lot more readable.
+ja:<li>冗長な正規表現を使うときに思い出すべき最も重要なことは、これを使うには追加の引数<code>re.VERBOSE</code>を渡す必要があるということだ。<code>re.VERBOSE</code>は<code>re</code>モジュールで定義される定数であり、この定数はパターンを冗長な正規表現として扱わなければならないことを知らせる。見ての通り、このパターンはたくさんの空白（全て無視される）と、いくつかのコメント（全て無視される）を含んでいる。空白やコメントを無視してしまえば、これは前の節で見た正規表現とまったく同じだが、ずっと読みやすいものになっている。
+
+
+en:<li>This matches the start of the string, then one of a possible three <code>M</code>, then <code>CM</code>, then <code>L</code> and three of a possible three <code>X</code>, then <code>IX</code>, then the end of the string.
+ja:<li>これは文字列の先頭にマッチし、次に3つあり得るうちの1つの<code>M</code>にマッチし、次に<code>CM</code>にマッチし、次に<code>L</code>と、3つあり得るうちの3つの<code>X</code>にマッチし、次に<code>IX</code>にマッチし、次に文字列の末尾にマッチする。
+
+
+en:<li>This matches the start of the string, then three of a possible three <code>M</code>, then <code>D</code> and three of a possible three <code>C</code>, then <code>L</code> and three of a possible three <code>X</code>, then <code>V</code> and three of a possible three <code>I</code>, then the end of the string.
+ja:<li>これは文字列の先頭にマッチし、次に3つあり得るうちの3つの<code>M</code>にマッチし、次に<code>D</code>と、3つあり得るうちの3つの<code>C</code>にマッチし、次に<code>L</code>と、3つあり得るうちの3つの<code>X</code>にマッチし、次に<code>V</code>と、3つあり得るうちの3つの<code>I</code>にマッチし、次に文字列の末尾にマッチする。
+
+
+en:<li>This does not match. Why?  Because it doesn&#8217;t have the <code>re.VERBOSE</code> flag, so the <code>re.search</code> function is treating the pattern as a compact regular expression, with significant whitespace and literal hash marks. Python can&#8217;t auto-detect whether a regular expression is verbose or not. Python assumes every regular expression is compact unless you explicitly state that it is verbose.
+ja:<li>これはマッチしない。なぜだろうか？ なぜなら<code>re.VERBOSE</code>フラグが与えられていないからだ。従って、<code>re.search</code>関数はこのパターンをコンパクトな正規表現として扱い、空白を無視せず、#も文字通りのものと解釈する。Pythonは冗長な正規表現であるかどうかを自動で判定してはくれない。明示的に冗長な正規表現だと宣言しない限り、Pythonはすべての正規表現をコンパクトな正規表現とみなすのだ。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=phonenumbers>Case study: Parsing Phone Numbers</h2>
+ja:<h2 id=phonenumbers>ケーススタディ: 電話番号をパースする</h2>
+
+
+en:<aside>\d matches any numeric digit (0&ndash;9). \D matches anything but digits.</aside>
+ja:<aside>\dは任意の数字（0-9）にマッチする。\Dは数字以外なら何にでもマッチする。</aside>
+
+
+en:<p>So far you&#8217;ve concentrated on matching whole patterns. Either the pattern matches, or it doesn&#8217;t. But regular expressions are much more powerful than that. When a regular expression <em>does</em> match, you can pick out specific pieces of it. You can find out what matched where.
+ja:<p>これまでは、パターン全体がマッチするものばかりを扱ってきた。パターンはマッチするかしないかのどちらかしかなかった。しかし、正規表現はそれよりももっと強力なものだ。正規表現がマッチ<em>する</em>ときは、その特定の一部分を取り出すことができる。どこで何がマッチしたのかを知ることができるのだ。
+
+
+en:<p>This example came from another real-world problem I encountered, again from a previous day job. The problem: parsing an American phone number. The client wanted to be able to enter the number free-form (in a single field), but then wanted to store the area code, trunk, number, and optionally an extension separately in the company&#8217;s database. I scoured the Web and found many examples of regular expressions that purported to do this, but none of them were permissive enough.
+ja:<p>この例は、私が現実に出会った問題から着想を得ている。これまた私の前の仕事からのものだ。問題となったのはアメリカの電話番号のパースだった。その時、顧客が求めてきたのは、電話番号を自由な形式で（1つのフィールドに）入力できるようにしつつ、そこから市外局番・局番・残りの番号、そしてオプションとして内線番号を取り出して会社のデータベースに別々に格納することだった。私はWeb上を探し回り、この処理を行うと主張している正規表現の例をたくさん見つけたが、ライセンス的に使えるものが1つもなかった。
+
+
+en:<p>Here are the phone numbers I needed to be able to accept:
+ja:<p>上手く処理できるようにしなければならなかった電話番号は次のようなものだ：
+
+
+en:<li><code>800-555-1212</code>
+ja:<li><code>800-555-1212</code>
+
+
+en:<li><code>800 555 1212</code>
+ja:<li><code>800 555 1212</code>
+
+
+en:<li><code>800.555.1212</code>
+ja:<li><code>800.555.1212</code>
+
+
+en:<li><code>(800) 555-1212</code>
+ja:<li><code>(800) 555-1212</code>
+
+
+en:<li><code>1-800-555-1212</code>
+ja:<li><code>1-800-555-1212</code>
+
+
+en:<li><code>800-555-1212-1234</code>
+ja:<li><code>800-555-1212-1234</code>
+
+
+en:<li><code>800-555-1212x1234</code>
+ja:<li><code>800-555-1212x1234</code>
+
+
+en:<li><code>800-555-1212 ext. 1234</code>
+ja:<li><code>800-555-1212 ext. 1234</code>
+
+
+en:<li><code>work 1-(800) 555.1212 #1234</code>
+ja:<li><code>work 1-(800) 555.1212 #1234</code>
+
+
+en:<p>Quite a variety! In each of these cases, I need to know that the area code was <code>800</code>, the trunk was <code>555</code>, and the rest of the phone number was <code>1212</code>. For those with an extension, I need to know that the extension was <code>1234</code>.
+ja:<p>パターンが多すぎる！ いずれの場合においても、市外局番は<code>800</code>で、局番は<code>555</code>で、残りの電話番号は<code>1212</code>であることを読み取れる必要がある。内線番号が存在する場合は、内線番号が<code>1234</code>であることも読み取れなくてはならない。
+
+
+en:<p>Let&#8217;s work through developing a solution for phone number parsing. This example shows the first step.
+ja:<p>それでは電話番号をパースする方法を構築しよう。この例はその最初の一歩だ。
+
+
+en:<li>Always read regular expressions from left to right. This one matches the beginning of the string, and then <code>(\d{3})</code>. What&#8217;s <code>\d{3}</code>?  Well, <code>\d</code> means &#8220;any numeric digit&#8221; (0 through <code>9</code>). The <code>{3}</code> means &#8220;match exactly three numeric digits&#8221;; it&#8217;s a variation on the <a href=#nmsyntax><code>{n,m} syntax</code></a> you saw earlier. Putting it all in parentheses means &#8220;match exactly three numeric digits, <em>and then remember them as a group that I can ask for later</em>&#8221;. Then match a literal hyphen. Then match another group of exactly three digits. Then another literal hyphen. Then another group of exactly four digits. Then match the end of the string.
+ja:<li>正規表現は常に左から右へ読もう。これは文字列の先頭にマッチして、次に<code>(\d{3})</code>にマッチする。<code>\d{3}</code>というのは何だろう？ <code>\d</code>は任意の数字（<code>0</code>から<code>9</code>まで）を意味している。<code>{3}</code>は「ちょうど3つの数字にマッチする」という意味で、前に見た<a href=#nmsyntax><code>{n,m}</code>構文</a>の一種だ。これを括弧の中に入れているのは「ちょうど3桁の数字にマッチさせ、<em>マッチしたものを後で参照できるようにグループとして覚えておいてくれ</em>」という意味だ。次にハイフンにマッチする。その次はまた別のちょうど3桁の数字のグループにマッチする。次にハイフンにマッチする。その次はまた別のちょうど4桁の数字にマッチする。次に文字列の終わりにマッチする。
+
+
+en:<li>To get access to the groups that the regular expression parser remembered along the way, use the <code>groups()</code> method on the object that the <code>search()</code> method returns. It will return a tuple of however many groups were defined in the regular expression. In this case, you defined three groups, one with three digits, one with three digits, and one with four digits.
+ja:<li>正規表現のパーサが途中で記憶したグループにアクセスするには、<code>search()</code>メソッドが返したオブジェクトにある<code>groups()</code>メソッドを使う。このメソッドは正規表現で定義したグループがいくつあったとしても、それらをタプルで返してくれる。この場合は、3つのグループを定義している。そのうちの1つは3桁の数字で、もう1つは3桁の数字、最後の1つは4桁の数字だ。
+
+
+en:<li>This regular expression is not the final answer, because it doesn&#8217;t handle a phone number with an extension on the end. For that, you&#8217;ll need to expand the regular expression.
+ja:<li>この正規表現で完成というわけではない。なぜなら末尾の内線番号を処理できるようになっていないからだ。内線番号を扱えるようにするには、この正規表現を拡張していく必要がある。
+
+
+en:<li>And this is why you should never &#8220;chain&#8221; the <code>search()</code> and <code>groups()</code> methods in production code. If the <code>search()</code> method returns no matches, it returns <a href=native-datatypes.html#none><code>None</code></a>, not a regular expression match object. Calling <code>None.groups()</code> raises a perfectly obvious exception: <code>None</code> doesn&#8217;t have a <code>groups()</code> method. (Of course, it&#8217;s slightly less obvious when you get this exception from deep within your code. Yes, I speak from experience here.)
+ja:<li>これは<code>search()</code>メソッドと<code>groups()</code>メソッドを製品コードで「連鎖」させてはいけない理由を表している。正規表現がマッチしなかった場合には、<code>search()</code>メソッドは正規表現のマッチオブジェクトではなく、<a href=native-datatypes.html#none><code>None</code></a>を返す。<code>None.groups()</code>を呼び出そうとすると、分かりきったことだが、例外が送出されることになる。<code>None</code>は<code>groups()</code>というメソッドを持っていないのだ（もちろん、コードの深いところでこの例外が出た場合は少し分かりづらくなる。そう、ここでは私は自分の経験に基づいてお話している）。
+
+
+en:<li>This regular expression is almost identical to the previous one. Just as before, you match the beginning of the string, then a remembered group of three digits, then a hyphen, then a remembered group of three digits, then a hyphen, then a remembered group of four digits. What&#8217;s new is that you then match another hyphen, and a remembered group of one or more digits, then the end of the string.
+ja:<li>この正規表現は前のものとほとんど同じだ。先ほどと同様に、文字列の先頭にマッチし、次に記憶される3桁の数字のグループにマッチし、次にハイフンにマッチし、次に記憶される3桁の数字のグループにマッチし、次にハイフンにマッチし、次に記憶される4桁の数字のグループにマッチする。変更点は、ここからハイフンにマッチし、記憶される1桁以上の数字のグループにマッチし、文字列の末尾にマッチすることだ。
+
+
+en:<li>The <code>groups()</code> method now returns a tuple of four elements, since the regular expression now defines four groups to remember.
+ja:<li>今度の<code>groups()</code>メソッドは4つの要素からなるタプルを返す。正規表現に4つの記憶するグループを定義しているからだ。
+
+
+en:<li>Unfortunately, this regular expression is not the final answer either, because it assumes that the different parts of the phone number are separated by hyphens. What if they&#8217;re separated by spaces, or commas, or dots?  You need a more general solution to match several different types of separators.
+ja:<li>残念だが、この正規表現も最終的な答えではない。なぜならこれは電話番号の個々の部分がハイフンで分割されていることを想定しているからだ。これがもしスペースやカンマやドットで区切られている場合にはどうなるだろうか？ いくつもの異なる区切り文字に対応できるもっと一般化した解決策が必要だ。
+
+
+en:<li>Oops! Not only does this regular expression not do everything you want, it&#8217;s actually a step backwards, because now you can&#8217;t parse phone numbers <em>without</em> an extension. That&#8217;s not what you wanted at all; if the extension is there, you want to know what it is, but if it&#8217;s not there, you still want to know what the different parts of the main number are.
+ja:<li>おっと！ この正規表現は完璧な答えでないどころか、先ほどのものから後退してしまっている。というのは、これは内線番号の<em>ない</em>電話番号をパースできないのだ。これでは全然お話にならない。欲しいのは、内線番号があればそれを読み取るが、仮に内線番号がなくとも、他の主番号の個々の部分について読み取ってくれるものだ。
+
+
+en:<p>The next example shows the regular expression to handle separators between the different parts of the phone number.
+ja:<p>次の例は、正規表現の個々の部分のあいだにある区切り文字を扱う正規表現を示している。
+
+
+en:<li>Hang on to your hat. You&#8217;re matching the beginning of the string, then a group of three digits, then <code>\D+</code>. What the heck is that?  Well, <code>\D</code> matches any character <em>except</em> a numeric digit, and <code>+</code> means &#8220;1 or more&#8221;. So <code>\D+</code> matches one or more characters that are not digits. This is what you&#8217;re using instead of a literal hyphen, to try to match different separators.
+ja:<li>しっかりとつかまっててくれ。文字列の先頭にマッチして、次に3桁の数字のグループにマッチして、次に<code>\D+</code>にマッチしている。これは一体何だろう？ <code>\D</code>は数字を<em>除く</em>全ての文字にマッチし、そして<code>+</code>は「1回以上」を意味している。つまり<code>\D+</code>は1つ以上の数字ではない文字にマッチする。異なる区切り文字にもマッチできるように、ハイフンの代わりにこれを使っているのだ。
+
+
+en:<li>Using <code>\D+</code> instead of <code>-</code> means you can now match phone numbers where the parts are separated by spaces instead of hyphens.
+ja:<li><code>-</code>の代わりに<code>\D+</code>を使うということは、ハイフンではなくスペースで分割された電話番号にもマッチすることを意味している。
+
+
+en:<li>Of course, phone numbers separated by hyphens still work too.
+ja:<li>もちろん、ハイフンで分割された電話番号でも依然として機能する。
+
+
+en:<li>Unfortunately, this is still not the final answer, because it assumes that there is a separator at all. What if the phone number is entered without any spaces or hyphens at all?
+ja:<li>残念だが、これもまだ最終的な答えにはなっていない。なぜならこれは区切り文字が存在することを想定しているからだ。電話番号が区切り文字なしに入力された場合はどうなるだろうか？
+
+
+en:<li>Oops! This still hasn&#8217;t fixed the problem of requiring extensions. Now you have two problems, but you can solve both of them with the same technique.
+ja:<li>おっと！ 内線番号が無ければ読み取れないという問題もまだ修正されていない。今のところ2つの問題を抱えていることになるが、両者は同じテクニックを使って解決できる。
+
+
+en:<p>The next example shows the regular expression for handling phone numbers <em>without</em> separators.
+ja:<p>次の例は区切り文字の<em>ない</em>電話番号を扱う正規表現を示している。
+
+
+en:<li>The only change you&#8217;ve made since that last step is changing all the <code>+</code> to <code>*</code>. Instead of <code>\D+</code> between the parts of the phone number, you now match on <code>\D*</code>. Remember that <code>+</code> means &#8220;1 or more&#8221;?  Well, <code>*</code> means &#8220;zero or more&#8221;. So now you should be able to parse phone numbers even when there is no separator character at all.
+ja:<li>前のステップからの唯一の変更点は、<code>+</code>を<code>*</code>に変更したことだけだ。<code>\D+</code>を電話番号の各部分の区切りとして使う代わりに、今度は<code>\D*</code>にマッチさせるのだ。<code>+</code>は「1回以上」を意味することを覚えているだろうか？ <code>*</code>は「0回以上」を意味しているのだ。だから、たとえ区切り文字がまったく使われていない電話番号であったとしても、これでパースできるようになっているはずだ。
+
+
+en:<li>Lo and behold, it actually works. Why?  You matched the beginning of the string, then a remembered group of three digits (<code>800</code>), then zero non-numeric characters, then a remembered group of three digits (<code>555</code>), then zero non-numeric characters, then a remembered group of four digits (<code>1212</code>), then zero non-numeric characters, then a remembered group of an arbitrary number of digits (<code>1234</code>), then the end of the string.
+ja:<li>驚くなかれ、これで現に読み取れるのだ。なぜだろう？ 文字列の先頭にマッチして、次に記憶しておく3桁の数字 (<code>800</code>) のグループにマッチし、次に0個の数字ではない文字にマッチし、次に記憶しておく3桁の数字 (<code>555</code>) のグループにマッチし、次に0個の数字ではない文字にマッチし、次に記憶しておく4桁の数字 (<code>1212</code>) のグループにマッチし、次に0個の数字ではない文字にマッチし、次に記憶しておく任意桁の数字 (<code>1234</code>) にマッチし、次に文字列の末尾にマッチする。
+
+
+en:<li>Other variations work now too: dots instead of hyphens, and both a space and an <code>x</code> before the extension.
+ja:<li>他のパターンも扱える: ハイフンの代わりにドットを使ったものや、内線番号の前にスペースと<code>x</code>があるものでも対応できる。
+
+
+en:<li>Finally, you&#8217;ve solved the other long-standing problem: extensions are optional again. If no extension is found, the <code>groups()</code> method still returns a tuple of four elements, but the fourth element is just an empty string.
+ja:<li>長らく残っていた問題もついに解決できた: 内線番号は再び省略可能になったのだ。内線番号が見つかれば、<code>groups()</code>メソッドは4つの要素をもったタプルを返してくれるし、見つからなければ4番目の要素は単に空の文字列になる。
+
+
+en:<li>I hate to be the bearer of bad news, but you&#8217;re not finished yet. What&#8217;s the problem here?  There&#8217;s an extra character before the area code, but the regular expression assumes that the area code is the first thing at the beginning of the string. No problem, you can use the same technique of &#8220;zero or more non-numeric characters&#8221; to skip over the leading characters before the area code.
+ja:<li>悪い知らせを伝えるのは嫌なのだが、実はまだ終わりではないのだ。ここでの問題は何か？ 市外局番の前に余計な文字があるが、正規表現は文字列が市外局番から始まることを想定しているのだ。しかし問題はない。「0個以上の数字でない数」のテクニックを使うことで、市外局番の前にある文字を読み飛ばすことができる。
+
+
+en:<p>The next example shows how to handle leading characters in phone numbers.
+ja:<p>次の例は電話番号の前にある文字を扱い方を示している。
+
+
+en:<li>This is the same as in the previous example, except now you&#8217;re matching <code>\D*</code>, zero or more non-numeric characters, before the first remembered group (the area code). Notice that you&#8217;re not remembering these non-numeric characters (they&#8217;re not in parentheses). If you find them, you&#8217;ll just skip over them and then start remembering the area code whenever you get to it.
+ja:<li>これは基本的に前の例と同じだが、最初に記憶されるグループ（市外局番）の前で、<code>\D*</code>（0個以上の数字ではない文字）にマッチさせている点が異なる。これらの数字でない文字は記憶されないことに注意しよう。もしそれらが見つかっても単に読み飛ばされてしまう。そして市外局番に行き着くと、それ以降の数字が記憶され始めるのだ。
+
+
+en:<li>You can successfully parse the phone number, even with the leading left parenthesis before the area code. (The right parenthesis after the area code is already handled; it&#8217;s treated as a non-numeric separator and matched by the <code>\D*</code> after the first remembered group.)
+ja:<li>たとえ市外局番の前に左括弧があったとしても、上手くパースできる。（市外局番の後にある右括弧には既に対応済みだ。これは、最初に記憶されるグループの後ろにある数字ではない区切り文字として扱われ、<code>\D*</code>にマッチする）
+
+
+en:<li>Just a sanity check to make sure you haven&#8217;t broken anything that used to work. Since the leading characters are entirely optional, this matches the beginning of the string, then zero non-numeric characters, then a remembered group of three digits (<code>800</code>), then one non-numeric character (the hyphen), then a remembered group of three digits (<code>555</code>), then one non-numeric character (the hyphen), then a remembered group of four digits (<code>1212</code>), then zero non-numeric characters, then a remembered group of zero digits, then the end of the string.
+ja:<li>これは、今まで動作していたものを壊していないかを確認するための、単なる動作確認だ。前に来る文字は完全に省略可能なので、これは文字列の先頭にマッチし、次に記憶される3桁の数字のグループ（<code>800</code>）にマッチし、次に1つの数字ではない文字にマッチし（ハイフン）、次に記憶される3桁の数字のグループ（<code>555</code>）にマッチし、次に1つの数字ではない文字にマッチし（ハイフン）、次に記憶される4桁の数字のグループ（<code>1212</code>）にマッチし、次に0個の数字ではない文字にマッチし、次に記憶される0桁の数字のグループにマッチし、次に文字列の末尾にマッチする。
+
+
+en:<li>This is where regular expressions make me want to gouge my eyes out with a blunt object. Why doesn&#8217;t this phone number match? Because there&#8217;s a <code>1</code> before the area code, but you assumed that all the leading characters before the area code were non-numeric characters (<code>\D*</code>). Aargh.
+ja:<li>正規表現を使っていてこういう状況に陥ると、自分の目を鈍器でえぐり出したくなるね。なぜこの電話番号にはマッチしないのだろうか？ なぜなら市外局番の前に<code>1</code>があるが、市外局番の前に来るものは全て数字でない文字（<code>\D*</code>）だと想定していたからだ。あーもう！
+
+
+en:<p>Let&#8217;s back up for a second. So far the regular expressions have all matched from the beginning of the string. But now you see that there may be an indeterminate amount of stuff at the beginning of the string that you want to ignore. Rather than trying to match it all just so you can skip over it, let&#8217;s take a different approach: don&#8217;t explicitly match the beginning of the string at all. This approach is shown in the next example.
+ja:<p>少し落ち着こう。今までの正規表現は文字列の頭から全部マッチさせてきた。しかし、現在では文字列の先頭に無視したいものがいくつも存在しうるということが分かっている。全体をマッチさせてそれらを読み飛ばすのではなく、違うやり方をしてみよう。つまり、明示的に文字列の先頭にはマッチさせないようにするのだ。このやり方を次の例で示す。
+
+
+en:<li>Note the lack of <code>^</code> in this regular expression. You are not matching the beginning of the string anymore. There&#8217;s nothing that says you need to match the entire input with your regular expression. The regular expression engine will do the hard work of figuring out where the input string starts to match, and go from there.
+ja:<li>この正規表現には<code>^</code>が無いことに注意しよう。もう文字列の先頭にはマッチさせないのだ。正規表現を入力全体とマッチさせる必要はどこにもない。正規表現エンジンが入力文字列にマッチし始める位置を頑張って見つけ出し、そこからマッチを行ってくれるのだ。
+
+
+en:<li>Now you can successfully parse a phone number that includes leading characters and a leading digit, plus any number of any kind of separators around each part of the phone number.
+ja:<li>今度は、先頭に文字と数字を含んでいる電話番号もパースできるようになった。さらに、電話番号の各部分の周りに、どんな種類の区切り文字がどれだけ使われていてもパースできるようになっている。
+
+
+en:<li>Sanity check. This still works.
+ja:<li>動作確認。ちゃんと処理できている。
+
+
+en:<li>That still works too.
+ja:<li>これも処理できている。
+
+
+en:<p>See how quickly a regular expression can get out of control?  Take a quick glance at any of the previous iterations. Can you tell the difference between one and the next?
+ja:<p>正規表現が瞬く間に手に負えないものになってしまうことが分かっただろうか？ 今までに繰り返してきたものをどれでも良いので少し見て欲しい。ある正規表現とその次のバージョンの正規表現を区別できるだろうか？
+
+
+en:<p>While you still understand the final answer (and it is the final answer; if you&#8217;ve discovered a case it doesn&#8217;t handle, I don&#8217;t want to know about it), let&#8217;s write it out as a verbose regular expression, before you forget why you made the choices you made.
+ja:<p>あなたがまだ最終バージョンの正規表現を理解しているうちに（これが最終的な答えだ。もしこれで扱えない例が見つかったとしても、私はそんなことは知りたくないね）、どうしてこのように構成したのかを忘れないうちに冗長な正規表現として書いておこう。
+
+
+en:<li>Other than being spread out over multiple lines, this is exactly the same regular expression as the last step, so it&#8217;s no surprise that it parses the same inputs.
+ja:<li>複数の行に展開されていることを除けば、最後のバージョンの正規表現とまったく同じだ。だから、この正規表現が同じ入力をパースできるのは当たり前のことだ。
+
+
+en:<li>Final sanity check. Yes, this still works. You&#8217;re done.
+ja:<li>最後の動作確認だ。よし、まだ動作する。これで終わりだ。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=summary>Summary</h2>
+ja:<h2 id=summary>まとめ</h2>
+
+
+en:<p>This is just the tiniest tip of the iceberg of what regular expressions can do. In other words, even though you&#8217;re completely overwhelmed by them now, believe me, you ain&#8217;t seen nothing yet.
+ja:<p>今までの例は、正規表現ができることの氷山の一角にすぎない。言い換えれば、たとえ今あなたがこれらに完全に圧倒されているとしても、信じて欲しいが、こんなものはまだ序の口なのだ。
+
+
+en:<p>You should now be familiar with the following techniques:
+ja:<p>今あなたは、以下のテクニックを身につけているはずだ：
+
+
+en:<li><code>^</code> matches the beginning of a string.
+ja:<li><code>^</code>は文字列の先頭にマッチする。
+
+
+en:<li><code>$</code> matches the end of a string.
+ja:<li><code>$</code>は文字列の末尾にマッチする。
+
+
+en:<li><code>\b</code> matches a word boundary.
+ja:<li><code>\b</code>は単語境界にマッチする。
+
+
+en:<li><code>\d</code> matches any numeric digit.
+ja:<li><code>\d</code>は任意の数字にマッチする。
+
+
+en:<li><code>\D</code> matches any non-numeric character.
+ja:<li><code>\D</code>は数字以外の任意の文字にマッチする。
+
+
+en:<li><code>x?</code> matches an optional <code>x</code> character (in other words, it matches an <code>x</code> zero or one times).
+ja:<li><code>x?</code>は<code>x</code>と言う文字に任意でマッチする（言い換えると、<code>x</code>が0回または1回現れるものにマッチする）。
+
+
+en:<li><code>x*</code> matches <code>x</code> zero or more times.
+ja:<li><code>x*</code>は<code>x</code>が0回以上現れるものにマッチする。
+
+
+en:<li><code>x+</code> matches <code>x</code> one or more times.
+ja:<li><code>x+</code>は<code>x</code>が1回以上現れるものにマッチする。
+
+
+en:<li><code>x{n,m}</code> matches an <code>x</code> character at least <code>n</code> times, but not more than <code>m</code> times.
+ja:<li><code>x{n,m}</code>は<code>x</code>が<code>n</code>回以上、<code>m</code>回以下現れるものにマッチする。
+
+
+en:<li><code>(a|b|c)</code> matches exactly one of <code>a</code>, <code>b</code> or <code>c</code>.
+ja:<li><code>(a|b|c)</code>は<code>a</code>, <code>b</code>, <code>c</code>のどれか一つだけにマッチする。
+
+
+en:<li><code>(x)</code> in general is a <em>remembered group</em>. You can get the value of what matched by using the <code>groups()</code> method of the object returned by <code>re.search</code>.
+ja:<li><code>(x)</code>は一般に<em>記憶されるグループ</em>のことだ。<code>re.search</code>メソッドが返したオブジェクトにある<code>groups()</code>メソッドを使うことで、マッチした値を取得できる。
+
+
+en:<p>Regular expressions are extremely powerful, but they are not the correct solution for every problem. You should learn enough about them to know when they are appropriate, when they will solve your problems, and when they will cause more problems than they solve.
+ja:<p>正規表現は非常に強力だが、すべての問題に対する正しい答えではない。正規表現がどんなときに適切で、どんなときに問題を解決してくれ、どんなときに初めの問題よりも多くの問題を引き起こしてしまうのかを、十分に学ぶ必要がある。
+
+
+en:<p class=v><a href=strings.html rel=prev title='back to &#8220;Strings&#8221;'><span class=u>&#x261C;</span></a> <a href=generators.html rel=next title='onward to &#8220;Closures &amp; Generators&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=strings.html rel=prev title='「文字列」に戻る'><span class=u>&#x261C;</span></a> <a href=generators.html rel=next title='「クロージャとジェネレータ」へ進む'><span class=u>&#x261E;</span></a>
+
+

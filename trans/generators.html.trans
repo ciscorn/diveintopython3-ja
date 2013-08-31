@@ -1,0 +1,494 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#generators>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#generators>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<title>Closures &amp; Generators - Dive Into Python 3</title>
+ja:<title>クロージャとジェネレータ - Dive Into Python 3 日本語版</title>
+
+
+en:<p id=level>Difficulty level: <span class=u title=intermediate>&#x2666;&#x2666;&#x2666;&#x2662;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=中級>&#x2666;&#x2666;&#x2666;&#x2662;&#x2662;</span>
+
+
+en:<h1>Closures <i class=baa>&amp;</i> Generators</h1>
+ja:<h1>クロージャとジェネレータ</h1>
+
+
+en:<p><span class=u>&#x275D;</span> My spelling is Wobbly. It&#8217;s good spelling but it Wobbles, and the letters get in the wrong places. <span class=u>&#x275E;</span><br>&mdash; Winnie-the-Pooh
+ja:<p><span class=u>&#x275D;</span> ぼくのつづり字はふらふらするんだ。つづりは正しいのだけど、ふらつくから、文字が間違ったところに行っちゃうんだ。<span class=u>&#x275E;</span><br>&mdash; クマのプーさん
+
+
+en:<p id=toc>&nbsp;
+ja:<p id=toc>&nbsp;
+
+
+en:<h2 id=divingin>Diving In</h2>
+ja:<h2 id=divingin>飛び込め</h2>
+
+
+en:<p class=f>Having grown up the son of a librarian and an English major, I have always been fascinated by languages. Not programming languages. Well yes, programming languages, but also natural languages. Take English. English is a schizophrenic language that borrows words from German, French, Spanish, and Latin (to name a few). Actually, &#8220;borrows&#8221; is the wrong word; &#8220;pillages&#8221; is more like it. Or perhaps &#8220;assimilates&#8221;&nbsp;&mdash;&nbsp;like the Borg. Yes, I like that.
+ja:<p class=f>司書と英文学専攻者の息子として育ったせいか、私はいつも言語というものに魅きつけられてきた。ここで言っているのは自然言語のことだ。プログラミング言語は特にそうではない……ええとまあ、プログラミング言語もだ。英語を取り上げてみよう。英語は統合失調症気味の言語で、(少し例を挙げれば)ドイツ語、フランス語、スペイン語、ラテン語から言葉を借りてきている。いや、「借りる」という言葉は適切じゃないな。「ぶんどってきた」と言った方がしっくりくる。あるいは、「同化する」という単語を使った方が良いかも&mdash;ボーグみたいに。うん、それがいい。
+
+
+en:<p class=c><code>We are the Borg. Your linguistic and etymological distinctiveness will be added to our own. Resistance is futile.</code>
+ja:<p class=c>我々はボーグだ。お前たちの言語的・語源的特性は我々に取り込まれる。抵抗は無意味だ。
+
+
+en:<p>In this chapter, you&#8217;re going to learn about plural nouns. Also, functions that return other functions, advanced regular expressions, and generators. But first, let&#8217;s talk about how to make plural nouns. (If you haven&#8217;t read <a href=regular-expressions.html>the chapter on regular expressions</a>, now would be a good time. This chapter assumes you understand the basics of regular expressions, and it quickly descends into more advanced uses.)
+ja:<p>この章では名詞の複数形について学ぶ。それ以外にも、別の関数を返す関数、高度な正規表現、ジェネレータといったものについても学ぶのだが、しかし、まずは「名詞の複数形はどのように作るのか」ということから話を始めよう。(もし、<a href=regular-expressions.html>正規表現の章</a>をまだ読んでいないのなら、良い機会なので読んでおいてほしい。この章は正規表現の基礎を知っていることを前提としていて、すぐにより高度な使い方の話に進んでいってしまうからだ。)
+
+
+en:<p>If you grew up in an English-speaking country or learned English in a formal school setting, you&#8217;re probably familiar with the basic rules:
+ja:<p>もし、あなたが英語圏の国で育ったか、正規の学校教育で英語を習ったことがあるなら、次のような基本的な規則には馴染みがあるだろう：
+
+
+en:<li>If a word ends in S, X, or Z, add ES. <i>Bass</i> becomes <i>basses</i>, <i>fax</i> becomes <i>faxes</i>, and <i>waltz</i> becomes <i>waltzes</i>.
+ja:<li>ある単語がS、X、Zで終わっていればESを付ける。例えば、<i>Bass</i>は<i>basses</i>、<i>fax</i>は<i>faxes</i>、<i>waltz</i>は<i>waltzes</i>になる。
+
+
+en:<li>If a word ends in a noisy H, add ES; if it ends in a silent H, just add S. What&#8217;s a noisy H? One that gets combined with other letters to make a sound that you can hear. So <i>coach</i> becomes <i>coaches</i> and <i>rash</i> becomes <i>rashes</i>, because you can hear the CH and SH sounds when you say them. But <i>cheetah</i> becomes <i>cheetahs</i>, because the H is silent.
+ja:<li>もし単語が有音のHで終わるなら、ESをつける。無音のHで終わるなら、Sだけをつければよい。有音のHというのは何かって？ 他の文字と組み合わさって、耳に聞こえる音になるHのことだ。例えば、<i>coach</i>は<i>coaches</i>、<i>rash</i>は<i>rashes</i>になる。実際に発音してみれば、ちゃんとCHとSHの音が聞こえるだろう。一方、<i>cheetah</i>のHは無音なので、<i>cheetahs</i>になる。
+
+
+en:<li>If a word ends in Y that sounds like I, change the Y to IES; if the Y is combined with a vowel to sound like something else, just add S. So <i>vacancy</i> becomes <i>vacancies</i>, but <i>day</i> becomes <i>days</i>.
+ja:<li>単語の終わりのYをIのように発音するなら、YをIESに変える。Yが母音と合わさって別の発音になるなら、ただSだけをつける。だから、<i>vacancy</i>は<i>vacancies</i>になるが、<i>day</i>は<i>days</i>になる。
+
+
+en:<li>If all else fails, just add S and hope for the best.
+ja:<li>もし以上の全ての規則に当てはまらなかったら、単純にSをつけて、あとは「これでうまくいきますように」と願えばいい。
+
+
+en:<p>(I know, there are a lot of exceptions. <i>Man</i> becomes <i>men</i> and <i>woman</i> becomes <i>women</i>, but <i>human</i> becomes <i>humans</i>. <i>Mouse</i> becomes <i>mice</i> and <i>louse</i> becomes <i>lice</i>, but <i>house</i> becomes <i>houses</i>. <i>Knife</i> becomes <i>knives</i> and <i>wife</i> becomes <i>wives</i>, but <i>lowlife</i> becomes <i>lowlifes</i>. And don&#8217;t even get me started on words that are their own plural, like <i>sheep</i>, <i>deer</i>, and <i>haiku</i>.)
+ja:<p>(もちろん例外はたくさんある。<i>man</i>は<i>men</i>になるし、<i>woman</i>は<i>women</i>になるが、<i>human</i>は<i>humans</i>になる。また、<i>mouse</i>は<i>mice</i>に、<i>louse</i>は<i>lice</i>になるのに、<i>house</i>は<i>houses</i>になる。さらに、<i>Knife</i>は<i>knives</i>に、<i>wife</i>は<i>wives</i>になるのだが、<i>lowlife</i>は<i>lowlifes</i>になる。ああ、それと独自の複数形を持つ<i>sheep</i>とか<i>deer</i>とか<i>haiku</i>とかの単語があることも知っているから、もうそこらへんで止めておいてくれ)
+
+
+en:<p>Other languages, of course, are completely different.
+ja:<p>当然のことだが、他の言語では事情は全く異なる。
+
+
+en:<p>Let&#8217;s design a Python library that automatically pluralizes English nouns. We&#8217;ll start with just these four rules, but keep in mind that you&#8217;ll inevitably need to add more.
+ja:<p>では、英語の名詞を自動で複数形にしてくれるPythonのライブラリを設計してみよう。ここでは、上に挙げた4つの規則だけで始めることにするが、この規則だけでは不十分だということは頭にとめておいてほしい。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=i-know>I Know, Let&#8217;s Use Regular Expressions!</h2>
+ja:<h2 id=i-know>そうか、正規表現を使うんだ！</h2>
+
+
+en:<p>So you&#8217;re looking at words, which, at least in English, means you&#8217;re looking at strings of characters. You have rules that say you need to find different combinations of characters, then do different things to them. This sounds like a job for regular expressions!
+ja:<p>さて、あなたは単語を調べていくことになるのだが、これは少なくとも英語では文字列を調べるということを意味している。そしてここにはいくつかの規則があり、それによれば異なる文字の組み合わせを見つけだした上で、それぞれに異なった処理を施す必要があるという。正規表現の出番みたいじゃないか！
+
+
+en:<p class=d>[<a href=examples/plural1.py>download <code>plural1.py</code></a>]
+ja:<p class=d>[<a href=examples/plural1.py><code>plural1.py</code>をダウンロードする</a>]
+
+
+en:<li>This is a regular expression, but it uses a syntax you didn&#8217;t see in <a href=regular-expressions.html><i>Regular Expressions</i></a>. The square brackets mean &#8220;match exactly one of these characters.&#8221; So <code>[sxz]</code> means &#8220;<code>s</code>, or <code>x</code>, or <code>z</code>&#8221;, but only one of them. The <code>$</code> should be familiar; it matches the end of string. Combined, this regular expression tests whether <var>noun</var> ends with <code>s</code>, <code>x</code>, or <code>z</code>.
+ja:<li>これは正規表現だが、前章の<a href=regular-expressions.html>正規表現</a>では触れなかった構文が使われている。この角括弧は「どれか一文字にマッチする」という意味だ。だから、<code>[sxz]</code>は「<code>s</code>、<code>x</code>または<code>z</code>」ということを表しているが、ただしこのどれか一つだけにマッチするものでなくてはならない。この<code>$</code>には馴染みがあるだろう。これは文字列の末尾にマッチするものだ。まとめると、この正規表現は<var>noun</var>が<code>s</code>、<code>x</code>、<code>z</code>のいずれかで終わるかどうかを調べているのだ。
+
+
+en:<li>This <code>re.sub()</code> function performs regular expression-based string substitutions.
+ja:<li>この<code>re.sub()</code>は正規表現に基づいて単語を置換する関数だ。
+
+
+en:<p>Let&#8217;s look at regular expression substitutions in more detail.
+ja:<p>正規表現を使った置換についてもっと詳しく見てみよう。
+
+
+en:<li>Does the string <code>Mark</code> contain <code>a</code>, <code>b</code>, or <code>c</code>? Yes, it contains <code>a</code>.
+ja:<li><code>Mark</code>という文字列は<code>a</code>、<code>b</code>、<code>c</code>のいずれかを含んでいるだろうか? 答えはイエスだ。この文字列には<code>a</code>がある。
+
+
+
+en:<li>OK, now find <code>a</code>, <code>b</code>, or <code>c</code>, and replace it with <code>o</code>. <code>Mark</code> becomes <code>Mork</code>.
+ja:<li>OK、なら今度は<code>a</code>、<code>b</code>、<code>c</code>を探し出して<code>o</code>に置換してみよう。すると、<code>Mark</code>は<code>Mork</code>になる。
+
+
+en:<li>The same function turns <code>rock</code> into <code>rook</code>.
+ja:<li>同じ関数を<code>rock</code>に使うと<code>rook</code>になる。
+
+
+en:<li>You might think this would turn <code>caps</code> into <code>oaps</code>, but it doesn&#8217;t. <code>re.sub</code> replaces <em>all</em> of the matches, not just the first one. So this regular expression turns <code>caps</code> into <code>oops</code>, because both the <code>c</code> and the <code>a</code> get turned into <code>o</code>.
+ja:<li>この関数を使うと<code>caps</code>は<code>oaps</code>になると思ったかもしれないが、そうはならない。<code>re.sub</code>は最初の一つだけではなく、マッチしたもの<em>全て</em>を置換する。だから、この正規表現は<code>caps</code>を<code>oops</code>に変えるのだ。この<code>c</code>と<code>a</code>の両方が<code>o</code>に置き換えられるからだ。
+
+
+en:<p>And now, back to the <code>plural()</code> function&hellip;
+ja:<p>さて、<code>plural()</code>関数に話を戻そうか&hellip;&hellip;
+
+
+en:<li>Here, you&#8217;re replacing the end of the string (matched by <code>$</code>) with the string <code>es</code>. In other words, adding <code>es</code> to the string. You could accomplish the same thing with string concatenation, for example <code>noun + 'es'</code>, but I chose to use regular expressions for each rule, for reasons that will become clear later in the chapter.
+ja:<li>ここでは、文字列の末尾を($でマッチさせて)<code>es</code>で置き換えている。言い換えると、<code>es</code>を文字列に付け加えているということだ。これと同じことは、文字列の連結を使ってもできるのだが(例えば、<code>noun + 'es'</code>)、ここではそれぞれの規則について正規表現を使って実装することにする。その理由はこの章を読み進めば明らかになるはずだ。
+
+
+en:<li>Look closely, this is another new variation. The <code>^</code> as the first character inside the square brackets means something special: negation. <code>[^abc]</code> means &#8220;any single character <em>except</em> <code>a</code>, <code>b</code>, or <code>c</code>&#8221;. So <code>[^aeioudgkprt]</code> means any character except <code>a</code>, <code>e</code>, <code>i</code>, <code>o</code>, <code>u</code>, <code>d</code>, <code>g</code>, <code>k</code>, <code>p</code>, <code>r</code>, or <code>t</code>. Then that character needs to be followed by <code>h</code>, followed by end of string. You&#8217;re looking for words that end in H where the H can be heard.
+ja:<li>よく見てほしい。ここにあるのも正規表現の新しいバリエーションだ。 この角括弧の中の一文字目にある<code>^</code>は特別な意味を持っている。つまり否定だ。例えば、<code>[^abc]</code>は「<code>a</code>、<code>b</code>、<code>c</code><em>以外の</em>一文字」という意味になる。だから、<code>[^aeioudgkprt]</code>は<code>a</code>、<code>e</code>、<code>i</code>、<code>o</code>、<code>u</code>、<code>d</code>、<code>g</code>、<code>k</code>、<code>p</code>、<code>r</code>、<code>t</code>以外の任意の一文字を表すことになるのだ。さて、ここではさらにその文字に<code>h</code>が続き、そこで文字列が終わりになる必要があった。今探しているのは、有音のHで終わる単語だからだ。
+
+
+en:<li>Same pattern here: match words that end in Y, where the character before the Y is <em>not</em> <code>a</code>, <code>e</code>, <code>i</code>, <code>o</code>, or <code>u</code>. You&#8217;re looking for words that end in Y that sounds like I.
+ja:<li>ここも同じパターンだ。これはYで終わる単語で、しかもその直前の文字が<code>a</code>、<code>e</code>、<code>i</code>、<code>o</code>、<code>u</code>の<em>いずれでもない</em>ものにマッチする。ここでは、Yが末尾にあって、さらにそのYをIというように発音する単語を探しているのだ。
+
+
+en:<p>Let&#8217;s look at negation regular expressions in more detail.
+ja:<p>否定を使った正規表現についてもっと詳しく見てみよう。
+
+
+en:<li><code>vacancy</code> matches this regular expression, because it ends in <code>cy</code>, and <code>c</code> is not <code>a</code>, <code>e</code>, <code>i</code>, <code>o</code>, or <code>u</code>.
+ja:<li>この正規表現は<code>vacancy</code>にマッチする。この単語は<code>cy</code>で終わっていて、<code>c</code>は<code>a</code>、<code>e</code>、<code>i</code>、<code>o</code>、<code>u</code>のいずれでもないからだ。
+
+
+en:<li><code>boy</code> does not match, because it ends in <code>oy</code>, and you specifically said that the character before the <code>y</code> could not be <code>o</code>. <code>day</code> does not match, because it ends in <code>ay</code>.
+ja:<li><code>boy</code>はマッチしない。<code>oy</code>で終わっているが、<code>y</code>の前の文字が<code>o</code>であってはならないと明示されているからだ。<code>day</code>もマッチしない。この単語は<code>ay</code>で終わっているからだ。
+
+
+
+en:<li><code>pita</code> does not match, because it does not end in <code>y</code>.
+ja:<li><code>pita</code>はマッチしない。 この単語は<code>y</code>で終わっていないからだ。
+
+en:<li>This regular expression turns <code>vacancy</code> into <code>vacancies</code> and <code>agency</code> into <code>agencies</code>, which is what you wanted. Note that it would also turn <code>boy</code> into <code>boies</code>, but that will never happen in the function because you did that <code>re.search</code> first to find out whether you should do this <code>re.sub</code>.
+ja:<li>この正規表現は、あなたの望む通り、<code>vacancy</code>を<code>vacancies</code>に、<code>agency</code>を<code>agencies</code>に変えてくれる。ただし、この正規表現は<code>boy</code>を<code>boies</code>に変えてしまうことに注意すること。この関数でこういったことが起こらないのは、<code>re.sub</code>で処理するかどうかを<code>re.search</code>を使って最初に判別しているからだ。
+
+
+en:<li>Just in passing, I want to point out that it is possible to combine these two regular expressions (one to find out if the rule applies, and another to actually apply it) into a single regular expression. Here&#8217;s what that would look like. Most of it should look familiar: you&#8217;re using a remembered group, which you learned in <a href=regular-expressions.html#phonenumbers>Case study: Parsing Phone Numbers</a>. The group is used to remember the character before the letter <code>y</code>. Then in the substitution string, you use a new syntax, <code>\1</code>, which means &#8220;hey, that first group you remembered? put it right here.&#8221; In this case, you remember the <code>c</code> before the <code>y</code>; when you do the substitution, you substitute <code>c</code> in place of <code>c</code>, and <code>ies</code> in place of <code>y</code>. (If you have more than one remembered group, you can use <code>\2</code> and <code>\3</code> and so on.)
+ja:<li>ついでに次のことを指摘しておきたい。この二つの正規表現（一方が規則を適用すべきかを調べ、他方が実際にその規則に従って処理する）を組み合わせて一つの正規表現にすることもできるのだ。これはその例だが、この大部分は見慣れたものだろう。例えば、<a href=regular-expressions.html#phonenumbers>ケーススタディ: 電話番号をパースする</a>で学んだ、グループを表す括弧が使われていて、ここでは<code>y</code>の直前にある文字を記憶するのに使われている。一方で、置換文字列の中では<code>\1</code>という新しい構文が使われているが、これは「ねえ、最初に記憶したグループがあったよね？ それをここに置いてよ」ということを表している。この例では、<code>y</code>の前の<code>c</code>を記憶しているので、置換を行うと、<code>c</code>を<code>c</code>で、<code>y</code>を<code>ies</code>で置き換えることになる(記憶されるグループが複数ある場合は、<code>\2</code>、<code>\3</code>というように使うことができる)
+
+
+en:<p>Regular expression substitutions are extremely powerful, and the <code>\1</code> syntax makes them even more powerful. But combining the entire operation into one regular expression is also much harder to read, and it doesn&#8217;t directly map to the way you first described the pluralizing rules. You originally laid out rules like &#8220;if the word ends in S, X, or Z, then add ES&#8221;. If you look at this function, you have two lines of code that say &#8220;if the word ends in S, X, or Z, then add ES&#8221;. It doesn&#8217;t get much more direct than that.
+ja:<p>正規表現による置換は非常に強力なものだが、<code>\1</code>構文を加えると一層強力なものになる。しかし、全ての処理を一つの正規表現にまとめてしまうと、コードがかなり読みにくくなってしまうし、最初に述べた複数形化の規則の表現とも直接は対応しなくなってしまう。もとはといえば、これらの規則は「もし、単語がS、X、Zのいずれかで終わっているなら、ESを加えよ」というように表されていた。<code>plural()</code>関数を見てみれば、「もし、単語がS、X、Zのいずれかで終わっているなら、ESを加えよ」という内容を表す二行のコードがあることがわかるだろう。これ以上に率直な書き方はまず無いと言っていいぐらいだ。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=a-list-of-functions>A List Of Functions</h2>
+ja:<h2 id=a-list-of-functions>関数のリスト</h2>
+
+
+en:<p>Now you&#8217;re going to add a level of abstraction. You started by defining a list of rules: if this, do that, otherwise go to the next rule. Let&#8217;s temporarily complicate part of the program so you can simplify another part.
+ja:<p>では、このコードを抽象化していくとしよう。この章では「これこれなら、あの処理をなせ。それ以外の場合は、次の規則にすすめ」という規則のリストを定義することから始めた。ここでは、とりあえずプログラムの一部を複雑化させることで、他の部分を単純化してみよう。
+
+
+en:<p class=d>[<a href=examples/plural2.py>download <code>plural2.py</code></a>]
+ja:<p class=d>[<a href=examples/plural2.py><code>plural2.py</code>をダウンロードする</a>]
+
+
+en:<li>Now, each match rule is its own function which returns the results of calling the <code>re.search()</code> function.
+ja:<li>マッチの規則が、それぞれ<code>re.search()</code>関数を実行した結果を返す関数で表されるようになっている。
+
+
+en:<li>Each apply rule is also its own function which calls the <code>re.sub()</code> function to apply the appropriate pluralization rule.
+ja:<li>処理の規則もそれぞれ<code>re.sub()</code>を呼び出す関数で表されていて、適切な複数形化の規則に基づいて処理するようになっている。
+
+
+en:<li>Instead of having one function (<code>plural()</code>) with multiple rules, you have the <code>rules</code> data structure, which is a sequence of pairs of functions.
+ja:<li>いくつもの規則が入った一つの関数(<code>plural()</code>)を作る代わりに、<code>rules</code>というデータ構造、つまり関数のペアからなるシーケンスを作っている。
+
+
+en:<li>Since the rules have been broken out into a separate data structure, the new <code>plural()</code> function can be reduced to a few lines of code. Using a <code>for</code> loop, you can pull out the match and apply rules two at a time (one match, one apply) from the <var>rules</var> structure. On the first iteration of the <code>for</code> loop, <var>matches_rule</var> will get <code>match_sxz</code>, and <var>apply_rule</var> will get <code>apply_sxz</code>. On the second iteration (assuming you get that far), <var>matches_rule</var> will be assigned <code>match_h</code>, and <var>apply_rule</var> will be assigned <code>apply_h</code>. The function is guaranteed to return something eventually, because the final match rule (<code>match_default</code>) simply returns <code>True</code>, meaning the corresponding apply rule (<code>apply_default</code>) will always be applied.
+ja:<li>複数形化の規則が取り出されて別のデータ構造に収められているため、新しい<code>plural()</code>はほんの数行になっている。ここでは、このように<code>for</code>ループを使うことで、マッチのための規則と処理のための規則の二つを<var>rules</var>構造体から一度に取り出している。この<code>for</code>文の最初のループでは、<code>mathes_rule</code>には<code>match_sxz</code>が渡され、<code>apply_rule</code>には<code>apply_sxz</code>が渡される。一方、(一回目では終わらなかったとして)二回目のループでは<code>matches_rule</code>に<code>match_h</code>が割り当てられ、<code>apply_rule</code>に<code>apply_h</code>が割り当てられることになる。さらに言うと、この関数は必ず何らかの値を返すことが保証されている。というのも、最後のループのマッチの規則(<code>match_default</code>)は単純に<code>True</code>を返すので、ループの終わりまで来た場合には、常にこのマッチの規則に対応する処理規則(<code>apply_default</code>)が適用されることになるからだ。
+
+
+en:<aside>The &#8220;rules&#8221; variable is a sequence of pairs of functions.</aside>
+ja:<aside>「rules」変数は関数のペアからなるシーケンスだ。</aside>
+
+
+en:<p>The reason this technique works is that <a href=your-first-python-program.html#everythingisanobject>everything in Python is an object</a>, including functions. The <var>rules</var> data structure contains functions&nbsp;&mdash;&nbsp;not names of functions, but actual function objects. When they get assigned in the <code>for</code> loop, then <var>matches_rule</var> and <var>apply_rule</var> are actual functions that you can call. On the first iteration of the <code>for</code> loop, this is equivalent to calling <code>matches_sxz(noun)</code>, and if it returns a match, calling <code>apply_sxz(noun)</code>.
+ja:<p>このテクニックが上手くいくのは、<a href=your-first-python-program.html#everythingisanobject>Pythonにおいては関数をはじめとするあらゆるものがオブジェクトだからだ</a>。この<var>rules</var>というデータ構造には関数が入っている&nbsp;&mdash;&nbsp;関数の名前ではなく、実際の関数オブジェクトが入っているのだ。そして、これらの関数が<code>for</code>ループの中で変数に代入されると、<code>mathes_rule</code>と<code>apply_rule</code>は実際に呼び出すことのできる関数になるのだ。だから、この<code>for</code>文の最初のループは、<code>matches_sxz(noun)</code>を呼び出して、マッチしたら<code>apply_sxz(noun)</code>を呼び出すという処理に等しいことになる。
+
+
+en:<p>If this additional level of abstraction is confusing, try unrolling the function to see the equivalence. The entire <code>for</code> loop is equivalent to the following:
+ja:<p>ここで加えた抽象化がよく分からなかったら、この関数を展開してみて、それで得られた等価なコードを見てみるとよい。この<code>for</code>ループ全体は以下のコードに等しい：
+
+
+en:<p>The benefit here is that the <code>plural()</code> function is now simplified. It takes a sequence of rules, defined elsewhere, and iterates through them in a generic fashion.
+ja:<p>このように抽象化を施す利点は、<code>plural()</code>関数が単純化されるということにある。この関数は、どこか別の所で定義された規則を含むシーケンスをとり、それをイテレートしていくという一般的な処理を行うのだ。
+
+en:<li>Get a match rule
+ja:<li>マッチルールを取得しろ。
+
+
+en:<li>Does it match? Then call the apply rule and return the result.
+ja:<li>マッチした？ なら、処理のルールを呼び出して、その結果を返してくれ。
+
+
+en:<li>No match? Go to step 1.
+ja:<li>マッチしなかった？ それなら1に戻れ。
+
+
+en:<p>The rules could be defined anywhere, in any way. The <code>plural()</code> function doesn&#8217;t care.
+ja:<p>これらの規則はどこで定義してもよいし、どのように定義しても問題ない。この<code>plural()</code>関数はそんなことには構わないのだ。
+
+
+en:<p>Now, was adding this level of abstraction worth it? Well, not yet. Let&#8217;s consider what it would take to add a new rule to the function. In the first example, it would require adding an <code>if</code> statement to the <code>plural()</code> function. In this second example, it would require adding two functions, <code>match_foo()</code> and <code>apply_foo()</code>, and then updating the <var>rules</var> sequence to specify where in the order the new match and apply functions should be called relative to the other rules.
+ja:<p>では、この抽象化にはそれだけの価値があっただろうか？ 実は、今のところはない。例えば、この関数に新しい規則を加える時のことを考えてみよう。最初のコードだと、<code>plural()</code>関数に<code>if</code>文を加えなくてはならない。二番目のコードだと、<code>match_foo()</code>と<code>apply_foo()</code>の二つの関数を新たに定義した上で、<var>rules</var>シーケンスを書き換えて、この新しいマッチ関数と処理関数が、他の関数との関係で何番目に呼び出されるべきなのかを定めなくてはならない。
+
+
+en:<p>But this is really just a stepping stone to the next section. Let&#8217;s move on&hellip;
+ja:<p>しかし、ここまでのことは次の節のための足がかりに過ぎないのだ。さあ先に進もうか&hellip;&hellip;
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=a-list-of-patterns>A List Of Patterns</h2>
+ja:<h2 id=a-list-of-patterns>パターンのリスト</h2>
+
+
+en:<p>Defining separate named functions for each match and apply rule isn&#8217;t really necessary. You never call them directly; you add them to the <var>rules</var> sequence and call them through there. Furthermore, each function follows one of two patterns. All the match functions call <code>re.search()</code>, and all the apply functions call <code>re.sub()</code>. Let&#8217;s factor out the patterns so that defining new rules can be easier.
+ja:<p>マッチと処理のための規則の一つ一つについて、個別に名前のある関数を定義する必要は、実のところあまりない。そもそも、これらの関数は直接呼び出されるわけではなく、<var>rules</var>シーケンスに加えられた上で、そこから呼び出されるのだ。もっと言えば、各々の関数は次の二つのパターンのうちのどちらかに従っている。つまり、全てのマッチ関数は<code>re.search()</code>を呼び出し、全ての処理関数は<code>re.sub()</code>を呼び出すのだ。新しい規則を定義するのがもっと楽になるように、このパターンを取り出してみよう。
+
+
+en:<p class=d>[<a href=examples/plural3.py>download <code>plural3.py</code></a>]
+ja:<p class=d>[<a href=examples/plural3.py><code>plural3.py</code>をダウンロードする</a>]
+
+
+en:<li><code>build_match_and_apply_functions()</code> is a function that builds other functions dynamically. It takes <var>pattern</var>, <var>search</var> and <var>replace</var>, then defines a <code>matches_rule()</code> function which calls <code>re.search()</code> with the <var>pattern</var> that was passed to the <code>build_match_and_apply_functions()</code> function, and the <var>word</var> that was passed to the <code>matches_rule()</code> function you&#8217;re building. Whoa.
+ja:<li><code>build_match_and_apply_functions()</code>は他の関数を動的に生成する関数だ。この関数は<var>pattern</var>、<var>search</var>、<var>replace</var>を引数にとり、<code>mathes_rule()</code>関数を定義する。この<code>mathes_rule()</code>関数は、<code>build_match_and_apply_functions()</code>関数に渡された<var>pattern</var>と、<code>mathes_rule()</code>自身に渡される<var>word</var>を引数として<code>re.search()</code>を呼び出す。ワーオ。
+
+en:<li>Building the apply function works the same way. The apply function is a function that takes one parameter, and calls <code>re.sub()</code> with the <var>search</var> and <var>replace</var> parameters that were passed to the <code>build_match_and_apply_functions()</code> function, and the <var>word</var> that was passed to the <code>apply_rule()</code> function you&#8217;re building. This technique of using the values of outside parameters within a dynamic function is called <em>closures</em>. You&#8217;re essentially defining constants within the apply function you&#8217;re building: it takes one parameter (<var>word</var>), but it then acts on that plus two other values (<var>search</var> and <var>replace</var>) which were set when you defined the apply function.
+ja:<li>処理関数も同じように生成される。この処理関数は一つの引数をとる関数で、<code>build_match_and_apply_functions()</code>に渡された<var>search</var>や<var>replace</var>と、この<code>apply_rule()</code>自身に渡された<var>word</var>を引数として<code>re.sub()</code>を呼び出している。このように、動的な関数の中で外部の引数の値を使うテクニックを<em>クロージャ</em>と呼ぶ。実質的には、これらの定数は処理関数内部で定義されていると言える。処理関数は一つの引数(word)をとるのだが、この関数が定義されるときに定められる他の二つの値(<var>search</var>と<var>replace</var>)も用いるのだ。
+
+
+en:<li>Finally, the <code>build_match_and_apply_functions()</code> function returns a tuple of two values: the two functions you just created. The constants you defined within those functions (<var>pattern</var> within the <code>matches_rule()</code> function, and <var>search</var> and <var>replace</var> within the <code>apply_rule()</code> function) stay with those functions, even after you return from <code>build_match_and_apply_functions()</code>. That&#8217;s insanely cool.
+ja:<li>最後に、この<code>build_match_and_apply_functions()</code>関数は二つの値が入ったタプル、つまりたった今生成した二つの関数からなるタプルを返す。これらの関数の中で定めた定数(<code>matches_rule()</code>の中の<var>pattern</var>と<code>apply_rule()</code>の中の<var>search</var>と<var>replace</var>)は、<code>build_match_and_apply_functions()</code>から返されたあとも残ってくれる。すばらしい。
+
+
+en:<p>If this is incredibly confusing (and it should be, this is weird stuff), it may become clearer when you see how to use it.
+ja:<p>これが途方もなくややこしいものに感じられるなら(そうなってることだろうと思う。これはずいぶん変わったものなのだから)、これがどのように使われるのかを見れば、もっとはっきりとするだろうと思う。
+
+
+en:<li>Our pluralization &#8220;rules&#8221; are now defined as a tuple of tuples of <em>strings</em> (not functions). The first string in each group is the regular expression pattern that you would use in <code>re.search()</code> to see if this rule matches. The second and third strings in each group are the search and replace expressions you would use in <code>re.sub()</code> to actually apply the rule to turn a noun into its plural.
+ja:<li>複数形化の「規則」は、<em>文字列</em>(関数ではない)のタプルからなるタプルとして定義されている。それぞれのグループの最初の文字列は<code>re.search()</code>で用いる正規表現のパターンで、これを使って名詞を選別する。各グループの二つ目と三つ目の文字列は、検索と置換のための正規表現で、<code>re.sub()</code>の中で用いて実際に規則を適用し、名詞を複数形にする。
+
+
+en:<li>There&#8217;s a slight change here, in the fallback rule. In the previous example, the <code>match_default()</code> function simply returned <code>True</code>, meaning that if none of the more specific rules matched, the code would simply add an <code>s</code> to the end of the given word. This example does something functionally equivalent. The final regular expression asks whether the word has an end (<code>$</code> matches the end of a string). Of course, every string has an end, even an empty string, so this expression always matches. Thus, it serves the same purpose as the <code>match_default()</code> function that always returned <code>True</code>: it ensures that if no more specific rule matches, the code adds an <code>s</code> to the end of the given word.
+ja:<li>ここのフォールバックの部分に少し変更が加えられている。前のコードだと、<code>match_default()</code>関数が単純に<code>True</code>を返すようになっていて、他の個別の規則のいずれにもマッチしなかった場合には、与えられた単語の終わりに<code>s</code>を付けるという処理を施していた。このコードもそれと機能的に等価な処理を行っている。最後の正規表現はその単語に終わりがあるかどうかを調べるものだ(<code>$</code>は文字列の末尾にマッチする)。もちろん、空白文字を含むあらゆる文字列には終わりがあるので、この正規表現はどんな文字列にもマッチすることになる。つまり、これは常に<code>True</code>を返す<code>match_default()</code>と同じ役割を果たすことになるのだ。結局のところ、このコードのおかげで、特定の規則のどれともマッチしないような場合には、その単語の末尾に<code>s</code>がつけられることになる。
+
+
+en:<li>This line is magic. It takes the sequence of strings in <var>patterns</var> and turns them into a sequence of functions. How? By &#8220;mapping&#8221; the strings to the <code>build_match_and_apply_functions()</code> function. That is, it takes each triplet of strings and calls the <code>build_match_and_apply_functions()</code> function with those three strings as arguments. The <code>build_match_and_apply_functions()</code> function returns a tuple of two functions. This means that <var>rules</var> ends up being functionally equivalent to the previous example: a list of tuples, where each tuple is a pair of functions. The first function is the match function that calls <code>re.search()</code>, and the second function is the apply function that calls <code>re.sub()</code>.
+ja:<li>この行は魔法みたいなコードだ。<var>patterns</var>に収められた、文字列からなるシーケンスを引数にとり、関数の入ったシーケンスに変えているのだ。でもどうやって？ <code>build_match_and_apply_functions()</code>関数に文字列を「対応させる」ことでだ。つまり、三つ組の文字列をそれぞれ取り上げ、これらの文字列を引数として<code>build_match_and_apply_functions()</code>を呼び出しているのだ。 <code>build_match_and_apply_functions()</code>は二つの関数からなるタプルを返すので、結局この<var>rules</var>は機能的に前のコードのものに等しいもの&mdash;関数のペアのタプルからなるリスト&mdash;になる。ちなみに、この一つ目の関数は<code>re.search()</code>を呼び出すマッチ関数で。二つ目の関数は<code>re.sub()</code>を呼び出す処理関数だ。
+
+
+en:<p>Rounding out this version of the script is the main entry point, the <code>plural()</code> function.
+ja:<p>このバージョンのスクリプトを締めくくるのは、メインのエントリーポイントとなる<code>plural()</code>関数だ。
+
+
+en:<li>Since the <var>rules</var> list is the same as the previous example (really, it is), it should come as no surprise that the <code>plural()</code> function hasn&#8217;t changed at all. It&#8217;s completely generic; it takes a list of rule functions and calls them in order. It doesn&#8217;t care how the rules are defined. In the previous example, they were defined as separate named functions. Now they are built dynamically by mapping the output of the <code>build_match_and_apply_functions()</code> function onto a list of raw strings. It doesn&#8217;t matter; the <code>plural()</code> function still works the same way.
+ja:<li>rulesリストは前のコードのものと同じものなので(そう、本当に同じものだ)、<code>plural()</code>関数に何も手が加えられていなくても少しも驚くことはない。これは規則を表す関数のリストを受け取って順番に呼び出していくだけの、完全に一般的な関数なのであって、その規則がどのように定義されるかなんてことには構わないのだ。前のコードでは、これらはそれぞれ名前のついた関数として定義されていた。一方、このコードでは<code>build_match_and_apply_functions()</code>関数の戻り値と文字列のリストを対応させることで動的に生成されている。しかし、こういったことは<code>plural()</code>関数に何の影響も与えないのだ。この関数は以前と同じように動いてくれる。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=a-file-of-patterns>A File Of Patterns</h2>
+ja:<h2 id=a-file-of-patterns>パターンのファイル</h2>
+
+
+en:<p>You&#8217;ve factored out all the duplicate code and added enough abstractions so that the pluralization rules are defined in a list of strings. The next logical step is to take these strings and put them in a separate file, where they can be maintained separately from the code that uses them.
+ja:<p>これで重複していたコードは全て取り除いたし、抽象化も、名詞を複数形にする規則を文字列のリストとして定義できるようになるまでに進めてある。当然の流れとして、次はこの文字列を取り出して別のファイルに保存できるようにする。こうすることで、コードとは別々に管理できるようになるのだ。
+
+
+en:<p>First, let&#8217;s create a text file that contains the rules you want. No fancy data structures, just whitespace-delimited strings in three columns. Let&#8217;s call it <code>plural4-rules.txt</code>.
+ja:<p>まずはテキストファイルを作って、そこにお好みの規則を加えよう。手が込んだデータ構造を使うのではなく、単に文字列を空白文字で三列に区切って書けばいい。そしてこれに<code>plural4-rules.txt</code>という名前をつけることにしよう。
+
+
+en:<p class=d>[<a href=examples/plural4-rules.txt>download <code>plural4-rules.txt</code></a>]
+ja:<p class=d>[<a href=examples/plural4-rules.txt><code>plural4-rules.txt</code>をダウンロードする</a>]
+
+
+en:<p>Now let&#8217;s see how you can use this rules file.
+ja:<p>では、どのようにこのファイルを使うのかを見てみよう。
+
+en:<p class=d>[<a href=examples/plural4.py>download <code>plural4.py</code></a>]
+ja:<p class=d>[<a href=examples/plural4.py><code>plural4.py</code>をダウンロードする</a>]
+
+
+en:<li>The <code>build_match_and_apply_functions()</code> function has not changed. You&#8217;re still using closures to build two functions dynamically that use variables defined in the outer function.
+ja:<li><code>build_match_and_apply_functions()</code>関数は何も変更されていない。このバージョンのコードでも、クロージャを用いて、外部の関数で定義された変数を使用する二つの関数を動的に生成している。
+
+
+en:<li>The global <code>open()</code> function opens a file and returns a file object. In this case, the file we&#8217;re opening contains the pattern strings for pluralizing nouns. The <code>with</code> statement creates what&#8217;s called a <i>context</i>: when the <code>with</code> block ends, Python will automatically close the file, even if an exception is raised inside the <code>with</code> block. You&#8217;ll learn more about <code>with</code> blocks and file objects in the <a href=files.html>Files</a> chapter.
+ja:<li>グローバル関数の<code>open()</code>はファイルを開いてファイルオブジェクトを返すものだ。このコードで開いているファイルには、名詞を複数形にするためのパターンを表す文字列が入っている。また、この<code>with</code>文はいわゆる<i>コンテクスト</i>を作るもので、<code>with</code>ブロックが終われば、たとえブロック内で例外が送出されていようが、Pythonは自動でファイルを閉じてくれる。なお、<code>with</code>ブロックとファイルオブジェクトについては<a href=files.html>ファイル</a>の章でより詳しく学ぶ。
+
+
+en:<li>The <code>for line in &lt;fileobject></code> idiom reads data from the open file, one line at a time, and assigns the text to the <var>line</var> variable. You&#8217;ll learn more about reading from files in the <a href=files.html>Files</a> chapter.
+ja:<li><code>for line in &lt;fileobject&gt;</code>というコードは、開かれたファイルから一度に一行だけデータ読み込み、その読み出したテキストを<var>line</var>変数に代入していくものだ。ファイルの読み込みに関しては<a href=files.html>Files</a>の章でもっと詳しく学ぶことになる。
+
+
+en:<li>Each line in the file really has three values, but they&#8217;re separated by whitespace (tabs or spaces, it makes no difference). To split it out, use the <code>split()</code> string method. The first argument to the <code>split()</code> method is <code>None</code>, which means &#8220;split on any whitespace (tabs or spaces, it makes no difference).&#8221; The second argument is <code>3</code>, which means &#8220;split on whitespace 3 times, then leave the rest of the line alone.&#8221; A line like <code>[sxz]$ $ es</code> will be broken up into the list <code>['[sxz]$', '$', 'es']</code>, which means that <var>pattern</var> will get <code>'[sxz]$'</code>, <var>search</var> will get <code>'$'</code>, and <var>replace</var> will get <code>'es'</code>. That&#8217;s a lot of power in one little line of code.
+ja:<li>ファイルの各行には三つの値が入っているのだが、これらの値は空白文字(タブかスペース。どちらでも違いはない)で区切られている。ここから値を切り出すには、<code>split()</code>という文字列メソッドを使えばいい。<code>split()</code>関数の一番目の引数は<code>None</code>になっているが、これは「空白文字(タブかスペース。違いはない)があったらそこで分割する」ということを意味している。二番目の引数は<code>3</code>だが、こちらは「空白文字で3回だけ行を分割して、残りはそのままにしておく」ということを表している。例えば、<code>[sxz]$ $ es</code>のような行は分割されて<code>['[sxz]$', '$', 'es']</code>というリストになり、結局、<var>pattern</var>には<code>'[sxz]$'</code>、<var>search</var>には'$'、<var>replace</var>には<code>'es'</code>が渡されることになる。たった一行の短いコードでこれだけのことができるのだ。
+
+
+en:<li>Finally, you pass <code>pattern</code>, <code>search</code>, and <code>replace</code> to the <code>build_match_and_apply_functions()</code> function, which returns a tuple of functions. You append this tuple to the <var>rules</var> list, and <var>rules</var> ends up storing the list of match and apply functions that the <code>plural()</code> function expects.
+ja:<li>ようやく、<code>build_match_and_apply_functions()</code>関数に<var>pattern</var>と<var>search</var>と<var>replace</var>が渡されて、その戻り値として関数のタプルが得られた。このタプルを<var>rules</var>に加えていけば、最後には、<var>rules</var>はマッチと処理のための関数が収まったリストになる。このリストこそ<code>plural()</code>関数が求めているものだ。
+
+
+en:<p>The improvement here is that you&#8217;ve completely separated the pluralization rules into an external file, so it can be maintained separately from the code that uses it. Code is code, data is data, and life is good.
+ja:<p>ここでの改良点は、名詞を複数形にする規則を外部のファイルに分離して、コードとは別に管理できるようにしたことにある。コードはコード、データはデータ。人生は素晴らしい。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=generators>Generators</h2>
+ja:<h2 id=generators>ジェネレータ</h2>
+
+
+en:<p>Wouldn&#8217;t it be grand to have a generic <code>plural()</code> function that parses the rules file? Get rules, check for a match, apply appropriate transformation, go to next rule. That&#8217;s all the <code>plural()</code> function has to do, and that&#8217;s all the <code>plural()</code> function should do.
+ja:<p>規則が入ったファイルの解析も行う、より包括的な<code>plural()</code>関数があったらすばらしいと思わないだろうか？ 規則を取得する、マッチするかどうかをチェックする、適切な変換を施す、次の規則に移る。<code>plural()</code>関数にこれだけの機能があれば十分だし、またまさしくこの全ての機能を備えているべきだとも言える。
+
+
+en:<p class=d>[<a href=examples/plural5.py>download <code>plural5.py</code></a>]
+ja:<p class=d>[<a href=examples/plural5.py><code>plural5.py</code>をダウンロードする</a>]
+
+
+en:<p>How the heck does <em>that</em> work? Let&#8217;s look at an interactive example first.
+ja:<p><em>こいつは</em>一体どのように動くんだ？ まずはインタラクティブな例を見てみよう。
+
+
+en:<li>The presence of the <code>yield</code> keyword in <code>make_counter</code> means that this is not a normal function. It is a special kind of function which generates values one at a time. You can think of it as a resumable function. Calling it will return a <i>generator</i> that can be used to generate successive values of <var>x</var>.
+ja:<li><code>yield</code>というキーワードは、<code>make_counter</code>が普通の関数ではないことを示している。これは一度に一つだけ値を生成するという特殊な関数なのだ。レジューム（再開）できる関数だと捉えることもできる。この関数を呼び出すとジェネレータが返されるのだが、このジェネレーターを使えば<code>x</code>の値を連続的に生成していくことができる。
+
+
+en:<li>To create an instance of the <code>make_counter</code> generator, just call it like any other function. Note that this does not actually execute the function code. You can tell this because the first line of the <code>make_counter()</code> function calls <code>print()</code>, but nothing has been printed yet.
+ja:<li><code>make_counter</code>ジェネレータのインスタンスを作るには、他の関数と同じように呼び出せばいい。気をつけてほしいのは、このように呼び出してもこの関数内のコードは実行されないということだ。現に<code>make_counter()</code>関数は一行目で<code>print()</code>を呼び出しているのに、ここには何も出力されていない。
+
+
+en:<li>The <code>make_counter()</code> function returns a generator object.
+ja:<li><code>make_counter()</code>関数はジェネレータオブジェクトを返す。
+
+
+en:<li>The <code>next()</code> function takes a generator object and returns its next value. The first time you call <code>next()</code> with the <var>counter</var> generator, it executes the code in <code>make_counter()</code> up to the first <code>yield</code> statement, then returns the value that was yielded. In this case, that will be <code>2</code>, because you originally created the generator by calling <code>make_counter(2)</code>.
+ja:<li><code>next()</code>関数はジェネレータオブジェクトを受け取って、そのジェネレータが次に生成する値を返す。最初に<var>counter</var>を渡して<code>next()</code>関数を呼び出した時には、<code>make_counter()</code>の一番初めから<code>yield</code>文までのコードが実行され、さらにyieldされた値が返される。この場合、<code>make_counter(2)</code>としてこのジェネレータを生成したので、<code>2</code>が返されることになる。
+
+
+en:<li>Repeatedly calling <code>next()</code> with the same generator object resumes exactly where it left off and continues until it hits the next <code>yield</code> statement. All variables, local state, <i class=baa>&amp;</i>c. are saved on <code>yield</code> and restored on <code>next()</code>. The next line of code waiting to be executed calls <code>print()</code>, which prints <samp>incrementing x</samp>. After that, the statement <code>x = x + 1</code>. Then it loops through the <code>while</code> loop again, and the first thing it hits is the statement <code>yield x</code>, which saves the state of everything and returns the current value of <var>x</var> (now <code>3</code>).
+ja:<li>同じジェネレータオブジェクトを渡して<code>next()</code>を再び呼び出すと、中断した所から処理を再開し、次の<code>yield</code>文にあたるまでコードを実行してゆく。あらゆる変数やジェネレータ内部の状態などは<code>yield</code>文が実行されたときに保存され、<code>next()</code>が呼び出されると復元されるのだ。この例では、実行を待っていた次の行のコードは<code>print()</code>を呼び出して<samp>incrementing x</samp>と出力するものだった。そして、それに続いて<code>x = x + 1</code>という代入文が実行され、それから<code>while</code>以下を再びループすることになる。<code>while</code>ループの一番初めにあるのは<code>yield x</code>だから、そこで状態が保存されて現在の<code>x</code>の値(つまり<code>3</code>)が返されるのだ。
+
+
+en:<li>The second time you call <code>next(counter)</code>, you do all the same things again, but this time <var>x</var> is now <code>4</code>.
+ja:<li>二度目に<code>next(counter)</code>を呼び出した時にも、全く同じ処理が行われる。ただし、今度は<code>x</code>の値が<code>4</code>になっている。
+
+
+en:<p>Since <code>make_counter</code> sets up an infinite loop, you could theoretically do this forever, and it would just keep incrementing <var>x</var> and spitting out values. But let&#8217;s look at more productive uses of generators instead.
+ja:<p><code>make_counter</code>のループには終わりが無いので、原理的にはこれを永久に繰り返せる。このジェネレータはいつまでも<code>x</code>をインクリメントして、その値を返し続けてくれることだろう。しかしここではもっと生産的なジェネレータの使い方を見ることにしよう。
+
+
+en:<h3 id=a-fibonacci-generator>A Fibonacci Generator</h3>
+ja:<h3 id=a-fibonacci-generator>フィボナッチ数列ジェネレータ</h3>
+
+
+en:<aside>&#8220;yield&#8221; pauses a function. &#8220;next()&#8221; resumes where it left off.</aside>
+ja:<aside>「yield」は関数を停止させる。「next()」は中断した場所から処理を再開させる。</aside>
+
+
+en:<p class=d>[<a href=examples/fibonacci.py>download <code>fibonacci.py</code></a>]
+ja:<p class=d>[<a href=examples/fibonacci.py><code>fibonacci.py</code>をダウンロードする</a>]
+
+
+en:<li>The Fibonacci sequence is a sequence of numbers where each number is the sum of the two numbers before it. It starts with 0 and <code>1</code>, goes up slowly at first, then more and more rapidly. To start the sequence, you need two variables: <var>a</var> starts at 0, and <var>b</var> starts at <code>1</code>.
+ja:<li>フィボナッチ数列とは、それぞれの数がその直前の二つの数の和になっているような数列のことだ。この数列は0と<code>1</code>から始まり、最初は緩やかに増加していくのだが、後の方になればなるほど急激に値は大きくなってゆく。この数列を生成し始めるには、まず二つの変数を用意しなくてはならない。つまり、0から始まる<var>a</var>と、<code>1</code>から始まる<var>b</var>だ。
+
+
+en:<li><var>a</var> is the current number in the sequence, so yield it.
+ja:<li><var>a</var>は数列の現時点での値を表している。だから、これをyieldする。
+
+
+en:<li><var>b</var> is the next number in the sequence, so assign that to <var>a</var>, but also calculate the next value (<code>a + b</code>) and assign that to <var>b</var> for later use. Note that this happens in parallel; if <var>a</var> is <code>3</code> and <var>b</var> is <code>5</code>, then <code>a, b = b, a + b</code> will set <var>a</var> to <code>5</code> (the previous value of <var>b</var>) and <var>b</var> to <code>8</code> (the sum of the previous values of <var>a</var> and <var>b</var>).
+ja:<li><var>b</var>は数列の次の値を表す。だからこれを<var>a</var>に代入するのだが、同時に次の値<code>(a + b)</code>も計算しておき、後で使えるように<var>b</var>に代入しておく。この処理が平行して行われていることに注意してほしい。もし、<var>a</var>が<code>3</code>で<var>b</var>が<code>5</code>なら、<code>a, b = b, a + b</code>とすると<var>a</var>には<code>5</code>(直前の<var>b</var>の値)が代入され、<var>b</var>には<code>8</code>(直前の<var>a</var>と<var>b</var>の値の和)が代入される。
+
+
+en:<p>So you have a function that spits out successive Fibonacci numbers. Sure, you could do that with recursion, but this way is easier to read. Also, it works well with <code>for</code> loops.
+ja:<p>これで、連続的にフィボナッチ数を返していく関数ができあがった。もちろん、再帰を使っても同じことができるのだが、こうする方が読みやすくなるのだ。ちなみに、この関数は<code>for</code>ループで使うこともできる。
+
+
+en:<li>You can use a generator like <code>fib()</code> in a <code>for</code> loop directly. The <code>for</code> loop will automatically call the <code>next()</code> function to get values from the <code>fib()</code> generator and assign them to the <code>for</code> loop index variable (<var>n</var>).
+ja:<li><code>fib()</code>のようなジェネレータは<code>for</code>ループで直接使うことができる。<code>for</code>ループは自動で<code>next()</code>を呼び出して、<code>fib()</code>ジェネレータから値を受け取り、<code>for</code>ループのインデクス変数(<var>n</var>)に代入してくれる。
+
+
+en:<li>Each time through the <code>for</code> loop, <var>n</var> gets a new value from the <code>yield</code> statement in <code>fib()</code>, and all you have to do is print it out. Once <code>fib()</code> runs out of numbers (<var>a</var> becomes bigger than <var>max</var>, which in this case is <code>1000</code>), then the <code>for</code> loop exits gracefully.
+ja:<li><code>for</code>ループを反復する度に、<code>fib()</code>の<code>yield</code>文が<var>n</var>に新しい値を渡してくれるので、後はその値を出力するだけでいい。<code>fib()</code>の数列が終わりに達したら(<var>a</var>が<code>max</code>、つまりこの例で言えば<code>1000</code>を越えた場合)、<code>for</code>ループはそこで何の問題も起こすことなく終了する。
+
+
+en:<li>This is a useful idiom: pass a generator to the <code>list()</code> function, and it will iterate through the entire generator (just like the <code>for</code> loop in the previous example) and return a list of all the values.
+ja:<li>これは便利な表現だ。<code>list()</code>関数にジェネレータを渡すと、(直前の例の<code>for</code>ループと同じように)ジェネレータ全体をイテレートして、その全ての値からなるリストを返してくれるのだ。
+
+
+en:<h3 id=a-plural-rule-generator>A Plural Rule Generator</h3>
+ja:<h3 id=a-plural-rule-generator>名詞を複数形にする規則のジェネレータ</h3>
+
+
+en:<p>Let&#8217;s go back to <code>plural5.py</code> and see how this version of the <code>plural()</code> function works.
+ja:<p><code>plural5.py</code>に戻って、このバージョンの<code>plural()</code>関数がどのように動くのかを見てみよう。
+
+
+en:<li>No magic here. Remember that the lines of the rules file have three values separated by whitespace, so you use <code>line.split(None, 3)</code> to get the three &#8220;columns&#8221; and assign them to three local variables.
+ja:<li>ここには何も不可思議なことはない。規則を収めたファイルの各行には空白文字で区切られた3つの値が入っていたことを思い出そう。だから、ここでは<code>line.split(None, 3)</code>を使って三つの「列」を取得し、それぞれをローカル変数に代入しているのだ。
+
+
+en:<li><em>And then you yield.</em> What do you yield? Two functions, built dynamically with your old friend, <code>build_match_and_apply_functions()</code>, which is identical to the previous examples. In other words, <code>rules()</code> is a generator that spits out match and apply functions <em>on demand</em>.
+ja:<li><em>そしてここでyieldする</em>。 何をyieldするかって？ 二つの関数だよ。これらの関数はお馴染みの<code>build_match_and_apply_functions()</code>関数で生成されたものだが、この関数は前のコードから全く変わっていない。要するに、<code>rules()</code>はマッチと処理のための関数を<em>オンデマンドで</em>返してくれるジェネレータなのだ。
+
+
+en:<li>Since <code>rules()</code> is a generator, you can use it directly in a <code>for</code> loop. The first time through the <code>for</code> loop, you will call the <code>rules()</code> function, which will open the pattern file, read the first line, dynamically build a match function and an apply function from the patterns on that line, and yield the dynamically built functions. The second time through the <code>for</code> loop, you will pick up exactly where you left off in <code>rules()</code> (which was in the middle of the <code>for line in pattern_file</code> loop). The first thing it will do is read the next line of the file (which is still open), dynamically build another match and apply function based on the patterns on that line in the file, and yield the two functions.
+ja:<li><code>rules()</code>はジェネレータなので、<code>for</code>ループでそのまま使える。<code>for</code>ループを最初に実行した時には、まず<code>rules()</code>関数が呼び出される。この関数は、パターンファイルを開き、最初の行を読み出した上で、その行に入っているパターンからマッチ関数と処理関数を動的に生成し、その二つの関数をyieldしてくれる。<code>for</code>ループを二度目に反復したときには、<code>rules()</code>関数が停止した地点(<code>for line in pattern_file</code>ループの途中)から処理を始めることになる。つまり、最初にファイル(これはまだ開かれたままだ)の次の行の読み出した上で、その行にあるパターンに基づいて別のマッチ関数と処理関数を動的に生成し、この二つの関数をyieldするのだ。
+
+
+en:<p>What have you gained over stage 4? Startup time. In stage 4, when you imported the <code>plural4</code> module, it read the entire patterns file and built a list of all the possible rules, before you could even think about calling the <code>plural()</code> function. With generators, you can do everything lazily: you read the first rule and create functions and try them, and if that works you don&#8217;t ever read the rest of the file or create any other functions.
+ja:<p>これは四番目のコードより何が優れているんだろう？ 起動時間だ。四番目のコードでは、<code>plural4</code>モジュールをインポートすると、<code>plural()</code>を呼び出すことを考える間もなく、パターンファイル全体が読み込まれ、適用される可能性のある規則全てを集めたリストが生成された。他方、ジェネレータを使えば、のらくらと処理していける。最初に一つ規則を読みこんで関数を作り、試してみる。それで上手くいけば、残りのファイルを読み込んだり別の関数を作ったりすることもない。
+
+
+en:<p>What have you lost? Performance! Every time you call the <code>plural()</code> function, the <code>rules()</code> generator starts over from the beginning&nbsp;&mdash;&nbsp;which means re-opening the patterns file and reading from the beginning, one line at a time.
+ja:<p>代わりに何を失うのだろう？ パフォーマンスさ！ <code>plural()</code>関数を呼び出すたびに、<code>rules()</code>ジェネレータは最初から処理をやりなおす&nbsp;&mdash;&nbsp;パターンファイルを再び開いて、また一行目から読み出していくのだ。それも一度に一行ずつ。
+
+
+en:<p>What if you could have the best of both worlds: minimal startup cost (don&#8217;t execute any code on <code>import</code>), <em>and</em> maximum performance (don&#8217;t build the same functions over and over again). Oh, and you still want to keep the rules in a separate file (because code is code and data is data), just as long as you never have to read the same line twice.
+ja:<p>この二つの長所を兼ね備えることができるとしたらどうだろう。つまり、起動時の負担を最小にして(要するに<code>import</code>したときにコードを一つも実行することなく)、<em>かつ</em>パフォーマンスを最大にするのだ(同じ関数を何度も何度も作り直さない)。ああ、それと同じ行を繰り返し読み込まなくてよいなら、規則を別のファイルに保存しておきたいね(なぜならコードはコードでデータはデータだから)。
+
+
+en:<p>To do that, you&#8217;ll need to build your own iterator. But before you do <em>that</em>, you need to learn about Python classes.
+ja:<p>このためには自前のイテレータを作る必要があるが、<em>それ</em>をやる前に、まずはPythonのクラスについて学ぶ必要がある。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=furtherreading>Further Reading</h2>
+ja:<h2 id=furtherreading>もっと知りたい人のために</h2>
+
+
+en:<li><a href=http://www.python.org/dev/peps/pep-0255/>PEP 255: Simple Generators</a>
+ja:<li><a href=http://www.python.org/dev/peps/pep-0255/>PEP 255: Simple Generators</a>
+
+
+en:<li><a href=http://effbot.org/zone/python-with-statement.htm>Understanding Python&#8217;s &#8220;with&#8221; statement</a>
+ja:<li><a href=http://effbot.org/zone/python-with-statement.htm>Understanding Python&#8217;s &#8220;with&#8221; statement</a>
+
+
+en:<li><a href=http://ynniv.com/blog/2007/08/closures-in-python.html>Closures in Python</a>
+ja:<li><a href=http://ynniv.com/blog/2007/08/closures-in-python.html>Closures in Python</a>
+
+
+en:<li><a href=http://en.wikipedia.org/wiki/Fibonacci_number>Fibonacci numbers</a>
+ja:<li><a href=http://en.wikipedia.org/wiki/Fibonacci_number>Fibonacci numbers</a>
+
+
+en:<li><a href=http://www2.gsu.edu/~wwwesl/egw/crump.htm>English Irregular Plural Nouns</a>
+ja:<li><a href=http://www2.gsu.edu/~wwwesl/egw/crump.htm>English Irregular Plural Nouns</a>
+
+
+en:<p class=v><a href=regular-expressions.html rel=prev title='back to &#8220;Regular Expressions&#8221;'><span class=u>&#x261C;</span></a> <a href=iterators.html rel=next title='onward to &#8220;Classes &amp; Iterators&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=regular-expressions.html rel=prev title='「正規表現」に戻る'><span class=u>&#x261C;</span></a> <a href=iterators.html rel=next title='「クラスとイテレーター」に進む'><span class=u>&#x261E;</span></a>
+
+
+en:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+ja:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+
+

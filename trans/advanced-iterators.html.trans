@@ -1,0 +1,572 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#advanced-iterators>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#advanced-iterators>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<title>Advanced Iterators - Dive Into Python 3</title>
+ja:<title>高度なイテレータ - Dive Into Python 3 日本語版</title>
+
+
+en:<p id=level>Difficulty level: <span class=u title=advanced>&#x2666;&#x2666;&#x2666;&#x2666;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=上級>&#x2666;&#x2666;&#x2666;&#x2666;&#x2662;</span>
+
+
+en:<h1>Advanced Iterators</h1>
+ja:<h1>高度なイテレータ</h1>
+
+
+en:<p><span class=u>&#x275D;</span> Great fleas have little fleas upon their backs to bite &#8217;em,<br>And little fleas have lesser fleas, and so ad infinitum. <span class=u>&#x275E;</span><br>&mdash; Augustus De Morgan
+ja:<p><span class=u>&#x275D;</span> 大ノミの背中には小ノミが棲み、彼らに背中を噛みつかれる。<br>小ノミの背中にはもっと小さいノミが棲み&hellip;&hellip;と無限に続く。<span class=u>&#x275E;</span><br>&mdash; Augustus De Morgan
+
+
+en:<h2 id=divingin>Diving In</h2>
+ja:<h2 id=divingin>飛び込む</h2>
+
+
+en:<p class=f>Just as <a href=regular-expressions.html>regular expressions</a> put <a href=strings.html>strings</a> on steroids, the <code>itertools</code> module puts <a href=iterators.html>iterators</a> on steroids. But first, I want to show you a classic puzzle.
+ja:<p class=f><a href=regular-expressions.html>正規表現</a>が<a href=strings.html>文字列に</a>ステロイドを与えるのと同様に、<code>itertools</code>モジュールは<a href=iterators.html>イテレータ</a>にステロイドを与える。まあその前に、あなたに古典的なパズルをお見せしたい。
+
+
+en:<p>Puzzles like this are called <i>cryptarithms</i> or <i>alphametics</i>. The letters spell out actual words, but if you replace each letter with a digit from <code>0&ndash;9</code>, it also &#8220;spells&#8221; an arithmetic equation. The trick is to figure out which letter maps to each digit. All the occurrences of each letter must map to the same digit, no digit can be repeated, and no &#8220;word&#8221; can start with the digit 0.
+ja:<p>このようなパズルは、「クリプト算術」や「覆面算」と呼ばれている。これらの文字は実在の単語を綴っているが、各々の文字を<code>0</code>-<code>9</code>の数字で置き換えると、方程式を「綴る」ようにもなる。このパズルのカギは、どの文字にどの数字が対応するのかを見つけ出すことだ。この時、同じ文字には同じ数字を対応させなければならず、同じ数字を2つの文字に割り当てることもできず、さらにどの「単語」も0で始めてはならない。
+
+
+en:<aside>The most well-known alphametic puzzle is <code>SEND + MORE = MONEY</code>.</aside>
+ja:<aside>最も有名な覆面算パズルは <code>SEND + MORE = MONEY</code> だ。</aside>
+
+
+en:<p>In this chapter, we&#8217;ll dive into an incredible Python program originally written by Raymond Hettinger. This program solves alphametic puzzles <em>in just 14 lines of code</em>.
+ja:<p>この章では、元はRaymond Hettingerによって作成された、驚くべきPythonプログラムに飛び込んでいく。このプログラムは覆面算のパズルを<em>たった14行のコード</em>で解く。
+
+
+en:<p class=d>[<a href=examples/alphametics.py>download <code>alphametics.py</code></a>]
+ja:<p class=d>[<a href=examples/alphametics.py><code>alphametics.py</code>をダウンロードする</a>]
+
+
+en:<p>You can run the program from the command line. On Linux, it would look like this. (These may take some time, depending on the speed of your computer, and there is no progress bar. Just be patient!)
+ja:<p>このプログラムはコマンドラインから実行できる。Linuxでは次のようにする（コンピュータの速度によっては少し時間がかかるかもしれない。プログレスバーは表示されない。我慢だ！）。
+
+
+en:<h2 id=re-findall>Finding all occurrences of a pattern</h2>
+ja:<h2 id=re-findall>パターンの出現をすべて見つける</h2>
+
+
+en:<p>The first thing this alphametics solver does is find all the letters (A&ndash;Z) in the puzzle.
+ja:<p>覆面算ソルバが最初に行うのは、そのパズルに含まれるすべての文字 (A&ndash;Z) を見つけ出すことだ。
+
+
+en:<li>The <code>re</code> module is Python&#8217;s implementation of <a href=regular-expressions.html>regular expressions</a>. It has a nifty function called <code>findall()</code> which takes a regular expression pattern and a string, and finds all occurrences of the pattern within the string. In this case, the pattern matches sequences of numbers. The <code>findall()</code> function returns a list of all the substrings that matched the pattern.
+ja:<li><code>re</code>モジュールはPythonの<a href=regular-expressions.html>正規表現</a>の実装だ。このモジュールは<code>findall()</code>という素敵な関数を持っている。この関数は、正規表現パターンと文字列を受け取り、その文字列の中にあるパターンの出現をすべて見つけ出す。この場合は、パターンは数字の並びにマッチする。<code>findall()</code>関数は、パターンにマッチしたすべての部分文字列のリストを返す。
+
+
+
+en:<li>Here the regular expression pattern matches sequences of letters. Again, the return value is a list, and each item in the list is a string that matched the regular expression pattern.
+ja:<li>この正規表現のパターンは文字の並びにマッチする。ここでも戻り値はリストであり、リストの各要素は正規表現パターンにマッチした文字列だ。
+
+
+en:<p>Here&#8217;s another example that will stretch your brain a little.
+ja:<p>次の例も、頭をすこしストレッチしてくれる。
+
+
+en:<aside>This is the <a href=http://en.wikipedia.org/wiki/Tongue-twister>hardest tongue twister</a> in the English language.</aside>
+ja:<aside>これは英語の<a href=http://en.wikipedia.org/wiki/Tongue-twister>最も難しい早口言葉</a>だ。</aside>
+
+
+en:<p>Surprised? The regular expression looks for a space, an <code>s</code>, and then the shortest possible series of any character (<code>.*?</code>), then a space, then another <code>s</code>. Well, looking at that input string, I see five matches:
+ja:<p>意外だっただろうか？ この正規表現が探すのは、空白、<code>s</code>、すべての文字のできるだけ短い繰り返し (<code>.*?</code>)、空白、そしてもうひとつの<code>s</code>だ。さて、入力文字列を見ると、5つのマッチが目に入る：
+
+
+en:<p>But the <code>re.findall()</code> function only returned three matches. Specifically, it returned the first, the third, and the fifth. Why is that? Because <em>it doesn&#8217;t return overlapping matches</em>. The first match overlaps with the second, so the first is returned and the second is skipped. Then the third overlaps with the fourth, so the third is returned and the fourth is skipped. Finally, the fifth is returned. Three matches, not five.
+ja:<p>だが、<code>re.findall()</code>関数は3つのマッチしか返していない。具体的は1つ目と3つ目と5つ目だ。これはなぜだろうか？ 理由は、<em>この関数は重なったマッチを返さない</em>からだ。1つ目のマッチは2つ目に重なり合っているので、1つ目は返されるが2つ目はスキップされる。3つ目のマッチは4つ目に重なり合っているので、3つ目は返されるが4つ目はスキップされる。そして最後に5つ目が返される。マッチするのは5つではなく3つだ。
+
+
+en:<p>This has nothing to do with the alphametics solver; I just thought it was interesting.
+ja:<p>これが覆面算ソルバに影響を与えることはない。ただ興味深いと思って紹介しただけだよ。
+
+
+en:<h2 id=unique-items>Finding the unique items in a sequence</h2>
+ja:<h2 id=unique-items>シーケンスから重複を取り除く</h2>
+
+
+en:<p><a href=native-datatypes.html#sets>Sets</a> make it trivial to find the unique items in a sequence.
+ja:<p><a href=native-datatypes.html#sets>集合</a>を使うと、シーケンスから重複を取り除く作業が取るに足らないものになる。
+
+
+en:<li>Given a list of several strings, the <code>set()</code> function will return a set of unique strings from the list. This makes sense if you think of it like a <code>for</code> loop. Take the first item from the list, put it in the set. Second. Third. Fourth. Fifth&nbsp;&mdash;&nbsp;wait, that&#8217;s in the set already, so it only gets listed once, because Python sets don&#8217;t allow duplicates. Sixth. Seventh&nbsp;&mdash;&nbsp;again, a duplicate, so it only gets listed once. The end result? All the unique items in the original list, without any duplicates. The original list doesn&#8217;t even need to be sorted first.
+ja:<li>いくつかの文字列を持ったリストが与えられると、<code>set()</code>関数はリストから重複する要素を取り除いた集合を返す。これは、<code>for</code>ループのように考えれば理解できる。リストから1つ目の要素を取って集合に入れる。2つ目を入れる。3つ目を入れる。4つ目を入れる。5つ目を&hellip;&hellip;待った、5つ目はすでに集合に含まれている。Pythonの集合は重複を許さないので、これは一度しか追加されない。6つ目入れる。7つ目を&hellip;&hellip;これも重複だ。よって、これも一度しか追加されない。最終的な結果はどうなっただろうか？ 結果は元のリストから重複を取り除いたものとなる。あらかじめ元のリストをソートしておく必要すらないのだ。
+
+
+en:<li>The same technique works with strings, since a string is just a sequence of characters.
+ja:<li>文字列は文字のシーケンスなので、同様のテクニックは文字列でも機能する。
+
+
+en:<li>Given a list of strings, <code>''.join(<var>a_list</var>)</code> concatenates all the strings together into one.
+ja:<li>文字列のリストが与えられると、<code>''.join(<var>a_list</var>)</code>はすべての文字列を1つに連結する。
+
+
+en:<li>So, given a list of strings, this line of code returns all the unique characters across all the strings, with no duplicates.
+ja:<li>つまりこの行のコードは、文字列のリストが与えられると、文字列にあるすべての文字から重複を取りのぞいたものを返す。
+
+
+en:<p>The alphametics solver uses this technique to build a set of all the unique characters in the puzzle.
+ja:<p>覆面算ソルバはこのテクニックを使って、パズルに含まれるすべての文字を含んだ集合を構築する。
+
+
+en:<p>This list is later used to assign digits to characters as the solver iterates through the possible solutions.
+ja:<p>このリストは、あとでソルバが解候補をイテレートする際に、数字を文字に割り当てるために使われる。
+
+
+en:<h2 id=assert>Making assertions</h2>
+ja:<h2 id=assert>表明する</h2>
+
+
+en:<p>Like many programming languages, Python has an <code>assert</code> statement. Here&#8217;s how it works.
+ja:<p>多くのプログラミング言語と同様に、Pythonは<code>assert</code>文を持っている。これは次のように動作する。
+
+
+en:<li>The <code>assert</code> statement is followed by any valid Python expression. In this case, the expression <code>1 + 1 == 2</code> evaluates to <code>True</code>, so the <code>assert</code> statement does nothing.
+ja:<li><code>assert</code>文には、正しいPythonの式であれば何でも置ける。この場合、式<code>1 + 1 == 2</code>は<code>True</code>と評価されるので、<code>assert</code>文は何もしない。
+
+
+en:<li>However, if the Python expression evaluates to <code>False</code>, the <code>assert</code> statement will raise an <code>AssertionError</code>.
+ja:<li>しかし、もしPythonの式が<code>False</code>と評価された場合、<code>assert</code>文は<code>AssertionError</code>を送出する。
+
+
+en:<li>You can also include a human-readable message that is printed if the <code>AssertionError</code> is raised.
+ja:<li><code>AssertionError</code>が起きた場合に表示するための、人間が読めるメッセージ含めておくこともできる。
+
+
+en:<p>Therefore, this line of code:
+ja:<p>つまり、コードのこの行は：
+
+
+en:<p>&hellip;is equivalent to this:
+ja:<p>&hellip;&hellip;これと同等だ：
+
+
+en:<p>The alphametics solver uses this exact <code>assert</code> statement to bail out early if the puzzle contains more than ten unique letters. Since each letter is assigned a unique digit, and there are only ten digits, a puzzle with more than ten unique letters can not possibly have a solution.
+ja:<p>覆面算ソルバは、パズルが10種類以上の文字を含んでいるときの緊急脱出手段として<code>assert</code>文を使っている。各々の文字は一意な数字に割り当てられるわけだが、数字は10個しかないので、10種類以上の文字を持つパズルは解を持ち得ないのだ。
+
+
+
+en:<h2 id=generator-expressions>Generator expressions</h2>
+ja:<h2 id=generator-expressions>ジェネレータ式</h2>
+
+
+en:<p>A generator expression is like a <a href=generators.html>generator function</a> without the function.
+ja:<p>ジェネレータ式は、関数を使わずに作る<a href=generators.html>ジェネレータ関数</a>、という感じのものだ。
+
+
+en:<li>A generator expression is like an anonymous function that yields values. The expression itself looks like a <a href=comprehensions.html#listcomprehension>list comprehension</a>, but it&#8217;s wrapped in parentheses instead of square brackets.
+ja:<li>ジェネレータ式は、値をyieldする匿名関数のようなものだと思えばいい。この式は<a href=comprehensions.html#listcomprehension>リスト内包表記</a>に似ているが、角括弧の代わりに丸括弧に包まれている。
+
+
+en:<li>The generator expression returns&hellip; an iterator.
+ja:<li>ジェネレータ式は&hellip;&hellip;イテレータを返す。
+
+
+en:<li>Calling <code>next(<var>gen</var>)</code> returns the next value from the iterator.
+ja:<li><code>next(<var>gen</var>)</code>の呼び出しによって、イテレータから次の値が返される。
+
+
+en:<li>If you like, you can iterate through all the possible values and return a tuple, list, or set, by passing the generator expression to <code>tuple()</code>, <code>list()</code>, or <code>set()</code>. In these cases, you don&#8217;t need an extra set of parentheses&nbsp;&mdash;&nbsp;just pass the &#8220;bare&#8221; expression <code>ord(c) for c in unique_characters</code> to the <code>tuple()</code> function, and Python figures out that it&#8217;s a generator expression.
+ja:<li>お望みなら、ジェネレータ式を<code>tuple()</code>、<code>list()</code>、<code>set()</code>に渡せば、すべての値がイテレートされてタプル・リスト・集合として返ってくる。これらの場合、余分な括弧は必要ない。つまり、<code>tuple()</code>関数に「はだか」の式<code>ord(c) for c in unique_characters</code>を渡すだけで、Pythonがジェネレータ式だと識別してくれるのだ。
+
+
+en:<p><span class=u>&#x261E;</span>Using a generator expression instead of a list comprehension can save both <abbr>CPU</abbr> and <abbr>RAM</abbr>. If you&#8217;re building an list just to throw it away (<i>e.g.</i> passing it to <code>tuple()</code> or <code>set()</code>), use a generator expression instead!
+ja:<p><span class=u>&#x261E;</span>リスト内包表記の代わりにジェネレータ式を使うことで、<abbr>CPU</abbr>使用量と<abbr>RAM</abbr>使用量の両方を削減できる。もし作ったリストをすぐ投げ捨てるのであれば（つまり、それを<code>tuple()</code>や<code>set()</code>に渡しているのなら）、代わりにジェネレータ式を使おう！
+
+
+en:<p>Here&#8217;s another way to accomplish the same thing, using a <a href=generators.html>generator function</a>:
+ja:<p>以下では、同じことを<a href=generators.html>ジェネレータ関数</a>を使ってやっている：
+
+
+en:<p>The generator expression is more compact but functionally equivalent.
+ja:<p>ジェネレータ式のほうがコンパクトだが、機能的には同等だ。
+
+
+en:<h2 id=permutations>Calculating Permutations&hellip; The Lazy Way!</h2>
+ja:<h2 id=permutations>順列を計算する&hellip;&hellip; 怠惰なやり方！</h2>
+
+
+en:<p>First of all, what the heck are permutations? Permutations are a mathematical concept. (There are actually several definitions, depending on what kind of math you&#8217;re doing. Here I&#8217;m talking about combinatorics, but if that doesn&#8217;t mean anything to you, don&#8217;t worry about it. As always, <a href=http://en.wikipedia.org/wiki/Permutation>Wikipedia is your friend</a>.)
+ja:<p>そもそも、順列というのは一体何だろう？ 順列は数学の概念だ（実際には、数学の分野によっていくつかの定義がある。ここで私が話しているのは組み合わせ論についてのものだが、その意味がまったく分からなくても心配する必要はない。いつものことながら、<a href=http://en.wikipedia.org/wiki/Permutation>Wikipediaはあなたの味方</a>だ）。
+
+
+en:<p>The idea is that you take a list of things (could be numbers, could be letters, could be dancing bears) and find all the possible ways to split them up into smaller lists. All the smaller lists have the same size, which can be as small as 1 and as large as the total number of items. Oh, and nothing can be repeated. Mathematicians say things like &#8220;let&#8217;s find the permutations of 3 different items taken 2 at a time,&#8221; which means you have a sequence of 3 items and you want to find all the possible ordered pairs.
+ja:<p>順列というのはこういうものだ。あなたは何か（数字とか、文字とか、踊っている熊さんとか）のリストを受け取る。そして、そのリストから取り出せる小さなリストをすべて見つけ出す。この時、取り出すリストはすべて同じサイズにする。そのサイズは最小で1、最大で全要素の数にできる。加えて、リストを取り出す際には1つの要素を2回以上使ってはならない。数学者は、「3つの異なる要素から2つずつ取り出すときの順列を見つけましょう」というようなことを言うが、これが意味することは、あなたは3つの要素からなるシーケンスを持っており、その要素から作り出せるすべての順序対を見つけ出したいということだ。
+
+
+en:<li>The <code>itertools</code> module has all kinds of fun stuff in it, including a <code>permutations()</code> function that does all the hard work of finding permutations.
+ja:<li><code>itertools</code>モジュールには愉快なものがたくさん詰まっており、その中には、順列を見つけるという面倒な仕事をすべてやってくれる<code>permutations()</code>関数も入っている。
+
+
+en:<li>The <code>permutations()</code> function takes a sequence (here a list of three integers) and a number, which is the number of items you want in each smaller group. The function returns an iterator, which you can use in a <code>for</code> loop or any old place that iterates. Here I&#8217;ll step through the iterator manually to show all the values.
+ja:<li><code>permutations()</code>関数は、シーケンス（ここでは3つの整数からなるリスト）と数値を受け取る。この数値が個々の小さなグループの要素の数になる。この関数はイテレータを返すが、このイテレータは<code>for</code>文のようなイテレートを行う場所でならどこでも使用できる。ここでは手動でイテレータを動かして、すべての値を示している。
+
+
+en:<li>The first permutation of <code>[1, 2, 3]</code> taken 2 at a time is <code>(1, 2)</code>.
+ja:<li><code>[1, 2, 3]</code>から一度に2つずつ取り出したときの最初の順列は<code>(1, 2)</code>だ。
+
+
+en:<li>Note that permutations are ordered: <code>(2, 1)</code> is different than <code>(1, 2)</code>.
+ja:<li>順列は順序付けされていることに注意しよう。<code>(2, 1)</code>と<code>(1, 2)</code>は区別される。
+
+
+en:<li>That&#8217;s it! Those are all the permutations of <code>[1, 2, 3]</code> taken 2 at a time. Pairs like <code>(1, 1)</code> and <code>(2, 2)</code> never show up, because they contain repeats so they aren&#8217;t valid permutations. When there are no more permutations, the iterator raises a <code>StopIteration</code> exception.
+ja:<li>これで終わりだ！ 以上が<code>[1, 2, 3]</code>から一度に2つずつ取り出したときのすべての順列だ。<code>(1, 1)</code>や<code>(2, 2)</code>のようなペアは絶対に現れない。これらは同じ要素が繰り返し使われているので、正しい順列ではないのだ。返す順列が無くなると、イテレータは<code>StopIteration</code>例外を送出する。
+
+
+en:<aside>The <code>itertools</code> module has all kinds of fun stuff.</aside>
+ja:<aside><code>itertools</code>モジュールには愉快な物がたくさん詰まっている。</aside>
+
+
+en:<p>The <code>permutations()</code> function doesn&#8217;t have to take a list. It can take any sequence&nbsp;&mdash;&nbsp;even a string.
+ja:<p><code>permutations()</code>関数はリストしか受け取れないわけではない。これは任意のシーケンスを受けとれる&nbsp;&mdash;&nbsp;つまり文字列さえも受け取れるのだ。
+
+
+en:<li>A string is just a sequence of characters. For the purposes of finding permutations, the string <code>'ABC'</code> is equivalent to the list <code>['A', 'B', 'C']</code>.
+ja:<li>文字列は単なる文字のシーケンスだ。順列を見つけるという目的からは、文字列<code>'ABC'</code>はリスト<code>['A', 'B', 'C']</code>と等価だ。
+
+
+en:<li>The first permutation of the 3 items <code>['A', 'B', 'C']</code>, taken 3 at a time, is <code>('A', 'B', 'C')</code>. There are five other permutations&nbsp;&mdash;&nbsp;the same three characters in every conceivable order.
+ja:<li>3つの要素<code>['A'、'B'、'C']</code>から一度に3つずつ取るときの最初の順列は<code>('A', 'B', 'C')</code> だ。この他に5つの順列&nbsp;&mdash;&nbsp;すなわち、この3文字の考えうる並べ方すべて&nbsp;&mdash;&nbsp;が存在する。
+
+
+en:<li>Since the <code>permutations()</code> function always returns an iterator, an easy way to debug permutations is to pass that iterator to the built-in <code>list()</code> function to see all the permutations immediately.
+ja:<li><code>permutations()</code>関数は常にイテレータを返すので、順列をデバッグする簡易な方法として、イテレータを組み込みの<code>list()</code>関数に渡すことで、順列の全体を即座に見るというやり方がある。
+
+
+en:<h2 id=more-itertools>Other Fun Stuff in the <code>itertools</code> Module</h2>
+ja:<h2 id=more-itertools><code>itertools</code>モジュールにある他の愉快なもの</h2>
+
+
+en:<li>The <code>itertools.product()</code> function returns an iterator containing the Cartesian product of two sequences.
+ja:<li><code>itertools.product()</code>関数は、2つのシーケンスの直積からなるイテレータを返す。
+
+
+en:<li>The <code>itertools.combinations()</code> function returns an iterator containing all the possible combinations of the given sequence of the given length. This is like the <code>itertools.permutations()</code> function, except combinations don&#8217;t include items that are duplicates of other items in a different order. So <code>itertools.permutations('ABC', 2)</code> will return both <code>('A', 'B')</code> and <code>('B', 'A')</code> (among others), but <code>itertools.combinations('ABC', 2)</code> will not return <code>('B', 'A')</code> because it is a duplicate of <code>('A', 'B')</code> in a different order.
+ja:<li><code>itertools.combinations()</code>関数は与えられたシーケンスについて、指定された要素の数からなる組み合わせ全部を取り出して、イテレーターとして返す。これは<code>itertools.permutations()</code>関数に似ているが、順序違いのものは含まないということが異なる。すなわち、<code>itertools.permutations('ABC', 2)</code>は、<code>('A', 'B')</code>と<code>('B', 'A')</code>の両方を返すが、<code>itertools.combinations('ABC', 2)</code>は、<code>('B', 'A')</code>を返さない。なぜなら、これは<code>('A', 'B')</code>の順序を変えたものでしかないからだ。
+
+
+en:<p class=d>[<a href=examples/favorite-people.txt>download <code>favorite-people.txt</code></a>]
+ja:<p class=d>[<a href=examples/favorite-people.txt><code>favorite-people.txt</code>をダウンロードする</a>]
+
+
+en:<li>This idiom returns a list of the lines in a text file.
+ja:<li>このイディオムは、テキストファイルの行のリストを返す。
+
+
+en:<li>Unfortunately (for this example), the <code>list(open(<var>filename</var>))</code> idiom also includes the carriage returns at the end of each line. This list comprehension uses the <code>rstrip()</code> string method to strip trailing whitespace from each line. (Strings also have an <code>lstrip()</code> method to strip leading whitespace, and a <code>strip()</code> method which strips both.)
+ja:<li>（この例にとっては）都合が悪いことに、<code>list(open(<var>filename</var>))</code>というイディオムで処理すると、各行の末尾にある改行文字が残ってしまう。このリスト内包表記は、文字列メソッドの<code>rstrip()</code>を使って、文字列の後ろに付いている空白文字を各行から取り除いている（文字列は、先頭にある空白文字を取り除くための<code>lstrip()</code>メソッドや、先頭と末尾の両方の空白文字を取り除く<code>strip()</code>メソッドも持っている）。
+
+
+en:<li>The <code>sorted()</code> function takes a list and returns it sorted. By default, it sorts alphabetically.
+ja:<li><code>sorted()</code>関数はリストを受け取って、そのリストをソートしたものを返す。デフォルトではアルファベット順にソートする。
+
+
+en:<li>But the <code>sorted()</code> function can also take a function as the <var>key</var> parameter, and it sorts by that key. In this case, the sort function is <code>len()</code>, so it sorts by <code>len(<var>each item</var>)</code>. Shorter names come first, then longer, then longest.
+ja:<li>しかし、<code>sorted()</code>関数は<var>key</var>引数として関数を受け取り、そのキーに基づいてソートを行うこともできる。この例では、ソート関数は<code>len()</code>なので、これは<code>len(<var>各要素</var>)</code>に基づいてソートを行う。短い名前が先に来て、次に長い名前、その後ろにもっと長い名前が続くというわけだ。
+
+
+en:<p>What does this have to do with the <code>itertools</code> module? I&#8217;m glad you asked.
+ja:<p>これが<code>itertools</code>モジュールと何の関係があるのかって？ その質問を待っていた。
+
+
+en:&hellip;continuing from the previous interactive shell&hellip;
+ja:&hellip;&hellip;前の対話シェルの続き&hellip;&hellip;
+
+
+en:<li>The <code>itertools.groupby()</code> function takes a sequence and a key function, and returns an iterator that generates pairs. Each pair contains the result of <code>key_function(<var>each item</var>)</code> and another iterator containing all the items that shared that key result.
+ja:<li><code>itertools.groupby()</code>関数はシーケンスとキー関数を受け取り、ペアを生成するイテレータを返す。各々のペアには、<code>key_function(<var>each item</var>)</code>の値と、キー関数に渡したときにその値を返すような要素を集めたイテレータが入っている。
+
+
+en:<li>Calling the <code>list()</code> function &#8220;exhausted&#8221; the iterator, <i>i.e.</i> you&#8217;ve already generated every item in the iterator to make the list. There&#8217;s no &#8220;reset&#8221; button on an iterator; you can&#8217;t just start over once you&#8217;ve exhausted it. If you want to loop through it again (say, in the upcoming <code>for</code> loop), you need to call <code>itertools.groupby()</code> again to create a new iterator.
+ja:<li><code>list()</code>関数を呼び出したことでイテレータは「使い果たされた」。つまり、リストを作るために、イテレータの要素をすべて生成しつくしたのだ。イテレータに「リセット」ボタンは無いので、一度使い果たしたら最初からやり直させることはできない。もう一度（例えば、次の<code>for</code>ループで）イテレートしたいのであれば、再び<code>itertools.groupby()</code>を呼び出して新しいイテレータを作る必要がある。
+
+
+en:<li>In this example, given a list of names <em>already sorted by length</em>, <code>itertools.groupby(names, len)</code> will put all the 4-letter names in one iterator, all the 5-letter names in another iterator, and so on. The <code>groupby()</code> function is completely generic; it could group strings by first letter, numbers by their number of factors, or any other key function you can think of.
+ja:<li>この例では、<em>すでに長さでソートしてある</em>名前のリストが与えられたので、<code>itertools.groupby(names, len)</code>は、4文字の名前をすべて1つのイテレータに入れ、5文字の名前をすべてもう1つのイテレータに入れ&hellip;&hellip;というように同じ長さの名前を同じ1つのイテレータに入れてくれた。<code>groupby()</code>関数は完全に汎用的なので、文字列を最初の1文字でグループ分けすることもできるし、数字を因数の数で分類することもできる。思いつくキー関数ならどんなものでも使えるのだ。
+
+
+en:<p><span class=u>&#x261E;</span>The <code>itertools.groupby()</code> function only works if the input sequence is already sorted by the grouping function. In the example above, you grouped a list of names by the <code>len()</code> function. That only worked because the input list was already sorted by length.
+ja:<p><span class=u>&#x261E;</span><code>itertools.groupby()</code>関数は、入力されたシーケンスがグループ関数ですでにソートされているときにだけ機能する。上の例では、名前のリストを<code>len()</code>関数でグループ分けしたが、これが上手くいったのは、あらかじめ入力リストを名前でソートしておいたからだ。
+
+
+en:<p>Are you watching closely?
+ja:<p>よく見ているかな？
+
+
+en:<li>The <code>itertools.chain()</code> function takes two iterators and returns an iterator that contains all the items from the first iterator, followed by all the items from the second iterator. (Actually, it can take any number of iterators, and it chains them all in the order they were passed to the function.)
+ja:<li><code>itertools.chain()</code>関数は、2つのイテレータを受け取って、1つ目のイテレータのすべての要素と、それに続いて2つ目のイテレータのすべての要素を含んだ1つのイテレータを返す（実は、任意数のイテレータを受け取ることができ、それらを関数に渡された順序で連結する）。
+
+
+en:<li>The <code>zip()</code> function does something prosaic that turns out to be extremely useful: it takes any number of sequences and returns an iterator which returns tuples of the first items of each sequence, then the second items of each, then the third, and so on.
+ja:<li><code>zip()</code>関数はつまらないことを行うのだが、実はこれはものすごく便利なことが分かる。この関数は任意の数のシーケンスを受け取り、各シーケンスの1つ目の要素からなるタプル、各シーケンスの2つ目の要素からなるタプル、3つ目の要素からなるタプル&hellip;&hellip;を生成するイテレータを返す。
+
+
+en:<li>The <code>zip()</code> function stops at the end of the shortest sequence. <code>range(10, 14)</code> has 4 items (10, 11, 12, and 13), but <code>range(0, 3)</code> only has 3, so the <code>zip()</code> function returns an iterator of 3 items.
+ja:<li><code>zip()</code>関数は、最も短いシーケンスの終わりで停止する。<code>range(10, 14)</code>は4つの要素 (10, 11, 12, 13) を持つが、<code>range(0, 3)</code>は3つしか持たないので、この<code>zip()</code>関数は3つの要素を持つイテレータを返す。
+
+
+en:<li>On the other hand, the <code>itertools.zip_longest()</code> function stops at the end of the <em>longest</em> sequence, inserting <code>None</code> values for items past the end of the shorter sequences.
+ja:<li>その一方で、<code>itertools.zip_longest()</code>関数は<em>最も長い</em>シーケンスの終わりで停止する。短いシーケンスが尽きた後については<code>None</code>を挿入する。
+
+
+en:<p id=dict-zip>OK, that was all very interesting, but how does it relate to the alphametics solver? Here&#8217;s how:
+ja:<p id=dict-zip>OK、全部とても興味深いものだったけど、覆面算ソルバにはどんな関係があるのだろうか？ それはこういうことだ：
+
+
+en:<li>Given a list of letters and a list of digits (each represented here as 1-character strings), the <code>zip</code> function will create a pairing of letters and digits, in order.
+ja:<li>文字のリストと数字（ここではそれぞれが1文字の文字列として表されている）のリストを与えると、<code>zip</code>関数は文字と数字のペアを順番通りに作成する。
+
+
+en:<li>Why is that cool? Because that data structure happens to be exactly the right structure to pass to the <code>dict()</code> function to create a dictionary that uses letters as keys and their associated digits as values. (This isn&#8217;t the only way to do it, of course. You could use a <a href=comprehensions.html#dictionarycomprehension>dictionary comprehension</a> to create the dictionary directly.) Although the printed representation of the dictionary lists the pairs in a different order (dictionaries have no &#8220;order&#8221; per se), you can see that each letter is associated with the digit, based on the ordering of the original <var>characters</var> and <var>guess</var> sequences.
+ja:<li>これのどこがクールなのだろうか？ なんとこのタプルは偶然にも、<code>dict()</code>関数に渡すことで、「文字をキー、対応する数字を値とした辞書」を構築できる構造になっているのだ（もちろんこれは唯一の方法ではない。<a href=comprehensions.html#dictionarycomprehension>辞書内包表記</a>を使って、この辞書を直接構築することだってできる）。表示された辞書の表現ではペアの順序が変わっているが（辞書は本質的に「順序」を持たない）、元の<var>characters</var>と<var>guess</var>のシーケンス内の順序に基づいて、各文字に数字が対応付けられていることが見て取れるだろう。
+
+
+en:<p id=guess>The alphametics solver uses this technique to create a dictionary that maps letters in the puzzle to digits in the solution, for each possible solution.
+ja:<p id=guess>覆面算ソルバは、パズルの文字を解の数字に対応させる辞書を作るために、各々の解候補に対してこのテクニックを使っている。
+
+
+en:<p>But what is this <code>translate()</code> method? Ah, now you&#8217;re getting to the <em>really</em> fun part.
+ja:<p>だけど、この<code>translate()</code>メソッドというのは何かって？ それでは、これから<em>本当に</em>面白い部分に入っていくとしよう。
+
+
+en:<h2 id=string-translate>A New Kind Of String Manipulation</h2>
+ja:<h2 id=string-translate>新種の文字列操作</h2>
+
+
+en:<p>Python strings have many methods. You learned about some of those methods in <a href=strings.html>the Strings chapter</a>: <code>lower()</code>, <code>count()</code>, and <code>format()</code>. Now I want to introduce you to a powerful but little-known string manipulation technique: the <code>translate()</code> method.
+ja:<p>Pythonの文字列は多くのメソッドを持っている。<code>lower()</code>, <code>count()</code>, <code>format()</code>といった一部のメソッドについては<a href=strings.html>文字列の章</a>で学んだ。今度は、パワフルだがほとんど知られていない文字列操作のテクニックである<code>translate()</code>メソッドを紹介したいと思う。
+
+
+en:<li>String translation starts with a translation table, which is just a dictionary that maps one character to another. Actually, &#8220;character&#8221; is incorrect&nbsp;&mdash;&nbsp;the translation table really maps one <em>byte</em> to another.
+ja:<li>文字列の変換は変換表の用意から始まる。これは、文字を他の文字に対応付けた単なる辞書だ。実を言うと「文字」と言ったのは不正確だ。実際には、変換表は<em>バイト</em>を他の<em>バイト</em>に対応させるのだ。
+
+
+en:<li>Remember, bytes in Python 3 are integers. The <code>ord()</code> function returns the <abbr>ASCII</abbr> value of a character, which, in the case of A&ndash;Z, is always a byte from 65 to 90.
+ja:<li>思い出して欲しい。Python 3のバイトは整数だ。<code>ord()</code>関数は文字の<abbr>ASCII</abbr>値を返し、これはA&ndash;Zの場合、常に65から90までの1バイトになる。
+
+
+en:<li>The <code>translate()</code> method on a string takes a translation table and runs the string through it. That is, it replaces all occurrences of the keys of the translation table with the corresponding values. In this case, &#8220;translating&#8221; <code>MARK</code> to <code>MORK</code>.
+ja:<li>文字列の<code>translate()</code>メソッドは変換表を受け取り、文字列をその変換表に通す。つまり、変換表のキーに一致する部分をすべて対応する文字に変換するのだ。この例では、<code>MARK</code>を<code>MORK</code>に「変換 (translate)」している。
+
+
+en:<aside>Now you&#8217;re getting to the <em>really</em> fun part.</aside>
+ja:<aside>ここからが<em>本当に</em>楽しい部分だ。</aside>
+
+
+en:<p>What does this have to do with solving alphametic puzzles? As it turns out, everything.
+ja:<p>これが覆面算パズルを解くのとどう関係するのかって？ 結論を言えば、これはすべてに関係しているのだ。
+
+
+en:<li>Using a <a href=#generator-expressions>generator expression</a>, we quickly compute the byte values for each character in a string. <var>characters</var> is an example of the value of <var>sorted_characters</var> in the <code>alphametics.solve()</code> function.
+ja:<li><a href=#generator-expressions>ジェネレータ式</a>を使い、この文字列にある各々の文字のバイト値を素早く計算する。<code>"SMEDONRY"</code>は、<code>alphametics.solve()</code>関数における<var>sorted_characters</var>の値の例だ。
+
+
+en:<li>Using another generator expression, we quickly compute the byte values for each digit in this string. The result, <var>guess</var>, is of the form <a href=#guess>returned by the <code>itertools.permutations()</code> function</a> in the <code>alphametics.solve()</code> function.
+ja:<li>別のジェネレータ式を使い、この文字列にある各々の数字のバイト値を素早く計算する。戻り値の<var>guess</var>は、<code>alphametics.solve()</code>関数において<a href=#guess><code>itertools.permutations()</code>関数によって返される</a>ものと同じ形をしている。
+
+
+en:<li>This translation table is generated by <a href=#dict-zip>zipping <var>characters</var> and <var>guess</var> together</a> and building a dictionary from the resulting sequence of pairs. This is exactly what the <code>alphametics.solve()</code> function does inside the <code>for</code> loop.
+ja:<li><a href=#dict-zip><var>characters</var>と<var>guess</var>をzip</a>して、その戻り値のペアのシーケンスから辞書を構築することによって、この変換表は生成される。これは、<code>alphametics.solve()</code>関数が<code>for</code>ループの中でやっていることそのものだ。
+
+
+en:<li>Finally, we pass this translation table to the <code>translate()</code> method of the original puzzle string. This converts each letter in the string to the corresponding digit (based on the letters in <var>characters</var> and the digits in <var>guess</var>). The result is a valid Python expression, as a string.
+ja:<li>最後に、オリジナルのパズル文字列の<code>translate()</code>メソッドに変換表を渡す。これは、文字列の各文字を（<var>characters</var>の文字と<var>guess</var>の数字にもとづいて）対応する数字に変換する。その結果は、有効なPythonの式を文字列として表したものになる。
+
+
+en:<p>That&#8217;s pretty impressive. But what can you do with a string that happens to be a valid Python expression?
+ja:<p>これはずいぶん感動的だ。しかし、たまたま正しいPythonの式になった文字列を使って何ができるのだろうか？
+
+
+en:<h2 id=eval>Evaluating Arbitrary Strings As Python Expressions</h2>
+ja:<h2 id=eval>任意の文字列をPythonの式として評価する</h2>
+
+
+en:<p>This is the final piece of the puzzle (or rather, the final piece of the puzzle solver). After all that fancy string manipulation, we&#8217;re left with a string like <code>'9567 + 1085 == 10652'</code>. But that&#8217;s a string, and what good is a string? Enter <code>eval()</code>, the universal Python evaluation tool.
+ja:<p>これはパズルの最後のピースだ（というより、パズルソルバの最後のピースと言うべきか）。手の込んだ文字列操作の末に、<code>'9567 + 1085 == 10652'</code>というような文字列が手に入った。しかし、これは文字列であって、文字列で何ができるというのだ？ <code>eval()</code>の話に入ろう。これは、Pythonの式を評価するための万能ツールだ。
+
+
+en:<p>But wait, there&#8217;s more! The <code>eval()</code> function isn&#8217;t limited to boolean expressions. It can handle <em>any</em> Python expression and returns <em>any</em> datatype.
+ja:<p>ちょっと待って。これだけじゃない！ <code>eval()</code>関数が扱えるものはブール式だけではなく、<em>どんな</em>Pythonの式でも扱えるし、<em>どんな</em>データ型でも返せるのだ。
+
+
+en:<p>But wait, that&#8217;s not all!
+ja:<p>待って、まだ終わりじゃない！
+
+
+en:<li>The expression that <code>eval()</code> takes can reference global variables defined outside the <code>eval()</code>. If called within a function, it can reference local variables too.
+ja:<li><code>eval()</code>が受け取る式は、<code>eval()</code>の外側で定義されたグローバル変数を参照できる。関数の中で呼び出されたときはローカル変数も参照できる。
+
+
+en:<li>And functions.
+ja:<li>関数も参照できる。
+
+
+en:<li>And modules.
+ja:<li>モジュールも参照できる。
+
+
+en:<p>Hey, wait a minute&hellip;
+ja:<p>話はもう少し&hellip;&hellip;
+
+
+en:<li>The <code>subprocess</code> module allows you to run arbitrary shell commands and get the result as a Python string.
+ja:<li><code>subprocess</code>モジュールは、任意のシェルコマンドを実行し、その結果をPythonの文字列として受け取る機能を提供する。
+
+
+en:<li>Arbitrary shell commands can have permanent consequences.
+ja:<li>シェルコマンドの無制限な実行を許すと、とりかえしのつかない結果を招く可能性がある。
+
+
+en:<p>It&#8217;s even worse than that, because there&#8217;s a global <code>__import__()</code> function that takes a module name as a string, imports the module, and returns a reference to it. Combined with the power of <code>eval()</code>, you can construct a single expression that will wipe out all your files:
+ja:<p>状況はもっと悪くなる。というのは、グローバルの<code>__import__()</code>関数が存在するからだ。この関数はモジュール名を文字列として受け取り、そのモジュールをインポートしてそれへの参照を返す。この関数と<code>eval()</code>の力を組み合わせれば、すべてのファイルを消し飛ばす式を作れるのだ：
+
+
+en:<li>Now imagine the output of <code>'rm -rf ~'</code>. Actually there wouldn&#8217;t be any output, but you wouldn&#8217;t have any files left either.
+ja:<li><code>'rm -rf ~'</code>の実行結果を想像してみよう。実際には一切何も出力されないのだが、あなたのファイルは全て消え去ってしまう。
+
+
+en:<p class=xxxl>eval() is EVIL
+ja:<p class=xxxl>eval() is EVIL<br><span style="text-align: center; font-size: 40%; font-weight: bold">eval()は邪悪</span>
+
+
+en:<p>Well, the evil part is evaluating arbitrary expressions from untrusted sources. You should only use <code>eval()</code> on trusted input. Of course, the trick is figuring out what&#8217;s &#8220;trusted.&#8221; But here&#8217;s something I know for certain: you should <b>NOT</b> take this alphametics solver and put it on the internet as a fun little web service. Don&#8217;t make the mistake of thinking, &#8220;Gosh, the function does a lot of string manipulation before getting a string to evaluate; <em>I can&#8217;t imagine</em> how someone could exploit that.&#8221; Someone <b>WILL</b> figure out how to sneak nasty executable code past all that string manipulation (<a href=http://www.securityfocus.com/blogs/746>stranger things have happened</a>), and then you can kiss your server goodbye.
+ja:<p>邪悪というのは、信頼できないところから入力された任意の式を評価してしまうことだ。<code>eval()</code>を使うのは、信頼している入力に対してだけにすべきだ。もちろん重要なのは「信頼している」とは何かを理解することであるが、確実に言えることがある： この覆面算ソルバを小さなおもしろWebサービスとしてインターネットに公開<b>すべきではない</b>。「え？ この関数は文字列を評価する前に沢山の文字列操作をしてるんだから、これのセキュリティホールを突く方法を誰かが見つけ出すなんて<em>想像できない</em>や」という誤った考えをしてはいけない。<b>きっと</b>何者かが、すべての文字列操作を通過する気色悪い実行可能コードを忍び込ませる方法を見いだすだろう（<a href=http://www.securityfocus.com/blogs/746>奇妙なことは実際に起きている</a>）。そうしたら、自分のサーバにキスして、お別れをしなければならない。
+
+
+en:<p>But surely there&#8217;s <em>some</em> way to evaluate expressions safely? To put <code>eval()</code> in a sandbox where it can&#8217;t access or harm the outside world? Well, yes and no.
+ja:<p>でも、式を安全に評価する<em>何らかの</em>方法は本当に無いの？ 外の世界にアクセスしたり傷つけたりできないサンドボックスに<code>eval()</code>を入れる方法は無いの？ うーん、それはイエスでもノーでもある。
+
+
+en:<li>The second and third parameters passed to the <code>eval()</code> function act as the global and local namespaces for evaluating the expression. In this case, they are both empty, which means that when the string <code>"x * 5"</code> is evaluated, there is no reference to <var>x</var> in either the global or local namespace, so <code>eval()</code> throws an exception.
+ja:<li><code>eval()</code>関数に渡された2つ目と3つ目のパラメータは、式を評価するときのグローバル名前空間とローカル名前空間として機能する。この場合は、両方が空になっている。このことは、<code>"x * 5"</code>という文字列が評価されるときに、グローバルとローカル名前空間のどちらにも<var>x</var>への参照が存在しないということを意味するので、この<code>eval()</code>は例外を送出する。
+
+
+en:<li>You can selectively include specific values in the global namespace by listing them individually. Then those&nbsp;&mdash;&nbsp;and only those&nbsp;&mdash;&nbsp;variables will be available during evaluation.
+ja:<li>値を一つ一つ列挙することによって、特定の値を選択的にグローバル名前空間に含めておける。そうすると、評価を行っているあいだは、これらの変数だけが利用できる。
+
+
+en:<li>Even though you just imported the <code>math</code> module, you didn&#8217;t include it in the namespace passed to the <code>eval()</code> function, so the evaluation failed.
+ja:<li>直前で<code>math</code>モジュールをインポートしているが、<code>eval()</code>関数に渡す名前区間にこれを含めていないので、この評価は失敗する。
+
+
+en:<p>Gee, that was easy. Lemme make an alphametics web service now!
+ja:<p>おお、これなら簡単だ。覆面算ウェブサービスを作らせてよ！
+
+
+en:<li>Even though you&#8217;ve passed empty dictionaries for the global and local namespaces, all of Python&#8217;s built-in functions are still available during evaluation. So <code>pow(5, 2)</code> works, because <code>5</code> and <code>2</code> are literals, and <code>pow()</code> is a built-in function.
+ja:<li>空の辞書をグローバル・ローカル名前空間に渡した場合でも、Pythonの組み込み関数ならどれでも評価の際に利用できる。つまり<code>pow(5, 2)</code>は問題なく評価される。<code>5</code>と<code>2</code>がリテラルで、<code>pow()</code>が組み込み関数だからだ。
+
+
+en:<li>Unfortunately (and if you don&#8217;t see why it&#8217;s unfortunate, read on), the <code>__import__()</code> function is also a built-in function, so it works too.
+ja:<li>不幸なことに（何が不幸なのか分からなければ、読み続けて欲しい）<code>__import__()</code>関数も組み込み関数なので、これも使えてしまう。
+
+
+en:<p>Yeah, that means you can still do nasty things, even if you explicitly set the global and local namespaces to empty dictionaries when calling <code>eval()</code>:
+ja:<p>そう、これが意味するのは、たとえ<code>eval()</code>を呼び出すときにグローバル・ローカル名前空間に空の辞書を明示的に設定したとしても、悪事を働けるということだ：
+
+
+en:<p>Oops. I&#8217;m glad I didn&#8217;t make that alphametics web service. Is there <em>any</em> way to use <code>eval()</code> safely? Well, yes and no.
+ja:<p>わぁ、覆面算ウェブサービスを作っていなくて良かったよ。<code>eval()</code>を安全に使う方法は<em>何か</em>無いの？ うーん、イエスでもあり、ノーでもある。
+
+
+en:<li>To evaluate untrusted expressions safely, you need to define a global namespace dictionary that maps <code>"__builtins__"</code> to <code>None</code>, the Python null value. Internally, the &#8220;built-in&#8221; functions are contained within a pseudo-module called <code>"__builtins__"</code>. This pseudo-module (<i>i.e.</i> the set of built-in functions) is made available to evaluated expressions unless you explicitly override it.
+ja:<li>信頼されていない式を安全に評価するには、<code>"__builtins__"</code>をPythonのNull値の<code>None</code>にマッピングしたグローバル名前空間を定義する必要がある。内部的には「組み込み」関数は<code>"__builtins__"</code>という疑似モジュールに含まれているのだ。この疑似モジュール（つまり、組み込み関数の集合）は、明示的に無効にしないかぎり、評価される式で使用できるようになっている。
+
+
+en:<li>Be sure you&#8217;ve overridden <code>__builtins__</code>. Not <code>__builtin__</code>, <code>__built-ins__</code>, or some other variation that will work just fine but expose you to catastrophic risks.
+ja:<li><code>__builtins__</code>が上書きされていることを確認しよう。これが<code>__builtin__</code>や<code>__built-ins__</code>のようなものになっていると、問題なく動作するにもかかわらず、恐ろしいリスクにさらされることになる。
+
+
+en:<p>So <code>eval()</code> is safe now? Well, yes and no.
+ja:<p>じゃあ、<code>eval()</code>はもう安全？ うーん、イエスでもノーでもある。
+
+
+en:<li>Even without access to <code>__builtins__</code>, you can still launch a denial-of-service attack. For example, trying to raise <code>2</code> to the <code>2147483647</code><sup>th</sup> power will spike your server&#8217;s <abbr>CPU</abbr> utilization to 100% for quite some time. (If you&#8217;re trying this in the interactive shell, press <kbd>Ctrl-C</kbd> a few times to break out of it.) Technically this expression <em>will</em> return a value eventually, but in the meantime your server will be doing a whole lot of nothing.
+ja:<li><code>__builtins__</code>にアクセスできなかったとしても、なおDOS攻撃を仕掛けることはできる。例えば、<code>2</code>の<code>2147483647</code>乗は、長時間にわたってサーバの<abbr>CPU</abbr>使用率を100%に跳ね上げるだろう（これを対話シェルで試すときは、<kbd>Ctrl-C</kbd>を何回か押して脱出しよう）。厳密にいえば、最終的にはこの式は<em>実際に</em>値を返すのだが、その間、サーバは無意味な処理に全力を注ぎ込むことになる。
+
+
+en:<p>In the end, it <em>is</em> possible to safely evaluate untrusted Python expressions, for some definition of &#8220;safe&#8221; that turns out not to be terribly useful in real life. It&#8217;s fine if you&#8217;re just playing around, and it&#8217;s fine if you only ever pass it trusted input. But anything else is just asking for trouble.
+ja:<p>最終的に、信頼されていないPythonの式を安全に評価できるようになった。ただし、現実世界ではほとんど役に立たない「安全」の定義においてだが。これは、遊びでつかう場合や、信頼された入力だけを渡すのであれば良いが、他のことに使うと災いを招くことになる。
+
+
+en:<h2 id=alphametics-finale>Putting It All Together</h2>
+ja:<h2 id=alphametics-finale>まとめ</h2>
+
+
+en:<p>To recap: this program solves alphametic puzzles by brute force, <i>i.e.</i> through an exhaustive search of all possible solutions. To do this, it&hellip;
+ja:<p>復習： このプログラムは、ブルートフォースによって（つまり、すべての解候補を総当り的に検索することによって）覆面算パズルを解く。これを行うために、このプログラムは&hellip;&hellip;
+
+
+en:<li><a href=#re-findall>Finds all the letters in the puzzle</a> with the <code>re.findall()</code> function
+ja:<li><code>re.findall()</code>関数を使って、<a href=#re-findall>パズルに含まれる文字をすべて見つける</a>
+
+
+en:<li><a href=#unique-items>Find all the <em>unique</em> letters in the puzzle</a> with sets and the <code>set()</code> function
+ja:<li>集合と<code>set()</code>関数を使って、<a href=#unique-items>パズルに含まれるすべての<em>ユニーク</em>な文字を見つける</a>
+
+
+en:<li><a href=#assert>Checks if there are more than 10 unique letters</a> (meaning the puzzle is definitely unsolvable) with an <code>assert</code> statement
+ja:<li><code>assert</code>文を使って、<a href=#assert>10個以上のユニークな文字があるかチェックする</a>（その場合、パズルは絶対に解けない）
+
+
+en:<li><a href=#generator-objects>Converts the letters to their ASCII equivalents</a> with a generator object
+ja:<li>ジェネレータオブジェクトを使って、<a href=#generator-expressions>文字を対応するASCIIコードに変換する</a>
+
+
+en:<li><a href=#permutations>Calculates all the possible solutions</a> with the <code>itertools.permutations()</code> function
+ja:<li><code>itertools.permutations()</code>関数を使って、<a href=#permutations>すべての解候補を求める</a>
+
+
+en:<li><a href=#string-translate>Converts each possible solution to a Python expression</a> with the <code>translate()</code> string method
+ja:<li>文字列メソッドの<code>translate()</code>を使って、<a href=#string-translate>すべての解候補をPythonの式に変換する</a>
+
+
+en:<li><a href=#eval>Tests each possible solution by evaluating the Python expression</a> with the <code>eval()</code> function
+ja:<li><code>eval()</code>関数を使い、<a href=#eval>Pythonの式を評価することによってそれぞれの解候補をテストする</a>
+
+
+en:<li>Returns the first solution that evaluates to <code>True</code>
+ja:<li><code>True</code>と評価された最初の解を返す
+
+
+en:<p>&hellip;in just 14 lines of code.
+ja:<p>&hellip;&hellip;これを14行のコードで行う。
+
+
+en:<li><a href=http://docs.python.org/3.1/library/itertools.html><code>itertools</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/itertools.html><code>itertools</code>モジュール</a>
+
+
+en:<li><a href=http://www.doughellmann.com/PyMOTW/itertools/><code>itertools</code>&nbsp;&mdash;&nbsp;Iterator functions for efficient looping</a>
+ja:<li><a href=http://www.doughellmann.com/PyMOTW/itertools/><code>itertools</code>&nbsp;&mdash;&nbsp;Iterator functions for efficient looping</a>
+
+
+en:<li><a href=http://blip.tv/file/1947373/>Watch Raymond Hettinger&#8217;s &#8220;Easy AI with Python&#8221; talk</a> at PyCon 2009
+ja:<li><a href=http://blip.tv/file/1947373/>Raymond Hettinger講演 「Pythonによる簡単なAI」</a>（at PyCon 2009）
+
+
+en:<li><a href=http://code.activestate.com/recipes/576615/>Recipe 576615: Alphametics solver</a>, Raymond Hettinger&#8217;s original alphametics solver for Python 2
+ja:<li><a href=http://code.activestate.com/recipes/576615/>Recipe 576615: Alphametics solver</a>、Raymond Hettingerが書いたオリジナルのPython2版覆面算ソルバ
+
+
+en:<li><a href=http://code.activestate.com/recipes/users/178123/>More of Raymond Hettinger&#8217;s recipes</a> in the ActiveState Code repository
+ja:<li><a href=http://code.activestate.com/recipes/users/178123/>Raymond Hettingerによるその他のコード</a>（ActiveState Code repository）
+
+
+en:<li><a href=http://en.wikipedia.org/wiki/Verbal_arithmetic>Alphametics on Wikipedia</a>
+ja:<li><a href=http://en.wikipedia.org/wiki/Verbal_arithmetic>Wikipedia「Alphametics」</a>
+
+
+en:<li><a href=http://www.tkcs-collins.com/truman/alphamet/index.shtml>Alphametics Index</a>, including <a href=http://www.tkcs-collins.com/truman/alphamet/alphamet.shtml>lots of puzzles</a> and <a href=http://www.tkcs-collins.com/truman/alphamet/alpha_gen.shtml>a generator to make your own</a>
+ja:<li><a href=http://www.tkcs-collins.com/truman/alphamet/index.shtml>Alphametics Index</a>には、<a href=http://www.tkcs-collins.com/truman/alphamet/alphamet.shtml>たくさんのパズル</a>と、<a href=http://www.tkcs-collins.com/truman/alphamet/alpha_gen.shtml>パズルを自作するためのジェネレータ</a>が含まれている。
+
+
+en:<p>Many thanks to Raymond Hettinger for agreeing to relicense his code so I could port it to Python 3 and use it as the basis for this chapter.
+ja:<p>コードの再ライセンスに同意してくれたことについて、Raymond Hettingerに大変感謝している。そのおかげで、私はこのコードをPython 3へ移植することができ、この章の土台として使うことができた。
+
+
+en:<p class=v><a href=iterators.html rel=prev title='back to &#8220;Classes &amp; Iterators&#8221;'><span class=u>&#x261C;</span></a> <a href=unit-testing.html rel=next title='onward to &#8220;Unit Testing&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=iterators.html rel=prev title='「クラスとイテレータ」へ戻る'><span class=u>&#x261C;</span></a> <a href=unit-testing.html rel=next title='「ユニットテスト」へ進む'><span class=u>&#x261E;</span></a>

@@ -1,0 +1,625 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#files>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#files>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+en:<title>Files - Dive Into Python 3</title>
+ja:<title>ファイル - Dive Into Python 3 日本語版</title>
+
+
+en:<h1>Files</h1>
+ja:<h1>ファイル</h1>
+
+
+en:<p><span class=u>&#x275D;</span> A nine mile walk is no joke, especially in the rain. <span class=u>&#x275E;</span><br>&mdash; Harry Kemelman, <cite>The Nine Mile Walk</cite>
+ja:<p><span class=u>&#x275D;</span> 9マイルも歩くのは楽じゃない、雨の中はなおさらだ。<span class=u>&#x275E;</span><br>&mdash; ハリイ・ケメルマン、<cite>The Nine Mile Walk</cite>
+
+
+en:<p class=f>My Windows laptop had 38,493 files before I installed a single application. Installing Python 3 added almost 3,000 files to that total. Files are the primary storage paradigm of every major operating system; the concept is so ingrained that most people would have trouble <a href=http://en.wikipedia.org/wiki/Computer_file#History>imagining an alternative</a>. Your computer is, metaphorically speaking, drowning in files.
+ja:<p class=f>私のWindowsラップトップには、アプリケーションを何も入れていない段階ですでに38,493個のファイルがあった。Python 3をインストールすると、そこにおよそ3,000個のファイルが追加された。主要なオペレーティングシステムのどれにおいても、ファイルはデータを格納するための最も基本的な枠組みになっている。この概念はとても深く根付いているので、ほとんどの人には<a href=http://en.wikipedia.org/wiki/Computer_file#History>これとは別の枠組みを想像する</a>ことすら難しいと思う。皆さんのコンピュータは、例えて言えば、大量のファイルの中で溺れているのだ。
+
+
+en:<h2 id=reading>Reading From Text Files</h2>
+ja:<h2 id=reading>テキストファイルから読み込む</h2>
+
+
+en:<p>Before you can read from a file, you need to open it. Opening a file in Python couldn&#8217;t be easier:
+ja:<p>ファイルの内容を読み込む前に、まずはファイルを開かなければならない。Pythonでファイルを開くのはすごく簡単だ：
+
+
+en:<p>Python has a built-in <code>open()</code> function, which takes a filename as an argument. Here the filename is <code class=pp>'examples/chinese.txt'</code>. There are five interesting things about this filename:
+ja:<p>Pythonには組み込みの<code>open()</code>関数があり、この関数は引数としてファイル名を受け取る。この例でのファイル名は<code class=pp>'examples/chinese.txt'</code>だ。このファイル名について、興味深いことが5つある：
+
+
+en:<li>It&#8217;s not just the name of a file; it&#8217;s a combination of a directory path and a filename. A hypothetical file-opening function could have taken two arguments&nbsp;&mdash;&nbsp;a directory path and a filename&nbsp;&mdash;&nbsp;but the <code>open()</code> function only takes one. In Python, whenever you need a &#8220;filename,&#8221; you can include some or all of a directory path as well.
+ja:<li>これは単なるファイル名ではなく、ディレクトリパスとファイル名の組み合わせになっている。ファイルを開く関数としては、ディレクトリパスとファイル名の2つの引数をとるものも考えられるが、<code>open()</code>関数は1つだけ受け取る。一般にPythonで「ファイル名」が必要になる場面においては、その中にディレクトリのパスも含めることができる。
+
+
+en:<li>The directory path uses a forward slash, but I didn&#8217;t say what operating system I was using. Windows uses backward slashes to denote subdirectories, while Mac OS X and Linux use forward slashes. But in Python, forward slashes always Just Work, even on Windows.
+ja:<li>このディレクトリパスにはフォワードスラッシュが使われているが、私がこの例で何のOSを使っているかについて言っていなかった。Windowsではサブディレクトリを表すのにバックスラッシュを使う一方で、Mac OS XやLinuxではフォワードスラッシュを使う。しかし、Pythonでは常にフォワードスラッシュを使えばいい。Windows上でもそれで動く。
+
+
+en:<li>The directory path does not begin with a slash or a drive letter, so it is called a <i>relative path</i>. Relative to what, you might ask? Patience, grasshopper.
+ja:<li>このディレクトリパスはスラッシュやドライブレターから始まっていないので、これは<em>相対パス</em>と呼ばれる。何に対して相対なの？と聞きたいかもしれない。おちつきなさい、バッタさん。
+
+
+en:<li>It&#8217;s a string. All modern operating systems (even Windows!) use Unicode to store the names of files and directories. Python 3 fully supports non-<abbr>ASCII</abbr> pathnames.
+ja:<li>このファイル名は文字列だ。すべての現代的なオペレーティングシステム（Windowsも！）はファイル名やディレクトリ名を表すのにUnicodeを使っている。Python 3は非<abbr>ASCII</abbr>のパス名を完全にサポートしている。
+
+
+
+en:<li>It doesn&#8217;t need to be on your local disk. You might have a network drive mounted. That &#8220;file&#8221; might be a figment of <a href=http://en.wikipedia.org/wiki/Filesystem_in_Userspace>an entirely virtual filesystem</a>. If your computer considers it a file and can access it as a file, Python can open it.
+ja:<li>このファイルがローカルディスク上にある必要はない。ネットワークドライブをマウントしているかもしれないし、そのファイルは<a href=http://en.wikipedia.org/wiki/Filesystem_in_Userspace>完全に仮想的なファイルシステム</a>が作り出す幻影かもしれない。コンピュータがファイルと見なし、ファイルとしてアクセスできるものであれば、Pythonはそれを開くことができる。
+
+
+en:<p>But that call to the <code>open()</code> function didn&#8217;t stop at the filename. There&#8217;s another argument, called <code>encoding</code>. Oh dear, <a href=strings.html#boring-stuff>that sounds dreadfully familiar</a>.
+ja:<p>しかし<code>open()</code>関数の呼び出しはファイル名だけで終わっていない。もう一つ<code>encoding</code>という引数がある。おやおや、これは<a href=strings.html#boring-stuff>うんざりするほど聞き覚えのあるもの</a>じゃないか。
+
+
+en:<h3 id=encoding>Character Encoding Rears Its Ugly Head</h3>
+ja:<h3 id=encoding>文字コードが不快な姿を現す</h3>
+
+
+en:<p>Bytes are bytes; <a href=strings.html#byte-arrays>characters are an abstraction</a>. A string is a sequence of Unicode characters. But a file on disk is not a sequence of Unicode characters; a file on disk is a sequence of bytes. So if you read a &#8220;text file&#8221; from disk, how does Python convert that sequence of bytes into a sequence of characters? It decodes the bytes according to a specific character encoding algorithm and returns a sequence of Unicode characters (otherwise known as a string).
+ja:<p>バイトはバイトであり、<a href=strings.html#byte-arrays>文字は抽象化</a>だ。文字列はUnicode文字のシーケンス（並び）だが、ディスク上のファイルはUnicode文字のシーケンスではなくバイトのシーケンスである。だとすると、「テキストファイル」をディスクから読むときに、Pythonはどのようにしてバイトのシーケンスを文字のシーケンスに変換すればよいのだろうか？ Pythonは、特定の文字コードのエンコーディングアルゴリズムに従ってバイト列をデコードし、Unicode文字のシーケンス（つまり文字列）を返すのだ。
+
+
+en:<aside>The default encoding is platform-dependent.</aside>
+ja:<aside>デフォルトの文字コードはプラットフォームに依存する。</aside>
+
+
+en:# This example was created on Windows. Other platforms may
+ja:# この例はWindows上で作成した。以下に理由を簡単に示すが、
+
+
+en:# behave differently, for reasons outlined below.
+ja:# ほかのプラットフォーム上では、異なる振る舞いをするかもしれない。
+
+
+en:<p>What just happened? You didn&#8217;t specify a character encoding, so Python is forced to use the default encoding. What&#8217;s the default encoding? If you look closely at the traceback, you can see that it&#8217;s dying in <code>cp1252.py</code>, meaning that Python is using CP-1252 as the default encoding here. (CP-1252 is a common encoding on computers running Microsoft Windows.) The CP-1252 character set doesn&#8217;t support the characters that are in this file, so the read fails with an ugly <code>UnicodeDecodeError</code>.
+ja:<p>一体何が起きたのだろうか？ 文字コードを指定しなかったので、Pythonはデフォルトの文字コードを使わざるを得なかったのだ。デフォルトの文字コードとは何だろう？ Tracebackをよく見てみると、プログラムは<code>cp1252.py</code>で停止していることが分かる。これは、ここでのデフォルトの文字コードとしてPythonがCP-1252を使っていることを意味している（CP-1252は西欧言語のWindowsマシンで一般的な文字コードの1つだ）。CP-1252文字セットはこのファイルに含まれている文字をサポートしていないので、不快な<code>UnicodeDecodeError</code>を伴って読み込みは失敗する。
+
+
+en:<p>But wait, it&#8217;s worse than that! The default encoding is <em>platform-dependent</em>, so this code <em>might</em> work on your computer (if your default encoding is <abbr>UTF-8</abbr>), but then it will fail when you distribute it to someone else (whose default encoding is different, like CP-1252).
+ja:<p>ちょっと待って欲しい、問題はもっと深刻だ！ デフォルトの文字コードは<em>プラットフォームに依存する</em>ので、あなたのコンピュータではこのコードが問題なく動く<em>かもしれない</em>が（デフォルトの文字コードが<abbr>UTF-8</abbr>の環境であればエラーは出ない）、これを誰か他の人（CP-1252などの異なるデフォルトの文字コードの環境の人）に配布したとたんに動かなくなってしまうのだ。
+
+
+en:<p><span class=u>&#x261E;</span>If you need to get the default character encoding, import the <code>locale</code> module and call <code>locale.getpreferredencoding()</code>. On my Windows laptop, it returns <code>'cp1252'</code>, but on my Linux box upstairs, it returns <code>'UTF8'</code>. I can&#8217;t even maintain consistency in my own house! Your results may be different (even on Windows) depending on which version of your operating system you have installed and how your regional/language settings are configured. This is why it&#8217;s so important to specify the encoding every time you open a file.
+ja:<p><span class=u>&#x261E;</span>デフォルトの文字コードを取得したければ、<code>locale</code>モジュールをインポートし、<code>locale.getpreferredencoding()</code>を呼び出せばいい。私のWindowsラップトップでは、この関数は<code>'cp1252'</code>を返したが、上の階にあるLinuxマシンでは<code>'UTF8'</code>を返した。私の家の中でさえ一貫していないのだ！ このデフォルトの値はOSのバージョンや地域・言語設定によっても変わりうる（Windowsでも異なる場合がある）。これこそが、ファイルを開くときに文字コードを必ず指定することが重要な理由だ。
+
+
+
+en:<h3 id=file-objects>Stream Objects</h3>
+ja:<h3 id=file-objects>ストリームオブジェクト</h3>
+
+
+en:<p>So far, all we know is that Python has a built-in function called <code>open()</code>. The <code>open()</code> function returns a <i>stream object</i>, which has methods and attributes for getting information about and manipulating a stream of characters.
+ja:<p>今までのところ分かったのは、<code>open()</code>という組み込み関数がPythonに存在するということだけだ。この<code>open()</code>関数は、<em>ストリームオブジェクト</em>と呼ばれるものを返す。ストリームオブジェクトは、文字のストリームから情報を取得したり、文字のストリームを操作するためのメソッドや属性を持っている。
+
+
+en:<li>The <code>name</code> attribute reflects the name you passed in to the <code>open()</code> function when you opened the file. It is not normalized to an absolute pathname.
+ja:<li><code>name</code>属性は、ファイルを開く際に<code>open()</code>関数に渡したパス名を表している。パスは、絶対パスへと正規化されてはいない。
+
+
+en:<li>Likewise, <code>encoding</code> attribute reflects the encoding you passed in to the <code>open()</code> function. If you didn&#8217;t specify the encoding when you opened the file (bad developer!) then the <code>encoding</code> attribute will reflect <code>locale.getpreferredencoding()</code>.
+ja:<li>同じように<code>encoding</code>属性は、<code>open()</code>関数に渡した文字コードを表している。ファイルを開くときに文字コードを指定しなかった場合は（ダメな開発者だ！）、<code>locale.getpreferredencoding()</code>の戻り値が<code>encoding</code>属性の値になる。
+
+
+en:<li>The <code>mode</code> attribute tells you in which mode the file was opened. You can pass an optional <var>mode</var> parameter to the <code>open()</code> function. You didn&#8217;t specify a mode when you opened this file, so Python defaults to <code>'r'</code>, which means &#8220;open for reading only, in text mode.&#8221; As you&#8217;ll see later in this chapter, the file mode serves several purposes; different modes let you write to a file, append to a file, or open a file in binary mode (in which you deal with bytes instead of strings).
+ja:<li><code>mode</code>属性は、ファイルがどのモードで開かれたのかを教えてくれる。<code>open()</code>関数にはオプションとして<var>mode</var>パラメータを渡すことができる。ファイルを開く際にモードを指定しなかったので、ここではデフォルト値の<code>'r'</code>がパラメータの値になっている。この<code>'r'</code>は、ファイルを読み込み専用のテキストモードで開くという意味だ。この章で後ほど見るように、ファイルモードはいくつかの目的のために使われる。モードを使い分けることによって、ファイルに書き込んだり、ファイルに追記したり、ファイルをバイナリモード（ファイルを文字列ではなくバイト列として扱うモード）で開くことができる。
+
+
+en:<p><span class=u>&#x261E;</span>The <a href=http://docs.python.org/3.1/library/io.html#module-interface>documentation for the <code>open()</code> function</a> lists all the possible file modes.
+ja:<p><span class=u>&#x261E;</span><a href=http://docs.python.org/3.1/library/io.html#module-interface><code>open()</code>関数のドキュメント</a>にすべてのファイルモードの一覧がある。
+
+
+en:<h3 id=read>Reading Data From A Text File</h3>
+ja:<h3 id=read>テキストファイルからデータを読み込む</h3>
+
+
+en:<p>After you open a file for reading, you&#8217;ll probably want to read from it at some point.
+ja:<p>ファイルを読み込み用に開いたら、次は、そのファイルの中身を読み込むということになるだろう。
+
+
+en:<li>Once you open a file (with the correct encoding), reading from it is just a matter of calling the stream object&#8217;s <code>read()</code> method. The result is a string.
+ja:<li>いったん（正しい文字コードで）ファイルを開いてしまえば、そこからの読み込みはストリームオブジェクトの<code>read()</code>メソッドを呼び出すだけだ。読み込みの結果として文字列が返される。
+
+
+en:<li>Perhaps somewhat surprisingly, reading the file again does not raise an exception. Python does not consider reading past end-of-file to be an error; it simply returns an empty string.
+ja:<li>少し意外かもしれないが、再びファイルの読み込みを行っても例外は発生しない。Pythonは、ファイルの終端 (EOF) からさらに読み込もうとしてもエラーとは見なさず、単に空の文字列を返すだけなのだ。
+
+
+en:<aside>Always specify an <code>encoding</code> parameter when you open a file.</aside>
+ja:<aside>ファイルを開くときは必ず<code>encoding</code>パラメータを指定しよう。</aside>
+
+
+en:<p>What if you want to re-read a file?
+ja:<p>ファイルを再び読み込みたいときはどうすればいいのだろうか？
+
+
+en:<li>Since you&#8217;re still at the end of the file, further calls to the stream object&#8217;s <code>read()</code> method simply return an empty string.
+ja:<li>まだファイルの終わりにいるので、ストリームオブジェクトの<code>read()</code>メソッドをさらに呼び出しても空の文字列が返されるだけだ。
+
+
+en:<li>The <code>seek()</code> method moves to a specific byte position in a file.
+ja:<li><code>seek()</code>メソッドを使えば、ファイルの特定のバイト位置へ移動できる。
+
+
+en:<li>The <code>read()</code> method can take an optional parameter, the number of characters to read.
+ja:<li><code>read()</code>メソッドは、オプション引数として、読み込む文字数を受け取ることができる。
+
+
+en:<li>If you like, you can even read one character at a time.
+ja:<li>お望みなら、1文字ずつ読み込むこともできる。
+
+
+en:<li>16 + 1 + 1 = &hellip; 20?
+ja:<li>16 + 1 + 1 = &hellip;&hellip; 20 ？
+
+
+en:<p>Let&#8217;s try that again.
+ja:<p>もう一度やってみよう。
+
+
+en:<li>Move to the 17<sup>th</sup> byte.
+ja:<li>17番目のバイトへ移動する。
+
+
+en:<li>Read one character.
+ja:<li>1文字読み込む。
+
+
+en:<li>Now you&#8217;re on the 20<sup>th</sup> byte.
+ja:<li>現在、20番目のバイトにいる。
+
+
+en:<p>Do you see it yet? The <code>seek()</code> and <code>tell()</code> methods always count <em>bytes</em>, but since you opened this file as text, the <code>read()</code> method counts <em>characters</em>. Chinese characters <a href=strings.html#boring-stuff>require multiple bytes to encode in <abbr>UTF-8</abbr></a>. The English characters in the file only require one byte each, so you might be misled into thinking that the <code>seek()</code> and <code>read()</code> methods are counting the same thing. But that&#8217;s only true for some characters.
+ja:<p>もうお分かりだろうか？ <code>seek()</code>と<code>tell()</code>メソッドは常に位置を<em>バイト</em>単位で数えるが、ファイルをテキストとして開いたので、<code>read()</code>メソッドは<em>文字</em>単位で数えるのだ。中国語の文字を<a href=strings.html#boring-stuff><abbr>UTF-8</abbr>で表すには数バイトが必要になる</a>。ファイル中の英語の文字は1つの文字ごとに1バイトしか必要としないので、<code>seek()</code>と<code>read()</code>メソッドは同じものを数えていると勘違いしていまうかもしれない。だが、それは一部の文字にしか当てはまらないのだ。
+
+
+en:<p>But wait, it gets worse!
+ja:<p>ちょっと待って、もっと悪いことがある！
+
+
+en:<li>Move to the 18<sup>th</sup> byte and try to read one character.
+ja:<li>18番目のバイトに移動し、1文字の読み込みを試みる。
+
+
+en:<li>Why does this fail? Because there isn&#8217;t a character at the 18<sup>th</sup> byte. The nearest character starts at the 17<sup>th</sup> byte (and goes for three bytes). Trying to read a character from the middle will fail with a <code>UnicodeDecodeError</code>.
+ja:<li>これがどうしてエラーになるのだろう？ 理由は、18番目のバイトに文字がないからだ。最も近くにある文字は17番目のバイトから始まっている（そして3バイト続いている）。中途半端な位置から文字を読み込もうとすると<code>UnicodeDecodeError</code>によって処理は失敗する。
+
+
+en:<h3 id=close>Closing Files</h3>
+ja:<h3 id=close>ファイルを閉じる</h3>
+
+
+en:<p>Open files consume system resources, and depending on the file mode, other programs may not be able to access them. It&#8217;s important to close files as soon as you&#8217;re finished with them.
+ja:<p>ファイルを開くとシステムリソースが消費されるし、ファイルモードによっては他のプログラムがそのファイルにアクセスできなくなるかもしれない。ファイルを使い終えたら、すみやかにそのファイルを閉じることが重要だ。
+
+
+en:<p>Well <em>that</em> was anticlimactic.
+ja:<p>これだけ。なんだか拍子抜けだ。
+
+
+en:<p>The stream object <var>a_file</var> still exists; calling its <code>close()</code> method doesn&#8217;t destroy the object itself. But it&#8217;s not terribly useful.
+ja:<p>ストリームオブジェクトの<var>a_file</var>はまだ存在している。ストリームオブジェクトの<code>close()</code>メソッドを呼び出しても、そのオブジェクト自体は破棄されないのだ。しかし、このオブジェクトは何の役にも立たない。
+
+
+en:<li>You can&#8217;t read from a closed file; that raises an <code>IOError</code> exception.
+ja:<li>閉じたファイルから読み込むことは出来ない。これは<code>IOError</code>例外を送出する。
+
+
+en:<li>You can&#8217;t seek in a closed file either.
+ja:<li>閉じたファイルをシークすることはできない。
+
+
+en:<li>There&#8217;s no current position in a closed file, so the <code>tell()</code> method also fails.
+ja:<li>閉じたファイルには現在位置が存在しないので、<code>tell()</code>メソッドも使えない。
+
+
+en:<li>Perhaps surprisingly, calling the <code>close()</code> method on a stream object whose file has been closed does <em>not</em> raise an exception. It&#8217;s just a no-op.
+ja:<li>意外かもしれないが、既に閉じられたストリームオブジェクトの<code>close()</code>を呼び出しても、例外は<em>発生しない</em>。何も行われないだけだ。
+
+
+en:<li>Closed stream objects do have one useful attribute: the <code>closed</code> attribute will confirm that the file is closed.
+ja:<li>閉じたストリームオブジェクトには、1つだけ有用な属性がある。それは<code>closed</code>属性で、これによってファイルが閉じられているかが確認できる。
+
+
+en:<h3 id=with>Closing Files Automatically</h3>
+ja:<h3 id=with>ファイルを自動的に閉じる</h3>
+
+
+en:<aside><code>try..finally</code> is good. <code>with</code> is better.</aside>
+ja:<aside><code>try..finally</code>は良い。<code>with</code>はもっと良い。</aside>
+
+
+en:<p>Stream objects have an explicit <code>close()</code> method, but what happens if your code has a bug and crashes before you call <code>close()</code>? That file could theoretically stay open for much longer than necessary. While you&#8217;re debugging on your local computer, that&#8217;s not a big deal. On a production server, maybe it is.
+ja:<p>ストリームオブジェクトには明白な<code>close()</code>メソッドがあるが、もしコードにバグがあり、<code>close()</code>を呼び出す前にクラッシュしてしまったら何が起きるのだろうか？ 理論的には、ファイルが必要以上に開かれ続けることになりうる。これはローカルコンピュータでデバッグしている時点では大した問題にならないが、実運用するサーバ上ではおそらく問題となるだろう。
+
+
+en:<p>Python 2 had a solution for this: the <code>try..finally</code> block. That still works in Python 3, and you may see it in other people&#8217;s code or in older code that was <a href=case-study-porting-chardet-to-python-3.html>ported to Python 3</a>. But Python 2.6 introduced a cleaner solution, which is now the preferred solution in Python 3: the <code>with</code> statement.
+ja:<p>Python 2にはこれを解決する方法が1つあった: <code>try..finally</code>ブロックだ。これはPython 3でも使えるので、他人のコードや<a href=case-study-porting-chardet-to-python-3.html>Python 3へ移植されたコード</a>で見かけるかもしれない。しかし、もっと明快な解決策がPython 2.6で導入されていて、Python 3ではそちらを使うほうが望ましい。その解決策とは<code>with</code>文だ。
+
+
+en:<p>This code calls <code>open()</code>, but it never calls <code>a_file.close()</code>. The <code>with</code> statement starts a code block, like an <code>if</code> statement or a <code>for</code> loop. Inside this code block, you can use the variable <var>a_file</var> as the stream object returned from the call to <code>open()</code>. All the regular stream object methods are available&nbsp;&mdash;&nbsp;<code>seek()</code>, <code>read()</code>, whatever you need. When the <code>with</code> block ends, <em>Python calls <code>a_file.close()</code> automatically</em>.
+ja:<p>このコードは<code>open()</code>を呼び出しているが、<code>a_file.close()</code>の呼び出しはどこにもない。<code>with</code>文は、<code>if</code>文や<code>for</code>ループと同じようにコードブロックを開始する。このコードブロックの中では、変数<var>a_file</var>を、<code>open()</code>から返されたストリームオブジェクトを表すものとして使うことができる。<code>seek()</code>や<code>read()</code>など、必要とするすべての標準のストリームオブジェクトメソッドが利用できる。<code>with</code>ブロックの終わりに達すると、Pythonは<code>a_file.close()</code>を<em>自動的に呼び出す</em>。
+
+
+en:<p>Here&#8217;s the kicker: no matter how or when you exit the <code>with</code> block, Python will close that file&hellip; even if you &#8220;exit&#8221; it via an unhandled exception. That&#8217;s right, even if your code raises an exception and your entire program comes to a screeching halt, that file will get closed. Guaranteed.
+ja:<p>重要なのは次の点だ： いつ・どのように<code>with</code>ブロックを抜け出したとしても、Pythonはそのファイルを閉じる&hellip;&hellip;たとえ未処理例外によって「抜け出した」ときでも閉じるのだ。そう、コードが例外を発生し、プログラム全体が悲鳴を上げて停止したとしても、そのファイルは閉じられる。これは保証されているのだ。
+
+
+en:<p><span class=u>&#x261E;</span>In technical terms, the <code>with</code> statement creates a <dfn>runtime context</dfn>. In these examples, the stream object acts as a <dfn>context manager</dfn>. Python creates the stream object <var>a_file</var> and tells it that it is entering a runtime context. When the <code>with</code> code block is completed, Python tells the stream object that it is exiting the runtime context, and the stream object calls its own <code>close()</code> method. See <a href=special-method-names.html#context-managers>Appendix B, &#8220;Classes That Can Be Used in a <code>with</code> Block&#8221;</a> for details.
+ja:<p><span class=u>&#x261E;</span>技術的な用語で言えば、<code>with</code>文は<dfn>実行時コンテクスト</dfn>というものを生成する。この例では、ストリームオブジェクトは<dfn>コンテクストマネージャ</dfn>として機能する。Pythonは<var>a_file</var>というストリームオブジェクトを作り、そのオブジェクトに対して実行時コンテクストに入ることを告げる。<code>with</code>コードブロックが終了すると、Pythonはストリームオブジェクトに対して、ランタイムコンテクストから抜け出すことを告げ、ストリームオブジェクトは自身の<code>close()</code>メソッドを呼び出す。詳細は<a href=special-method-names.html#context-managers>Appendix B, 「<code>with</code>ブロックで使用できるクラス」</a>を参照してほしい。
+
+
+en:<p>There&#8217;s nothing file-specific about the <code>with</code> statement; it&#8217;s just a generic framework for creating runtime contexts and telling objects that they&#8217;re entering and exiting a runtime context. If the object in question is a stream object, then it does useful file-like things (like closing the file automatically). But that behavior is defined in the stream object, not in the <code>with</code> statement. There are lots of other ways to use context managers that have nothing to do with files. You can even create your own, as you&#8217;ll see later in this chapter.
+ja:<p><code>with</code>文はファイルのためだけの構文ではない。<code>with</code>文は、実行時コンテクストを作成し、そのコンテクストへの入出をオブジェクトに伝える汎用のフレームワークにすぎないのだ。対象となるオブジェクトがストリームオブジェクトなら、ファイルライクな処理（例えばファイルを自動で閉じる）が行われるだろう。だけれど、その振る舞いは<code>with</code>文に定義されているのではなく、ストリームオブジェクトの中で定義されているのだ。コンテクストマネージャは、ファイルとは関係のない様々な用途で使用できる。この章で後ほどで見るように、独自のコンテクストマネージャを作ることもできる。
+
+
+en:<h3 id=for>Reading Data One Line At A Time</h3>
+ja:<h3 id=for>データを一行ずつ読み込む</h3>
+
+
+en:<p>A &#8220;line&#8221; of a text file is just what you think it is&nbsp;&mdash;&nbsp;you type a few words and press <kbd>ENTER</kbd>, and now you&#8217;re on a new line. A line of text is a sequence of characters delimited by&hellip; what exactly? Well, it&#8217;s complicated, because text files can use several different characters to mark the end of a line. Every operating system has its own convention. Some use a carriage return character, others use a line feed character, and some use both characters at the end of every line.
+ja:<p>テキストファイルの「行」というのは、皆さんが考えている通りのものだ&nbsp;&mdash;&nbsp;いくつか単語を入力して<kbd>ENTER</kbd>を押せば、新しい行に入る。テキストの行は文字のシーケンスであって、それは改行文字によって区切られている&hellip;&hellip;だけれど、この改行文字とは一体何のことだろう？ 実のところ、これは複雑な問題で、現実には何種類もの文字が行の末尾を表す記号として使われている。この問題については、どのOSも独自の慣習を持っている。行の終わりにキャリッジリターン文字を使うOSもあれば、ラインフィード文字を使うOSもあるし、この二つをまとめて行末に置くOSもある。
+
+
+en:<p>Now breathe a sigh of relief, because <em>Python handles line endings automatically</em> by default. If you say, &#8220;I want to read this text file one line at a time,&#8221; Python will figure out which kind of line ending the text file uses and and it will all Just Work.
+ja:<p>でも安心して欲しい。<em>Pythonはデフォルトで行の末尾を自動的に処理してくれる</em>のだ。「ファイルを一行ずつ読みたい」と言えば、Pythonはテキストファイルで使われている行終端の種類を自動で判別してくれるので、何の問題も起きない。
+
+
+en:<p><span class=u>&#x261E;</span>If you need fine-grained control over what&#8217;s considered a line ending, you can pass the optional <code>newline</code> parameter to the <code>open()</code> function. See <a href=http://docs.python.org/3.1/library/io.html#module-interface>the <code>open()</code> function documentation</a> for all the gory details.
+ja:<p><span class=u>&#x261E;</span>もし行の終端として何を使うかを細かく制御する必要がある場合は、<code>open()</code>関数にオプションの<code>newline</code>パラメータを渡すことができる。これについての複雑な詳細を知りたい場合は<a href=http://docs.python.org/3.1/library/io.html#module-interface><code>open()</code>関数のドキュメント</a>を参照してほしい。
+
+
+en:<p>So, how do you actually do it? Read a file one line at a time, that is. It&#8217;s so simple, it&#8217;s beautiful.
+ja:<p>さて、具体的にはどうすればよいのだろうか？ ファイルを1行ずつ読む方法のことだ。これは実に簡単で、そして美しい。
+
+
+en:<p class=d>[<a href=examples/oneline.py>download <code>oneline.py</code></a>]
+ja:<p class=d>[<a href=examples/oneline.py><code>oneline.py</code>をダウンロードする</a>]
+
+
+en:<li>Using <a href=#with>the <code>with</code> pattern</a>, you safely open the file and let Python close it for you.
+ja:<li><a href=#with><code>with</code>パターンを使い</a>、安全にファイルを開き、Pythonに閉じさせる。
+
+
+en:<li>To read a file one line at a time, use a <code>for</code> loop. That&#8217;s it. Besides having explicit methods like <code>read()</code>, <em>the stream object is also an <a href=iterators.html>iterator</a></em> which spits out a single line every time you ask for a value.
+ja:<li>ファイルを1行ずつ読み込むには<code>for</code>ループを使えばいい。それだけだ。ストリームオブジェクトは<code>read()</code>のような明示的なメソッドを持つだけではなく、<em><a href=iterators.html>イテレータ</a>としても振る舞うのだ</em>。このイテレータは、値が要求されるたびに1つの行を返す。
+
+
+en:<li>Using <a href=strings.html#formatting-strings>the <code>format()</code> string method</a>, you can print out the line number and the line itself. The format specifier <code>{:>4}</code> means &#8220;print this argument right-justified within 4 spaces.&#8221; The <var>a_line</var> variable contains the complete line, carriage returns and all. The <code>rstrip()</code> string method removes the trailing whitespace, including the carriage return characters.
+ja:<li><a href=strings.html#formatting-strings>文字列の<code>format()</code>メソッドを使うことで</a>、行番号と行自身を出力することができる。このフォーマット指定子<code>{:>4}</code>は「4文字分のスペースに右詰めする」ことを意味する。<var>a_line</var>変数は行全体を含んでおり、それには改行文字も含まれる。文字列メソッドの<code>rstrip()</code>は、改行文字を含む行末の空白を取り除く。
+
+
+en:<p>Did you get this error?
+ja:<p>このエラーが起きただろうか？
+
+
+en:<p>If so, you&#8217;re probably using Python 3.0. You should really upgrade to Python 3.1.
+ja:<p>もし起きたのなら、おそらくPython 3.0を使っているのだろう。Python 3.1にアップグレードして欲しい。
+
+
+en:<p>Python 3.0 supported string formatting, but only with <a href=strings.html#formatting-strings>explicitly numbered format specifiers</a>. Python 3.1 allows you to omit the argument indexes in your format specifiers. Here is the Python 3.0-compatible version for comparison:
+ja:<p>Python 3.0は文字列フォーマットをサポートしているが、それは<a href=strings.html#formatting-strings>明示的に番号付けされたフォーマット指定子</a>だけに限られる。Python 3.1ではフォーマット指定子の中の引数インデックスを省略できる。比較のために、Python 3.0と互換性のあるバージョンも示しておく：
+
+
+en:<h2 id=writing>Writing to Text Files</h2>
+ja:<h2 id=writing>テキストファイルに書き込む</h2>
+
+
+en:<aside>Just open a file and start writing.</aside>
+ja:<aside>ファイルを開いて書き始めるだけだ。</aside>
+
+
+en:<p>You can write to files in much the same way that you read from them. First you open a file and get a stream object, then you use methods on the stream object to write data to the file, then you close the file.
+ja:<p>ファイルへの書き込みは、読み込みとほぼ同じ方法で行うことができる。まずファイルを開いてストリームオブジェクトを取得し、次にストリームオブジェクトのメソッドを使ってファイルにデータを書き込み、最後にファイルを閉じる。
+
+
+en:<p>To open a file for writing, use the <code>open()</code> function and specify the write mode. There are two file modes for writing:
+ja:<p>ファイルを書き込み用に開くには、書き込みモードを指定して<code>open()</code>関数を呼びだす。書き込み用のファイルモードは2種類ある：
+
+
+en:<li>&#8220;Write&#8221; mode will overwrite the file. Pass <code>mode='w'</code> to the <code>open()</code> function.
+ja:<li>「書き込み」モードはファイルを上書きする。<code>open()</code>関数に<code>mode='w'</code>を渡そう。
+
+
+en:<li>&#8220;Append&#8221; mode will add data to the end of the file. Pass <code>mode='a'</code> to the <code>open()</code> function.
+ja:<li>「追記」モードはファイルの終わりにデータを追加する。<code>open()</code>関数に<code>mode='a'</code>を渡そう。
+
+
+
+en:<p>Either mode will create the file automatically if it doesn&#8217;t already exist, so there&#8217;s never a need for any sort of fiddly &#8220;if the file doesn&#8217;t exist yet, create a new empty file just so you can open it for the first time&#8221; function. Just open a file and start writing.
+ja:<p>どちらのモードであっても、ファイルがまだ存在していない場合にはファイルを自動的に作成するので、「初回でも開けるようにファイルがまだ存在しない場合には空のファイルを作成する関数」のような厄介なものは決して必要ない。ファイルを開いて書き始めるだけでいい。
+
+
+en:<p>You should always close a file as soon as you&#8217;re done writing to it, to release the file handle and ensure that the data is actually written to disk. As with reading data from a file, you can call the stream object&#8217;s <code>close()</code> method, or you can use the <code>with</code> statement and let Python close the file for you. I bet you can guess which technique I recommend.
+ja:<p>書き込みが終わったら、できるだけ速やかにファイルを閉じるようにしよう。そうすれば、書き込んだ内容がディスクに確実に保存されるし、ファイルハンドルも解放される。ファイルを読み込むときと同じで、ストリームオブジェクトの<code>close()</code>メソッドを使うこともできるし、<code>with</code>文を使ってPythonに閉じさせることもできる。私がどちらを奨めるかは言う必要がないはずだ。
+
+
+en:<li>You start boldly by creating the new file <code>test.log</code> (or overwriting the existing file), and opening the file for writing. The <code>mode='w'</code> parameter means open the file for writing. Yes, that&#8217;s all as dangerous as it sounds. I hope you didn&#8217;t care about the previous contents of that file (if any), because that data is gone now.
+ja:<li>新しいファイル<code>test.log</code>を大胆に作成し（もしくは既存のファイルを上書きし）、そのファイルを書き込み用に開くことから始める。<code>mode='w'</code>パラメータはファイルを書き込み用に開くことを意味している。そう、これはとても危険なことだ。もしこのファイルが既に存在していたのなら、その内容を気にかけていなかったことを祈りたい。そのデータはもう消えてしまったからね。
+
+
+en:<li>You can add data to the newly opened file with the <code>write()</code> method of the stream object returned by the <code>open()</code> function. After the <code>with</code> block ends, Python automatically closes the file.
+ja:<li><code>open()</code>関数から返されたストリームオブジェクトの<code>write()</code>メソッドを使うことで、新しく開いたファイルにデータを追加することができる。<code>with</code>ブロックが終わると、Pythonは自動的にファイルを閉じる。
+
+
+en:<li>That was so fun, let&#8217;s do it again. But this time, with <code>mode='a'</code> to append to the file instead of overwriting it. Appending will <em>never</em> harm the existing contents of the file.
+ja:<li>面白かったので、もう一度やってみよう。しかし、今度はファイルへ上書きするのではなく、<code>mode='a'</code>を用いてファイルに追記しよう。追記によってファイルの既存の内容が破壊されることは<em>絶対に無い</em>。
+
+
+en:<li>Both the original line you wrote and the second line you appended are now in the file <code>test.log</code>. Also note that neither carriage returns nor line feeds are included. Since you didn&#8217;t write them explicitly to the file either time, the file doesn&#8217;t include them. You can write a carriage return with the <code>'\r'</code> character, and/or a line feed with the <code>'\n'</code> character. Since you didn&#8217;t do either, everything you wrote to the file ended up on one line.
+ja:<li>書き込んだ元の行と、2回目に追加した行の両方が<code>test.log</code>ファイルに含まれている。改行（キャッリッジリターン・ラインフィード）が含まれていないことにも注意しよう。改行文字をファイルに明示的に書き込まなかったので、ファイルはそれを含んでいない。キャリッジリターンは文字<code>'\r'</code>として書き込むことができるし、ラインフィードは文字<code>'\n'</code>として書き込むことができる。このどちらも行っていないので、ファイルに書き込んだものはすべて1行になってしまっている。
+
+
+en:<h3 id=encoding-again>Character Encoding Again</h3>
+ja:<h3 id=encoding-again>文字コード再び</h3>
+
+
+en:<p>Did you notice the <code>encoding</code> parameter that got passed in to the <code>open()</code> function while you were <a href=#writing>opening a file for writing</a>? It&#8217;s important; don&#8217;t ever leave it out! As you saw in the beginning of this chapter, files don&#8217;t contain <i>strings</i>, they contain <i>bytes</i>. Reading a &#8220;string&#8221; from a text file only works because you told Python what encoding to use to read a stream of bytes and convert it to a string. Writing text to a file presents the same problem in reverse. You can&#8217;t write characters to a file; <a href=strings.html#byte-arrays>characters are an abstraction</a>. In order to write to the file, Python needs to know how to convert your string into a sequence of bytes. The only way to be sure it&#8217;s performing the correct conversion is to specify the <code>encoding</code> parameter when you open the file for writing.
+ja:<p><a href=#writing>ファイルを書き込み用に開く</a>際に、<code>open()</code>関数に<code>encoding</code>パラメータを渡していることに気づいただろうか？ これは非常に重要なので、決して省略してはならない。この章の始めで見たように、ファイルは<em>文字列</em>ではなく<em>バイト列</em>を含んでいる。バイトのストリームを読み込んで文字列に変換するのに使う文字コードを指定したからこそ、「文字列」を読み込むことができるのだ。テキストファイルに書き込む場合には、同じ問題が裏返しになって現れる。ファイルに文字を書き込むことはできない。<a href=strings.html#byte-arrays>文字は抽象化</a>だからだ。ファイルに書き込むためには、文字列をバイトのシーケンスに変換する方式を指定する必要がある。正しい変換を行わせる唯一の方法は、ファイルを書き込み用に開くときに、<code>encoding</code>パラメータを指定することだ。
+
+
+en:<h2 id=binary>Binary Files</h2>
+ja:<h2 id=binary>バイナリファイル</h2>
+
+
+en:<p class=ss><img src=examples/beauregard.jpg alt='my dog Beauregard' width=100 height=100>
+ja:<p class=ss><img src=examples/beauregard.jpg alt='私の愛犬 ボーレガード' width=100 height=100>
+
+
+en:<p>Not all files contain text. Some of them contain pictures of my dog.
+ja:<p>ファイルというのテキストばかりではない。いくつかのファイルには私の愛犬の写真が入っている。
+
+
+en:<li>Opening a file in binary mode is simple but subtle. The only difference from opening it in text mode is that the <code>mode</code> parameter contains a <code>'b'</code> character.
+ja:<li>ファイルをバイナリモードで開くのはシンプルだが、違いはわずかだ。テキストモードで開く場合との唯一の差は、<code>mode</code>パラメータに<code>'b'</code>という文字を含めることだ。
+
+
+en:<li>The stream object you get from opening a file in binary mode has many of the same attributes, including <code>mode</code>, which reflects the <code>mode</code> parameter you passed into the <code>open()</code> function.
+ja:<li>ファイルをバイナリモードで開くことによって取得したストリームオブジェクトはテキストファイルの時と同じ属性の多くを含んでいる。その１つに<code>mode</code>があり、これは<code>open()</code>関数に渡した<code>mode</code>パラメータを反映している。
+
+
+en:<li>Binary stream objects also have a <code>name</code> attribute, just like text stream objects.
+ja:<li>バイナリストリームオブジェクトは、テキストストリームオブジェクトと同様に<code>name</code>属性も持っている。
+
+
+en:<li>Here&#8217;s one difference, though: a binary stream object has no <code>encoding</code> attribute. That makes sense, right? You&#8217;re reading (or writing) bytes, not strings, so there&#8217;s no conversion for Python to do. What you get out of a binary file is exactly what you put into it, no conversion necessary.
+ja:<li>ここに1つの違いがある。バイナリストリームオブジェクトには<code>encoding</code>属性がないのだ。この理由はお分かりだと思う。今は文字列ではなくバイト列を読み書きしているのだから、変換を施す必要などないのだ。バイナリファイルを読み込む時は、書き込まれた内容をそのまま取り出している。そこに変換処理が入り込む余地はない。
+
+
+en:<p>Did I mention you&#8217;re reading bytes? Oh yes you are.
+ja:<p>バイト列を読み込んでいるということを言ってあっただろうか。もちろん、バイト列を読み込んでいる。
+
+
+en:<li>Like text files, you can read binary files a little bit at a time. But there&#8217;s a crucial difference&hellip;
+ja:<li>テキストファイルと同様に、バイナリファイルを少しずつ読み込むことができる。しかし、ここには重大な違いがあり&hellip;&hellip;
+
+
+en:<li>&hellip;you&#8217;re reading bytes, not strings. Since you opened the file in binary mode, the <code>read()</code> method takes <em>the number of bytes to read</em>, not the number of characters.
+ja:<li>&hellip;&hellip;文字列ではなく、バイト列を読み込んでいるのだ。ファイルをバイナリモードで開いたので、<code>read()</code>メソッドは文字数ではなく<em>読み込むバイト数</em>を引数にとる。
+
+
+en:<li>That means that there&#8217;s never <a href=#read>an unexpected mismatch</a> between the number you passed into the <code>read()</code> method and the position index you get out of the <code>tell()</code> method. The <code>read()</code> method reads bytes, and the <code>seek()</code> and <code>tell()</code> methods track the number of bytes read. For binary files, they&#8217;ll always agree.
+ja:<li>これが意味するのは、<code>read()</code>に渡した数と<code>tell()</code>メソッドが返すインデックスとのあいだには<a href=#read>予想外の不一致</a>が決して起き得ないということだ。<code>read()</code>メソッドはバイトを読み込み、<code>seek()</code>と<code>tell()</code>メソッドは読み込んだバイト数を追跡する。バイナリファイルの場合、これらは常に一致する。
+
+
+en:<h2 id=file-like-objects>Stream Objects From Non-File Sources</h2>
+ja:<h2 id=file-like-objects>ファイル以外をソースとするストリームオブジェクト</h2>
+
+
+en:<aside>To read from a fake file, just call <code>read()</code>.</aside>
+ja:<aside>疑似ファイルから読み込むには、<code>read()</code>を呼び出すだけだ。</aside>
+
+
+en:<p>Imagine you&#8217;re writing a library, and one of your library functions is going to read some data from a file. The function could simply take a filename as a string, go open the file for reading, read it, and close it before exiting. But you shouldn&#8217;t do that. Instead, your <abbr>API</abbr> should take <em>an arbitrary stream object</em>.
+ja:<p>今、ライブラリを書いているとしよう。そして、そのライブラリの1つの関数はファイルからデータを読み込もうとしているとする。その関数は、「ファイル名を文字列として受け取り、そのファイルを読み込み用に開き、それを読み込み、関数を抜け出る前にそのファイルを閉じる」という単純な設計にもできるが、そうすべきではない。その代わりに、あなたの<abbr>API</abbr>は<em>任意のストリームオブジェクト</em>を受け取るようにすべきだ。
+
+
+en:<p>In the simplest case, a stream object is anything with a <code>read()</code> method which takes an optional <var>size</var> parameter and returns a string. When called with no <var>size</var> parameter, the <code>read()</code> method should read everything there is to read from the input source and return all the data as a single value. When called with a <var>size</var> parameter, it reads that much from the input source and returns that much data. When called again, it picks up where it left off and returns the next chunk of data.
+ja:<p>最も単純な場合、<code>read()</code>メソッド（オプションとして<var>size</var>パラメータを受け取り、文字列を戻り値として返す）を持っているオブジェクトなら何だってストリームオブジェクトだといえる。<var>size</var>パラメータなしで呼ばれた場合は、<code>read()</code>メソッドは入力ソースを読み込んで、そのすべてのデータを一つの値として返さなければならない。<var>size</var>パラメータと共に呼び出された場合は、入力データからその分を読み込んで返す。再度呼ばれときは、中断した場所を見つけ、その次のデータの固まりを返す。
+
+
+en:<p>That sounds exactly like the stream object you get from opening a real file. The difference is that <em>you&#8217;re not limiting yourself to real files</em>. The input source that&#8217;s being &#8220;read&#8221; could be anything: a web page, a string in memory, even the output of another program. As long as your functions take a stream object and simply call the object&#8217;s <code>read()</code> method, you can handle any input source that acts like a file, without specific code to handle each kind of input.
+ja:<p>これは実際のファイルを開いたときのストリームオブジェクトに非常によく似ている。違いは<em>本物のファイルだとは限らない</em>ということだ。「読み込む」入力ソースは何でも良く、Webページや、メモリ上の文字列、他のプログラムの出力でも良い。関数がストリームオブジェクトを受け取り、そのオブジェクトの<code>read()</code>メソッドを呼び出す限り、ファイルとして振る舞ういかなる入力であっても、それらを扱うための専用のコードなしに扱うことができる。
+
+
+en:<li>The <code>io</code> module defines the <code>StringIO</code> class that you can use to treat a string in memory as a file.
+ja:<li><code>io</code>モジュールは<code>StringIO</code>クラスを定義しており、これを使うと、メモリ上の文字列をあたかもファイルであるかのように扱うことができる。
+
+
+en:<li>To create a stream object out of a string, create an instance of the <code>io.StringIO()</code> class and pass it the string you want to use as your &#8220;file&#8221; data. Now you have a stream object, and you can do all sorts of stream-like things with it.
+ja:<li>文字列からストリームオブジェクトを作るには、「ファイル」のデータとして扱いたい文字列を渡して<code>io.StringIO()</code>クラスのインスタンスを作成すればよい。ストリームオブジェクトを手に入れたので、これを使ってストリームライクなあらゆる操作ができる。
+
+
+en:<li>Calling the <code>read()</code> method &#8220;reads&#8221; the entire &#8220;file,&#8221; which in the case of a <code>StringIO</code> object simply returns the original string.
+ja:<li><code>read()</code>メソッドは「ファイル」の中身を全て「読み出す」関数だが、<code>StringIO</code>の場合は単純に元の文字列が返される。
+
+
+en:<li>Just like a real file, calling the <code>read()</code> method again returns an empty string.
+ja:<li>本物のファイルと同様に、<code>read()</code>メソッドをもう一度呼び出すと空の文字列が返される。
+
+
+en:<li>You can explicitly seek to the beginning of the string, just like seeking through a real file, by using the <code>seek()</code> method of the <code>StringIO</code> object.
+ja:<li><code>StringIO</code>オブジェクトの<code>seek()</code>メソッドを使うことで、本物のファイルをシークする時のように、文字列の先頭に明示的にシークすることができる。
+
+
+en:<li>You can also read the string in chunks, by passing a <var>size</var> parameter to the <code>read()</code> method.
+ja:<li><var>size</var>パラメータを<code>read()</code>メソッドに渡すことで、文字列を小分けにして読み込むこともできる。
+
+
+en:<p><span class=u>&#x261E;</span><code>io.StringIO</code> lets you treat a string as a text file. There&#8217;s also a <code>io.BytesIO</code> class, which lets you treat a byte array as a binary file.
+ja:<p><span class=u>&#x261E;</span><code>io.StringIO</code>を使うと、文字列をテキストファイルのように扱うことができる。また<code>io.BytesIO</code>クラスというものもあり、これを使うとバイト配列をバイナリファイルとして扱うことができる。
+
+
+en:<h3 id=gzip>Handling Compressed Files</h3>
+ja:<h3 id=gzip>圧縮ファイルを扱う</h3>
+
+
+en:<p>The Python standard library contains modules that support reading and writing compressed files. There are a number of different compression schemes; the two most popular on non-Windows systems are <a href=http://docs.python.org/3.1/library/gzip.html>gzip</a> and <a href=http://docs.python.org/3.1/library/bz2.html>bzip2</a>. (You may have also encountered <a href=http://docs.python.org/3.1/library/zipfile.html>PKZIP archives</a> and <a href=http://docs.python.org/3.1/library/tarfile.html>GNU Tar archives</a>. Python has modules for those, too.)
+ja:<p>Python標準ライブラリには、圧縮ファイルの読み書きをサポートするモジュールが含まれている。圧縮方式には様々な種類があるが、Windows以外のシステムにおいて最も広く使われているのは<a href=http://docs.python.org/3.1/library/gzip.html>gzip</a>と<a href=http://docs.python.org/3.1/library/bz2.html>bzip2</a>だ（<a href=http://docs.python.org/3.1/library/zipfile.html>PKZIPアーカイブ</a>や<a href=http://docs.python.org/3.1/library/tarfile.html>GNU Tarアーカイブ</a>にも出会ったことがあるかもしれない。Pythonには、これらを扱うモジュールも含まれている）。
+
+
+en:<p>The <code>gzip</code> module lets you create a stream object for reading or writing a gzip-compressed file. The stream object it gives you supports the <code>read()</code> method (if you opened it for reading) or the <code>write()</code> method (if you opened it for writing). That means you can use the methods you&#8217;ve already learned for regular files to <em>directly read or write a gzip-compressed file</em>, without creating a temporary file to store the decompressed data.
+ja:<p><code>gzip</code>モジュールを使うと、gzipで圧縮されたファイルを読み書きするためのストリームオブジェクトを作成できる。このモジュールによって生成されるストリームオブジェクトは<code>read()</code>メソッド（読み込み用に開いた場合）や<code>write()</code>メソッド（書き込み用に開いた場合）をサポートしている。つまり、解凍したデータを格納するための一時ファイルを作るなどということはせずに、通常のファイルを扱うためにすでに学んだメソッドを使って、<em>gzip圧縮されたファイルを直接読み書きする</em>ことができるというわけだ。
+
+
+en:<p>As an added bonus, it supports the <code>with</code> statement too, so you can let Python automatically close your gzip-compressed file when you&#8217;re done with it.
+ja:<p>さらにおまけとして、このモジュールは<code>with</code>文もサポートしているので、gzipで圧縮されたファイルを使い終わったときに、それをPythonに自動的に閉じさせることもできる。
+
+
+en:<li>You should always open gzipped files in binary mode. (Note the <code>'b'</code> character in the <code>mode</code> argument.)
+ja:<li>gzipで圧縮されたファイルは常にバイナリモードで開かなければならない（引数<code>mode</code>に文字<code>'b'</code>が含まれることに注意しよう）。
+
+
+en:<li>I constructed this example on Linux. If you&#8217;re not familiar with the command line, this command is showing the &#8220;long listing&#8221; of the gzip-compressed file you just created in the Python Shell. This listing shows that the file exists (good), and that it is 79 bytes long. That&#8217;s actually larger than the string you started with! The gzip file format includes a fixed-length header that contains some metadata about the file, so it&#8217;s inefficient for extremely small files.
+ja:<li>私はこの例をLinux上で作成した。コマンドラインに詳しくない人のために説明すると、このコマンドはPythonシェルで作成したgzip圧縮ファイルを「長い形式で一覧表示」している。この一覧表示は、ファイルがちゃんと存在しており（素晴らしい）、その長さが79バイトだということを示している。これは実のところ元の文字列よりもサイズが大きくなってしまっている！ gzipファイル形式は、ファイルのメタデータを保持する固定長のヘッダを持っているので、非常に小さいファイルに対しては非効率なのだ。
+
+
+en:<li>The <code>gunzip</code> command (pronounced &#8220;gee-unzip&#8221;) decompresses the file and stores the contents in a new file named the same as the compressed file but without the <code>.gz</code> file extension.
+ja:<li><code>gunzip</code>コマンド（「ジー・アンジップ」と発音する）は、ファイルを解凍してその内容を新しいファイルに保存する。保存されるファイルの名前は、圧縮ファイルの名前から拡張子の<code>.gz</code>を取り除いたものになる。
+
+
+en:<li>The <code>cat</code> command displays the contents of a file. This file contains the string you originally wrote directly to the compressed file <code>out.log.gz</code> from within the Python Shell.
+ja:<li><code>cat</code>コマンドはファイルの内容を表示する。このファイルの中身は、先ほどPythonシェルから圧縮ファイルの<code>out.log.gz</code>に直接書き込んだ文字列だ。
+
+
+en:<p>Python 3.0 had a <code>gzip</code> module, but it did not support using a gzipped-file object as a context manager. Python 3.1 added the ability to use gzipped-file objects in a <code>with</code> statement.
+ja:<p>Python 3.0にも<code>gzip</code>モジュールは存在するが、gzip圧縮されたファイルのオブジェクトをコンテクストマネージャとして使うことはできなかった。Python 3.1では、gzip圧縮されたファイルのオブジェクトを<code>with</code>文で使えるようになっている。
+
+
+en:<h2 id=stdio>Standard Input, Output, and Error</h2>
+ja:<h2 id=stdio>標準入力・標準出力・標準エラー出力</h2>
+
+
+en:<aside><code>sys.stdin</code>, <code>sys.stdout</code>, <code>sys.stderr</code>.</aside>
+ja:<aside><code>sys.stdin</code>, <code>sys.stdout</code>, <code>sys.stderr</code>.</aside>
+
+
+en:<p>Command-line gurus are already familiar with the concept of standard input, standard output, and standard error. This section is for the rest of you.
+ja:<p>コマンドラインに慣れ親しんでいる人なら、標準入力・標準出力・標準エラー出力の概念について既に熟知していることだろう。この節は、それ以外の人々に向けて書かれている。
+
+
+en:<p>Standard output and standard error (commonly abbreviated <code>stdout</code> and <code>stderr</code>) are pipes that are built into every <abbr>UNIX</abbr>-like system, including Mac OS X and Linux. When you call the <code>print()</code> function, the thing you&#8217;re printing is sent to the <code>stdout</code> pipe. When your program crashes and prints out a traceback, it goes to the <code>stderr</code> pipe. By default, both of these pipes are just connected to the terminal window where you are working; when your program prints something, you see the output in your terminal window, and when a program crashes, you see the traceback in your terminal window too. In the graphical Python Shell, the <code>stdout</code> and <code>stderr</code> pipes default to your &#8220;Interactive Window&#8221;.
+ja:<p>標準出力と標準エラー出力（一般に<code>stdout</code>, <code>stderr</code>と略される）は、Mac OS XやLinuxのようなすべてのUNIXライクなシステムに標準で組み込まれているパイプだ。<code>print()</code>関数を呼び出すと、印字しようとしたものは<code>stdout</code>パイプに送られる。プログラムがクラッシュしてTracebackを印字しようとしたときは、それが<code>stderr</code>パイプに送られる。デフォルトでは、作業している端末ウインドウに両方のパイプが接続されている。プログラムが何かを印字するときは、その結果を端末ウインドウで見ることになるし、プログラムがクラッシュするときは、同様にTracebackを端末ウインドウで見ることになる。グラフィカルなPythonシェルでは、<code>stdout</code>と<code>stderr</code>パイプはデフォルトで「対話ウインドウ」に接続されている。
+
+
+en:<li>The <code>print()</code> function, in a loop. Nothing surprising here.
+ja:<li>ループの中の<code>print()</code>関数だ。ここには驚くようなことはない。
+
+
+en:<li><code>stdout</code> is defined in the <code>sys</code> module, and it is a <a href=#file-like-objects>stream object</a>. Calling its <code>write()</code> function will print out whatever string you give it. In fact, this is what the <code>print</code> function really does; it adds a carriage return to the end of the string you&#8217;re printing, and calls <code>sys.stdout.write</code>.
+ja:<li><code>stdout</code>は<code>sys</code>モジュールで定義されている。そしてこれは<a href=#file-like-objects>ストリームオブジェクト</a>だ。これの<code>write()</code>関数を呼び出すと、そこに与えた文字列をなんでも表示する。実際に、これが<code>print</code>関数の行っていることだ。<code>print</code>関数は表示する文字列の末尾に改行を追加して、<code>sys.stdout.write</code>を呼び出す。
+
+
+en:<li>In the simplest case, <code>sys.stdout</code> and <code>sys.stderr</code> send their output to the same place: the Python <abbr>IDE</abbr> (if you&#8217;re in one), or the terminal (if you&#8217;re running Python from the command line). Like standard output, standard error does not add carriage returns for you. If you want carriage returns, you&#8217;ll need to write carriage return characters.
+ja:<li>最も単純な場合では、<code>sys.stdout</code>と<code>sys.stderr</code>は同じ場所、つまりPython <abbr>IDE</abbr>（その中にいる場合）、もしくは端末（Pythonをコマンドラインから実行している場合）に出力する。標準出力と同様に、標準エラー出力も改行を追加してくれない。改行したい場合は、改行文字を書き込む必要がある。
+
+
+en:<p><code>sys.stdout</code> and <code>sys.stderr</code> are stream objects, but they are write-only. Attempting to call their <code>read()</code> method will always raise an <code>IOError</code>.
+ja:<p><code>sys.stdout</code>と<code>sys.stderr</code>はストリームオブジェクトだが、これらは書き込み専用だ。これらの<code>read()</code>メソッドを呼び出そうとすると、常に<code>IOError</code>が発生する。
+
+
+en:<h3 id=redirect>Redirecting Standard Output</h3>
+ja:<h3 id=redirect>標準出力をリダイレクトする</h3>
+
+
+en:<p><code>sys.stdout</code> and <code>sys.stderr</code> are stream objects, albeit ones that only support writing. But they&#8217;re not constants; they&#8217;re variables. That means you can assign them a new value&nbsp;&mdash;&nbsp;any other stream object&nbsp;&mdash;&nbsp;to redirect their output.
+ja:<p><code>sys.stdout</code>と<code>sys.stderr</code>は、書き込みのみをサポートするストリームオブジェクトだ。しかし、これらは定数ではなく変数だ。これが意味するのは、新しい値、つまり任意のストリームオブジェクトを代入することで、これらの出力先をリダイレクトできるということだ。
+
+
+en:<p class=d>[<a href=examples/stdout.py>download <code>stdout.py</code></a>]
+ja:<p class=d>[<a href=examples/stdout.py><code>stdout.py</code>をダウンロードする</a>]
+
+
+en:<p>Check this out:
+ja:<p>これを調べてみよう：
+
+
+en:<p>Python 3.0 supported the <code>with</code> statement, but each statement can only use one context manager. Python 3.1 allows you to chain multiple context managers in a single <code>with</code> statement.
+ja:<p>Python 3.0は<code>with</code>文をサポートしているが、個々の<code>with</code>文は1つのコンテクストマネージャしか扱うことができない。Python 3.1では単一の<code>with</code>文のなかで複数のコンテクストマネージャを連鎖させることができる。
+
+
+en:<p>Let&#8217;s take the last part first.
+ja:<p>まずは後半部分を見てみよう。
+
+
+en:<p>That&#8217;s a complicated <code>with</code> statement. Let me rewrite it as something more recognizable.
+ja:<p>これは複雑な<code>with</code>文だ。もっと分かりやすい形に書き換えてみよう。
+
+
+en:<p>As the rewrite shows, you actually have <em>two</em> <code>with</code> statements, one nested within the scope of the other. The &#8220;outer&#8221; <code>with</code> statement should be familiar by now: it opens a <abbr>UTF-8</abbr>-encoded text file named <code>out.log</code> for writing and assigns the stream object to a variable named <var>a_file</var>. But that&#8217;s not the only thing odd here.
+ja:<p>このように書き換えてみると分かるように、これは実際には<em>2つ</em>の<code>with</code>文からなり、一方が他方のスコープ内にネストされている。「外側」の<code>with</code>文についてはもう既によく分かっているだろう。ここでは<code>out.log</code>という名前の<abbr>UTF-8</abbr>でエンコードされたテキストファイルを書き込み用に開き、そのストリームオブジェクトを<var>a_file</var>という名前の変数に代入している。しかし奇妙な点はまだある。
+
+
+en:<p>Where&#8217;s the <code>as</code> clause? The <code>with</code> statement doesn&#8217;t actually require one. Just like you can call a function and ignore its return value, you can have a <code>with</code> statement that doesn&#8217;t assign the <code>with</code> context to a variable. In this case, you&#8217;re only interested in the side effects of the <code>RedirectStdoutTo</code> context.
+ja:<p><code>as</code>句はどこにあるのだろうか？ 実を言うと、<code>with</code>文は必ずしも<code>as</code>句を必要としないのだ。関数を呼び出して、その戻り値を無視するときのように、<code>with</code>コンテクストを変数へ代入しない<code>with</code>文を作ることもできる。この例では、<code>RedirectStdoutTo</code>コンテクストの副作用だけが必要なのだ。
+
+
+en:<p>What are those side effects? Take a look inside the <code>RedirectStdoutTo</code> class. This class is a custom <a href=special-method-names.html#context-managers>context manager</a>. Any class can be a context manager by defining two <a href=iterators.html#a-fibonacci-iterator>special methods</a>: <code>__enter__()</code> and <code>__exit__()</code>.
+ja:<p>その副作用とは一体何だろう？ <code>RedirectStdoutTo</code>クラスの中を見てみよう。このクラスはカスタマイズされた<a href=special-method-names.html#context-managers>コンテクストマネージャ</a>だ。どんなクラスも2つの<a href=iterators.html#a-fibonacci-iterator>特殊メソッド</a>、つまり<code>__enter__()</code>と<code>__exit__()</code>を定義することでコンテクストマネージャになることができる。
+
+
+en:<li>The <code>__init__()</code> method is called immediately after an instance is created. It takes one parameter, the stream object that you want to use as standard output for the life of the context. This method just saves the stream object in an instance variable so other methods can use it later.
+ja:<li><code>__init__()</code>メソッドはインスタンスが生成された直後に呼び出される。ここでは1つの引数として、このコンテクストが存在する間だけ標準入力として使いたいストリームオブジェクトを受け取る。このメソッドはストリームオブジェクトが後で他のメソッドから使えるように、インスタンス変数に保存するだけだ。
+
+
+en:<li>The <code>__enter__()</code> method is a <a href=iterators.html#a-fibonacci-iterator>special class method</a>; Python calls it when entering a context (<i>i.e.</i> at the beginning of the <code>with</code> statement). This method saves the current value of <code>sys.stdout</code> in <var>self.out_old</var>, then redirects standard output by assigning <var>self.out_new</var> to <var>sys.stdout</var>.
+ja:<li><code>__enter__()</code>メソッドは<a href=iterators.html#a-fibonacci-iterator>特殊クラスメソッド</a>だ。Pythonは、コンテクストに入るとき（つまり<code>with</code>文の初め）にこのメソッドを呼び出す。このメソッドは、<code>sys.stdout</code>の現在の値を<var>self.out_old</var>に保存し、次に<var>self.out_new</var>を<var>sys.stdout</var>に代入することによって標準出力をリダイレクトする。
+
+
+en:<li>The <code>__exit__()</code> method is another special class method; Python calls it when exiting the context (<i>i.e.</i> at the end of the <code>with</code> statement). This method restores standard output to its original value by assigning the saved <var>self.out_old</var> value to <var>sys.stdout</var>.
+ja:<li><code>__exit__()</code>メソッドはもう1つの特殊クラスメソッドだ。Pythonは、コンテクストから抜けるとき（つまり<code>with</code>文の最後）にこのメソッドを呼び出す。このメソッドは、保存しておいた<var>self.out_old</var>の値を<var>sys.stdout</var>に代入することによって標準出力を元の値に戻す。
+
+
+en:<p>Putting it all together:
+ja:<p>すべてをまとめよう：
+
+
+en:<li>This will print to the <abbr>IDE</abbr> &#8220;Interactive Window&#8221; (or the terminal, if running the script from the command line).
+ja:<li>この出力は<abbr>IDE</abbr> 「対話ウインドウ」（もしくは、スクリプトがコマンドラインで実行されているときはコマンドライン）に印字される。
+
+
+en:<li>This <a href=#with><code>with</code> statement</a> takes <em>a comma-separated list of contexts</em>. The comma-separated list acts like a series of nested <code>with</code> blocks. The first context listed is the &#8220;outer&#8221; block; the last one listed is the &#8220;inner&#8221; block. The first context opens a file; the second context redirects <code>sys.stdout</code> to the stream object that was created in the first context.
+ja:<li>ここで、<a href=#with><code>with</code>文</a>は<em>カンマで区切られたコンテクストのリスト</em>を受け取っている。カンマで区切られたリストは、ネストされた<code>with</code>ブロックのように振る舞う。リストの最初のコンテクストが「外側」のブロックになり、最後のコンテクストが「内側」のコンテクストになる。最初のコンテクストはファイルを開き、次のコンテクストは、初めのコンテクストで作られたストリームオブジェクトへ<code>sys.stdout</code>をリダイレクトする。
+
+
+en:<li>Because this <code>print()</code> function is executed with the context created by the <code>with</code> statement, it will not print to the screen; it will write to the file <code>out.log</code>.
+ja:<li>この<code>print()</code>関数は、<code>with</code>文によって作られたコンテクストと共に実行されるので、その出力は画面に印字されず、<code>out.log</code>ファイルに書き込まれる。
+
+
+en:<li>The <code>with</code> code block is over. Python has told each context manager to do whatever it is they do upon exiting a context. The context managers form a last-in-first-out stack. Upon exiting, the second context changed <code>sys.stdout</code> back to its original value, then the first context closed the file named <code>out.log</code>. Since standard output has been restored to its original value, calling the <code>print()</code> function will once again print to the screen.
+ja:<li><code>with</code>コードブロックが終了した。ここでPythonは、各々のコンテクストマネージャに対して、コンテクストから抜け出るときに行うべき処理を実行するように告げる。コンテクストマネージャは後入れ先出し (LIFO) のスタックを形成している。終了の際は、2番目のコンテクストマネージャが<code>sys.stdout</code>を元の値に戻し、次に1番目のコンテクストマネージャが<code>out.log</code>ファイルを閉じる。標準出力が元の値に戻ったので、<code>print()</code>関数を呼び出すと再び画面上に印字されるようになる。
+
+
+en:<p>Redirecting standard error works exactly the same way, using <code>sys.stderr</code> instead of <code>sys.stdout</code>.
+ja:<p>標準エラー出力のリダイレクトも全く同じ方法で行える。<code>sys.stdout</code>の代わりに<code>sys.stderr</code>を使えばいい。
+
+
+en:<li><a href=http://docs.python.org/py3k/tutorial/inputoutput.html#reading-and-writing-files>Reading and writing files</a> in the Python.org tutorial
+ja:<li><a href=http://docs.python.org/py3k/tutorial/inputoutput.html#reading-and-writing-files>Reading and writing files</a> Python.orgのチュートリアル
+
+
+en:<li><a href=http://docs.python.org/3.1/library/io.html><code>io</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/io.html><code>io</code>モジュール</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#file-objects>Stream objects</a>
+ja:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#file-objects>ストリームオブジェクト</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#context-manager-types>Context manager types</a>
+ja:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#context-manager-types>Context manager types</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/sys.html#sys.stdout><code>sys.stdout</code> and <code>sys.stderr</code></a>
+ja:<li><a href=http://docs.python.org/3.1/library/sys.html#sys.stdout><code>sys.stdout</code> と <code>sys.stderr</code></a>
+
+
+en:<li><a href=http://en.wikipedia.org/wiki/Filesystem_in_Userspace><abbr>FUSE</abbr> on Wikipedia</a>
+ja:<li><a href=http://en.wikipedia.org/wiki/Filesystem_in_Userspace>Wikipediaの<abbr>FUSE</abbr>の項</a>
+
+
+en:<p class=v><a href=refactoring.html rel=prev title='back to &#8220;Refactoring&#8221;'><span class=u>&#x261C;</span></a> <a href=xml.html rel=next title='onward to &#8220;XML&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=refactoring.html rel=prev title='&#8220;リファクタリング&#8221;に戻る'><span class=u>&#x261C;</span></a> <a href=xml.html rel=next title='&#8220;XML&#8221;へ進む'><span class=u>&#x261E;</span></a>
+

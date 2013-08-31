@@ -1,0 +1,81 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#troubleshooting>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#troubleshooting>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<title>Troubleshooting - Dive Into Python 3</title>
+ja:<title>トラブルシューティング - Dive Into Python 3 日本語版</title>
+
+
+en:<h1>Troubleshooting</h1>
+ja:<h1>トラブルシューティング</h1>
+
+
+en:<p><span class=u>&#x275D;</span> Where&#8217;s the <kbd>ANY</kbd> key? <span class=u>&#x275E;</span><br>&mdash; <a href=http://www.wherestheanykey.co.uk>variously attributed</a>
+ja:<p><span class=u>&#x275D;</span> <kbd>ANY</kbd>キーってのはどこにあるんだ？ <span class=u>&#x275E;</span><br>&mdash; <a href=http://www.wherestheanykey.co.uk>出典多数</a>
+
+
+en:<p id=toc>&nbsp;
+ja:<p id=toc>&nbsp;
+
+
+en:<h2 id=divingin>Diving In</h2>
+ja:<h2 id=divingin>飛び込む</h2>
+
+
+en:<p class=f>FIXME
+ja:<p class=f>要修正
+
+
+en:<h2 id=getting-to-the-command-line>Getting to the Command Line</h2>
+ja:<h2 id=getting-to-the-command-line>コマンドラインにたどりつく</h2>
+
+
+en:<p>Throughout this book, there are examples of executing Python programs from the command line. Where is the command line?
+ja:<p>この本には、全体を通じてコマンドラインからPythonプログラムを実行する例が掲載されている。では、コマンドラインというのはどこにあるのだろう？
+
+
+
+en:<p>On Linux, look in your <b><code>Applications</code></b> menu for a program called <b><code>Terminal</code></b>. (It may be in a submenu like <b><code>Accessories</code></b> or <b><code>System</code></b>.)
+ja:<p>Linuxなら、<b><code>Applications</code></b>メニューを見て<b><code>Terminal</code></b>という名前のプログラムを探してほしい(もしかしたら<b><code>Accessories</code></b>や<b><code>System</code></b>のようなサブメニューに入っているかもしれない)。
+
+
+en:<p>On Mac OS X, there is an application called <b><code>Terminal</code></b> in your <code>/Applications/Utilities/</code> folder. To get there, click on your desktop, open the <b><code>Go</code></b> menu, select <b><code>Go to folder...</code></b>, and type <kbd>/Applications/Utilities/</kbd>. Then double-click the <b><code>Terminal</code></b> program.
+ja:Mac OS Xなら、<code>/Applications/Utilities/</code>フォルダ内に<b><code>Terminal</code></b>というアプリケーションがある。このフォルダに行くには、まずデスクトップをクリックして、<b><code>Go</code></b>メニューを開き、<b><code>Go to folder...</code></b>を選んで、<kbd>/Applications/Utilities/</kbd>と打てばいい。その上で、<b><code>Terminal</code></b>プログラムをダブルクリックすれば起動するはずだ。
+
+
+en:<p>On Windows, click <b><code>Start</code></b>, select <b><code>Run...</code></b>, type <kbd>cmd</kbd>, and press <kbd>ENTER</kbd>.
+ja:<p>Windowsなら、まず<b><code>Start</code></b>をクリックして、<b><code>Run...</code></b>を選び、<kbd>cmd</kbd>と打って、<kbd>ENTER</kbd>を押せばいい
+
+
+en:<h2 id=running-python-on-the-command-line>Running Python on the command line</h2>
+ja:<h2 id=running-python-on-the-command-line>コマンドラインからPythonを実行する</h2>
+
+
+en:<p>Once you <a href=#getting-to-the-command-line>get to the command line</a>, you should be able to run the Python interactive shell. On the Linux or Mac OS X command line, type <kbd>python3</kbd> and press <kbd>ENTER</kbd>. On the Windows command line, type <kbd>c:\python31\python</kbd> and press <kbd>ENTER</kbd>. If all goes well, you should see something like this:
+ja:<p><a href=#getting-to-the-command-line>コマンドラインにたどりついたら</a>、Python対話シェルを起動できるようになったはずだ。LinuxかMax OS Xのコマンドラインなら、<kbd>python3</kbd>と打って<kbd>ENTER</kbd>を押せばいい。Windowsのコマンドラインなら、<kbd>c:\python31\python</kbd>と打って<kbd>ENTER</kbd>を押せばいい。うまくいけば、このようなものが現れるはずだ：
+
+
+en:<p>(Type <kbd>exit()</kbd> and press <kbd>ENTER</kbd> to exit the Python interactive shell and go back to the command line. This works on all platforms.)
+ja:<p>（Python対話シェルを終了してコマンドラインに戻りたいなら、<kbd>exit()</kbd>と打って<kbd>ENTER</kbd>を押せばいい。どのプラットフォームでもこれで終了させることができる。)
+
+
+en:<p>If you get a &#8220;command not found&#8221; error, it probably means you <a href=installing-python.html>don&#8217;t have Python 3 installed</a>.
+ja:<p>「command not found」エラーが出たなら、おそらく<a href=installing-python.html>Python 3がまだインストールされてない</a>のだろう。
+
+
+en:<p>On the other hand, if you get into a Python interactive shell but the version number is not what you expected, you may have more than one version of Python installed. This happens most often on Linux and Mac OS X systems, where an older version of Python is pre-installed. You can install the latest version without deleting the older version (they will live side-by-side in peace), but you will need to be more specific when you run Python from the command line.
+ja:<p>他方、Python対話シェルには入れたが、そのバージョン番号が期待していたものとは違っていたという場合には、たぶん複数のバージョンのPythonがインストールされているのだろう。これが最も頻繁に起こるのはLinuxやMac OS Xで、これらのシステムでは古いバージョンのPythonがあらかじめインストールされているのだ。別に古いバージョンを消さずとも最新のバージョンをインストールできるのだが（衝突することなく共存してくれる)、この場合には、コマンドラインから起動する時により具体的に指定する必要がある。
+
+
+en:<p>For example, on my home Linux box, I have several versions of Python installed so I can test the Python software that I write. To run a specific version, I can type <code>python3.0</code>, <code>python3.1</code>, or <code>python2.6</code>.
+ja:<p>例えば、私は自宅のLinuxにいくつかのバージョンのPythonをインストールしていて、自分が書いたPythonのソフトウェアをテストできるようにしてある。特定のバージョンを使いたい時には、<code>python3.0</code>、<code>python3.1</code>、<code>python2.6</code>などと打って起動している。
+
+
+en:<p class=v><a rel=prev href=where-to-go-from-here.html title='back to &#8220;Where To Go From Here&#8221;'><span class=u>&#x261C;</span></a> <a href=blank.html rel=next><span class=u>&#x261E;</span></a>
+ja:<p class=v><a rel=prev href=where-to-go-from-here.html title='「ここからどこへ進むか」に戻る'><span class=u>&#x261C;</span></a> <a href=blank.html rel=next><span class=u>&#x261E;</span></a>
+
+
+en:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+ja:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+
+

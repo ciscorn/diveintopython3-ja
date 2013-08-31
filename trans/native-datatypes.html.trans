@@ -1,0 +1,1047 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#native-datatypes>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#native-datatypes>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<title>Native datatypes - Dive Into Python 3</title>
+ja:<title>ネイティブデータ型 - Dive Into Python 3 日本語版</title>
+
+
+en:<h1>Native Datatypes</h1>
+ja:<h1>ネイティブデータ型</h1>
+
+
+en:<p><span class=u>&#x275D;</span> Wonder is the foundation of all philosophy, inquiry its progress, ignorance its end. <span class=u>&#x275E;</span><br>&mdash; Michel de Montaigne
+ja:<p><span class=u>&#x275D;</span> 疑問はすべての哲学の礎であり、探求はその前進であり、無知はその終わりだ。<span class=u>&#x275E;</span><br>&mdash; ミシェル・ド・モンテーニュ
+
+
+en:<h2 id=divingin>Diving In</h2>
+ja:<h2 id=divingin>飛び込む</h2>
+
+
+en:<p class=f>Datatypes. Set aside <a href=your-first-python-program.html>your first Python program</a> for just a minute, and let&#8217;s talk about datatypes. In Python, <a href=your-first-python-program.html#declaringfunctions>every value has a datatype</a>, but you don&#8217;t need to declare the datatype of variables. How does that work? Based on each variable&#8217;s original assignment, Python figures out what type it is and keeps tracks of that internally.
+ja:<p class=f>データ型だ。<a href=your-first-python-program.html>初めてのPythonプログラム</a>のことはしばらく忘れて、データ型について話そう。Pythonでは<a href=your-first-python-program.html#declaringfunctions>すべての値がデータ型を持っている</a>にもかかわらず、変数のデータ型を宣言する必要はない。これはどういう仕組みで動いているんだろう？ Pythonは、それぞれの変数について、もともとの代入がなされたときに何の型であるかを把握し、それを内部的に追跡しているのだ。
+
+
+en:<p>Python has many native datatypes. Here are the important ones:
+ja:<p>Pythonは数多くのネイティブデータ型を持っている。重要なものは以下の通りだ：
+
+
+en:<li><b>Booleans</b> are either <code>True</code> or <code>False</code>.
+ja:<li><b>ブール値</b>は、<code>True</code>または<code>False</code>のどちらかを表す。
+
+
+en:<li><b>Numbers</b> can be integers (<code>1</code> and <code>2</code>), floats (<code>1.1</code> and <code>1.2</code>), fractions (<code>1/2</code> and <code>2/3</code>), or even <a href=http://en.wikipedia.org/wiki/Complex_number>complex numbers</a>.
+ja:<li><b>数値</b>は、整数（<code>1</code>や<code>2</code>）を表したり、浮動小数点数（<code>1.1</code>や<code>1.2</code>）を表したり、分数（<code>1/2</code>や<code>2/3</code>）を表したりできる。<a href=http://en.wikipedia.org/wiki/Complex_number>複素数</a>さえも表せる。
+
+
+en:<li><b>Strings</b> are sequences of Unicode characters, <i>e.g.</i> an <abbr>HTML</abbr> document.
+ja:<li><b>文字列</b>はUnicode文字のシーケンスだ。例: <abbr>HTML</abbr>ドキュメント。
+
+
+en:<li><b>Bytes</b> and <b>byte arrays</b>, <i>e.g.</i> a <abbr>JPEG</abbr> image file.
+ja:<li><b>バイト列</b>と<b>バイト配列</b>。例: <abbr>JPEG</abbr>画像。
+
+
+en:<li><b>Lists</b> are ordered sequences of values.
+ja:<li><b>リスト</b>は値のシーケンスだ。要素は順序づけされる。
+
+
+en:<li><b>Tuples</b> are ordered, immutable sequences of values.
+ja:<li><b>タプル</b>は値のイミュータブルなシーケンスだ。要素は順序づけされる。
+
+
+en:<li><b>Sets</b> are unordered bags of values.
+ja:<li><b>集合</b>は値を詰めた袋だ。要素は順序づけされない。
+
+
+en:<li><b>Dictionaries</b> are unordered bags of key-value pairs.
+ja:<li><b>辞書</b>はキーと値のペアを詰めた袋だ。要素は順序づけされない。
+
+
+en:<p>Of course, there are more types than these. <a href=your-first-python-program.html#everythingisanobject>Everything is an object</a> in Python, so there are types like <i>module</i>, <i>function</i>, <i>class</i>, <i>method</i>, <i>file</i>, and even <i>compiled code</i>. You&#8217;ve already seen some of these: <a href=your-first-python-program.html#runningscripts>modules have names</a>, <a href=your-first-python-program.html#docstrings>functions have <code>docstrings</code></a>, <i class=baa>&amp;</i>c. You&#8217;ll learn about classes in <a href=iterators.html>Classes <i class=baa>&amp;</i> Iterators</a>, and about files in <a href=files.html>Files</a>.
+ja:<p>もちろん、ここで取り上げたものよりももっと多くの型が存在する。Pythonでは<a href=your-first-python-program.html#everythingisanobject>あらゆるものがオブジェクト</a>なので、<i>モジュール</i>・<i>関数</i>・<i>クラス</i>・<i>メソッド</i>・<i>ファイル</i>、そして<i>コンパイルされたコード</i>といった型すら存在する。これらのうちのいくつかは既に見ている： <a href=your-first-python-program.html#runningscripts>モジュールは名前を持つ</a>、<a href=your-first-python-program.html#docstrings>関数は<code>docstrings</code>を持つ</a>、などなど。クラスについては<a href=iterators.html>クラスとイテレータ</a>で学ぶことになり、ファイルについては<a href=files.html>ファイル</a>で学ぶ。
+
+
+en:<p>Strings and bytes are important enough&nbsp;&mdash;&nbsp;and complicated enough&nbsp;&mdash;&nbsp;that they get their own chapter. Let&#8217;s look at the others first.
+ja:<p>文字列やバイトはかなり重要で、そしてかなりやっかいなので、専用の章を設けている。まずはそれ以外のものから見ていこう。
+
+
+en:<h2 id=booleans>Booleans</h2>
+ja:<h2 id=booleans>ブール値</h2>
+
+
+en:<aside>You can use virtually any expression in a boolean context.</aside>
+ja:<aside>ブール値のコンテクストでは事実上すべての式を使うことができる。</aside>
+
+
+en:<p>Booleans are either true or false. Python has two constants, cleverly named <code><dfn>True</dfn></code> and <code><dfn>False</dfn></code>, which can be used to assign <dfn>boolean</dfn> values directly. Expressions can also evaluate to a boolean value. In certain places (like <code>if</code> statements), Python expects an expression to evaluate to a boolean value. These places are called <i>boolean contexts</i>. You can use virtually any expression in a boolean context, and Python will try to determine its truth value. Different datatypes have different rules about which values are true or false in a boolean context. (This will make more sense once you see some concrete examples later in this chapter.)
+ja:<p>ブール値は真または偽のどちらかを表す。Pythonは、<code><dfn>True</dfn></code>, <code><dfn>False</dfn></code>と分かりやすく命名された2つの定数を持っており、これらはブール値を直接代入するために使うことができる。式を評価した結果もブール値になりうる。特定の箇所（たとえば<code>if</code>文）では、式を評価した結果がブール値になることが要求される場合もある。このような箇所は<em>ブール値のコンテクスト</em>と呼ばれる。そこでは事実上どんな式でも使うことができ、Pythonはその式の真偽値を決定しようと試みる。ブール値のコンテクストにおいて、どのような規則に基づいて値が真／偽と評価されるかは、データ型によってまちまちである（これについては、この章に現れる具体例をいくつか見れば意味がよく分かるだろう）。
+
+
+en:<p>For example, take this snippet from <a href=your-first-python-program.html#divingin><code>humansize.py</code></a>:
+ja:<p>例として、<a href=your-first-python-program.html#divingin><code>humansize.py</code></a>の断片を取り上げよう：
+
+
+en:<p><var>size</var> is an integer, 0 is an integer, and <code>&lt;</code> is a numerical operator. The result of the expression <code>size &lt; 0</code> is always a boolean. You can test this yourself in the Python interactive shell:
+ja:<p><var>size</var>は整数で、<code>0</code>も整数、そして<code>&lt;</code>は数値演算子だ。式<code>size &lt; 0</code>の結果は常にブール値になる。このことは、Pythonの対話シェルで自分で確認できる。
+
+
+en:<p>Due to some legacy issues left over from Python 2, booleans can be treated as numbers. <code>True</code> is <code>1</code>; <code>False</code> is 0.
+ja:<p>Python 2から残されたいくつかの古い問題のために、ブール値を数値として扱うこともできる。<code>True</code>は<code>1</code>で、<code>False</code>は<code>0</code>だ。
+
+
+en:<p>Ew, ew, ew! Don&#8217;t do that. Forget I even mentioned it.
+ja:<p>ああ気持ち悪い！ これはやってはいけない。言及はしたけれど忘れてほしい。
+
+
+en:<h2 id=numbers>Numbers</h2>
+ja:<h2 id=numbers>数値</h2>
+
+
+en:<p>Numbers are awesome. There are so many to choose from. Python supports both <dfn>integer</dfn>s and <dfn>floating point</dfn> numbers. There&#8217;s no type declaration to distinguish them; Python tells them apart by the presence or absence of a <dfn>decimal</dfn> point.
+ja:<p>数値は素晴らしい。非常にたくさんのなかから値を選ぶことができる。Pytyonは、<dfn>整数</dfn>と<dfn>浮動小数点数</dfn>の両方をサポートしている。この２つを区別するための型宣言は存在せず、Pythonは小数点が存在するかしないかで両者を区別する。
+
+
+en:<li>You can use the <code>type()</code> function to check the type of any value or variable. As you might expect, <code>1</code> is an <code>int</code>.
+ja:<li>値や変数の型を調べるには<code>type()</code>関数が使える。ご推察の通り、<code>1</code>は<code>int</code>だ。
+
+
+en:<li>Similarly, you can use the <code>isinstance()</code> function to check whether a value or variable is of a given type.
+ja:<li>同様に、値や変数の型が特定の型かどうかを調べるには、<code>isinstane()</code>関数が使える。
+
+
+en:<li>Adding an <code>int</code> to an <code>int</code> yields an <code>int</code>.
+ja:<li><code>int</code>を<code>int</code>に加えると<code>int</code>が生み出される。
+
+
+en:<li>Adding an <code>int</code> to a <code>float</code> yields a <code>float</code>. Python coerces the <code>int</code> into a <code>float</code> to perform the addition, then returns a <code>float</code> as the result.
+ja:<li><code>int</code>を<code>float</code>に加えると<code>float</code>が生み出される。Pythonは<code>int</code>を<code>float</code>に型強制 (coercion) してから加算を行い、その結果として<code>float</code>を返すのだ。
+
+
+en:<h3 id=number-coercion>Coercing Integers To Floats And Vice-Versa</h3>
+ja:<h3 id=number-coercion>整数から浮動小数点数への型強制とその逆</h3>
+
+
+en:<p>As you just saw, some operators (like addition) will coerce integers to floating point numbers as needed. You can also coerce them by yourself.
+ja:<p>いま見た通り、いくつかの演算子（加算など）は必要に応じて整数を浮動小数点数に型強制する。自分でこの型強制を行うことも可能だ。
+
+
+en:<li>You can explicitly coerce an <code>int</code> to a <code>float</code> by calling the <code>float()</code> function.
+ja:<li><code>float()</code>関数を呼び出すことで、明示的に<code>int</code>を<code>float</code>に型強制できる。
+
+
+en:<li>Unsurprisingly, you can also coerce a <code>float</code> to an <code>int</code> by calling <code>int()</code>.
+ja:<li>当然ながら、<code>int()</code>関数を呼び出すことで、明示的に<code>float</code>を<code>int</code>に型強制できる。
+
+
+en:<li>The <code>int()</code> function will truncate, not round.
+ja:<li><code>int()</code>関数は四捨五入ではなく切り捨てを行う。
+
+
+en:<li>The <code>int()</code> function truncates negative numbers towards 0. It&#8217;s a true truncate function, not a floor function.
+ja:<li><code>int()</code>関数は、負数を0の方向へ向けて切り捨てる。これは正しい切り捨て関数であり、床関数 (floor function) ではない。
+
+
+en:<li>Floating point numbers are accurate to 15 decimal places.
+ja:<li>浮動小数点数は小数第15位まで正確だ。
+
+
+en:<li>Integers can be arbitrarily large.
+ja:<li>整数はどんな大きさでも対応できる。
+
+
+en:<p><span class=u>&#x261E;</span>Python 2 had separate types for <code>int</code> and <code>long</code>. The <code>int</code> datatype was limited by <code>sys.maxint</code>, which varied by platform but was usually <code>2<sup>32</sup>-1</code>. Python 3 has just one integer type, which behaves mostly like the old <code>long</code> type from Python 2. See <a href=http://www.python.org/dev/peps/pep-0237><abbr>PEP</abbr> 237</a> for details.
+ja:<p><span class=u>&#x261E;</span>Python 2は<code>int</code>と<code>long</code>を区別していた。<code>int</code>データ型が表現できる数は<code>sys.maxint</code>に制限されていて、この値はプラットフォームごとに異なるが通常は<code>2<sup>32</sup>-1</code>だった。Python 3はただ一つの整数型を持っており、これはPython2の<code>long</code>型とほぼ同様に振る舞う。詳細は<a href=http://www.python.org/dev/peps/pep-0237><abbr>PEP</abbr> 237</a>を見てほしい。
+
+
+en:<h3 id=common-numerical-operations>Common Numerical Operations</h3>
+ja:<h3 id=common-numerical-operations>一般的な数値演算</h3>
+
+
+en:<p>You can do all kinds of things with numbers.
+ja:<p>数値があれば、どんなことでもできる。
+
+
+en:<li>The <code>/</code> operator performs floating point division. It returns a <code>float</code> even if both the numerator and denominator are <code>int</code>s.
+ja:<li><code>/</code>演算子は浮動小数点数の除算を行う。たとえ分子と分母の両方が<code>int</code>型であっても、この演算子は<code>float</code>型を返す。
+
+
+en:<li>The <code>//</code> operator performs a quirky kind of integer division. When the result is positive, you can think of it as truncating (not rounding) to 0 decimal places, but be careful with that.
+ja:<li><code>//</code>演算子はひねくれた整数除算を行う。結果が正の数の場合は、整数への切り捨て（四捨五入ではない）とみなすことができるが、これについては注意が必要だ。
+
+
+en:<li>When integer-dividing negative numbers, the <code>//</code> operator rounds &#8220;up&#8221; to the nearest integer. Mathematically speaking, it&#8217;s rounding &#8220;down&#8221; since <code>&minus;6</code> is less than <code>&minus;5</code>, but it could trip you up if you were expecting it to truncate to <code>&minus;5</code>.
+ja:<li>負の数を整数除算する場合、<code>//</code>演算子は最も近い整数に繰り「上げる」。数学的に言えば、<code>&minus;6</code>は<code>&minus;5</code>より小さいので「繰り下げ」というべきだが、<code>&minus;5</code>に切り捨てられることを期待していると足もとをすくわれる。
+
+
+en:<li>The <code>//</code> operator doesn&#8217;t always return an integer. If either the numerator or denominator is a <code>float</code>, it will still round to the nearest integer, but the actual return value will be a <code>float</code>.
+ja:<li><code>//</code>演算子は常に整数を返すわけではない。分子や分母のどちらか一方でも<code>float</code>の場合は、なお結果を最も近い整数に丸めてくれるのだが、実際の戻り値は<code>float</code>で返される。
+
+
+en:<li>The <code>**</code> operator means &#8220;raised to the power of.&#8221;  <code>11<sup>2</sup></code> is <code>121</code>.
+ja:<li><code>**</code>演算子は「べき乗」を意味する。つまり<code>11<sup>2</sup></code>は<code>121</code>だ。
+
+
+en:<li>The <code>%</code> operator gives the remainder after performing integer division. <code>11</code> divided by <code>2</code> is <code>5</code> with a remainder of <code>1</code>, so the result here is <code>1</code>.
+ja:<li><code>%</code>演算子は整数除算の余りを返す。<code>11</code>を<code>2</code>で割ると<code>5</code>余り<code>1</code>になるので、ここでの結果は<code>1</code>となる。
+
+
+en:<p><span class=u>&#x261E;</span>In Python 2, the <code>/</code> operator usually meant integer division, but you could make it behave like floating point division by including a special directive in your code. In Python 3, the <code>/</code> operator always means floating point division. See <a href=http://www.python.org/dev/peps/pep-0238/><abbr>PEP</abbr> 238</a> for details.
+ja:<p><span class=u>&#x261E;</span>Python 2では、通常、<code>/</code>演算子は整数除算をなすものであったが、コードに特別な命令を入れれば浮動小数点数除算の演算子にすることもできた。Python 3では、<code>/</code>演算子は常に浮動小数点数の除算を行う。詳細は<a href=http://www.python.org/dev/peps/pep-0238/><abbr>PEP</abbr> 238</a>を見てほしい。
+
+
+en:<h3 id=fractions>Fractions</h3>
+ja:<h3 id=fractions>分数</h3>
+
+
+en:<p>Python isn&#8217;t limited to integers and floating point numbers. It can also do all the fancy math you learned in high school and promptly forgot about.
+ja:<p>Pythonが扱えるのは、整数や浮動小数点数だけではない。高校で習って、その後すぐに忘れてしまったしゃれた数学も、Pythonはすべて扱える。
+
+
+en:<li>To start using fractions, import the <code>fractions</code> module.
+ja:<li>分数を使うために、<code>fractions</code>モジュールをインポートする。
+
+
+en:<li>To define a fraction, create a <code>Fraction</code> object and pass in the numerator and denominator.
+ja:<li>分数を定義するには、<code>Fraction</code>オブジェクトを作って分子と分母を渡す。
+
+
+en:<li>You can perform all the usual mathematical operations with fractions. Operations return a new <code>Fraction</code> object. <code>2 * (1/3) = (2/3)</code>
+ja:<li>分数をつかった普通の数学的演算ならなんでもできる。演算結果は新しい<code>Fraction</code>オブジェクトとして返される。<code>2 * (1/3) = (2/3)</code>
+
+
+en:<li>The <code>Fraction</code> object will automatically reduce fractions. <code>(6/4) = (3/2)</code>
+ja:<li><code>Fraction</code>オブジェクトは自動的に約分される。<code>(6/4) = (3/2)</code>
+
+
+en:<li>Python has the good sense not to create a fraction with a zero denominator.
+ja:<li>Pythonは、分母がゼロの分数が作成されないようにうまくやってくれる。
+
+
+en:<h3 id=trig>Trigonometry</h3>
+ja:<h3 id=trig>三角法</h3>
+
+
+en:<p>You can also do basic trigonometry in Python.
+ja:<p>Pythonでは基本的な三角法も行える。
+
+
+en:<li>The <code>math</code> module has a constant for &pi;, the ratio of a circle&#8217;s circumference to its diameter.
+ja:<li><code>math</code>は、円周率&pi;（円の周りの長さと直径の比）のために定数を用意している。
+
+
+en:<li>The <code>math</code> module has all the basic trigonometric functions, including <code>sin()</code>, <code>cos()</code>, <code>tan()</code>, and variants like <code>asin()</code>.
+ja:<li><code>math</code>には基本的な三角関数が全部入っている。例えば<code>sin()</code>, <code>cos()</code>, <code>tan()</code>といったものや、<code>asin()</code>のような派生形も入っている。
+
+
+en:<li>Note, however, that Python does not have infinite precision. <code>tan(&pi; / 4)</code> should return <code>1.0</code>, not <code>0.99999999999999989</code>.
+ja:<li>とはいえ、Pythonは無限の精度を持たないことに注意しよう。<code>tan(&pi; / 4)</code>は<code>1.0</code>を返すべきなのに、<code>0.99999999999999989</code>が返ってきてしまう。
+
+
+en:<h3 id=numbers-in-a-boolean-context>Numbers In A Boolean Context</h3>
+ja:<h3 id=numbers-in-a-boolean-context>ブール値のコンテクストでの数値</h3>
+
+
+en:<aside>Zero values are false, and non-zero values are true.</aside>
+ja:<aside>ゼロは偽、ゼロではない数値は真。</aside>
+
+
+en:<p>You can use numbers <a href=#booleans>in a boolean context</a>, such as an <code>if</code> statement. Zero values are false, and non-zero values are true.
+ja:<p>数値は<code>if</code>文のような<a href=#booleans>ブール値のコンテクスト</a>で使うことができる。ゼロは偽であり、ゼロではない数値は真だ。
+
+
+en:<li>Did you know you can define your own functions in the Python interactive shell? Just press <kbd>ENTER</kbd> at the end of each line, and <kbd>ENTER</kbd> on a blank line to finish.
+ja:<li>Python対話シェルの中で、独自の関数を定義できることは知っていただろうか？ 各行の終わりで<kbd>ENTER</kbd>キーを押すだけで良い。空行で<kbd>ENTER</kbd>を押すと完了だ。
+
+
+en:<li>In a boolean context, non-zero integers are true; 0 is false.
+ja:<li>ブール値のコンテクストでは、ゼロでない整数は真で、<code>0</code>は偽だ。
+
+
+en:<li>Non-zero floating point numbers are true; <code>0.0</code> is false. Be careful with this one! If there&#8217;s the slightest rounding error (not impossible, as you saw in the previous section) then Python will be testing <code>0.0000000000001</code> instead of 0 and will return <code>True</code>.
+ja:<li>ゼロでない浮動小数点数は真であり、<code>0.0</code>は偽だ。これには注意しなければならない！ わずかな丸め誤差が発生した場合（前の節で見たように、これは起こりうる）、Pythonは<code>0</code>ではなく<code>0.0000000000001</code>を評価することになり、その結果<code>True</code>が返されてしまう。
+
+
+en:<li>Fractions can also be used in a boolean context. <code>Fraction(0, n)</code> is false for all values of <var>n</var>. All other fractions are true.
+ja:<li>分数もブール値のコンテクストで使うことができる。<code>Fraction(0, n)</code>はすべての <var>n</var> について偽になる。それ以外の分数は真だ。
+
+
+en:<h2 id=lists>Lists</h2>
+ja:<h2 id=lists>リスト</h2>
+
+
+en:<p>Lists are Python&#8217;s workhorse datatype. When I say &#8220;<dfn>list</dfn>,&#8221; you might be thinking &#8220;array whose size I have to declare in advance, that can only contain items of the same type, <i class=baa>&amp;</i>c.&#8221; Don&#8217;t think that. Lists are much cooler than that.
+ja:<p>リストはPythonの主戦力となるデータ型だ。私が「<dfn>リスト</dfn>」と言うとき、あなたはこう考えるかもしれない。「サイズをあらかじめ宣言する必要がある配列で、同じ型の要素だけを含むことができる」と。しかし、そう考えてはならない。リストはそれよりもずっとクールなものだ。
+
+
+en:<p><span class=u>&#x261E;</span>A list in Python is like an array in Perl 5. In Perl 5, variables that store arrays always start with the <code>@</code> character; in Python, variables can be named anything, and Python keeps track of the datatype internally.
+ja:<p><span class=u>&#x261E;</span>PythonのリストはPerl 5の配列に似ている。Perl 5では、配列を格納する変数は常に<code>@</code>という文字から始まる。Pythonでは、変数はどんな名前でもよく、Pythonが内部的にデータ型を追跡してくれる。
+
+
+en:<p><span class=u>&#x261E;</span>A list in Python is much more than an array in Java (although it can be used as one if that&#8217;s really all you want out of life). A better analogy would be to the <code>ArrayList</code> class, which can hold arbitrary objects and can expand dynamically as new items are added.
+ja:<p><span class=u>&#x261E;</span>PythonのリストはJavaの配列を遙かに超えたものだ（本当に望むなら、配列のように使いつづけることもできるが）。もっと良いアナロジーは<code>ArrayList</code>クラスだろう。これは任意のオブジェクトを格納できるし、新しい要素を追加するとサイズが動的に拡張される。
+
+
+en:<h3 id=creatinglists>Creating A List</h3>
+ja:<h3 id=creatinglists>リストを作る</h3>
+
+
+en:<p>Creating a list is easy: use square brackets to wrap a comma-separated list of values.
+ja:<p>リストを作るのは簡単だ: カンマで区切って並べた値を、角括弧で包めばいい。
+
+
+en:<li>First, you define a list of five items. Note that they retain their original order. This is not an accident. A list is an ordered set of items.
+ja:<li>初めに、5つの要素を持ったリストを定義する。要素が元の順番を保持していることに注意しよう。これは偶然ではない。リストは順序づけられた要素の集合なのだ。
+
+
+en:<li>A list can be used like a zero-based array. The first item of any non-empty list is always <code>a_list[0]</code>.
+ja:<li>リストはインデックスが0から始まる配列のように扱うことができる。空でないリストの先頭の要素は常に<code>a_list[0]</code>だ。
+
+
+en:<li>The last item of this five-item list is <code>a_list[4]</code>, because lists are always zero-based.
+ja:<li>リストのインデックスは0から始まるので、この5つの要素を持つリストの最後の要素は<code>a_list[4]</code>だ。
+
+
+en:<li>A negative index accesses items from the end of the list counting backwards. The last item of any non-empty list is always <code>a_list[-1]</code>.
+ja:<li>負のインデックスは、配列の後ろ側から逆順に数えて要素にアクセスする。空でないリストの最後の要素は常に<code>a_list[-1]</code>だ。
+
+
+en:<li>If the negative index is confusing to you, think of it this way: <code>a_list[-<var>n</var>] == a_list[len(a_list) - <var>n</var>]</code>. So in this list, <code>a_list[-3] == a_list[5 - 3] == a_list[2]</code>.
+ja:<li>負のインデックスが理解しにくいのなら、こう考えてみよう: <code>a_list[-<var>n</var>] == a_list[len(a_list) - <var>n</var>]</code>。つまりこのリストでは、<code>a_list[-3] == a_list[5 - 3] == a_list[2]</code>だ。
+
+
+en:<h3 id=slicinglists>Slicing A List</h3>
+ja:<h3 id=slicinglists>リストをスライスする</h3>
+
+
+en:<aside>a_list[0] is the first item of a_list.</aside>
+ja:<aside>a_list[0] は a_list の最初の要素だ。</aside>
+
+
+en:<p>Once you&#8217;ve defined a list, you can get any part of it as a new list. This is called <i>slicing</i> the list.
+ja:<p>リストを定義したら、そのリストの任意の一部分を新しいリストとして取得できる。これはリストの<em>スライス</em>と呼ばれる。
+
+
+en:<li>You can get a part of a list, called a &#8220;slice&#8221;, by specifying two indices. The return value is a new list containing all the items of the list, in order, starting with the first slice index (in this case <code>a_list[1]</code>), up to but not including the second slice index (in this case <code>a_list[3]</code>).
+ja:<li>2つのインデックスを指定することで、リストの一部を取得できる。これは「スライス」と呼ばれる。戻り値は、1つ目のスライスインデックス（この例では<code>a_list[1]</code>）から、2つ目のスライスインデックス（この例では<code>a_list[3]</code>）の直前までを含む新しいリストで、順序も保持されている。
+
+
+en:<li>Slicing works if one or both of the slice indices is negative. If it helps, you can think of it this way: reading the list from left to right, the first slice index specifies the first item you want, and the second slice index specifies the first item you don&#8217;t want. The return value is everything in between.
+ja:<li>スライスは、スライスインデックスの一方または両方が負の数でも動作する。これは次のように考えると良いかもしれない: リストを左から右へ読み、1つ目のスライスインデックスで欲しい最初の要素を指定し、2つ目のスライスインデックスは欲しくない最初の要素を指定する。戻り値はその間に含まれるすべてだ。
+
+
+en:<li>Lists are zero-based, so <code>a_list[0:3]</code> returns the first three items of the list, starting at <code>a_list[0]</code>, up to but not including <code>a_list[3]</code>.
+ja:<li>リストの添え字は0から始まるので、<code>a_list[0:3]</code>はリストの最初の3つの要素を返す。これは<code>a_list[0]</code>から始まり、<code>a_list[3]</code>の直前までを含む。
+
+
+en:<li>If the left slice index is 0, you can leave it out, and 0 is implied. So <code>a_list[:3]</code> is the same as <code>a_list[0:3]</code>, because the starting 0 is implied.
+ja:<li>左側のスライスインデックスが0のときは、これを省略できる。つまり、<code>a_list[:3]</code>は、始点のインデックスが暗黙に0とみなされるので、<code>a_list[0:3]</code>と同じだ。
+
+
+en:<li>Similarly, if the right slice index is the length of the list, you can leave it out. So <code>a_list[3:]</code> is the same as <code>a_list[3:5]</code>, because this list has five items.  There is a pleasing symmetry here. In this five-item list, <code>a_list[:3]</code> returns the first 3 items, and <code>a_list[3:]</code> returns the last two items. In fact, <code>a_list[:<var>n</var>]</code> will always return the first <var>n</var> items, and <code>a_list[<var>n</var>:]</code> will return the rest, regardless of the length of the list.
+ja:<li>同様に、右側のスライスインデックスがリストの長さと同じである場合は、これを省略できる。つまり<code>a_list[3:]</code>は、このリストが5つの要素から構成されているので、<code>a_string[3:5]</code>と同じになる。ここには気持ちの良い対称性がある。この5つの要素を持つリストでは、<code>a_list[:3]</code>は最初の3要素を返し、<code>a_string[3:]</code>は最後の2要素を返す。実際に、リストの長さにかかわらず、<code>a_list[:<var>n</var>]</code>は常に最初の <var>n</var> 個の要素を返し、<code>a_list[<var>n</var>:]</code>はその残りを返す。
+
+
+en:<li>If both slice indices are left out, all items of the list are included. But this is not the same as the original <var>a_list</var> variable. It is a new list that happens to have all the same items. <code>a_list[:]</code> is shorthand for making a complete copy of a list.
+ja:<li>両方のスライスインデックスが省略された場合は、リストのすべての要素が含まれる。しかし、これは元の <var>a_list</var> 変数とは異なる。これは、たまたますべて同じ要素を持った新しいリストなのだ。だから、<code>a_list[:]</code>はリストの完全なコピーを作るための簡易な方法として使える。
+
+
+en:<h3 id=extendinglists>Adding Items To A List</h3>
+ja:<h3 id=extendinglists>要素をリストに追加する</h3>
+
+
+en:<p>There are four ways to add items to a list.
+ja:<p>要素をリストに追加する方法は4つある。
+
+
+en:<li>The <code>+</code> operator concatenates lists to create a new list. A list can contain any number of items; there is no size limit (other than available memory). However, if memory is a concern, you should be aware that list concatenation creates a second list in memory. In this case, that new list is immediately assigned to the existing variable <var>a_list</var>. So this line of code is really a two-step process&nbsp;&mdash;&nbsp;concatenation then assignment&nbsp;&mdash;&nbsp;which can (temporarily) consume a lot of memory when you&#8217;re dealing with large lists.
+ja:<li><code>+</code>演算子はリストを結合して新たなリストを作る。リストは要素をいくつでも含むことができ、（利用可能なメモリ量以外に）サイズの制限はない。しかしながら、メモリの使用量が問題となるような場合には、このリストの結合によって新たなリストがメモリ上に作成されることに注意すること。この場合、その新しいリストはすぐに既存の変数<var>a_list</var>へ代入される。つまり、この行は実際には結合と代入という2つのステップから成り立っており、巨大なリストを扱うときには（一時的に）大量のメモリを消費する可能性があるのだ。
+
+
+en:<li>A list can contain items of any datatype, and the items in a single list don&#8217;t all need to be the same type. Here we have a list containing a string, a floating point number, and an integer.
+ja:<li>リストは任意のデータ型の要素を含むことができ、1つのリストの要素がすべて同じ型である必要はない。実際に、このリストには文字列と浮動小数点数と整数が入っている。
+
+
+en:<li>The <code>append()</code> method adds a single item to the end of the list. (Now we have <em>four</em> different datatypes in the list!)
+ja:<li><code>append()</code>メソッドはリストの末尾に要素を1つ追加する（今、リストには<em>4つ</em>の異なるデータ型がある！）。
+
+
+en:<li>Lists are implemented as classes.  &#8220;Creating&#8221; a list is really instantiating a class.  As such, a list has methods that operate on it. The <code>extend()</code> method takes one argument, a list, and appends each of the items of the argument to the original list.
+ja:<li>リストはクラスとして実装されている。リストの「作成」は実際にはクラスのインスタンス化だ。ゆえに、リストは自身を操作するためのメソッドを持っている。<code>extend()</code>メソッドは1つの引数としてリストをとり、引数として与えられたリストの各要素を元のリストへ追加する。
+
+
+en:<li>The <code>insert()</code> method inserts a single item into a list. The first argument is the index of the first item in the list that will get bumped out of position. List items do not need to be unique; for example, there are now two separate items with the value <code>'&Omega;'</code>: the first item, <code>a_list[0]</code>, and the last item, <code>a_list[6]</code>.
+ja:<li><code>insert()</code>メソッドは1つの要素をリストに挿入する。1つ目の引数は、挿入によって位置がずらされる最初の要素のインデックスだ。リストの各要素の値は、リストの中で唯一の値である必要はない。。例えば、現在このリストには2つの<code>'&Omega;'</code>があり、リストの最初(<code>a_list[0]</code>)と最後(<code>a_list[6]</code>)にそれぞれ収まっている。
+
+
+en:<p><span class=u>&#x261E;</span><code><var>a_list</var>.insert(0, <var>value</var>)</code> is like the <code>unshift()</code> function in Perl. It adds an item to the beginning of the list, and all the other items have their positional index bumped up to make room.
+ja:<p><span class=u>&#x261E;</span><code><var>a_list</var>.insert(0, <var>value</var>)</code>はPerlの<code>unshift()</code>関数に似ている。これは、要素をリストの先頭に追加し、それに合わせて他の全要素の位置インデックスを1つ増やすという処理を行う。
+
+
+en:<p>Let&#8217;s look closer at the difference between <code>append()</code> and <code>extend()</code>.
+ja:<p><code>append()</code>と<code>extend()</code>の違いをもっとよく見てみよう。
+
+
+en:<li>The <code>extend()</code> method takes a single argument, which is always a list, and adds each of the items of that list to <var>a_list</var>.
+ja:<li><code>extend()</code>メソッドは単一の引数として常にリストを取り、そのリストの各要素を<var>a_list</var>へ追加する。
+
+
+en:<li>If you start with a list of three items and extend it with a list of another three items, you end up with a list of six items.
+ja:<li>3つの要素を持つリストを、別の3つの要素を持つリストで拡張 (extend) すると、6つの要素を持つリストになる。
+
+
+en:<li>On the other hand, the <code>append()</code> method takes a single argument, which can be any datatype. Here, you&#8217;re calling the <code>append()</code> method with a list of three items.
+ja:<li>一方で、<code>append()</code>メソッドも引数を1つだけとるが、その引数はどんなデータ型でもいい。ここでは、3つの要素を持つリストを引数として<code>append()</code>メソッドを呼び出している。
+
+
+en:<li>If you start with a list of six items and append a list onto it, you end up with... a list of seven items. Why seven? Because the last item (which you just appended) <em>is itself a list</em>. Lists can contain any type of data, including other lists. That may be what you want, or it may not. But it&#8217;s what you asked for, and it&#8217;s what you got.
+ja:<li>6つの要素を持つリストに対してリストを加える (append) と、結果は&hellip;&hellip; 7つの要素を持つリストになる。なぜ7つなのだろうか？ なぜなら最後の要素（今加えたもの）は<em>リスト自体</em>だからだ。リストはどんなデータ型でも含むことができるので、リストが他のリストを含むこともできる。これは望む結果かもしれないし、そうでないかもしれない。だがどうであれ、この操作をすれば、このような結果が返ってくるのだ。
+
+
+en:<h3 id=searchinglists>Searching For Values In A List</h3>
+ja:<h3 id=searchinglists>リストの値を検索する</h3>
+
+
+en:<li>As you might expect, the <code>count()</code> method returns the number of occurrences of a specific value in a list.
+ja:<li>もうお分かりだと思うが、<code>count()</code>メソッドは指定された値がリストの中に何回出現するかを数える。
+
+
+en:<li>If all you want to know is whether a value is in the list or not, the <code>in</code> operator is slightly faster than using the <code>count()</code> method. The <code>in</code> operator always returns <code>True</code> or <code>False</code>; it will not tell you how many times the value appears in the list.
+ja:<li>リストの中に特定の値があるかどうかを知りたいだけの場合は、<code>count()</code>メソッドよりも<code>in</code>演算子の方がわずかながら処理が早い。<code>in</code>演算子は、常に<code>True</code>または<code>False</code>を返す。リスト中にその値が何回現われるのかは教えてくれないのだ。
+
+
+en:<li>Neither the <code>in</code> operator nor the <code>count()</code> method will tell you <em>where</em> in the list a value appears. If you need to know where in the list a value is, call the <code>index()</code> method. By default it will search the entire list, although you can specify an optional second argument of the (0-based) index to start from, and even an optional third argument of the (0-based) index to stop searching.
+ja:<li><code>in</code>演算子も<code>count()</code>メソッドも、値がリストの<em>どこに</em>現れるのかは教えてくれない。値がリストのどこにあるのかを知る必要がある場合は、<code>index()</code>メソッドを呼び出そう。デフォルトでは、このメソッドはリスト全体を検索するが、2番目の引数で検索を開始するインデックス（0を起点とする）を指定することや、さらに3つ目の引数で検索を止めるインデックス（0を起点とする）を指定することもできる。
+
+
+en:<li>The <code>index()</code> method finds the <em>first</em> occurrence of a value in the list. In this case, <code>'new'</code> occurs twice in the list, in <code>a_list[2]</code> and <code>a_list[4]</code>, but the <code>index()</code> method will return only the index of the first occurrence.
+ja:<li><code>index()</code>メソッドはリスト中で<em>最初に</em>出現したものだけを検出する。この例だと、<code>'new'</code>がリストの中に2回出現していて、<code>a_list[2]</code>と<code>a_list[4]</code>の2箇所に存在しているが、<code>index()</code>メソッドは1つ目のインデックスだけを返す。
+
+
+en:<li>As you might <em>not</em> expect, if the value is not found in the list, the <code>index()</code> method will raise an exception.
+ja:<li>予想<em>していなかった</em>だろうが、値がリストから見つからない場合、<code>index()</code>メソッドは例外を送出する。
+
+
+en:<p>Wait, what? That&#8217;s right: the <code>index()</code> method raises an exception if it doesn&#8217;t find the value in the list. This is notably different from most languages, which will return some invalid index (like <code>-1</code>). While this may seem annoying at first, I think you will come to appreciate it. It means your program will crash at the source of the problem instead of failing strangely and silently later. Remember, <a href=#creatinglists><code>-1</code> is a valid list index</a>. If the <code>index()</code> method returned <code>-1</code>, that could lead to some not-so-fun debugging sessions!
+ja:<p>待った、何だって？ そう、<code>index()</code>メソッドは、値をリストから見つけ出せなかった場合に例外を送出するのだ。これは他の多くの言語と際だって異なる点だ。他の多くの言語はここで無効なインデックス（例えば<code>-1</code>）を返すだろう。始めのうちはこれを煩わしく思うかもしれないが、次第にこの良さが分かるようになると思う。こうすれば、後の方で密やかに奇妙な振る舞いを引き起こすのではなく、問題の根源でクラッシュしてくれるからだ。<code>-1</code>がリストの有効なインデックスだということを思い出してほしい。もし仮に<code>index()</code>メソッドが<code>-1</code>を返していたとしたら、あまり楽しくないデバッグ作業に連れていってくれただろうね！
+
+
+en:<h3 id=removingfromlists>Removing Items From A List</h3>
+ja:<h3 id=removingfromlists>リストから要素を取り除く</h3>
+
+
+en:<aside>Lists never have gaps.</aside>
+ja:<aside>リストは決して隙間を持たない。</aside>
+
+
+en:<p>Lists can expand and contract automatically. You&#8217;ve seen the expansion part. There are several different ways to remove items from a list as well.
+ja:<p>リストは自動的に伸張したり収縮したりできる。伸張については既に見ている。リストから要素を取り除くのにもいくつかの方法がある。
+
+
+en:<li>You can use the <code><dfn>del</dfn></code> statement to delete a specific item from a list.
+ja:<li>特定の要素をリストから削除するには、<code><dfn>del</dfn></code>文が使える。
+
+
+en:<li>Accessing index <code>1</code> after deleting index <code>1</code> does <em>not</em> result in an error. All items after the deleted item shift their positional index to &#8220;fill the gap&#8221; created by deleting the item.
+ja:<li>インデックス<code>1</code>を削除した後に、インデックス<code>1</code>にアクセスしてもエラーには<em>ならない</em>。要素が削除されてできた隙間を「埋める」ために、その削除された要素の後ろにあるすべての要素の位置がずらされるのだ。
+
+
+en:<p>Don&#8217;t know the positional index? Not a problem; you can remove items by value instead.
+ja:<p>インデックスの位置が分からないときはどうすれば良いのだろうか？ 心配は要らない。代わりに値を指定することで要素を取り除くことができる。
+
+
+en:<li>You can also remove an item from a list with the <code>remove()</code> method. The <code>remove()</code> method takes a <em>value</em> and removes the first occurrence of that value from the list. Again, all items after the deleted item will have their positional indices bumped down to &#8220;fill the gap.&#8221; Lists never have gaps.
+ja:<li><code>remove()</code>メソッドでもリストから要素を取り除ける。<code>remove()</code>メソッドは<em>値</em>を受け取り、それで最初に見つかったものをリストから取り除く。ここでもやはり、削除される要素の後ろにあるすべての要素は「隙間を埋める」ために位置がずらされる。リストは決して隙間を持たないのだ。
+
+
+en:<li>You can call the <code>remove()</code> method as often as you like, but it will raise an exception if you try to remove a value that isn&#8217;t in the list.
+ja:<li><code>remove()</code>メソッドは好きなだけ呼び出すことができるが、リストの中に存在しない値を取り除こうとすると、このメソッドは例外を送出する。
+
+
+en:<h3 id=popgoestheweasel>Removing Items From A List: Bonus Round</h3>
+ja:<h3 id=popgoestheweasel>リストから要素を取り除く: おまけ</h3>
+
+
+en:<p>Another interesting list method is <code>pop()</code>. The <code>pop()</code> method is yet another way to <a href=#removingfromlists>remove items from a list</a>, but with a twist.
+ja:<p>別の面白いリストのメソッドとして<code>pop()</code>がある。<code>pop()</code>メソッドは、リストから要素を取り除くもう一つの方法だが、少しひねりが加えられている。
+
+
+en:<li>When called without arguments, the <code>pop()</code> list method removes the last item in the list <em>and returns the value it removed</em>.
+ja:<li>リストの<code>pop()</code>メソッドを引数なしに呼び出すと、リストの最後の要素が削除されて、<em>削除された値が返される</em>。
+
+
+en:<li>You can pop arbitrary items from a list. Just pass a positional index to the <code>pop()</code> method. It will remove that item, shift all the items after it to &#8220;fill the gap,&#8221; and return the value it removed.
+ja:<li>任意の要素をリストから<code>pop</code>できる。これにはインデックスを<code>pop()</code>メソッドに渡すだけでいい。すると、要素が取り除かれ、「隙間を埋める」ために後ろにある要素がずらされ、取り除かれた値が返される。
+
+
+en:<li>Calling <code>pop()</code> on an empty list raises an exception.
+ja:<li>空リストの<code>pop()</code>メソッドを呼び出すと、例外が送出される。
+
+
+en:<p><span class=u>&#x261E;</span>Calling the <code>pop()</code> list method without an argument is like the <code>pop()</code> function in Perl. It removes the last item from the list and returns the value of the removed item. Perl has another function, <code>shift()</code>, which removes the first item and returns its value; in Python, this is equivalent to <code><var>a_list</var>.pop(0)</code>.
+ja:<p><span class=u>&#x261E;</span>引数無しでの<code>pop()</code>の呼び出しは、Perlの<code>pop()</code>関数に似ている。これはリストから末尾の要素を取り除き、<em>その取り除かれた値を返す</em>。Perlは他に<code>shift()</code>という関数を持っている。これはリストの先頭の要素を取り除いて、その値を返すものだが、Pythonでは<code>a_list.pop(0)</code>で同じことができる。
+
+
+en:<h3 id=lists-in-a-boolean-context>Lists In A Boolean Context</h3>
+ja:<h3 id=lists-in-a-boolean-context>ブール値のコンテクストでのリスト</h3>
+
+
+en:<aside>Empty lists are false; all other lists are true.</aside>
+ja:<aside>空のリストは偽、それ以外のリストは真。</aside>
+
+
+en:<p>You can also use a list in <a href=#booleans>a boolean context</a>, such as an <code>if</code> statement.
+ja:<p>リストは<code>if</code>文のような <a href=#booleans>ブール値のコンテクスト</a>でも使うことができる。
+
+
+en:<li>In a boolean context, an empty list is false.
+ja:<li>ブール値のコンテクストでは、空のリストは偽だ。
+
+
+en:<li>Any list with at least one item is true.
+ja:<li>要素を1つでも持つリストは真だ。
+
+
+en:<li>Any list with at least one item is true. The value of the items is irrelevant.
+ja:<li>要素を1つでも持つリストは真だ。要素の値は関係ない。
+
+
+en:<h2 id=tuples>Tuples</h2>
+ja:<h2 id=tuples>タプル</h2>
+
+
+en:<p>A <dfn>tuple</dfn> is an immutable list.  A tuple can not be changed in any way once it is created.
+ja:<p><dfn>タプル</dfn>はイミュータブルなリストだ。いったん作成されたタプルは、どんな手段によっても変更できない。
+
+
+en:<li>A tuple is defined in the same way as a list, except that the whole set of elements is enclosed in parentheses instead of square brackets.
+ja:<li>タプルはリストと同じような方法で定義するが、要素の集合の全体を角括弧ではなく丸括弧で包む点が異なる。
+
+
+en:<li>The elements of a tuple have a defined order, just like a list. Tuple indices are zero-based, just like a list, so the first element of a non-empty tuple is always <code>a_tuple[0]</code>.
+ja:<li>タプルの要素はリストと同様に決められた順序を持つ。タプルのインデックスはリストと同様に0から始まるので、空でないタプルの最初の要素は常に<code>a_tuple[0]</code>だ。
+
+
+en:<li>Negative indices count from the end of the tuple, just like a list.
+ja:<li>リストと同様に、負のインデックスはタプルの後ろ側から数えられる。
+
+
+en:<li>Slicing works too, just like a list. When you slice a list, you get a new list; when you slice a tuple, you get a new tuple.
+ja:<li>リストと同様に、スライスすることもできる。リストをスライスすると新しいリストが得られるように、タプルをスライスすると新しいタプルが得られる。
+
+
+en:<p>The major difference between tuples and lists is that tuples can not be changed. In technical terms, tuples are <dfn>immutable</dfn>. In practical terms, they have no methods that would allow you to change them. Lists have methods like <code>append()</code>, <code>extend()</code>, <code>insert()</code>, <code>remove()</code>, and <code>pop()</code>. Tuples have none of these methods. You can slice a tuple (because that creates a new tuple), and you can check whether a tuple contains a particular value (because that doesn&#8217;t change the tuple), and&hellip; that&#8217;s about it.
+ja:<p>タプルとリストの大きな違いは、タプルは変更ができないという点だ。専門用語ではこれを、タプルは<dfn>イミュータブル</dfn> (immutable) であると言う。実際的な言葉で言えば、タプルはタプルの変更を許すようなメソッドを持っていないということだ。リストは<code>append()</code>, <code>extend()</code>, <code>insert()</code>, <code>remove()</code>, <code>pop()</code>などのメソッドを持っているが、タプルはこれらのメソッドを持っていない。それでも、タプルをスライスすることはできるし（新しいタプルが作られるから）、タプルが特定の値を持っているかどうかを確かめることもできるし（タプルを変更しないから）、そして&hellip;&hellip; まぁこれくらいにしておこう。
+
+
+en:<li>You can&#8217;t add elements to a tuple. Tuples have no <code>append()</code> or <code>extend()</code> method.
+ja:<li>タプルに要素を追加することはできない。タプルは<code>append()</code>や<code>extend()</code>というメソッドを持っていない。
+
+
+en:<li>You can&#8217;t remove elements from a tuple. Tuples have no <code>remove()</code> or <code>pop()</code> method.
+ja:<li>タプルから要素を取り除くことはできない。タプルは<code>remove()</code>や<code>pop()</code>というメソッドを持っていない。
+
+
+en:<li>You <em>can</em> find elements in a tuple, since this doesn&#8217;t change the tuple.
+ja:<li>タプル中の要素を検索することはできる。これはタプルを変更しないからね。
+
+
+en:<li>You can also use the <code>in</code> operator to check if an element exists in the tuple.
+ja:<li><code>in</code>演算子を使って、要素がタプルに含まれているかどうかを調べることもできる。
+
+
+en:<p>So what are tuples good for?</p>
+ja:<p>で、タプルは何の役に立つのだろうか？</p>
+
+
+en:<li>Tuples are faster than lists.  If you&#8217;re defining a constant set of values and all you&#8217;re ever going to do with it is iterate through it, use a tuple instead of a list.
+ja:<li>タプルはリストよりも高速だ。変更を加える予定のない集合を定めて、それをイテレートするだけのつもりなら、リストの代わりにタプルを使うとよい。
+
+
+en:<li>It makes your code safer if you &#8220;write-protect&#8221; data that doesn&#8217;t need to be changed. Using a tuple instead of a list is like having an implied <code>assert</code> statement that shows this data is constant, and that special thought (and a specific function) is required to override that.
+ja:<li>変更の必要がないデータを「書き込み保護」すれば、コードはもっと安全なものになる。タプルをリストの代わりに使うことは、データが不変であることを示す暗黙的な<code>assert</code>文があるようなものであり、それを上書きするには特別の意図（と特定の関数）が要求される。
+
+
+en:<li>Some tuples can be used as dictionary keys (specifically, tuples that contain <i>immutable</i> values like strings, numbers, and other tuples). Lists can never be used as dictionary keys, because lists are not immutable.
+ja:<li>ある種のタプル（具体的に言えば、文字列とか数字とか他のタプルとかいったような<em>イミュータブル</em>な値からなるタプル）は辞書のキーとして使える。リストはイミュータブルではないので、辞書のキーとしては決して使うことができない。
+
+
+en:<p><span class=u>&#x261E;</span>Tuples can be converted into lists, and vice-versa. The built-in <code>tuple()</code> function takes a list and returns a tuple with the same elements, and the <code>list()</code> function takes a tuple and returns a list. In effect, <code>tuple()</code> freezes a list, and <code>list()</code> thaws a tuple.
+ja:<p><span class=u>&#x261E;</span>タプルはリストに変換できるし、その逆もできる。組み込みの<code>tuple()</code>関数はリストを引数にとって、同じ要素を持ったタプルを返す。また<code>list()</code>関数はタプルを引数にとってリストを返す。実質的には、<code>tuple()</code>はリストの凍結を行い、<code>list()</code>はタプルの解凍を行うと考えることができる。
+
+
+en:<h3 id=tuples-in-a-boolean-context>Tuples In A Boolean Context</h3>
+ja:<h3 id=tuples-in-a-boolean-context>ブール値のコンテクストでのタプル</h3>
+
+
+en:<p>You can use tuples in <a href=#booleans>a boolean context</a>, such as an <code>if</code> statement.
+ja:<p>タプルは<code>if</code>文のような<a href=#booleans>ブール値のコンテクスト</a>で使うことができる。
+
+
+en:<li>In a boolean context, an empty tuple is false.
+ja:<li>ブール値のコンテクストでは、空のタプルは偽だ。
+
+
+en:<li>Any tuple with at least one item is true.
+ja:<li>要素を1つでももつタプルは真だ。
+
+
+en:<li>Any tuple with at least one item is true. The value of the items is irrelevant. But what&#8217;s that comma doing there?
+ja:<li>要素を1つでももつタプルは真だ。要素の値は関係ない。しかし、このカンマは何をしているのだろう。
+
+
+en:<li>To create a tuple of one item, you need a comma after the value. Without the comma, Python just assumes you have an extra pair of parentheses, which is harmless, but it doesn&#8217;t create a tuple.
+ja:<li>1つの要素からなるタプルを作るには、値の後にカンマを置かなくてはならない。もしこのカンマがないと、Pythonは余分な括弧があるだけだと見なしてしまう。これはエラーにはならないが、タプルは作成されない。
+
+
+en:<h3 id=multivar>Assigning Multiple Values At Once</h3>
+ja:<h3 id=multivar>複数の値を一度に代入する</h3>
+
+
+en:<p>Here&#8217;s a cool programming shortcut: in Python, you can use a tuple to assign multiple values at once.
+ja:<p>クールな技をお見せしよう: Pythonでは、タプルを使って複数の値を一度に代入できるのだ。
+
+
+en:<li><var>v</var> is a tuple of three elements, and <code>(x, y, z)</code> is a tuple of three variables. Assigning one to the other assigns each of the values of <var>v</var> to each of the variables, in order.
+ja:<li><var>v</var> は3つの要素を持つタプルで、<code>(x、y、z)</code>は3つの変数を持つタプルだ。一方をもう一方へ代入すると、<var>v</var>の各々の値が、順番通りに各々の変数へ代入される。
+
+
+en:<p>This has all kinds of uses. Suppose you want to assign names to a range of values. You can use the built-in <code>range()</code> function with multi-variable assignment to quickly assign consecutive values.
+ja:<p>これにはあらゆる使い道がある。仮に、連続する数値に名前を付けたいとしよう。組み込みの<code>range()</code>関数と多値代入を使うことで、連続する値を素早く代入することができる。
+
+
+en:<li>The built-in <code>range()</code> function constructs a sequence of integers. (Technically, the <code>range()</code> function returns an <a href=iterators.html>iterator</a>, not a list or a tuple, but you&#8217;ll learn about that distinction later.) <var>MONDAY</var>, <var>TUESDAY</var>, <var>WEDNESDAY</var>, <var>THURSDAY</var>, <var>FRIDAY</var>, <var>SATURDAY</var>, and <var>SUNDAY</var> are the variables you&#8217;re defining. (This example came from the <code>calendar</code> module, a fun little module that prints calendars, like the <abbr>UNIX</abbr> program <code>cal</code>. The <code>calendar</code> module defines integer constants for days of the week.)
+ja:<li>組み込みの<code>range()</code>関数は、整数のシーケンスを構築する（技術的に言うと、<code>range()</code>関数はリストやタプルではなく、<a href=iterators.html>イテレータ</a>を返すのだが、この違いについては後で学ぶ）<var>MONDAY</var>, <var>TUESDAY</var>, <var>WEDNESDAY</var>, <var>THURSDAY</var>, <var>FRIDAY</var>, <var>SATURDAY</var>, <var>SUNDAY</var>が、ここで定義している変数だ（この例は<code>calendar</code>モジュールから持ってきた。これは小さくて愉快なモジュールで、<abbr>UNIX</abbr>の<code>cal</code>プログラムのようにカレンダーを表示する。<code>calendar</code>モジュールは各曜日ごとに整数の定数を定義している）。
+
+
+en:<li>Now each variable has its value: <var>MONDAY</var> is 0, <var>TUESDAY</var> is <code>1</code>, and so forth.
+ja:<li>各変数は値を持った。<var>MONDAY</var>は<code>0</code>、<var>TUESDAY</var>は<code>1</code>、などなど。
+
+
+en:<p>You can also use multi-variable assignment to build functions that return multiple values, simply by returning a tuple of all the values. The caller can treat it as a single tuple, or it can assign the values to individual variables. Many standard Python libraries do this, including the <code>os</code> module, which you'll learn about in <a href=comprehensions.html#os>the next chapter</a>.
+ja:<p>多値代入は、複数の戻り値を返す関数を作るためにも使える。これをするには単純に、すべての戻り値を含むタプルを返せばいい。呼び出し元は、返されたタプルを1つのタプルとして扱うこともできるし、個別の変数に値を代入することもできる。<a href=comprehensions.html#os>次の章</a>で学ぶ<code>os</code>モジュールなどを含む、多くのPythonの標準ライブラリがこれを行っている。
+
+
+en:<h2 id=sets>Sets</h2>
+ja:<h2 id=sets>集合</h2>
+
+
+en:<p>A <dfn>set</dfn> is an unordered &#8220;bag&#8221; of unique values. A single set can contain values of any immutable datatype. Once you have two sets, you can do standard set operations like union, intersection, and set difference.
+ja:<p><dfn>集合</dfn>は一意な値を詰めた「袋」であり、その要素は順序づけされない。1つの集合の中には、イミュータブルなデータ型の値なら何でも含めることができる。2つの集合を作れば、それらを使って和集合・積集合・差集合といった標準的な集合演算を行うこともできる。
+
+
+en:<h3 id=creating-a-set>Creating A Set</h3>
+ja:<h3 id=creating-a-set>集合を作る</h3>
+
+
+en:<p>First things first. Creating a set is easy.
+ja:<p>重要なことからやろう。集合を作るのは簡単だ。
+
+
+en:<li>To create a set with one value, put the value in curly brackets (<code>{}</code>).
+ja:<li>1つの値を持った集合を作るには、その値を波括弧 (<code>{}</code>) の中に入れればいい。
+
+
+en:<li>Sets are actually implemented as <a href=iterators.html#defining-classes>classes</a>, but don&#8217;t worry about that for now.
+ja:<li>集合は、実際には<a href=iterators.html#defining-classes>クラス</a>として実装されているが、今の段階では気にしないでおこう。
+
+
+en:<li>To create a set with multiple values, separate the values with commas and wrap it all up with curly brackets.
+ja:<li>複数の値を持った集合を作るには、値をカンマで区切って波括弧で包めばよい。
+
+
+en:<p>You can also create a set out of a <a href=#lists>list</a>.
+ja:<p><a href=#lists>リスト</a>から集合を作ることもできる。
+
+
+en:<li>To create a set from a list, use the <code>set()</code> function. (Pedants who know about how sets are implemented will point out that this is not really calling a function, but instantiating a class. I <em>promise</em> you will learn the difference later in this book. For now, just know that <code>set()</code> acts like a function, and it returns a set.)
+ja:<li>リストから集合を作るには、<code>set()</code>関数を使えばよい（集合がどのように実装されているのかを知っているスノッブたちは、これが実は関数呼び出しではなく、クラスのインスタンス化であると指摘してくるかもしれない。この違いはこの本の後の章で学ぶことを<em>約束する</em>。現時点では、<code>set()</code>が関数のように機能して、集合を返すことだけを知っていればよい）。
+
+
+en:<li>As I mentioned earlier, a single set can contain values of any datatype. And, as I mentioned earlier, sets are <em>unordered</em>. This set does not remember the original order of the list that was used to create it. If you were to add items to this set, it would not remember the order in which you added them.
+ja:<li>前に述べたように、1つの集合はどんなデータ型でも含むことができる。そして、同じく前に述べたように、集合は<em>順序づけされていない</em>。この集合は、集合を作るために使ったリストの元の順序を記憶していない。仮に、この集合にいくつかの要素を追加したとしても、集合はそれらを追加した順序を覚えないのだ。
+
+
+en:<li>The original list is unchanged.
+ja:<li>元のリストは変更されていない。
+
+
+en:<p id=emptyset>Don&#8217;t have any values yet? Not a problem. You can create an empty set.
+ja:<p id=emptyset>まだ値を一つも持っていないって？ 問題ない。空の集合を作ることができる。
+
+
+en:<li>To create an empty set, call <code>set()</code> with no arguments.
+ja:<li>空の集合を作るには、<code>set()</code>を引数なしに呼び出せばいい。
+
+
+en:<li>The printed representation of an empty set looks a bit strange. Were you expecting <code>{}</code>, perhaps? That would denote an empty dictionary, not an empty set. You&#8217;ll learn about dictionaries later in this chapter.
+ja:<li>空の集合は少し変わった表現で表示される。もしかすると<code>{}</code>と表示されると予想していただろうか？ それだと空の集合ではなく、空の辞書を表すことになってしまう。辞書については後でこの章で学ぶ。
+
+
+en:<li>Despite the strange printed representation, this <em>is</em> a set&hellip;
+ja:<li>変わった表現で表示されるが、これは集合<em>であり</em>&hellip;&hellip;
+
+
+en:<li>&hellip;and this set has no members.
+ja:<li>&hellip;&hellip;この集合は要素を持たない。
+
+
+en:<li>Due to historical quirks carried over from Python 2, you can not create an empty set with two curly brackets. This actually creates an empty dictionary, not an empty set.
+ja:<li>昔からある変な記法がPython 2より引き継がれたおかげで、二つの波括弧で空の集合を作ることはできない。これは実際には空の集合ではなく、空の辞書を作ってしまうのだ。
+
+
+en:<h3 id=modifying-sets>Modifying A Set</h3>
+ja:<h3 id=modifying-sets>集合を変更する</h3>
+
+
+en:<p>There are two different ways to add values to an existing set: the <code>add()</code> method, and the <code>update()</code> method.
+ja:<p>集合に値を追加するには2つの異なる方法がある。<code>add()</code>メソッドと<code>update()</code>メソッドだ。
+
+
+
+en:<li>The <code>add()</code> method takes a single argument, which can be any datatype, and adds the given value to the set.
+ja:<li><code>add()</code>メソッドは単一の引数（どんな型でもよい）をとり、与えられた値を集合に追加する。
+
+
+en:<li>This set now has 3 members.
+ja:<li>この集合は今3つの要素を持っている。
+
+
+en:<li>Sets are bags of <em>unique values</em>. If you try to add a value that already exists in the set, it will do nothing. It won&#8217;t raise an error; it&#8217;s just a no-op.
+ja:<li>集合は<em>一意な値</em>を詰めた袋だ。既にその集合に含まれている値を追加しようとしても、何も起こらない。例外も送出されない。本当に何も起こらないのだ。
+
+
+en:<li>This set <em>still</em> has 3 members.
+ja:<li>集合は<em>まだ</em>3つの要素を持っている。
+
+
+en:<li>The <code>update()</code> method takes one argument, a set, and adds all its members to the original set. It&#8217;s as if you called the <code>add()</code> method with each member of the set.
+ja:<li><code>update()</code>メソッドは1つの引数として集合をとり、その集合のすべての要素を元の集合に追加する。これは集合の各要素を引数として<code>add()</code>メソッドを呼び出すのと同じだ。
+
+
+en:<li>Duplicate values are ignored, since sets can not contain duplicates.
+ja:<li>集合は重複した値を含むことができないので、重複した値は無視される。
+
+
+en:<li>You can actually call the <code>update()</code> method with any number of arguments. When called with two sets, the <code>update()</code> method adds all the members of each set to the original set (dropping duplicates).
+ja:<li>実際には<code>update()</code>メソッドは任意の数の引数と共に呼び出すことができる。2つの集合と共に呼び出すと、<code>update()</code>メソッドは各々の集合の各要素を（重複を除いて）元の集合に追加する。
+
+
+en:<li>The <code>update()</code> method can take objects of a number of different datatypes, including lists. When called with a list, the <code>update()</code> method adds all the items of the list to the original set.
+ja:<li><code>update()</code>メソッドは、リストのようにいくつもの異なるデータ型から構成されるオブジェクトを受け取ることができる。リストと共に呼び出されると、<code>update()</code>メソッドはリストのすべての要素を元の集合に追加する。
+
+
+en:<h3 id=removing-from-sets>Removing Items From A Set</h3>
+ja:<h3 id=removing-from-sets>集合から値を取り除く</h3>
+
+
+en:<p>There are three ways to remove individual values from a set. The first two, <code>discard()</code> and <code>remove()</code>, have one subtle difference.
+ja:<p>集合から値を取り除くには3つの異なる方法がある。始めの2つは<code>discard()</code>メソッドと<code>remove()</code>メソッドで、この2つには微妙な違いが1つある。
+
+
+
+en:<li>The <code>discard()</code> method takes a single value as an argument and removes that value from the set.
+ja:<li><code>discard()</code>メソッドは引数として1つの値を受け取り、その値を集合から取り除く。
+
+
+en:<li>If you call the <code>discard()</code> method with a value that doesn&#8217;t exist in the set, it does nothing. No error; it&#8217;s just a no-op.
+ja:<li>集合に存在しない値を引数として<code>discard()</code>メソッドを呼び出したときは、何も行われない。エラーも起きない。本当に何も起きないのだ。
+
+
+en:<li>The <code>remove()</code> method also takes a single value as an argument, and it also removes that value from the set.
+ja:<li><code>remove()</code>メソッドも同じく引数として1つの値を受け取り、その値を集合から取り除く。
+
+
+en:<li>Here&#8217;s the difference: if the value doesn&#8217;t exist in the set, the <code>remove()</code> method raises a <code>KeyError</code> exception.
+ja:<li>違いはこれだ: 値が集合の中に存在しない場合は、<code>remove()</code>メソッドは<code>KeyError</code>例外を送出する。
+
+
+en:<p>Like lists, sets have a <code>pop()</code> method.
+ja:<p>リストのように、集合は<code>pop()</code>メソッドを持っている。
+
+
+en:<li>The <code>pop()</code> method removes a single value from a set and returns the value. However, since sets are unordered, there is no &#8220;last&#8221; value in a set, so there is no way to control which value gets removed. It is completely arbitrary.
+ja:<li><code>pop()</code>メソッドは1つの値を取り除いてその値を返す。ただし、集合の要素は順序付けされていないので、集合には「最後の」値というものはなく、したがって、どの値が取り除かれるのかを制御する方法はない。どれが取り除かれるかは完全に不定だ。
+
+
+en:<li>The <code>clear()</code> method removes <em>all</em> values from a set, leaving you with an empty set. This is equivalent to <code>a_set = set()</code>, which would create a new empty set and overwrite the previous value of the <var>a_set</var> variable.
+ja:<li><code>clear()</code>メソッドは<em>すべての</em>値を集合から削除し、空の集合を残す。<!--これは<code>a_set = set()</code>、つまり新しい空の集合を作り、<var>a_set</var>変数の前の値を上書きするという処理と等しい [[誤りなのでコメントアウト]] -->
+
+
+en:<li>Attempting to pop a value from an empty set will raise a <code>KeyError</code> exception.
+ja:<li>空の集合からpopしようとすると、<code>KeyError</code>例外が送出される。
+
+
+en:<h3 id=common-set-operations>Common Set Operations</h3>
+ja:<h3 id=common-set-operations>一般的な集合演算</h3>
+
+
+en:<p>Python&#8217;s <code>set</code> type supports several common set operations.
+ja:<p>Pythonの<code>set</code>はいくつかの一般的な集合演算をサポートしている。
+
+
+en:<li>To test whether a value is a member of a set, use the <code>in</code> operator. This works the same as lists.
+ja:<li>ある値が集合に含まれているかを確認するには、<code>in</code>演算子を使えばよい。これはリストの場合と同様に機能する。
+
+
+en:<li>The <code>union()</code> method returns a new set containing all the elements that are in <em>either</em> set.
+ja:<li><code>union()</code>メソッドは、<em>どちらか</em>の集合に含まれるすべての要素を含んだ新しい集合を返す。
+
+
+en:<li>The <code>intersection()</code> method returns a new set containing all the elements that are in <em>both</em> sets.
+ja:<li><code>intersection()</code>メソッドは、<em>両方の</em>集合に含まれるすべての要素を含んだ新しい集合を返す。
+
+
+en:<li>The <code>difference()</code> method returns a new set containing all the elements that are in <var>a_set</var> but not <var>b_set</var>.
+ja:<li><code>difference()</code>メソッドは、<var>a_set</var>には含まれるが<var>b_set</var>には含まれていないすべての要素を含んだ新しい集合を返す。
+
+
+
+en:<li>The <code>symmetric_difference()</code> method returns a new set containing all the elements that are in <em>exactly one</em> of the sets.
+ja:<li><code>symmetric_difference()</code>メソッドは、<em>どちらか一方だけの</em>集合に含まれるすべての要素を含んだ新しい集合を返す。
+
+
+en:<p>Three of these methods are symmetric.
+ja:<p>以上のメソッドのうち、3つは対称的だ。
+
+
+en:<li>The symmetric difference of <var>a_set</var> from <var>b_set</var> <em>looks</em> different than the symmetric difference of <var>b_set</var> from <var>a_set</var>, but remember, sets are unordered. Any two sets that contain all the same values (with none left over) are considered equal.
+ja:<li><var>b_set</var>から<var>a_set</var>の対称差 (symmetric difference) は、<var>a_set</var>から<var>b_set</var>の対称差とは異なるように<em>見える</em>が、集合は要素が順序づけされないことを思い出して欲しい。2つの集合が同じ要素をすべて（残さず）含んでいれば等しいと見なされる。
+
+
+en:<li>And that&#8217;s exactly what happens here. Don&#8217;t be fooled by the Python Shell&#8217;s printed representation of these sets. They contain the same values, so they are equal.
+ja:<li>これが真実だ。Pythonシェルが表示した集合の表現に騙されてはならない。これらは同じ値を含んでいるので、これらは等しい。
+
+
+en:<li>The union of two sets is also symmetric.
+ja:<li>2つの集合の和集合 (union) も対称的だ。
+
+
+en:<li>The intersection of two sets is also symmetric.
+ja:<li>2つの集合の積集合 (intersection) も対称的だ。
+
+
+en:<li>The difference of two sets is not symmetric. That makes sense; it&#8217;s analogous to subtracting one number from another. The order of the operands matters.
+ja:<li>2つの集合の差 (difference) は対称的ではない。これは理にかなっている。つまり、これはある数から他の数を引くことに似ている。演算対象の順番が問題となるのだ。
+
+
+en:<p>Finally, there are a few questions you can ask of sets.
+ja:<p>最後に、集合に尋ねることのできる事柄をいくつか紹介する。
+
+
+en:<li><var>a_set</var> is a <dfn>subset</dfn> of <var>b_set</var>&nbsp;&mdash;&nbsp;all the members of <var>a_set</var> are also members of <var>b_set</var>.
+ja:<li><var>a_set</var>は<var>b_set</var>の<dfn>部分集合</dfn> (subset) だ。つまり <var>a_set</var> のすべての要素は <var>set</var> にも含まれている。
+
+
+en:<li>Asking the same question in reverse, <var>b_set</var> is a <dfn>superset</dfn> of <var>a_set</var>, because all the members of <var>a_set</var> are also members of <var>b_set</var>.
+ja:<li>逆の言い方をすると、<var>a_set</var>のすべての要素は<var>b_set</var>の要素でもあるので、<var>b_set</var>は<var>a_set</var>の<dfn>上位集合</dfn> (superset) だ。
+
+
+en:<li>As soon as you add a value to <var>a_set</var> that is not in <var>b_set</var>, both tests return <code>False</code>.
+ja:<li><var>b_set</var> に含まれていない値を<var>a_set</var>に追加すると、たちまち両方の結果は<code>False</code>になる。
+
+
+en:<h3 id=sets-in-a-boolean-context>Sets In A Boolean Context</h3>
+ja:<h3 id=sets-in-a-boolean-context>ブール値のコンテクストでの集合</h3>
+
+
+en:<p>You can use sets in <a href=#booleans>a boolean context</a>, such as an <code>if</code> statement.
+ja:<p>集合は<code>if</code>文のような<a href=#booleans>ブール値のコンテクスト</a>で使うことができる。
+
+
+en:<li>In a boolean context, an empty set is false.
+ja:<li>ブール値のコンテクストでは、空の集合は偽だ。
+
+
+en:<li>Any set with at least one item is true.
+ja:<li>要素を1つでも持つ集合は真だ。
+
+
+en:<li>Any set with at least one item is true. The value of the items is irrelevant.
+ja:<li>要素を1つでも持つ集合は真だ。要素の値は関係ない。
+
+
+en:<h2 id=dictionaries>Dictionaries</h2>
+ja:<h2 id=dictionaries>辞書</h2>
+
+
+en:<p>A <dfn>dictionary</dfn> is an unordered set of key-value pairs. When you add a key to a dictionary, you must also add a value for that key. (You can always change the value later.) Python dictionaries are optimized for retrieving the value when you know the key, but not the other way around.
+ja:<p><dfn>辞書</dfn>は、キーと値のペアからなる順序付けされていない集合だ。辞書にキーを追加するときは、そのキーに対応する値も同時に追加しなければならない（この値はあとでいつでも変更できる）。Pythonの辞書は、既知のキーをもとに値を取得するのは効率的に行えるようになっているが、その逆方向はそうなっていない。
+
+
+en:<p><span class=u>&#x261E;</span>A dictionary in Python is like a hash in Perl 5. In Perl 5, variables that store hashes always start with a <code>%</code> character. In Python, variables can be named anything, and Python keeps track of the datatype internally.
+ja:<p><span class=u>&#x261E;</span>Pythonの辞書はPerl 5のハッシュに似ている。Perl 5では、ハッシュを格納する変数は常に<code>%</code>という文字から始める。Pythonでは、変数はどんな名前でもよく、Pythonが内部的にデータ型を追跡する。
+
+
+en:<h3 id=creating-dictionaries>Creating A Dictionary</h3>
+ja:<h3 id=creating-dictionaries>辞書を作る</h3>
+
+
+en:<p>Creating a dictionary is easy. The syntax is similar to <a href=#sets>sets</a>, but instead of values, you have key-value pairs. Once you have a dictionary, you can look up values by their key.
+ja:<p>辞書を作るのは簡単だ。構文は<a href=#sets>集合</a>に似ているが、値の代わりにキーと値のペアが必要になる。辞書を作ったあとは、キーを指定することで値を取り出せる。
+
+
+en:<li>First, you create a new dictionary with two items and assign it to the variable <var>a_dict</var>. Each item is a key-value pair, and the whole set of items is enclosed in curly braces.
+ja:<li>はじめに、2つの要素を持つ辞書を作り、それを変数<var>a_dict</var>へ代入する。各々の要素はキーと値のペアであり、要素の集合の全体は波括弧に包まれている。
+
+
+en:<li><code>'server'</code> is a key, and its associated value, referenced by <code>a_dict['server']</code>, is <code>'db.diveintopython3.org'</code>.
+ja:<li><code>'server'</code>はキーだ。このキーに関連づけられた値は<code>a_dict['server']</code>によって参照でき、その値は<code>'db.diveintopython3.org'</code>だ。
+
+
+en:<li><code>'database'</code> is a key, and its associated value, referenced by <code>a_dict['database']</code>, is <code>'mysql'</code>.
+ja:<li><code>'database'</code>はキーだ。このキーに関連づけられた値は<code>a_dict['server']</code>によって参照でき、その値は<code>'mysql'</code>だ。
+
+
+en:<li>You can get values by key, but you can&#8217;t get keys by value. So <code>a_dict['server']</code> is <code>'db.diveintopython3.org'</code>, but <code>a_dict['db.diveintopython3.org']</code> raises an exception, because <code>'db.diveintopython3.org'</code> is not a key.
+ja:<li>値はキーによって取得できるが、キーを値によって取得することはできない。つまり、<code>a_dict['server']</code>は<code>'db.diveintopython3.org'</code>になるが、<code>'db.diveintopython3.org'</code>はキーではないので、<code>a_dict['db.diveintopython3.org']</code>は例外を送出する。
+
+
+en:<h3 id=modifying-dictionaries>Modifying A Dictionary</h3>
+ja:<h3 id=modifying-dictionaries>辞書を変更する</h3>
+
+
+en:<p>Dictionaries do not have any predefined size limit. You can add new key-value pairs to a dictionary at any time, or you can modify the value of an existing key. Continuing from the previous example:
+ja:<p>辞書には、事前に定められた上限サイズというものは一切ない。新しいキーと値のペアをいつでも辞書に追加できるし、既在のキーに対応する値もいつでも変更可能だ。前の例から続けよう：
+
+
+en:<li>You can not have duplicate keys in a dictionary. Assigning a value to an existing key will wipe out the old value.
+ja:<li>辞書に重複したキーを持たせることはできない。既存のキーに値を代入すると、古い値が追い出される。
+
+
+en:<li>You can add new key-value pairs at any time. This syntax is identical to modifying existing values.
+ja:<li>キーと値のペアはいつでも追加できる。この構文は既存の値を変更するときとまったく同じだ。
+
+
+en:<li>The new dictionary item (key <code>'user'</code>, value <code>'mark'</code>) appears to be in the middle. In fact, it was just a coincidence that the items appeared to be in order in the first example; it is just as much a coincidence that they appear to be out of order now.
+ja:<li>新しい辞書の要素（キー<code>'user'</code>、値<code>'mark'</code>）は中央に現れている。実際のところ、最初の例で要素が現れた順序は偶然であり、ここで順序が崩れたように見えるのも同じく偶然だ。
+
+
+en:<li>Assigning a value to an existing dictionary key simply replaces the old value with the new one.
+ja:<li>辞書の既存のキーに代入すると、古い値が新しい値に単純に置き換えられる。
+
+
+en:<li>Will this change the value of the <code>user</code> key back to "mark"?  No!  Look at the key closely&nbsp;&mdash;&nbsp;that&#8217;s a capital <kbd>U</kbd> in <kbd>"User"</kbd>. Dictionary keys are case-sensitive, so this statement is creating a new key-value pair, not overwriting an existing one. It may look similar to you, but as far as Python is concerned, it&#8217;s completely different.
+ja:<li>これは<code>user</code>キーの値を "mark" に戻すだろうか？ いや、違う！ キーをよく見てほしい。<kbd>"User"</kbd> に大文字の <kbd>U</kbd> がある。辞書のキーについては大文字と小文字が区別されるので、この文は新たなキーと値のペアを作り、既存の値は書き換えない。似たように見えるかもしれないが、Pythonから見れば、これはまったく異なるものなのだ。
+
+
+en:<h3 id=mixed-value-dictionaries>Mixed-Value Dictionaries</h3>
+ja:<h3 id=mixed-value-dictionaries>値が混在する辞書</h3>
+
+
+en:<p>Dictionaries aren&#8217;t just for strings. Dictionary values can be any datatype, including integers, booleans, arbitrary objects, or even other dictionaries. And within a single dictionary, the values don&#8217;t all need to be the same type; you can mix and match as needed. Dictionary keys are more restricted, but they can be strings, integers, and a few other types. You can also mix and match key datatypes within a dictionary.
+ja:<p>辞書は文字列しか扱えないわけではない。辞書の値はどんなデータ型でもよく、例えば、整数型、ブール値、任意のオブジェクトを使うことができるし、他の辞書を値にすることだってできる。また1つの辞書において、全ての値が同じ型である必要はなく、必要に応じて様々な型を混ぜて使うことができる。辞書のキーとして使える型は値よりも制限されているが、文字列や数値、その他いくつかの型を使うことができる。辞書のキーも、一つの辞書の中で様々なデータ型を混ぜて使うことができる。
+
+
+en:<p>In fact, you&#8217;ve already seen a dictionary with non-string keys and values, in <a href=your-first-python-program.html#divingin>your first Python program</a>.
+ja:<p>実際に、すでに<a href=your-first-python-program.html#divingin>始めてのPythonプログラム</a>において、文字列以外のキーや値を使った辞書を見ている.
+
+
+en:<p>Let's tear that apart in the interactive shell.
+ja:<p>対話シェルでこれを分解してみよう。
+
+
+en:<li>Like <a href=#lists>lists</a> and <a href=#sets>sets</a>, the <code>len()</code> function gives you the number of keys in a dictionary.
+ja:<li><a href=#lists>リスト</a>や<a href=#sets>集合</a>と同じように、<code>len()</code>関数は辞書に含まれるキーの数を教えてくれる。
+
+
+en:<li>And like lists and sets, you can use the <code>in</code> operator to test whether a specific key is defined in a dictionary.
+ja:<li>そして<a href=#lists>リスト</a>や<a href=#sets>集合</a>と同様に、特定のキーが辞書に含まれているかどうかを調べるには、<code>in</code>演算子が使える。
+
+
+en:<li><code>1000</code> <em>is</em> a key in the <code>SUFFIXES</code> dictionary; its value is a list of eight items (eight strings, to be precise).
+ja:<li><code>1000</code>は辞書<code>SUFFIXES</code>のキーであり、対応する値は8つの要素（正確には8つの文字列）を持つリストだ。
+
+
+en:<li>Similarly, <code>1024</code> is a key in the <code>SUFFIXES</code> dictionary; its value is also a list of eight items.
+ja:<li><code>1024</code>は辞書<code>SUFFIXES</code>のキーであり、それに対応する値もまた8つの要素を持つリストだ。
+
+
+en:<li>Since <code>SUFFIXES[1000]</code> is a list, you can address individual items in the list by their 0-based index.
+ja:<li><code>SUFFIXES[1000]</code>はリストなので、このリストの個々の要素を0から始まるインデックスで指定できる。
+
+
+en:<h3 id=dictionaries-in-a-boolean-context>Dictionaries In A Boolean Context</h3>
+ja:<h3 id=dictionaries-in-a-boolean-context>ブール値のコンテクストでの辞書</h3>
+
+
+en:<aside>Empty dictionaries are false; all other dictionaries are true.</aside>
+ja:<aside>空の辞書は偽で、それ以外の辞書はすべて真だ。</aside>
+
+
+en:<p>You can also use a dictionary in <a href=#booleans>a boolean context</a>, such as an <code>if</code> statement.
+ja:<p>辞書は<code>if</code>文のような<a href=#booleans>ブール値のコンテクスト</a>で使うことができる。
+
+
+en:<li>In a boolean context, an empty dictionary is false.
+ja:<li>ブール値のコンテクストでは、空の辞書は偽だ。
+
+
+en:<li>Any dictionary with at least one key-value pair is true.
+ja:<li>キーと値のペアを1つでも持っている辞書は真だ。
+
+
+en:<h2 id=none><code>None</code></h2>
+ja:<h2 id=none><code>None</code></h2>
+
+
+en:<p><code><dfn>None</dfn></code> is a special constant in Python. It is a <dfn>null</dfn> value. <code>None</code> is not the same as <code>False</code>. <code>None</code> is not 0. <code>None</code> is not an empty string. Comparing <code>None</code> to anything other than <code>None</code> will always return <code>False</code>.
+ja:<p><code><dfn>None</dfn></code>はPythonの特別な定数で、これは<dfn>null</dfn>値（無効値）である。<code>None</code>は<code>False</code>ではないし、0でもないし、空の文字列でもない。<code>None</code>を<code>None</code>以外の値と比較すると、常に<code>False</code>が返る。
+
+
+en:<p><code>None</code> is the only null value. It has its own datatype (<code>NoneType</code>). You can assign <code>None</code> to any variable, but you can not create other <code>NoneType</code> objects. All variables whose value is <code>None</code> are equal to each other.
+ja:<p><code>None</code>は唯一のnull値であり、<code>None</code>は自身のデータ型 (<code>NoneType</code>) を持っている。<code>None</code>は任意の変数へ代入できるが、他の<code>NoneType</code>のオブジェクトを作ることはできない。<code>None</code>を値として持つすべての変数は互いに等しい。
+
+
+en:<h3 id=none-in-a-boolean-context><code>None</code> In A Boolean Context</h3>
+ja:<h3 id=none-in-a-boolean-context>ブール値のコンテクストでの<code>None</code></h3>
+
+
+en:<p>In <a href=#booleans>a boolean context</a>, <code>None</code> is false and <code>not None</code> is true.
+ja:<p><a href=#booleans>ブール値のコンテクスト</a>では、<code>None</code>は偽で<code>not None</code>は真だ。
+
+
+en:<h2 id=furtherreading>Further Reading</h2>
+ja:<h2 id=furtherreading>もっと知りたい人のために</h2>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#boolean-operations-and-or-not>Boolean operations</a>
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#boolean-operations-and-or-not>Boolean operations</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#numeric-types-int-float-long-complex>Numeric types</a>
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#numeric-types-int-float-long-complex>Numeric types</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#sequence-types-str-unicode-list-tuple-buffer-xrange>Sequence types</a>
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#sequence-types-str-unicode-list-tuple-buffer-xrange>Sequence types</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#set-types-set-frozenset>Set types</a>
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#set-types-set-frozenset>Set types</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#mapping-types-dict>Mapping types</a>
+en:<li><a href=http://docs.python.org/3.1/library/stdtypes.html#mapping-types-dict>Mapping types</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/fractions.html><code>fractions</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/fractions.html><code>fractions</code>モジュール</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/math.html><code>math</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/math.html><code>math</code>モジュール</a>
+
+
+en:<li><a href=http://www.python.org/dev/peps/pep-0237/><abbr>PEP</abbr> 237: Unifying Long Integers and Integers</a>
+ja:<li><a href=http://www.python.org/dev/peps/pep-0237/><abbr>PEP</abbr> 237: Unifying Long Integers and Integers</a>
+
+
+en:<li><a href=http://www.python.org/dev/peps/pep-0238/><abbr>PEP</abbr> 238: Changing the Division Operator</a>
+ja:<li><a href=http://www.python.org/dev/peps/pep-0238/><abbr>PEP</abbr> 238: Changing the Division Operator</a>
+
+
+en:<p class=v><a href=your-first-python-program.html rel=prev title='back to &#8220;Your First Python Program&#8221;'><span class=u>&#x261C;</span></a> <a href=comprehensions.html rel=next title='onward to &#8220;Comprehensions&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=your-first-python-program.html rel=prev title='「初めてのPythonプログラム」へ戻る'><span class=u>&#x261C;</span></a> <a href=comprehensions.html rel=next title='「内包表記」へ進む'><span class=u>&#x261E;</span></a>
+
+

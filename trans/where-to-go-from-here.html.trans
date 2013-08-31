@@ -1,0 +1,161 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#where-to-go-from-here>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#where-to-go-from-here>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+en:<title>Where to Go From Here - Dive Into Python 3</title>
+ja:<title>ここからどこへ進むか - Dive Into Python 3 日本語版</title>
+
+
+en:<h1>Where To Go From Here</h1>
+ja:<h1>ここからどこへ進むか</h1>
+
+
+en:<p><span class=u>&#x275D;</span> Go forth on your path, as it exists only through your walking. <span class=u>&#x275E;</span><br>&mdash; St. Augustine of Hippo (attributed)
+ja:<p><span class=u>&#x275D;</span>自分の道を進みなさい。その道はあなたが歩いたところだけに存在するのだから。<span class=u>&#x275E;</span><br>&mdash; 聖アウグスティヌス（の言葉とされる）
+
+
+en:<h2 id=things-to-read>Things to Read</h2>
+ja:<h2 id=things-to-read>読み物</h2>
+
+
+en:<p class=f>Unfortunately, I can not write cover every facet of Python 3 in this book. Fortunately, there are many wonderful, freely available tutorials available elsewhere.
+ja:<p class=f>残念ながらPython 3のすべての側面をこの本に網羅することはできなかった。しかし幸運にも、自由に読める素晴らしいチュートリアルがインターネット上に数多く存在する。
+
+
+en:<p>Decorators:
+ja:<p>デコレータ：
+
+
+en:<li><a href=http://programmingbits.pythonblogs.com/27_programmingbits/archive/50_function_decorators.html>Function Decorators</a> by Ariel Ortiz
+ja:<li>Ariel Ortizによる <a href=http://programmingbits.pythonblogs.com/27_programmingbits/archive/50_function_decorators.html>関数デコレータ</a>
+
+
+en:<li><a href=http://programmingbits.pythonblogs.com/27_programmingbits/archive/51_more_on_function_decorators.html>More on Function Decorators</a> by Ariel Ortiz
+ja:<li>Ariel Ortizによる <a href=http://programmingbits.pythonblogs.com/27_programmingbits/archive/51_more_on_function_decorators.html>続・関数デコレータ</a>
+
+
+en:<li><a href=http://www.ibm.com/developerworks/linux/library/l-cpdecor.html>Charming Python: Decorators make magic easy</a> by David Mertz
+ja:<li>David Mertzによる <a href=http://www.ibm.com/developerworks/linux/library/l-cpdecor.html>魅力的なPython: デコレータで魔法を身近に</a>
+
+
+en:<li><a href=http://docs.python.org/reference/compound_stmts.html#function>Function Definitions</a> in the official Python documentation
+ja:<li>Python公式ドキュメントの <a href=http://docs.python.org/reference/compound_stmts.html#function>関数定義</a>
+
+
+en:<p>Properties:
+ja:<p>プロパティ：
+
+
+en:<li><a href=http://adam.gomaa.us/blog/2008/aug/11/the-python-property-builtin/>The Python <code>property</code> builtin</a> by Adam Gomaa
+ja:<li>Adam Gomaaによる <a href=http://adam.gomaa.us/blog/2008/aug/11/the-python-property-builtin/>Pythonの<code>property</code>ビルトイン</a>
+
+
+en:<li><a href=http://tomayko.com/writings/getters-setters-fuxors>Getters/Setters/Fuxors</a> by Ryan Tomayko
+ja:<li>Ryan Tomaykoによる <a href=http://tomayko.com/writings/getters-setters-fuxors>Getters/Setters/Fuxors</a>
+
+
+en:<li><a href=http://docs.python.org/library/functions.html#property><code>property()</code> function</a> in the official Python documentation
+ja:<li>Python公式ドキュメントの<a href=http://docs.python.org/library/functions.html#property><code>property()</code>関数</a>
+
+
+en:<p>Descriptors:
+ja:<p>ディスクリプタ：
+
+
+en:<li><a href=http://users.rcn.com/python/download/Descriptor.htm>How-To Guide For Descriptors</a> by Raymond Hettinger
+ja:<li>Raymond Hettingerによる <a href=http://users.rcn.com/python/download/Descriptor.htm>デスクリプタのHow-Toガイド</a>
+
+
+en:<li><a href=http://www.ibm.com/developerworks/linux/library/l-python-elegance-2.html>Charming Python: Python elegance and warts, Part 2</a> by David Mertz
+ja:<li>David Mertzによる <a href=http://www.ibm.com/developerworks/linux/library/l-python-elegance-2.html>魅力的なPython: Pythonの優雅さと欠点 (パート2)</a>
+
+
+en:<li><a href='http://www.informit.com/articles/printerfriendly.aspx?p=1309289'>Python Descriptors</a> by Mark Summerfield
+ja:<li>Mark Summerfieldによる <a href='http://www.informit.com/articles/printerfriendly.aspx?p=1309289'>Pythonのディスクリプタ</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/reference/datamodel.html#invoking-descriptors>Invoking Descriptors</a> in the official Python documentation
+ja:<li>Python公式ドキュメントの <a href=http://docs.python.org/3.1/reference/datamodel.html#invoking-descriptors>ディスクリプタを呼びだす</a>
+
+
+en:<p>Threading <i class=baa>&amp;</i> multiprocessing:</p>
+ja:<p>スレッド処理とマルチプロセス処理:</p>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/threading.html><code>threading</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/threading.html><code>threading</code> モジュール</a>
+
+
+en:<li><a href=http://www.doughellmann.com/PyMOTW/threading/><code>threading</code>&nbsp;&mdash;&nbsp;Manage concurrent threads</a>
+ja:<li><a href=http://www.doughellmann.com/PyMOTW/threading/><code>threading</code>&nbsp;&mdash;&nbsp;Manage concurrent threads</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/multiprocessing.html><code>multiprocessing</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/multiprocessing.html><code>multiprocessing</code> モジュール</a>
+
+
+en:<li><a href=http://www.doughellmann.com/PyMOTW/multiprocessing/><code>multiprocessing</code>&nbsp;&mdash;&nbsp;Manage processes like threads</a>
+ja:<li><a href=http://www.doughellmann.com/PyMOTW/multiprocessing/><code>multiprocessing</code>&nbsp;&mdash;&nbsp;Manage processes like threads</a>
+
+
+en:<li><a href=http://jessenoller.com/2009/02/01/python-threads-and-the-global-interpreter-lock/>Python threads and the Global Interpreter Lock</a> by Jesse Noller
+ja:<li>Jesse Nollerによる <a href=http://jessenoller.com/2009/02/01/python-threads-and-the-global-interpreter-lock/>Pythonのスレッドとグローバルインタプリタロック</a>
+
+
+en:<li><a href=http://blip.tv/file/2232410>Inside the Python <abbr>GIL</abbr> (video)</a> by David Beazley
+ja:<li>David Beazleyによる <a href=http://blip.tv/file/2232410>Python <abbr>GIL</abbr> の内部 (動画)</a>
+
+
+en:<p>Metaclasses:
+ja:<p>メタクラス：
+
+
+en:<li><a href=http://www.ibm.com/developerworks/linux/library/l-pymeta.html>Metaclass programming in Python</a> by David Mertz and Michele Simionato
+ja:<li>David MertzとMichele Simionatoによる <a href=http://www.ibm.com/developerworks/linux/library/l-pymeta.html>Pythonでのメタクラスプログラミング</a>
+
+
+en:<li><a href=http://www.ibm.com/developerworks/linux/library/l-pymeta2/>Metaclass programming in Python, Part 2</a> by David Mertz and Michele Simionato
+ja:<li>David MertzとMichele Simionatoによる <a href=http://www.ibm.com/developerworks/linux/library/l-pymeta2/>Pythonでのメタクラスプログラミング (パート2)</a>
+
+
+en:<li><a href=http://www.ibm.com/developerworks/linux/library/l-pymeta3.html>Metaclass programming in Python, Part 3</a> by David Mertz and Michele Simionato
+ja:<li>David MertzとMichele Simionatoによる <a href=http://www.ibm.com/developerworks/linux/library/l-pymeta3.html>Pythonでのメタクラスプログラミング (パート3)</a>
+
+
+en:<p>In addition, Doug Hellman&#8217;s <a href=http://www.doughellmann.com/PyMOTW/contents.html>Python Module of the Week</a> is a fantastic guide to many of the modules in the Python standard library.
+ja:<p>これに加えて、Doug Hellmanによる<a href=http://www.doughellmann.com/PyMOTW/contents.html>Python Module of the Week</a>が、Python標準ライブラリに含まれる数多くのモジュールへの素晴らしいガイドになっている。
+
+
+en:<h2 id=code>Where To Look For Python 3-Compatible Code</h2>
+ja:<h2 id=code>Python 3互換のコードはどこで見つければよいのか</h2>
+
+
+en:<p>As Python 3 is relatively new, there is a dearth of compatible libraries. Here are some of the places to look for code that works with Python 3.
+ja:<p>Python 3は比較的新しいので、互換性のあるライブラリが不足している。Python 3で動作するコードを探すための場所をいくつか挙げておこう。
+
+
+en:<li><a href='http://pypi.python.org/pypi?:action=browse&amp;c=533&amp;show=all'>Python Package Index: list of Python 3 packages</a>
+ja:<li><a href='http://pypi.python.org/pypi?:action=browse&amp;c=533&amp;show=all'>Python Package Index: Python 3 パッケージのリスト</a>
+
+
+en:<li><a href='http://code.activestate.com/recipes/langs/python/tags/python3/'>Python Cookbook: list of recipes tagged &#8220;python3&#8221;</a>
+ja:<li><a href='http://code.activestate.com/recipes/langs/python/tags/python3/'>Python Cookbook: &#8220;python3&#8221;のタグが付けられたレシピのリスト</a>
+
+
+en:<li><a href='http://code.google.com/hosting/search?q=label:python3'>Google Project Hosting: list of projects tagged &#8220;python3&#8221;</a>
+ja:<li><a href='http://code.google.com/hosting/search?q=label:python3'>Google Project Hosting: &#8220;python3&#8221;のタグが付けられたプロジェクトのリスト</a>
+
+
+en:<li><a href='http://sourceforge.net/search/?words=%22python+3%22'>SourceForge: list of projects matching &#8220;Python 3&#8221;</a>
+ja:<li><a href='http://sourceforge.net/search/?words=%22python+3%22'>SourceForge: &#8220;Python 3&#8221;にマッチするプロジェクトのリスト</a>
+
+
+en:<li><a href='http://github.com/search?type=Repositories&amp;language=python&amp;q=python3'>GitHub: list of projects matching &#8220;python3&#8221;</a> (also, <a href='http://github.com/search?type=Repositories&amp;language=python&amp;q=python+3'>list of projects matching &#8220;python 3&#8221;</a>)
+ja:<li><a href='http://github.com/search?type=Repositories&amp;language=python&amp;q=python3'>GitHub: &#8220;python3&#8221;にマッチするプロジェクトのリスト</a>（<a href='http://github.com/search?type=Repositories&amp;language=python&amp;q=python+3'>&#8220;python 3&#8221;にマッチするプロジェクトのリスト</a>）
+
+
+en:<li><a href='http://bitbucket.org/repo/all/?name=python3'>BitBucket: list of projects matching &#8220;python3&#8221;</a> (and <a href='http://bitbucket.org/repo/all/?name=python+3'>those matching &#8220;python 3&#8221;</a>)
+ja:<li><a href='http://bitbucket.org/repo/all/?name=python3'>BitBucket: &#8220;python3&#8221;にマッチするプロジェクトのリスト</a>（<a href='http://bitbucket.org/repo/all/?name=python+3'>&#8220;python 3&#8221;にマッチするプロジェクトのリスト</a>）
+
+
+en:<p class=v><a rel=prev href=special-method-names.html title='back to &#8220;Special Method Names&#8221;'><span class=u>&#x261C;</span></a> <a href=blank.html rel=next><span class=u>&#x261E;</span></a>
+ja:<p class=v><a rel=prev href=special-method-names.html title='「特殊メソッド名」に戻る'><span class=u>&#x261C;</span></a> <a href=troubleshooting.html rel=next title='「トラブルシューティング」に進む'><span class=u>&#x261E;</span></a>

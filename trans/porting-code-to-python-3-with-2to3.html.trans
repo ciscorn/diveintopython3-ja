@@ -1,0 +1,956 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#porting-code-to-python-3-with-2to3>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#porting-code-to-python-3-with-2to3>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<title>Porting code to Python 3 with 2to3 - Dive Into Python 3</title>
+ja:<title>2to3を使ってコードをPython 3に移植する - Dive Into Python 3 日本語版</title>
+
+
+en:<p id=level>Difficulty level: <span class=u title=pro>&#x2666;&#x2666;&#x2666;&#x2666;&#x2666;</span>
+ja:<p id=level>難易度: <span class=u title=プロ級>&#x2666;&#x2666;&#x2666;&#x2666;&#x2666;</span>
+
+
+en:<td><i>no change</i>
+ja:<td><i>変更なし</i>
+
+
+en:<td><i>no change (broken)</i>
+ja:<td><i>変更なし（動作しない）</i>
+
+
+en:<td><i>unchanged</i>
+ja:<td><i>変更されていない</i>
+
+en:<td><i>unsupported</i>
+ja:<td><i>サポートされていない</i>
+
+
+en:<h1>Porting Code to Python 3 with <code>2to3</code></h1>
+ja:<h1><code>2to3</code>を使ってコードをPython 3に移植する</h1>
+
+
+en:<p><span class=u>&#x275D;</span> Life is pleasant. Death is peaceful. It&#8217;s the transition that&#8217;s troublesome. <span class=u>&#x275E;</span><br>&mdash; Isaac Asimov (attributed)
+ja:<p><span class=u>&#x275D;</span> 生は楽しく、死は安らかである。厄介なのはその変わり目だ。<span class=u>&#x275E;</span><br>&mdash; アイザック・アシモフ（の言葉とされる）
+
+
+en:<h2 id=divingin>Diving In</h2>
+ja:<h2 id=divingin>飛び込む</h2>
+
+
+#FIXME
+en:<p class=f>So much has changed between Python 2 and Python 3, there are vanishingly few programs that will run unmodified under both. But don&#8217;t despair! To help with this transition, Python 3 comes with a utility script called <code>2to3</code>, which takes your actual Python 2 source code as input and auto-converts as much as it can to Python 3. <a href=case-study-porting-chardet-to-python-3.html#running2to3>Case study: porting <code>chardet</code> to Python 3</a> describes how to run the <code>2to3</code> script, then shows some things it can&#8217;t fix automatically. This appendix documents what it <em>can</em> fix automatically.
+ja:<p class=f>Python 2で作成したプログラムをPython 3で動くようにするには、実質的にほぼ全てのプログラムに、少なくともちょっとした調整ぐらいは施さなくてはならないだろう。Python 3には<code>2to3</code>という便利なスクリプトがついている。これは実際のPython 2のコードを受け取って、Python 3でも動くように可能な限り自動変換してくれるというものだ。「<a href=case-study-porting-chardet-to-python-3.html#running2to3>ケーススタディ: <code>chardet</code>をPython 3に移植する</a>」では、まずどのように<code>2to3</code>を実行するかを説明し、それから自動で直せないものをいくつか示した。この付録では、<code>2to3</code>を使うことで何を自動で修正しうるのかを説明する。
+
+
+en:<h2 id=print><code>print</code> statement</h2>
+ja:<h2 id=print><code>print</code>文</h2>
+
+
+en:<p>In Python 2, <code><dfn>print</dfn></code> was a statement. Whatever you wanted to print simply followed the <code>print</code> keyword. In Python 3, <a href=your-first-python-program.html#divingin><code>print()</code> is a function</a>. Whatever you want to print, pass it to <code>print()</code> like any other function.
+ja:<p>Python 2では<code><dfn>print</dfn></code>文であり、何を出力するにせよ、単純に<code>print</code>の後に続ければよかった。Python 3では、<a href=your-first-python-program.html#divingin><code>print()</code>は関数</a>だ。だから、出力したいものが何であれ、他の関数と同じように<code>print()</code>に引数として渡さなくてはならない。
+
+
+en:<li>To print a blank line, call <code>print()</code> without any arguments.
+ja:<li>空白行を出力するには、<code>print()</code>を引数無しで呼び出せばいい。
+
+en:<li>To print a single value, call <code>print()</code> with one argument.
+ja:<li>値を一つだけ出力したいなら、<code>print()</code>に一つの引数を渡して呼び出せばいい。
+
+
+en:<li>To print two values separated by a space, call <code>print()</code> with two arguments.
+ja:<li>二つの値をスペースで区切って出力するには、<code>print()</code>を二つの引数を渡して呼び出せばいい。
+
+
+#FIXME
+en:<li>This one is a little tricky. In Python 2, if you ended a <code>print</code> statement with a comma, it would print the values separated by spaces, then print a trailing space, then stop without printing a carriage return. (Technically, it&#8217;s a little more complicated than that. The <code>print</code> statement in Python 2 used a now-deprecated attribute called <var>softspace</var>. Instead of printing a space, Python 2 would set <code>sys.stdout.softspace</code> to 1. The space character wasn&#8217;t really printed until something else got printed on the same line. If the next <code>print</code> statement printed a carriage return, <code>sys.stdout.softspace</code> would be set to 0 and the space would never be printed. You probably never noticed the difference unless your application was sensitive to the presence or absence of trailing whitespace in <code>print</code>-generated output.) In Python 3, the way to do this is to pass <code>end=' '</code> as a keyword argument to the <code>print()</code> function. The <code>end</code> argument defaults to <code>'\n'</code> (a carriage return), so overriding it will suppress the carriage return after printing the other arguments.
+ja:<li>これは少し手が込んでいる。Python 2では、<code>print</code>文の最後にカンマをつけると、スペースで区切られた値の後にさらにスペースが出力され、改行文字は出力されなかった。Python 3で同じことをするには、キーワード引数としてend=' 'を<code>print()</code>関数に渡さなくてはならない。つまり、endのデフォルトの値は<code>'\n'</code>（改行文字）になっているので、これをオーバーライドすることで、他の引数が出力された後に改行文字が入らないようにできるのだ。
+
+
+en:<li>In Python 2, you could redirect the output to a pipe&nbsp;&mdash;&nbsp;like <code>sys.stderr</code>&nbsp;&mdash;&nbsp;by using the <code>>>pipe_name</code> syntax. In Python 3, the way to do this is to pass the pipe in the <code>file</code> keyword argument. The <code>file</code> argument defaults to <code>sys.stdout</code> (standard out), so overriding it will output to a different pipe instead.
+ja:<li>Python 2では、<code>>>pipe_name</code>の構文を使うことで&nbsp;&mdash;&nbsp;<code>sys.stderr</code>のような&nbsp;&mdash;&nbsp;パイプに出力をリダイレクトできた。Python 3ではパイプをfileのキーワード引数として渡す必要がある。つまり、デフォルトでは<code>sys.stdout</code>（標準出力）が<code>file</code>の引数となっているので、これをオーバーライドすることで異なるパイプに出力できるようになるのだ。
+
+
+en:<h2 id=unicodeliteral>Unicode string literals</h2>
+ja:<h2 id=unicodeliteral>Unicode文字列リテラル</h2>
+
+
+en:<p>Python 2 had two string types: <dfn>Unicode</dfn> strings and non-Unicode strings. Python 3 has one string type: <a href=strings.html#divingin>Unicode strings</a>.
+ja:<p>Python 2には二つの文字列の型があった: <dfn>Unicode</dfn>文字列と非Unicode文字列だ。Python 3には文字列の型は一つしかない: <a href=strings.html#divingin>Unicode文字列</a>だ。
+
+
+en:<li>Unicode string literals are simply converted into string literals, which, in Python 3, are always Unicode.
+ja:<li>Unicode文字列はそのまま文字列に変換される。Python 3では文字列は常にUnicodeだからだ。
+
+
+en:<li>Unicode raw strings (in which Python does not auto-escape backslashes) are converted to raw strings. In Python 3, raw strings are always Unicode.
+ja:<li>rawモード（自動的にバックスラッシュでエスケープしないモード）のUnicode文字列はraw文字列に変換される。Python 3では、raw文字列は常にUnicodeだからだ。
+
+
+en:<h2 id=unicode><code>unicode()</code> global function</h2>
+ja:<h2 id=unicode><code>unicode()</code>グローバル関数</h2>
+
+
+en:<p>Python 2 had two global functions to coerce objects into strings: <code>unicode()</code> to coerce them into Unicode strings, and <code>str()</code> to coerce them into non-Unicode strings. Python 3 has only one string type, <a href=strings.html#divingin>Unicode strings</a>, so the <code>str()</code> function is all you need. (The <code>unicode()</code> function no longer exists.)
+ja:<p>Python 2にはオブジェクトを文字列に変換するグローバル関数が二つあった: Unicode文字列に変換する<code>unicode()</code>と、非Unicode文字列に変更する<code>str()</code>だ。Python 3はたった一つの文字列の型、つまり<a href=strings.html#divingin>Unicode文字列</a>しか持っていないので、<code>str()</code>関数だけでこと足りるのだ（事実、<code>unicode()</code>は削除されている）。
+
+
+en:<h2 id=long><code>long</code> data type</h2>
+ja:<h2 id=long><code>long</code>データ型</h2>
+
+
+en:<p>Python 2 had separate <code>int</code> and <code><dfn>long</dfn></code> types for non-floating-point numbers. An <code>int</code> could not be any larger than <a href=#renames><code>sys.maxint</code></a>, which varied by platform. Longs were defined by appending an <code>L</code> to the end of the number, and they could be, well, longer than ints. In Python 3, <a href=native-datatypes.html#numbers>there is only one integer type</a>, called <code>int</code>, which mostly behaves like the <code>long</code> type in Python 2. Since there are no longer two types, there is no need for special syntax to distinguish them.
+ja:<p>Python 2は非浮動小数点数として<code>int</code>型と<code><dfn>long</dfn></code>型の2つの型を用意していて、<code>int</code>は各プラットフォームごとに設定された<a href=#renames><code>sys.maxint</code></a>の値以上に大きくなれなかった。一方で、長整数とは数字の最後に<code>L</code>を付けることで定義されるもので、この長整数は、そのつまり、整数より長くなることができた。Python 3には<code>int</code>と呼ばれる整数型しかなく、これはおおかたPython 2の<code>long</code>型のように振る舞う。このように<code>int</code>と<code>long</code>は統合されたので、この二つを区別するための特別な構文もなくなっている。
+
+
+en:<p>Further reading: <a href=http://www.python.org/dev/peps/pep-0237/><abbr>PEP</abbr> 237: Unifying Long Integers and Integers</a>.
+ja:<p>参考: <a href=http://www.python.org/dev/peps/pep-0237/><abbr>PEP</abbr> 237: 長整数と整数の統合</a>。
+
+
+en:<li>Base 10 long integer literals become base 10 integer literals.
+ja:<li>10進法の長整数リテラルは10進法の整数リテラルになる。
+
+
+en:<li>Base 16 long integer literals become base 16 integer literals.
+ja:<li>16進法の長整数リテラルは16進法の整数リテラルになる。
+
+
+en:<li>In Python 3, the old <code>long()</code> function no longer exists, since longs don&#8217;t exist. To coerce a variable to an integer, use the <code>int()</code> function.
+ja:<li>Python 3では、長整数が無くなった関係で、<code>long()</code>関数も廃止されている。変数を整数に直すには、<code>int()</code>関数を使えばいい。
+
+
+en:<li>To check whether a variable is an integer, get its type and compare it to <code>int</code>, not <code>long</code>.
+ja:<li>ある変数が整数かどうかを調べるには、その型を取得して（<code>long</code>型ではなく）<code>int</code>型と比較すればいい。
+
+
+en:<li>You can also use the <code>isinstance()</code> function to check data types; again, use <code>int</code>, not <code>long</code>, to check for integers.
+ja:<li><code>isinstance()</code>関数を使ってデータの型を調べることもできる。ここでも、整数かどうかを調べる時には<code>long</code>ではなく<code>int</code>を使うこと。
+
+
+en:<h2 id=ne>&lt;> comparison</h2>
+ja:<h2 id=ne>&lt;&gt; 比較</h2>
+
+
+en:<p>Python 2 supported <code>&lt;></code> as a synonym for <code>!=</code>, the not-equals comparison operator. Python 3 supports the <code>!=</code> operator, but not <code>&lt;></code>.
+ja:<p>Python 2は、不等性を評価する演算子の<code>!=</code>と同じ意味を表すものとして<code>&lt;&gt;</code>をサポートしていた。Python 3では<code>&lt;&gt;</code>は消えて、<code>!=</code>だけがサポートされている。
+
+
+en:<li>A simple comparison.
+ja:<li>単純な比較。
+
+
+en:<li>A more complex comparison between three values.
+ja:<li>より複雑な3つの値の比較。
+
+
+en:<h2 id=has_key><code>has_key()</code> dictionary method</h2>
+ja:<h2 id=has_key><code>has_key()</code>辞書メソッド</h2>
+
+
+en:<p>In Python 2, dictionaries had a <code><dfn>has_key</dfn>()</code> method to test whether the dictionary had a certain key. In Python 3, this method no longer exists. Instead, you need to use <a href=native-datatypes.html#mixed-value-dictionaries>the <code>in</code> operator</a>.
+ja:<p>Python 2では<code><dfn>has_key</dfn>()</code>というメソッドが辞書にあり、これを用いることで特定のキーが辞書にあるかどうかを調べることができた。Python 3ではこのメソッドは廃止されているので、代わりに<a href=native-datatypes.html#mixed-value-dictionaries><code>in</code>演算子</a>を使う必要がある。
+
+
+en:<li>The simplest form.
+ja:<li>最も簡単な例。
+
+
+en:<li>The <code>in</code> operator takes precedence over the <code>or</code> operator, so there is no need for parentheses around <code>x in a_dictionary</code> or around <code>y in a_dictionary</code>.
+ja:<li><code>in</code>演算子は<code>or</code>演算子より優先されるので、<code>x in a_dictionary</code>や<code>y in a_dictionary</code>を丸括弧でくくる必要はない。
+
+
+en:<li>On the other hand, you <em>do</em> need parentheses around <code>x or y</code> here, for the same reason&nbsp;&mdash;&nbsp;<code>in</code> takes precedence over <code>or</code>. (Note: this code is completely different from the previous line. Python interprets <code>x or y</code> first, which results in either <var>x</var> (if <var>x</var> is <a href=native-datatypes.html#booleans>true in a boolean context</a>) or <var>y</var>. Then it takes that singular value and checks whether it is a key in <var>a_dictionary</var>.)
+ja:<li>一方で、この例では必ず<code>x or y</code>を丸括弧でくくる必要がある。これも同じ理由&nbsp;&mdash;&nbsp;<code>in</code>は<code>or</code>に優先する&nbsp;&mdash;&nbsp;による（注意: このコードは2のコードとはまったく意味が異なる。Pythonはまず<code>x or y</code>を解釈し、もし<var>x</var>が<a href=native-datatypes.html#booleans>ブール値の文脈で真</a>ならば<var>x</var>を返し、偽ならば<var>y</var>を返す。それから、その戻り値を取り上げ、それが<var>a_dictionary</var>のキーなのかどうかをチェックする）
+
+
+en:<li>The <code>+</code> operator takes precedence over the <code>in</code> operator, so this form technically doesn&#8217;t need parentheses around <code>x + y</code>, but <code>2to3</code> includes them anyway.
+ja:<li><code>+</code>演算子は<code>in</code>演算子に優先するので、厳密には<code>x + y</code>に丸括弧をつける必要は無いのだが、とりあえず<code>2to3</code>は括弧をつけてくれる。
+
+
+en:<li>This form definitely needs parentheses around <code>y in a_dictionary</code>, since the <code>+</code> operator takes precedence over the <code>in</code> operator.
+ja:<li>この場合は確実に<code>y in a_dictionary</code>を括弧でくくらなくてはならない。<code>+</code>演算子は<code>in</code>演算子に優先するからだ。
+
+
+en:<h2 id=dict>Dictionary methods that return lists</h2>
+ja:<h2 id=dict>リストを返す辞書メソッド</h2>
+
+
+en:<p>In Python 2, many dictionary methods returned lists. The most frequently used methods were <code><dfn>keys</dfn>()</code>, <code><dfn>items</dfn>()</code>, and <code><dfn>values</dfn>()</code>. In Python 3, all of these methods return dynamic <dfn>views</dfn>. In some contexts, this is not a problem. If the method&#8217;s return value is immediately passed to another function that iterates through the entire sequence, it makes no difference whether the actual type is a list or a view. In other contexts, it matters a great deal. If you were expecting a complete list with individually addressable elements, your code will choke, because views do not support indexing.
+ja:<p>Python 2では、多くの辞書型のメソッドがリストを返していた。中でも、最もよく使われていたのが<code><dfn>keys</dfn>()</code>, <code><dfn>items</dfn>()</code>, <code><dfn>values</dfn>()</code>だ。Python 3ではこれら3つのメソッド全てがダイナミックな<dfn>view</dfn>を返す。これは場面によっては、何の問題にもならない。例えば、これらのメソッドが返す値が即座に別の関数に渡され、シーケンス全体がイテレートされるなら別に問題は起きない。しかし、これが大きな問題を引き起こす場合もある。例えば、個々の要素を参照できる完全なリストが必要なところでは、コードは止まってしまうだろう。viewはインデクスによる参照をサポートしてないからだ。
+
+
+en:<li><code>2to3</code> errs on the side of safety, converting the return value from <code>keys()</code> to a static list with the <code>list()</code> function. This will always work, but it will be less efficient than using a view. You should examine the converted code to see if a list is absolutely necessary, or if a view would do.
+ja:<li><code>2to3</code>は安全な方に転ぶように設計されていて、<code>keys()</code>の戻り値を全て<code>list()</code>関数で静的なリストに変換するようになっている。こうすればどんな場合でもコードは動くのだが、viewを使うより効率は落ちる。変換したコードに目を通して「リストが本当に必要だろうか？ viewを使っても動かないだろうか？」と確かめた方がいい。
+
+
+en:<li>Another view-to-list conversion, with the <code>items()</code> method. <code>2to3</code> will do the same thing with the <code>values()</code> method.
+ja:<li>今度は<code>item()</code>メソッドの戻り値をviewからリストに変換している。<code>2to3</code>は<code>values()</code>メソッドにも同じ処理を施す。
+
+
+en:<li>Python 3 does not support the <code>iterkeys()</code> method anymore. Use <code>keys()</code>, and if necessary, convert the view to an iterator with the <code>iter()</code> function.
+ja:<li>Python 3は<code>iterkeys()</code>メソッドをサポートしていない。代わりに<code>keys()</code>を使い、その上で必要なら、viewを<code>iter()</code>関数を使ってイテレーターに変換すればいい。
+
+
+en:<li><code>2to3</code> recognizes when the <code>iterkeys()</code> method is used inside a list comprehension, and converts it to the <code>keys()</code> method (without wrapping it in an extra call to <code>iter()</code>). This works because views are iterable.
+ja:<li><code>2to3</code>は、リストの内包表記で<code>iterkeys()</code>メソッドが使われている場合を識別し、<code>keys()</code>メソッドに変換してくれる（<code>iter()</code>を呼び出して<code>keys()</code>を変換することはない）。viewはイテレートできるので、これでも動くのだ。
+
+
+en:<li><code>2to3</code> recognizes that the <code>keys()</code> method is immediately passed to a function which iterates through an entire sequence, so there is no need to convert the return value to a list first. The <code>min()</code> function will happily iterate through the view instead. This applies to <code>min()</code>, <code>max()</code>, <code>sum()</code>, <code>list()</code>, <code>tuple()</code>, <code>set()</code>, <code>sorted()</code>, <code>any()</code>, and <code>all()</code>.
+ja:<li><code>2to3</code>は、<code>keys()</code>メソッドがシーケンス全体にわたってイテレートする関数に即座に渡される場合を認識し、<code>keys()</code>の戻り値をlistに変換する必要はないと判断してくれる。例えば、上に挙げられている<code>min()</code>関数は何の問題もなくviewをイテレートできるのだ。このことは<code>min()</code>、<code>max()</code>、<code>sum()</code>、<code>list()</code>、<code>tuple()</code>、<code>set()</code>、<code>sorted()</code>、<code>any()</code>、<code>all()</code>についてあてはまる。
+
+
+en:<h2 id=imports>Modules that have been renamed or reorganized</h2>
+ja:<h2 id=imports>名前が変更されたり再構成されたりしたモジュール</h2>
+
+
+en:<p>Several modules in the Python Standard Library have been renamed. Several other modules which are related to each other have been combined or reorganized to make their association more logical.
+ja:<p>標準ライブラリに入っているモジュールのいくつかは名前が変更されている、他にも、相互に関連のあったモジュールの中には、その関係をより論理的に明解にするために統合されたり再構成されたりしたものがある。
+
+
+en:<h3 id=http><code>http</code></h3>
+ja:<h3 id=http><code>http</code></h3>
+
+
+en:<p>In Python 3, several related <abbr>HTTP</abbr> modules have been combined into a single package, <code>http</code>.
+ja:<p>Python 3 ではHTTP関連のモジュールのいくつかが統合されて、httpという一つのパッケージにまとめられている。
+
+
+en:<li>The <code>http.client</code> module implements a low-level library that can request <abbr>HTTP</abbr> resources and interpret <abbr>HTTP</abbr> responses.
+ja:<li><code>http.client</code>モジュールは、HTTPリソースを要求し、HTTPの応答を解釈するための低級ライブラリを実装したものだ。
+
+
+en:<li>The <code>http.cookies</code> module provides a Pythonic interface to browser cookies that are sent in a <code>Set-Cookie:</code> <abbr>HTTP</abbr> header.
+ja:<li><code>http.cookies</code>モジュールは<code>Set-Cookie: HTTP</code>ヘッダに送られたクッキーをブラウズするPython的なインターフェイスを提供する。
+
+
+en:<li>The <code>http.cookiejar</code> module manipulates the actual files on disk that popular web browsers use to store cookies.
+ja:<li><code>http.cookiejar</code>モジュールを使えば、一般的なウェブブラウザがcookieを保存するのに使っているディスク上のファイルを取り扱うことができる。
+
+
+en:<li>The <code>http.server</code> module provides a basic <abbr>HTTP</abbr> server.
+ja:<li><code>http.server</code>モジュールは基本的なHTTP サーバーの機能を提供する。
+
+
+en:<h3 id=urllib><code>urllib</code></h3>
+ja:<h3 id=urllib><code>urllib</code></h3>
+
+
+en:<p>Python 2 had a rat&#8217;s nest of overlapping modules to parse, encode, and fetch <abbr>URLs</abbr>. In Python 3, these have all been refactored and combined in a single package, <code>urllib</code>.
+ja:<p>Python 2では、URLを取得したり、構文解析やエンコードを施したりするためのモジュールはグチャグチャに入り混じっていて、その機能も互いに重なり合っていた。Python 3では、これらのモジュールは全て書き直されて、<code>urllib</code>という1つのパッケージに統合されている。
+
+
+en:<li>The old <code>urllib</code> module in Python 2 had a variety of functions, including <code>urlopen()</code> for fetching data and <code>splittype()</code>, <code>splithost()</code>, and <code>splituser()</code> for splitting a <abbr>URL</abbr> into its constituent parts. These functions have been reorganized more logically within the new <code>urllib</code> package. <code>2to3</code> will also change all calls to these functions so they use the new naming scheme.
+ja:<li>Python 2で使われていた古い<code>urllib</code>モジュールには様々な関数が入っていて、その中には、データを取得する<code>urlopen()</code>や、URLを構成要素に分割する<code>splittype()</code>、<code>splithost()</code>、<code>splituser()</code>などがあった。これらの関数はより論理的に筋が通るように再構成され、新しい<code>urllib</code>パッケージに納められている。<code>2to3</code>は、新しい命名体系に従うように、これらの関数が呼び出されている箇所を修正してくれる。
+
+
+en:<li>The old <code>urllib2</code> module in Python 2 has been folded into the <code>urllib</code> package in Python 3. All your <code>urllib2</code> favorites&nbsp;&mdash;&nbsp;the <code>build_opener()</code> method, <code>Request</code> objects, and <code>HTTPBasicAuthHandler</code> and friends&nbsp;&mdash;&nbsp;are still available.
+ja:<li>Python 2に存在した<code>urllib2</code>モジュールは、Python 3では<code>urllib</code>パッケージに組み込まれている。あなたのお気に入りの関数&nbsp;&mdash;&nbsp;<code>build_opener()</code>メソッドや<code>Request</code>オブジェクト、<code>HTTPBasicAuthHandler</code>とその仲間たちなど&nbsp;&mdash;&nbsp;は、Python 3でもまだ使えるのだ。
+
+
+en:<li>The <code>urllib.parse</code> module in Python 3 contains all the parsing functions from the old <code>urlparse</code> module in Python 2.
+ja:<li>Python3の<code>urllib.parse</code>モジュールの中には、Python 2の<code>urlparse</code>モジュールに含まれていた構文解析関数が全て入っている。
+
+
+en:<li>The <code>urllib.robotparser</code> module parses <a href=http://www.robotstxt.org/><code>robots.txt</code> files</a>.
+ja:<li><code>urllib.robotparser</code>モジュールは<a href=http://www.robotstxt.org/><code>robots.txt</code></a>を解析するものだ。
+
+
+en:<li>The <code>FancyURLopener</code> class, which handles <abbr>HTTP</abbr> redirects and other status codes, is still available in the new <code>urllib.request</code> module. The <code>urlencode()</code> function has moved to <code>urllib.parse</code>.
+ja:<li>HTTPリダイレクトなどのスターテスコードを扱う<code>FancyURLopner</code>クラスは、<code>urllib.request</code>モジュールから呼び出すことができる。<code>urlencode()</code>関数は<code>urllib.parse</code>に移されている。
+
+
+en:<li>The <code>Request</code> object is still available in <code>urllib.request</code>, but constants like <code>HTTPError</code> have been moved to <code>urllib.error</code>.
+ja:<li><code>Request</code>オブジェクトは<code>urllib.request</code>から呼び出せる。一方で、HTTPErrorのような定数は<code>urllib.error</code>に移されている。
+
+
+en:<p>Did I mention that <code>2to3</code> will rewrite your function calls too? For example, if your Python 2 code imports the <code>urllib</code> module and calls <code>urllib.urlopen()</code> to fetch data, <code>2to3</code> will fix both the import statement and the function call.
+ja:<p>言ってなかったかもしれないが、<code>2to3</code>は関数の呼び出しも修正してくれる。例えば、あるコードが<code>urllib</code>モジュールをインポートして、データ取得のために<code>urllib.urlopen()</code>を呼び出していた場合、<code>2to3</code>はこのimport文と関数の呼び出しの両方を書き直してくれる。
+
+
+en:<h3 id=dbm><code>dbm</code></h3>
+ja:<h3 id=dbm><code>dbm</code></h3>
+
+
+en:<p>All the various <abbr>DBM</abbr> clones are now in a single package, <code>dbm</code>. If you need a specific variant like <abbr>GNU</abbr> <abbr>DBM</abbr>, you can import the appropriate module within the <code>dbm</code> package.
+ja:<p>何種類もあった<abbr>DBM</abbr>クローンは全て<code>dbm</code>という一つのパッケージにまとめられている。<abbr>GNU</abbr> <abbr>DBM</abbr>といった特定の実装が欲しければ、そのモジュールを<code>dbm</code>パッケージからインポートできる。
+
+
+en:<h3 id=xmlrpc><code>xmlrpc</code></h3>
+ja:<h3 id=xmlrpc><code>xmlrpc</code></h3>
+
+
+en:<p><abbr>XML-RPC</abbr> is a lightweight method of performing remote <abbr>RPC</abbr> calls over <abbr>HTTP</abbr>. The <abbr>XML-RPC</abbr> client library and several <abbr>XML-RPC</abbr> server implementations are now combined in a single package, <code>xmlrpc</code>.
+ja:<p><abbr>XML-RPC</abbr>は<abbr>HTTP</abbr>を介して<abbr>RPC</abbr>（遠隔手続き呼び出し）を行う軽量なメソッドだ。<abbr>XML-RPC</abbr>のクライアント用ライブラリやいくつかの<abbr>XML-RPC</abbr>サーバーの実装は<code>xmlrpc</code>に統合されている。
+
+
+en:<h3 id=othermodules>Other modules</h3>
+ja:<h3 id=othermodules>その他のモジュール</h3>
+
+
+en:<li>A common idiom in Python 2 was to try to import <code>cStringIO as StringIO</code>, and if that failed, to import <code>StringIO</code> instead. Do not do this in Python 3; the <code>io</code> module does it for you. It will find the fastest implementation available and use it automatically.
+ja:<li>Python 2では、まず<code>cStringIO as StringIO</code>というようにインポートしてみて、それでエラーが起これば、<code>StringIO</code>を代わりにインポートするという方法が広く用いられていたが、Python 3でこれをやってはいけない。<code>io</code>モジュールが代わりにやってくれるからだ。このモジュールは使える中から最も実行速度の速い実装を見つけだして、それを使うように自動で設定してくれる。
+
+
+en:<li>A similar idiom was used to import the fastest pickle implementation. Do not do this in Python 3; the <code>pickle</code> module does it for you.
+ja:<li>最も速いpickleの実装をインポートするのにも同じようなテクニックが用いられてきてが、これもPython 3ではやってはいけない。<code>pickle</code>モジュールがやってくれることだからだ。
+
+
+en:<li>The <code>builtins</code> module contains the global functions, classes, and constants used throughout the Python language. Redefining a function in the <code>builtins</code> module will redefine the global function everywhere. That is exactly as powerful and scary as it sounds.
+ja:<li><code>builtins</code>モジュールの中にはグローバルな関数やクラスや定数が入っていて、これらはPython言語全体で使われている。だから、<code>builtins</code>モジュールのある関数を変更すると、あらゆる部分に影響が及ぶことになる。<code>builtins</code>モジュールの関数やクラスを変更することは、とても強力であると同時に非常に恐ろしいことでもあるのだ。
+
+
+en:<li>The <code>copyreg</code> module adds pickle support for custom types defined in C.
+ja:<li><code>copyreg</code>モジュールはCで定義された拡張型をpickle化できるようにするために使われる。
+
+
+en:<li>The <code>queue</code> module implements a multi-producer, multi-consumer queue.
+ja:<li><code>queue</code>モジュールは多生産者-多消費者キューを実装するものだ。
+
+
+en:<li>The <code>socketserver</code> module provides generic base classes for implementing different kinds of socket servers.
+ja:<li><code>socketserver</code>モジュールは様々な種類のソケットサーバーを実装するための一般的な基底クラスを提供する。
+
+
+en:<li>The <code>configparser</code> module parses <abbr>INI</abbr>-style configuration files.
+ja:<li><code>configparser</code>モジュールは<abbr>INI</abbr>文法で書かれた設定ファイルを解析する。
+
+
+en:<li>The <code>reprlib</code> module reimplements the built-in <code>repr()</code> function, with additional controls on how long the representations can be before they are truncated.
+ja:<li><code>reprlib</code>モジュールは組み込みの<code>repr()</code>関数を再実装したもので、出力するデータの長さを操作できる機能を備えている。
+
+
+en:<li>The <code>subprocess</code> module allows you to spawn processes, connect to their pipes, and obtain their return codes.
+ja:<li><code>subprocess</code>モジュールはプロセスの起動、パイプへの接続、戻りコードの取得などの機能を提供する。
+
+
+en:<h2 id=import>Relative imports within a package</h2>
+ja:<h2 id=import>パッケージ内の相対インポート</h2>
+
+
+en:<p>A package is a group of related modules that function as a single entity. In Python 2, when modules within a package need to reference each other, you use <code>import foo</code> or <code>from foo import Bar</code>. The Python 2 interpreter first searches within the current package to find <code>foo.py</code>, and then moves on to the other directories in the Python search path (<code>sys.path</code>). Python 3 works a bit differently. Instead of searching the current package, it goes directly to the Python search path. If you want one module within a package to import another module in the same package, you need to explicitly provide the relative path between the two modules.
+ja:<p>パッケージというのは関連したモジュールを集めたもので、あたかも一つのものであるかのように機能する。Python 2では、あるパッケージに含まれる複数のモジュールが相互に参照する必要がある時には、<code>import foo</code>か<code>from foo import Bar</code>を使っていた。ここで、Python 2のインタプリタは最初に現在のパッケージにfoo.pyがあるかどうかを調べた後、Pythonのサーチパス (<code>sys.path</code>) にある別のディレクトリに移るという処理をしていた。一方、Python 3では少し異なった処理がなされる。現在のパッケージの中を最初に検索するかわりに、直接Pythonのサーチパスを参照するのだ。もし、あるモジュールに同じパッケージにある別のモジュールをインポートさせたいなら、二つのモジュール間の相対パスを明示しなくてはならない。
+
+
+en:<p>Suppose you had this package, with multiple files in the same directory:
+ja:<p>例えば、次のようなパッケージがあるとしよう。ここには複数のファイルが同じディレクトリに入っている：
+
+
+en:<p>Now suppose that <code>universaldetector.py</code> needs to import the entire <code>constants.py</code> file and one class from <code>mbcharsetprober.py</code>. How do you do it?
+ja:<p>ここで、<code>universaldetector.py</code>の中で<code>constants.py</code>と<code>mbcharsetprober.py</code>に含まれる一つのクラスをインポートする必要があるとしたら、どうすればよいだろうか？
+
+
+en:<li>When you need to import an entire module from elsewhere in your package, use the new <code>from . import</code> syntax. The period is actually a relative path from this file (<code>universaldetector.py</code>) to the file you want to import (<code>constants.py</code>). In this case, they are in the same directory, thus the single period. You can also import from the parent directory (<code>from .. import anothermodule</code>) or a subdirectory.
+ja:<li>パッケージのどこからであれ、同じパッケージのモジュールをインポートしたいなら、<code>from . import</code>という新しい構文を使えばいい。このピリオドは実際には一方のファイル (<code>universaldetector.py</code>) からインポートしたいファイル (<code>constants.py</code>) までの相対パスを表している。この例の場合、二つが同じディレクトリにあるので、相対パスはピリオド一つになる。同じようにして、親ディレクトリ (<code>from .. import anothermodule</code>) からインポートすることもできるし、サブディレクトリからもできる。
+
+
+en:<li>To import a specific class or function from another module directly into your module&#8217;s namespace, prefix the target module with a relative path, minus the trailing slash. In this case, <code>mbcharsetprober.py</code> is in the same directory as <code>universaldetector.py</code>, so the path is a single period. You can also import form the parent directory (<code>from ..anothermodule import AnotherClass</code>) or a subdirectory.
+ja:<li>他のモジュールにある特定のクラスや関数を、あなたのモジュールの名前空間に直接インポートしたいなら、対象となるモジュール名の前に相対パス（ただし最後のスラッシュは取ること）を付ければいい。この例の場合、<code>mbcharsetprober.py</code>は<code>universaldetector.py</code>と同じディレクトリにあるので、相対パスはピリオド一つとなる。同じようにして、親ディレクトリ (<code>from ..anothermodule import AnotherClass</code>) からインポートすることもできるし、サブディレクトリからもできる。
+
+
+en:<h2 id=next><code>next()</code> iterator method</h2>
+ja:<h2 id=next><code>next()</code>イテレータ メソッド</h2>
+
+
+en:<p>In Python 2, iterators had a <code><dfn>next</dfn>()</code> method which returned the next item in the sequence. That&#8217;s still true in Python 3, but there is now also <a href=generators.html#generators>a global <code>next()</code> function</a> that takes an iterator as an argument.
+ja:<p>Python 2 では、イテレータはシーケンスの中の次の要素を返す<code><dfn>next</dfn>()</code>というメソッドを持っていた。このメソッドはPython 3にもあるが、これとは別に一つのイテレータを引数にとる<a href=generators.html#generators><code>next()</code>というグローバル関数</a>も用意されている。
+
+
+en:<li>In the simplest case, instead of calling an iterator&#8217;s <code>next()</code> method, you now pass the iterator itself to the global <code>next()</code> function.
+ja:<li>これは最も簡単な例で、イテレータの<code>next()</code>メソッドを呼び出す代わりに、グローバル関数の<code>next()</code>にそのイテレータを渡している。
+
+
+en:<li>If you have a function that returns an iterator, call the function and pass the result to the <code>next()</code> function. (The <code>2to3</code> script is smart enough to convert this properly.)
+ja:<li>イテレータを返す関数があれば、この関数を呼び出して、その戻り値を<code>next()</code>関数に渡すようにすればいい（<code>2to3</code>スクリプトは賢いので、これを正しく変換してくれる）。
+
+
+en:<li>If you define your own class and mean to use it as an iterator, define the <code>__next__()</code> special method.
+ja:<li>もし、独自のクラスを定義してイテレータとして使うつもりなら、<code>__next__()</code>という特別なメソッドを定義すればいい。
+
+
+en:<li>If you define your own class and just happen to have a method named <code>next()</code> that takes one or more arguments, <code>2to3</code> will not touch it. This class can not be used as an iterator, because its <code>next()</code> method takes arguments.
+ja:<li>クラスの中にたまたま<code>next()</code>という名前のメソッドが含まれていて、しかもそのメソッドが引数を一つ以上とるものであった場合、<code>2to3</code>はそのメソッドには手を加えない。<code>next()</code>メソッドが引数を取るものである以上、このクラスをイテレータとして使うことはできない。
+
+
+en:<li>This one is a bit tricky. If you have a local variable named <var>next</var>, then it takes precedence over the new global <code>next()</code> function. In this case, you need to call the iterator&#8217;s special <code>__next__()</code> method to get the next item in the sequence. (Alternatively, you could also refactor the code so the local variable wasn&#8217;t named <var>next</var>, but <code>2to3</code> will not do that for you automatically.)
+ja:<li>この例は少し複雑だ。nextという名前のローカル変数があった場合、この変数はグローバル関数の<var>next()</var>より優先される。この例だと、シーケンスの次の要素を取得するにはイテレータの<code>__next__()</code>という特別なメソッドを呼び出さなければならない（あるいは、ローカル変数の名前をnext以外に変えてコードを書きなおすこともできるが、<code>2to3</code>が自動でそのような処理をすることはない）。
+
+
+en:<h2 id=filter><code>filter()</code> global function</h2>
+ja:<h2 id=filter><code>filter()</code>グローバル関数</h2>
+
+
+en:<p>In Python 2, the <code><dfn>filter</dfn>()</code> function returned a list, the result of filtering a sequence through a function that returned <code>True</code> or <code>False</code> for each item in the sequence. In Python 3, the <code>filter()</code> function returns an iterator, not a list.
+ja:<p><code><dfn>filter</dfn>()</code>関数とは、個々の要素につき<code>True</code>か<code>False</code>を返す関数を使ってシーケンスをフィルタリングするものだが、Python 2ではその戻り値としてリストを返していた。しかし、Python 3では<code>filter()</code>関数はリストではなくイテレーターを返すようになっている。
+
+
+en:<li>In the most basic case, <code>2to3</code> will wrap a call to <code>filter()</code> with a call to <code>list()</code>, which simply iterates through its argument and returns a real list.
+ja:<li>この最も基本的な例では、<code>2to3</code>は<code>list()</code>関数で<code>filter()</code>を括っている。この<code>list()</code>というのは、渡された引数全体を単純にイテレートして、そのリストを返す関数だ。
+
+
+en:<li>However, if the call to <code>filter()</code> is <em>already</em> wrapped in <code>list()</code>, <code>2to3</code> will do nothing, since the fact that <code>filter()</code> is returning an iterator is irrelevant.
+ja:<li>一方で、もし<code>filter()</code>が既に<code>list()</code>で括られているならば、<code>2to3</code>は何もしない。<code>filter()</code>がイテレータを返そうが、この場合には何の影響も無いからだ。
+
+
+en:<li>For the special syntax of <code>filter(None, ...)</code>, <code>2to3</code> will transform the call into a semantically equivalent list comprehension.
+ja:<li><code>filter(None, ...)</code>という特殊な構文があるが、<code>2to3</code>はこれを同じ意味を表すリスト内包表記に置き換えてくれる。
+
+
+en:<li>In contexts like <code>for</code> loops, which iterate through the entire sequence anyway, no changes are necessary.
+ja:<li><code>filter()</code>がシーケンス全体をイテレートする<code>for</code>ループに使われているような場合には、何の変更も必要ない。
+
+
+en:<li>Again, no changes are necessary, because the list comprehension will iterate through the entire sequence, and it can do that just as well if <code>filter()</code> returns an iterator as if it returns a list.
+ja:<li>この場合も何も変更する必要はない。このリスト内包表記はシーケンス全体をイテレートするものなので、<code>filter()</code>がイテレーターを返そうがリストを返そうが同じように処理できるからだ。
+
+
+en:<h2 id=map><code>map()</code> global function</h2>
+ja:<h2 id=map><code>map()</code>グローバル関数</h2>
+
+
+en:<p>In much the same way as <a href=#filter><code>filter()</code></a>, the <code><dfn>map</dfn>()</code> function now returns an iterator. (In Python 2, it returned a list.)
+ja:<p><a href=#filter><code>filter()</code></a>とほぼ同様に、<code><dfn>map</dfn>()</code>もイテレータを返すようになっている（Python 2ではリストを返している）。
+
+
+en:<li>As with <code>filter()</code>, in the most basic case, <code>2to3</code> will wrap a call to <code>map()</code> with a call to <code>list()</code>.
+ja:<li><code>filter()</code>の場合と同様に、この最も基本的な例では、<code>2to3</code>は<code>map()</code>を<code>list()</code>で括っている。
+
+
+en:<li>For the special syntax of <code>map(None, ...)</code>, the identity function, <code>2to3</code> will convert it to an equivalent call to <code>list()</code>.
+ja:<li><code>map(None, ...)</code>という特殊な構文（これは恒等関数である）があるが、<code>2to3</code>は<code>list()</code>を用いて同じ意味を表すように書き換えてくれる。
+
+
+en:<li>If the first argument to <code>map()</code> is a lambda function, <code>2to3</code> will convert it to an equivalent list comprehension.
+ja:<li>もし<code>map()</code>の最初の引数が<code>lambda</code>関数なら、<code>2to3</code>はこれを等値なリスト内包表記に置き換える。
+
+
+en:<li>In contexts like <code>for</code> loops, which iterate through the entire sequence anyway, no changes are necessary.
+ja:<li><code>map()</code>がシーケンス全体をイテレートする<code>for</code>ループに使われているような場合には、何の変更も必要ない。
+
+
+en:<li>Again, no changes are necessary, because the list comprehension will iterate through the entire sequence, and it can do that just as well if <code>map()</code> returns an iterator as if it returns a list.
+ja:<li>この場合も何も変更する必要はない。このリスト内包表記はシーケンス全体をイテレートするものなので、<code>map()</code>がイテレーターを返そうがリストを返そうが同じように処理できるからだ。
+
+
+en:<h2 id=reduce><code>reduce()</code> global function</h2>
+ja:<h2 id=reduce><code>reduce()</code>グローバル関数</h2>
+
+
+en:<p>In Python 3, the <code><dfn>reduce</dfn>()</code> function has been removed from the global namespace and placed in the <code>functools</code> module.
+ja:<p>Python 3では、<code><dfn>reduce</dfn>()</code>関数はグローバル名前空間から取り除かれ、<code>functools</code>モジュールの中に置かれている。
+
+
+en:<h2 id=apply><code>apply()</code> global function</h2>
+ja:<h2 id=apply><code>apply()</code>グローバル関数</h2>
+
+
+en:<p>Python 2 had a global function called <code><dfn>apply</dfn>()</code>, which took a function <var>f</var> and a list <code>[a, b, c]</code> and returned <code>f(a, b, c)</code>. You can accomplish the same thing by calling the function directly and passing it the list of arguments preceded by an asterisk. In Python 3, the <code>apply()</code> function no longer exists; you must use the asterisk notation.
+ja:<p>Python 2には<code><dfn>apply</dfn>()</code>というグローバル関数があった。これは関数<var>f</var>とリスト[a,b,c]を引数にとり、f(a,b,c）を返すものだった。これは関数を直接呼び出して、アスタリスクを前に付けた引数のリストを渡すことで同じことを実現できる。Python 3では<code>apply()</code>関数は廃止されているので、このアスタリスクを使った記法に変えなくてはならない。
+
+
+en:<li>In the simplest form, you can call a function with a list of arguments (an actual list like <code>[a, b, c]</code>) by prepending the list with an asterisk (<code>*</code>). This is exactly equivalent to the old <code>apply()</code> function in Python 2.
+ja:<li>最も簡単な例。前にアスタリスク (*) を付けた引数のリスト（[a,b,c]のような実際のリスト）を使って関数を呼び出すことができる。これはPython 2の<code>apply()</code>関数とまったく同じ意味を表すものである。
+
+
+en:<li>In Python 2, the <code>apply()</code> function could actually take three parameters: a function, a list of arguments, and a dictionary of named arguments. In Python 3, you can accomplish the same thing by prepending the list of arguments with an asterisk (<code>*</code>) and the dictionary of named arguments with two asterisks (<code>**</code>).
+ja:<li>Python 2では、<code>apply()</code>関数は実のところ3つの引数をとることができた: 関数、引数のリスト、そしてキーワード引数の辞書だ。Python 3 では、引数のリストの前にアスタリスク (<code>*</code>) をつけ、キーワード引数の辞書の前に2つのアスタリスク (<code>**</code>) をつけることで同じことを実現できる。
+
+
+en:<li>The <code>+</code> operator, used here for list concatenation, takes precedence over the <code>*</code> operator, so there is no need for extra parentheses around <code>a_list_of_args + z</code>.
+ja:<li>ここでリストの連結に使われている<code>+</code>演算子は<code>*</code>演算子に優先するので、<code>a_list_of_args + z</code>のまわりを丸括弧で括る必要はない。
+
+
+en:<li>The <code>2to3</code> script is smart enough to convert complex <code>apply()</code> calls, including calling functions within imported modules.
+ja:<li><code>2to3</code>スクリプトは賢いので、複雑な<code>apply()</code>の呼び出しも処理できる。例えば、ここではインポートされたモジュールに含まれている関数が呼び出されている。
+
+
+en:<h2 id=intern><code>intern()</code> global function</h2>
+ja:<h2 id=intern><code>intern()</code>グローバル関数</h2>
+
+
+en:<p>In Python 2, you could call the <code><dfn>intern</dfn>()</code> function on a string to intern it as a performance optimization. In Python 3, the <code>intern()</code> function has been moved to the <code>sys</code> module.
+ja:<p>Python 2 では、<code><dfn>intern</dfn>()</code>関数を呼び出して文字列を隔離し、パフォーマンスの最大化を図ることができた。Python 3では<code>intern()</code>関数は<code>sys</code>モジュールに移されている。
+
+
+en:<h2 id=exec><code>exec</code> statement</h2>
+ja:<h2 id=exec><code>exec</code>文</h2>
+
+
+en:<p>Just as <a href=#print>the <code>print</code> statement</a> became a function in Python 3, so too has the <code><dfn>exec</dfn></code> statement. The <code>exec()</code> function takes a string which contains arbitrary Python code and executes it as if it were just another statement or expression. <code>exec()</code> is like <a href=advanced-iterators.html#eval><code>eval()</code></a>, but even more powerful and evil. The <code>eval()</code> function can only evaluate a single expression, but <code>exec()</code> can execute multiple statements, imports, function declarations&nbsp;&mdash;&nbsp;essentially an entire Python program in a string.
+ja:<p><a href=#print><code>print</code>文</a>はPython 3で関数になったが、これと同じ変更が<code><dfn>exec</dfn></code>文にも加えられた。<code>exec()</code>関数は任意のPythonのコードを含む文字列をとり、その文字列を文や式として実行する。<code>exec()</code>は<a href=advanced-iterators.html#eval><code>eval()</code></a>に似ているが、<code>eval()</code>よりもっと強力であり、そして邪悪でもある。<code>eval()</code>関数は一つの式しか評価できないのに対して、<code>exec()</code>は複数の文やimport文、関数定義など&nbsp;&mdash;&nbsp;これらは本質的に一つのPythonプログラムを文字列に落としたものだ&nbsp;&mdash;&nbsp;を実行できるのだ。
+
+
+en:<li>In the simplest form, the <code>2to3</code> script simply encloses the code-as-a-string in parentheses, since <code>exec()</code> is now a function instead of a statement.
+ja:<li>これは最も簡単な例で、<code>2to3</code>スクリプトは単純に文字列に直されたコードを丸括弧で括っている。<code>exec()</code>は文ではなく関数だからだ。
+
+
+en:<li>The old <code>exec</code> statement could take a namespace, a private environment of globals in which the code-as-a-string would be executed. Python 3 can also do this; just pass the namespace as the second argument to the <code>exec()</code> function.
+ja:<li>従来の<code>exec</code>文は名前空間、つまり引数の文字列が実行される際の個別の環境を引数にとることができた。Python 3も同じことができる。<code>exec()</code>関数の二番目の引数として名前空間を渡せばよいだけだ。
+
+
+en:<li>Even fancier, the old <code>exec</code> statement could also take a local namespace (like the variables defined within a function). In Python 3, the <code>exec()</code> function can do that too.
+ja:<li>さらに複雑なことに、従来の<code>exec</code>文はローカル名前空間（関数の中で定義された変数名など）を引数にとることができた。Python 3の<code>exec()</code>関数でも同じことができる。
+
+
+en:<h2 id=execfile><code>execfile</code> statement</h2>
+ja:<h2 id=execfile><code>execfile</code>文</h2>
+
+
+en:<p>Like the old <a href=#exec><code>exec</code> statement</a>, the old <code>execfile</code> statement will execute strings as if they were Python code. Where <code>exec</code> took a string, <code>execfile</code> took a filename. In Python 3, the <code>execfile</code> statement has been eliminated. If you really need to take a file of Python code and execute it (but you&#8217;re not willing to simply import it), you can accomplish the same thing by opening the file, reading its contents, calling the global <code>compile()</code> function to force the Python interpreter to compile the code, and then call the new <code>exec()</code> function.
+ja:<p>従来の<a href=#exec><code>exec</code>文</a>と同じように、Python 2のexecfile文は文字列をPythonのコードであるかのように実行するものだった。この二つの違いは、execは文字列をとるがexecfileはファイル名をとるということにあった。Python 3では、execfile文は廃止されている。Pythonコードが書かれたファイルを実行する必要があり、単純にインポートしたくない理由がある場合には、そのファイルを開いて読みだし、<code>compile()</code>関数でそのファイルの内容をコンパイルさせた上で、<code>exec()</code>関数を呼び出すことで実質的に同じことを実現できる。
+
+
+en:<h2 id=repr><code>repr</code> literals (backticks)</h2>
+ja:<h2 id=repr><code>repr</code>リテラル（バック）</h2>
+
+
+en:<p>In Python 2, there was a special syntax of wrapping any object in <dfn>backticks</dfn> (like <code>`x`</code>) to get a representation of the object. In Python 3, this capability still exists, but you can no longer use backticks to get it. Instead, use the global <code>repr()</code> function.
+ja:<p>Python 2では、どんなオブジェクトでもバッククォートで括れば（例えば`x`）、そのオブジェクトの評価結果を取得できた。Python 3では、このバッククォートの構文は廃止されているが、グローバル関数の<code>repr()</code>で同じことができる。
+
+
+en:<li>Remember, <var>x</var> can be anything&nbsp;&mdash;&nbsp;a class, a function, a module, a primitive data type, <i class=baa>&amp;</i>c. The <code>repr()</code> function works on everything.
+ja:<li>覚えておいてほしいのだが、<var>x</var>はクラスでも関数でモジュールでも標準のデータ型でも何でもよいのだ。<code>repr()</code>関数はどのような引数を渡しても動いてくれる。
+
+
+en:<li>In Python 2, backticks could be nested, leading to this sort of confusing (but valid) expression. The <code>2to3</code> tool is smart enough to convert this into nested calls to <code>repr()</code>.
+ja:<li>Python 2 では、バッククォートをネストできたので、この種の（正しいことは正しいのだが）分かりにくい式を作ることもできた。<code>2to3</code>は賢いので、このような式をちゃんと<code>repr()</code>をネストした形に変換してくれる。
+
+
+en:<h2 id=except><code>try...except</code> statement</h2>
+ja:<h2 id=except><code>try...except</code>文</h2>
+
+
+en:<p>The syntax for <a href=your-first-python-program.html#exceptions>catching <dfn>exceptions</dfn></a> has changed slightly between Python 2 and Python 3.
+ja:<p>この<a href=your-first-python-program.html#exceptions><dfn>例外</dfn>処理</a>の構文は、Python 2とPython 3では微妙に異なっている。
+
+
+en:<li>Instead of a comma after the exception type, Python 3 uses a new keyword, <code>as</code>.
+ja:<li>例外型の後にカンマを付ける代わりに、Python 3ではasというキーワードを使う。
+
+
+en:<li>The <code>as</code> keyword also works for catching multiple types of exceptions at once.
+ja:<li>asは様々な型の例外を一度に処理できる。
+
+
+en:<li>If you catch an exception but don&#8217;t actually care about accessing the <dfn>exception</dfn> object itself, the syntax is identical between Python 2 and Python 3.
+ja:<li>例外が出ても、<dfn>例外</dfn>オブジェクトを参照する気がなければ、構文はPython 2とPython 3とでまったく変わらない。
+
+
+en:<li>Similarly, if you use a fallback to catch <em>all</em> exceptions, the syntax is identical.
+ja:<li>同じように、全ての例外を一つのフォールバックで処理するなら、構文を変更する必要はない。
+
+
+en:<p><span class=u>&#x261E;</span>You should never use a fallback to catch <em>all</em> exceptions when importing modules (or most other times). Doing so will catch things like <code>KeyboardInterrupt</code> (if the user pressed <kbd>Ctrl-C</kbd> to interrupt the program) and can make it more difficult to debug errors.
+ja:<p><span class=u>&#x261E;</span>モジュールをインポートする場合（もっと言えば、大抵の場合）に、一つのフォールバックで全ての例外を処理しようとしてはいけない。そうすると、<code>KeyboardInterrupt</code>（これはユーザーがプログラムを中断するために<kbd>Ctrl-C</kbd>を押したときに送出される）といった例外も捕えてしまうし、エラーをデバッグするのも難しくなってしまう。
+
+
+en:<h2 id=raise><code>raise</code> statement</h2>
+ja:<h2 id=raise><code>raise</code>文</h2>
+
+
+en:<p>The syntax for <a href=your-first-python-program.html#exceptions>raising your own exceptions</a> has changed slightly between Python 2 and Python 3.
+ja:<p><a href=your-first-python-program.html#exceptions>あなた独自の例外</a>を送出するための構文は、Python 2とPython 3とで微妙に異なっている。
+
+
+en:<li>In the simplest form, raising an exception without a custom error message, the syntax is unchanged.
+ja:<li>この最も単純な例では、エラーメッセージを出さずに例外を送出している。この構文はまったく変わっていない。
+
+
+en:<li>The change becomes noticeable when you want to raise an exception with a custom error message. Python 2 separated the exception class and the message with a comma; Python 3 passes the error message as a parameter.
+ja:<li>違いはエラーメッセージと 共に例外を送出する際に明らかになる。Python 2は例外クラスとメッセージをカンマで区切っていたが、Python 3ではエラーメッセージを引数として渡すのだ。
+
+
+en:<li>Python 2 supported a more complex syntax to raise an exception with a custom traceback (stack trace). You can do this in Python 3 as well, but the syntax is quite different.
+ja:<li>Python 2は自前のトレースバック（スタックトレース）と一緒に例外を送出するという、もっと複雑な構文をサポートしていた。Python 3でも同じことができるが、構文はかなり異なっている。
+
+
+en:<li>In Python 2, you could raise an exception with no exception class, just an error message. In Python 3, this is no longer possible. <code>2to3</code> will warn you that it was unable to fix this automatically.
+ja:<li>Python 2では、例外クラスを書かずともエラーメッセージだけで例外を送出できた。Python 3ではこれはもう廃止されている。<code>2to3</code>は、この構文については自動で修正できなかったと警告を出してくれるだろう。
+
+
+en:<h2 id=throw><code>throw</code> method on generators</h2>
+ja:<h2 id=throw>ジェネレータの<code>throw</code>メソッド</h2>
+
+
+en:<p>In Python 2, generators have a <code><dfn>throw</dfn>()</code> method. Calling <code>a_generator.throw()</code> raises an exception at the point where the generator was paused, then returns the next value yielded by the generator function. In Python 3, this functionality is still available, but the syntax is slightly different.
+ja:<p>Python 2では、ジェネレータには<code><dfn>throw</dfn>()</code>メソッドがあった。これは例えば、<code>a_generator.throw()</code>というように呼び出すことで、ジェネレータが停止した位置で例外を送出し、さらにジェネレータが<code>yield</code>する次の値を返させることができた。Python 3では、この関数はまだ使えるが、構文が多少異なっている。
+
+
+en:<li>In the simplest form, a generator throws an exception without a custom error message. In this case, the syntax has not changed between Python 2 and Python 3.
+ja:<li>最も簡単な型で、ジェネレータは例外をエラーメッセージ無しで送出している。この場合、構文はPython 2とPython 3とで変わっていない。
+
+
+en:<li>If the generator throws an exception <em>with</em> a custom error message, you need to pass the error string to the exception when you create it.
+ja:<li>ジェネレータがエラーメッセージと一緒に例外を送出する場合は、エラーメッセージの文字列を例外の引数として送出時に渡さなければならない。
+
+
+en:<li>Python 2 also supported throwing an exception with <em>only</em> a custom error message. Python 3 does not support this, and the <code>2to3</code> script will display a warning telling you that you will need to fix this code manually.
+ja:<li><code>raise</code>の場合と同様に、Python 2では例外クラスを出さずに、エラーメッセージだけで例外を送出できたが、Python 3はもはやこの構文をサポートしていない。<code>2to3</code>スクリプトは、この部分のコードを手で直す必要があると警告を出してくれるだろう。
+
+
+en:<h2 id=xrange><code>xrange()</code> global function</h2>
+ja:<h2 id=xrange><code>xrange()</code> グローバル関数</h2>
+
+
+en:<p>In Python 2, there were two ways to get a range of numbers: <code><dfn>range</dfn>()</code>, which returned a list, and <code><dfn>xrange</dfn>()</code>, which returned an iterator. In Python 3, <code>range()</code> returns an iterator, and <code>xrange()</code> doesn&#8217;t exist.
+ja:<p>Python 2では、一定の範囲で数列を生成するには二つの方法があった: リストを返す<code><dfn>range</dfn>()</code>とイテレータを返す<code><dfn>xrange</dfn>()</code>だ。Python 3では、<code>range()</code>はイテレータを返すように変更され、<code>xrange()</code>は削除されている。
+
+
+en:<li>In the simplest case, the <code>2to3</code> script will simply convert <code>xrange()</code> to <code>range()</code>.
+ja:<li>最も簡単な例。<code>2to3</code>スクリプトは<code>xrange()</code>を<code>range()</code>に変更する。
+
+
+en:<li>If your Python 2 code used <code>range()</code>, the <code>2to3</code> script does not know whether you needed a list, or whether an iterator would do. It errs on the side of caution and coerces the return value into a list by calling the <code>list()</code> function.
+ja:<li>Python 2で書かれたコードが<code>range()</code>を使っている場合、<code>2to3</code>スクリプトは、そこでリストがどうしても必要なのか、それともイテレータでもよいのか判断できないので、どちらの場合でも良いように、戻り値を<code>list()</code>関数を使ってリストに直してくれる。
+
+
+en:<li>If the <code>xrange()</code> function was inside a list comprehension, there is no need to coerce the result to a list, since the list comprehension will work just fine with an iterator.
+ja:<li><code>xrange()</code>関数がリスト内包表記で使われていた場合には、戻り値をリストに直す意味は無い。リスト内包表記はイテレータでも動くからだ。
+
+
+en:<li>Similarly, a <code>for</code> loop will work just fine with an iterator, so there is no need to change anything here.
+ja:<li>同様に、<code>for</code>ループはイテレータでも普通に動くので、何の変更も加えなくてよい。
+
+
+en:<li>The <code>sum()</code> function will also work with an iterator, so <code>2to3</code> makes no changes here either. Like <a href=#dict>dictionary methods that return views instead of lists</a>, this applies to <code>min()</code>, <code>max()</code>, <code>sum()</code>, <code>list()</code>, <code>tuple()</code>, <code>set()</code>, <code>sorted()</code>, <code>any()</code>, and <code>all()</code>.
+ja:<li><code>sum()</code>関数もイテレータを処理できるので、ここでも<code>2to3</code>はまったく変更を加えない。<a href=#dict>リストの代わりにviewを返すように変更された辞書のメソッド</a>の場合と同じように、<code>min()</code>、<code>max()</code>、<code>sum()</code>、<code>list()</code>、<code>tuple()</code>、<code>set()</code>、<code>sorted()</code>、<code>any()</code>、<code>all()</code>は何の影響を受けないのだ。
+
+
+en:<h2 id=raw_input><code>raw_input()</code> and <code>input()</code> global functions</h2>
+ja:<h2 id=raw_input><code>raw_input()</code> / <code>input()</code>グローバル関数</h2>
+
+
+en:<p>Python 2 had two global functions for asking the user for input on the command line. The first, called <code>input()</code>, expected the user to enter a Python expression (and returned the result). The second, called <code><dfn>raw_input</dfn>()</code>, just returned whatever the user typed. This was wildly confusing for beginners and widely regarded as a &#8220;wart&#8221; in the language. Python 3 excises this wart by renaming <code>raw_input()</code> to <code>input()</code>, so it works the way everyone naively expects it to work.
+ja:<p>Python 2には、コマンドライン上でユーザーに入力を求めるための二つのグローバル関数があった。一つ目は<code>input()</code>で、これにはPythonの式が入力されることになっていた（その上で評価した結果を返してくれる）。二つ目は<code><dfn>raw_input()</dfn></code>で、これはユーザーがタイプしたものをそのまま返してくれるものだった。この区別は初心者にとって何ともややこしいもので、Pythonの「こぶ」だと考えられていた。Python 3では、<code>raw_input()</code>の名前は<code>input()</code>に変更され、この「こぶ」は切り落とされている。つまり、人々の直感に合った動きをするように変更されたのである。
+
+
+en:<li>In the simplest form, <code>raw_input()</code> becomes <code>input()</code>.
+ja:<li>最も簡単な例。<code>raw_input()</code>が<code>input()</code>になっている。
+
+
+en:<li>In Python 2, the <code>raw_input()</code> function could take a prompt as a parameter. This has been retained in Python 3.
+ja:<li>Python 2では、<code>raw_input()</code>関数はプロンプトを引数としてとることができた。これはPython 3でも残されている。
+
+
+en:<li>If you actually need to ask the user for a Python expression to evaluate, use the <code>input()</code> function and pass the result to <code>eval()</code>.
+ja:<li>ユーザーに入力してもらったPythonの式を評価するという処理を行いたいなら、<code>input()</code>関数を使ってその戻り値を<code>eval()</code>に渡せばいい。
+
+
+en:<h2 id=funcattrs><code>func_*</code> function attributes</h2>
+ja:<h2 id=funcattrs><code>func_*</code> 関数属性</h2>
+
+
+en:<p>In Python 2, code within functions can access special attributes about the function itself. In Python 3, these special function attributes have been renamed for consistency with other attributes.
+ja:<p>Python 2では、関数の内部からその関数の特殊な属性を参照ができた。Python 3では、これらの特殊な関数属性の名前が、他のオブジェクトの属性名との一貫性を保つために変更されている。
+
+
+en:<li>The <code>__name__</code> attribute (previously <code>func_name</code>) contains the function&#8217;s name.
+ja:<li><code>__name__</code>属性（以前は<code>func_name</code>）にはその関数の名前が入っている。
+
+
+en:<li>The <code>__doc__</code> attribute (previously <code>func_doc</code>) contains the <i>docstring</i> that you defined in the function&#8217;s source code.
+ja:<li><code>__doc__</code>属性（以前は<code>func_doc</code>）は関数のソースコードで定義したドキュメント文字列が入っている。
+
+
+en:<li>The <code>__defaults__</code> attribute (previously <code>func_defaults</code>) is a tuple containing default argument values for those arguments that have default values.
+ja:<li><code>__defaults__</code>属性（以前は<code>func_defaults</code>）はタプルで、中にはその関数に設定されているデフォルト値が入っている。
+
+
+en:<li>The <code>__dict__</code> attribute (previously <code>func_dict</code>) is the namespace supporting arbitrary function attributes.
+ja:<li><code>__dict__</code>属性（以前は<code>func_dict</code>）はその関数の名前空間で、任意の関数属性をサポートしている。
+
+
+en:<li>The <code>__closure__</code> attribute (previously <code>func_closure</code>) is a tuple of cells that contain bindings for the function&#8217;s free variables.
+ja:<li><code>__closure__</code>属性（以前は、<code>func_closure</code>）はその関数の引数以外の変数に対するバインディングの入ったセル群からなるタプルである。
+
+
+en:<li>The <code>__globals__</code> attribute (previously <code>func_globals</code>) is a reference to the global namespace of the module in which the function was defined.
+ja:<li><code>__globals__</code>属性（以前は<code>func_globals</code>）はその関数が定義されたモジュールのグローバル名前空間を参照するためのものだ。
+
+
+en:<li>The <code>__code__</code> attribute (previously <code>func_code</code>) is a code object representing the compiled function body.
+ja:<li><code>__code__</code>属性（以前は<code>func_code</code>）はコンパイルされた関数本体を表すコードオブジェクトである。
+
+
+en:<h2 id=xreadlines><code>xreadlines()</code> I/O method</h2>
+ja:<h2 id=xreadlines><code>xreadlines()</code> I/O メソッド</h2>
+
+
+en:<p>In Python 2, file objects had an <code><dfn>xreadlines</dfn>()</code> method which returned an iterator that would read the file one line at a time. This was useful in <code>for</code> loops, among other places. In fact, it was so useful, later versions of Python 2 added the capability to file objects themselves.
+ja:<p>Python 2では、ファイルオブジェクトは<code><dfn>xreadlines</dfn>()</code>というメソッドを持っていたが、これは一度に一行だけファイルを読んでいくイテレータを返すものだった。これはとりわけ<code>for</code>ループで使うのに便利であり、実際に、あまりにも便利だったので、Python 2の後の方のバージョンではファイルオブジェクトそのものを代わりに使っても動くように変更が加えられたぐらいだ。
+
+
+en:<p>In Python 3, the <code>xreadlines()</code> method no longer exists. <code>2to3</code> can fix the simple cases, but some edge cases will require manual intervention.
+ja:<p>Python 3では、<code>xreadlines()</code>メソッドは廃止されている。<code>2to3</code>は簡単なものなら直せるが、より複雑なコードには自ら手を入れる必要があるだろう。
+
+
+en:<li>If you used to call <code>xreadlines()</code> with no arguments, <code>2to3</code> will convert it to just the file object. In Python 3, this will accomplish the same thing: read the file one line at a time and execute the body of the <code>for</code> loop.
+ja:<li><code>xreadlines()</code>を引数無しで呼び出している場合、<code>2to3</code>はこれをファイルオブジェクトに変換する。Python 3では、両者はまったく同じ処理&nbsp;&mdash;&nbsp;ファイルを一度に一行だけ読み、<code>for</code>ループの本体を実行する&nbsp;&mdash;&nbsp;を行うのだ。
+
+
+en:<li>If you used to call <code>xreadlines()</code> with an argument (the number of lines to read at a time), <code>2to3</code> will not fix it, and your code will fail with an <code>AttributeError: '_io.TextIOWrapper' object has no attribute 'xreadlines'</code>. You can manually change <code>xreadlines()</code> to <code>readlines()</code> to get it to work in Python 3. (The <code>readlines()</code> method now returns an iterator, so it is just as efficient as <code>xreadlines()</code> was in Python 2.)
+ja:<li><code>xreadlines()</code>を引数(一度に読む行数を表す）をつけて呼び出している場合、<code>2to3</code>はこれを修正してはくれない。もし、Python3でそのコードを実行したならば、<code>AttributeError: '_io.TextIOWrapper' object has no attribute 'xreadlines'</code>と送出されて止まってしまうだろう。ここで、コードの<code>xreadlines()</code>を<code>readlines()</code>に手で直せばPython 3でも動くようになるはずである（<code>readlines()</code>メソッドは、現在ではイテレータを返すようになっているので、実行速度もPython 2の<code>xreadlines()</code>と変わらない）。
+
+
+en:<h2 id=tuple_params><code>lambda</code> functions that take a tuple instead of multiple parameters</h2>
+ja:<h2 id=tuple_params>複数の引数をとる代わりにタプルをとる<code>lambda</code>関数</h2>
+
+
+en:<p>In Python 2, you could define anonymous <code><dfn>lambda</dfn></code> functions which took multiple parameters by defining the function as taking a tuple with a specific number of items. In effect, Python 2 would &#8220;unpack&#8221; the tuple into named arguments, which you could then reference (by name) within the <code>lambda</code> function. In Python 3, you can still pass a tuple to a <code>lambda</code> function, but the Python interpreter will not unpack the tuple into named arguments. Instead, you will need to reference each argument by its positional index.
+ja:<p>Python 2では匿名の<dfn><code>lambda</code></dfn>関数を作成でき、さらにその関数が複数の要素を持つタプルを引数にとるように定義することで、複数の引数を扱うことができた。この時、Python 2は実質的にタプルをアンパックして名前の付いた変数の形に直し、<code>lambda</code>関数内部で（名前によって）変数を参照できるようにしていた。Python 3でも<code>lambda</code>関数にタプルを渡すことはできる。しかし、Python 3のインタープリタはタプルを名前の付いた変数にアンパックしてくれないので、個々の変数にはインデクスを使って参照しなければならない。
+
+
+en:<li>If you had defined a <code>lambda</code> function that took a tuple of one item, in Python 3 that would become a <code>lambda</code> with references to <var>x1[0]</var>. The name <var>x1</var> is autogenerated by the <code>2to3</code> script, based on the named arguments in the original tuple.
+ja:<li><code>lambda</code>関数が一つの要素からなるタプルを引数にとるように定義されている場合、この関数はPython 3では、<var>x1[0]</var>という形で参照をおこなう<code>lambda</code>関数になる。この<var>x1</var>という変数名は、元のタプルに含まれていた変数名に基づいて<code>2to3</code>が自動で生成してくれる。
+
+
+en:<li>A <code>lambda</code> function with a two-item tuple <var>(x, y)</var> gets converted to <var>x_y</var> with positional arguments <var>x_y[0]</var> and <var>x_y[1]</var>.
+ja:<li>2つの要素からなるタプル<var>(x, y)</var>を引数にとる<code>lambda</code>関数は、<var>x_y</var>というタプルを引数にとり、<var>x_y[0]</var>と<var>x_y[1]</var>という形で参照するように変換される。
+
+
+en:<li>The <code>2to3</code> script can even handle <code>lambda</code> functions with nested tuples of named arguments. The resulting Python 3 code is a bit unreadable, but it works the same as the old code did in Python 2.
+ja:<li><code>2to3</code>スクリプトはネストしたタプルを引数に取るような、より複雑な<code>lambda</code>関数も扱える。その結果生成されるPython 3のコードは少し読みにくいが、Python 2の古いコードと同じように動いてはくれる。
+
+
+en:<li>You can define <code>lambda</code> functions that take multiple arguments. Without parentheses around the arguments, Python 2 just treats it as a <code>lambda</code> function with multiple arguments; within the <code>lambda</code> function, you simply reference the arguments by name, just like any other function. This syntax still works in Python 3.
+ja:<li>複数の引数をとる<code>lambda</code>関数を定義することもできる。引数が括弧で括られていなければ、Python 2は単純にこれを複数の引数を取る<code>lambda</code>関数として扱ってくれ、他の関数と同様に、引数名によって値を参照することもできた。この構文はPython 3でも同じように使える。
+
+
+en:<h2 id=methodattrs>Special method attributes</h2>
+ja:<h2 id=methodattrs>特殊メソッド属性</h2>
+
+
+en:<p>In Python 2, class methods can reference the class object in which they are defined, as well as the method object itself.  <code>im_self</code> is the class instance object; <code>im_func</code> is the function object; <code>im_class</code> is the class of <code>im_self</code>. In Python 3, these special method attributes have been renamed to follow the naming conventions of other attributes.
+ja:<p>Python 2では、あるクラスのメソッドはそのメソッドオブジェクトのみならず、そのメソッドが属するクラスオブジェクトを参照することもできた。例えば、<code>im_self</code>はインスタンスオブジェクト、<code>im_func</code>は関数オブジェクト、<code>im_class</code>は<code>im_self</code>のクラスをそれぞれ表していた。Python 3では、他の属性の命名規則に合わせて、これらの特別なメソッド属性の名前が変更されている。
+
+
+en:<h2 id=nonzero><code>__nonzero__</code> special method</h2>
+ja:<h2 id=nonzero><code>__nonzero__</code>特殊メソッド</h2>
+
+
+en:<p>In Python 2, you could build your own classes that could be used in a boolean context. For example, you could instantiate the class and then use the instance in an <code>if</code> statement. To do this, you defined a special <code>__nonzero__()</code> method which returned <code>True</code> or <code>False</code>, and it was called whenever the instance was used in a boolean context. In Python 3, you can still do this, but the name of the method has changed to <code>__bool__()</code>.
+ja:<p>Python 2では、ブール演算として使える独自のクラスを作ることができ、例えばその独自のクラスのインスタンスを<code>if</code>文で使うことができた。この場合、<code>True</code>か<code>False</code>かのどちらかを返す<code>__nonzero__()</code>という特別なメソッドを定義する必要があり、実際にブール演算の際に呼び出されるのはこのメソッドであった。Python 3でも同じことができるが、この特別なメソッドの名前は<code>__bool__()</code>に変更されている。
+
+
+en:<li>Instead of <code>__nonzero__()</code>, Python 3 calls the <code>__bool__()</code> method when evaluating an instance in a boolean context.
+ja:<li>インスタンスがブール演算として使われる時には、Python 3では<code>__nonzero__()</code>の代わりに<code>__bool__()</code>が呼び出される。
+
+
+en:<li>However, if you have a <code>__nonzero__()</code> method that takes arguments, the <code>2to3</code> tool will assume that you were using it for some other purpose, and it will not make any changes.
+ja:<li>ただし、<code>__nonzero__()</code>を引数をとるメソッドとして定義している場合、<code>2to3</code>はこれが何か別の目的で使われているのだと判断するので、何の修正も加えられない。
+
+
+en:<h2 id=numliterals>Octal literals</h2>
+ja:<h2 id=numliterals>8進数リテラル</h2>
+
+
+en:<p>The syntax for defining base 8 (<dfn>octal</dfn>) numbers has changed slightly between Python 2 and Python 3.
+ja:<p>Python 2とPython 3とでは、8進数を表すための構文が多少異なっている。
+
+
+en:<h2 id=renames><code>sys.maxint</code></h2>
+ja:<h2 id=renames><code>sys.maxint</code></h2>
+
+
+en:<p>Due to the <a href=#long>integration of the <code>long</code> and <code>int</code> types</a>, the <code>sys.maxint</code> constant is no longer accurate. Because the value may still be useful in determining platform-specific capabilities, it has been retained but renamed as <code>sys.maxsize</code>.
+ja:<p><a href=#long><code>long</code>型と<code>int</code>型が統合された</a>ため、<code>sys.maxint</code>定数はもはや正確なものではない。しかし、この値は各プラットフォームにおける何らかの最大値を決めるのに役立つかもしれないので、<code>sys.maxsize</code>という名前で残されている。
+
+
+en:<li><code>maxint</code> becomes <code>maxsize</code>.
+ja:<li>maxintはmaxsizeに変更される。
+
+
+en:<li>Any usage of <code>sys.maxint</code> becomes <code>sys.maxsize</code>.
+ja:<li><code>sys.maxint</code>はどのように使われていても、すべて<code>sys.maxsize</code>に置き換えられる。
+
+
+en:<h2 id=callable><code>callable()</code> global function</h2>
+ja:<h2 id=callable><code>callable()</code>グローバル関数</h2>
+
+
+en:<p>In Python 2, you could check whether an object was callable (like a function) with the global <code><dfn>callable</dfn>()</code> function. In Python 3, this global function has been eliminated. To check whether an object is callable, check for the existence of the <code>__call__()</code> special method.
+ja:<p>Python 2では、<code><dfn>callable</dfn>()</code>というグローバル関数を使うことで、あるオブジェクトが(関数のように）呼び出せるかどうかをチェックできた。Python 3では、このグローバル関数は削除されている。オブジェクトが呼び出し可能かどうかを調べるには、<code>__call__()</code>という特別なメソッドが存在しているかどうかをチェックすればいい。
+
+
+en:<h2 id=zip><code>zip()</code> global function</h2>
+ja:<h2 id=zip><code>zip()</code>グローバル関数</h2>
+
+
+en:<p>In Python 2, the global <code><dfn>zip</dfn>()</code> function took any number of sequences and returned a list of tuples. The first tuple contained the first item from each sequence; the second tuple contained the second item from each sequence; and so on. In Python 3, <code>zip()</code> returns an iterator instead of a list.
+ja:<p>Python 2には、<code><dfn>zip</dfn>()</code>という任意の数のシーケンスを引数にとるグローバル関数があり、これは次のようなタプルのリストを返すものだった。つまり、このリストの一番目のタプルは、引数として渡された各々のシーケンスの一番目の要素で構成され、二番目のタプルは、各々のシーケンスの二番目の要素で構成され……というようにして構築されるリストだ。Python 3では、<code>zip()</code>はリストの代わりにイテレータを返すようになっている。
+
+
+en:<li>In the simplest form, you can get the old behavior of the <code>zip()</code> function by wrapping the return value in a call to <code>list()</code>, which will run through the iterator that <code>zip()</code> returns and return a real list of the results.
+ja:<li>最も簡単な例。<code>zip()</code>の戻り値を<code>list()</code>で括ることで（この<code>list()</code>は<code>zip()</code>の戻り値をイテレートして、その結果のリストを返してくれる）、従来の<code>zip()</code>とおなじ振る舞いをさせることができる。
+
+
+en:<li>In contexts that already iterate through all the items of a sequence (such as this call to the <code>join()</code> method), the iterator that <code>zip()</code> returns will work just fine. The <code>2to3</code> script is smart enough to detect these cases and make no change to your code.
+ja:<li>シーケンスの全ての要素に渡ってすぐにイテレートされるような場合（例えばこの例のように<code>join()</code>メソッドが使われている場合)には、別にイテレータでも上手く動いてくれる。<code>2to3</code>は賢いので、このようなケースを認識して、変更を加えないでおいてくれる。
+
+
+en:<h2 id=standarderror><code>StandardError</code> exception</h2>
+ja:<h2 id=standarderror><code>StandardError</code>例外</h2>
+
+
+en:<p>In Python 2, <code><dfn>StandardError</dfn></code> was the base class for all built-in exceptions other than <code>StopIteration</code>, <code>GeneratorExit</code>, <code>KeyboardInterrupt</code>, and <code>SystemExit</code>. In Python 3, <code>StandardError</code> has been eliminated; use <code>Exception</code> instead.
+ja:<p>Python 2では、<code><dfn>StandardError</dfn></code>は<code>StopIteration</code>、<code>GeneratorExit</code>、<code>KeyboardInterrupt</code>、<code>SystemExit</code>の4つを除く全ての組み込み例外の基底クラスであった。Python 3では、<code>StandardError</code>は削除され、その代わりに<code>Exception</code>が用意されている。
+
+
+en:<h2 id=types><code>types</code> module constants</h2>
+ja:<h2 id=types><code>types</code>モジュールの定数</h2>
+
+
+en:<p>The <code>types</code> module contains a variety of constants to help you determine the type of an object. In Python 2, it contained constants for all primitive types like <code>dict</code> and <code>int</code>. In Python 3, these constants have been eliminated; just use the primitive type name instead.
+ja:<p><code>types</code>モジュールには、オブジェクトの型を調べるのに役立つ様々な定数が入っている。Python 2では<code>dict</code>や<code>int</code>など、全ての標準型に対応する定数が含まれていたが、Python 3ではこれらの定数は削除されている。この代わりとしては、単純にその標準型の名前を使えばいい。
+
+
+en:<p><span class=u>&#x261E;</span><code>types.StringType</code> gets mapped to <code>bytes</code> instead of <code>str</code> because a Python 2 &#8220;string&#8221; (not a Unicode string, just a regular string) is really just a sequence of bytes in a particular character encoding.
+ja:<p><span class=u>&#x261E;</span><code>types.StiringType</code>は<code>str</code>ではなく<code>bytes</code>に対応している。Python 2の「文字列」（Unicode文字列ではなくただの文字列）とは、実のところ、ある特定の文字コードによって表現されたバイト列のシーケンスだからだ。
+
+
+en:<h2 id=isinstance><code>isinstance()</code> global function</h2>
+ja:<h2 id=isinstance><code>isinstance()</code>グローバル関数</h2>
+
+
+en:<p>The <code>isinstance()</code> function checks whether an object is an instance of a particular class or type. In Python 2, you could pass a tuple of types, and <code>isinstance()</code> would return <code>True</code> if the object was any of those types. In Python 3, you can still do this, but passing the same type twice is deprecated.
+ja:<p><code>isinstance()</code>関数はオブジェクトが特定のクラスのインスタンス(あるいは特定の型のオブジェクト）であるかどうかをチェックするものだ。Python 2では、型オブジェクトを要素にもつタプルを渡した場合、オブジェクトの型がそのタプルに含まれていれば<code>True</code>を返していた。Python 3でも基本的には同じだが、同じ型を二度渡すことは非推奨とされている。
+
+
+en:<h2 id=basestring><code>basestring</code> datatype</h2>
+ja:<h2 id=basestring><code>basestring</code>データ型</h2>
+
+
+en:<p>Python 2 had two string types: Unicode and non-Unicode. But there was also another type, <code><dfn>basestring</dfn></code>. It was an abstract type, a superclass for both the <code>str</code> and <code>unicode</code> types. It couldn&#8217;t be called or instantiated directly, but you could pass it to the global <code>isinstance()</code> function to check whether an object was either a Unicode or non-Unicode string. In Python 3, there is only one string type, so <code>basestring</code> has no reason to exist.
+ja:<p>Python 2は二つの文字列の型があった: Unicode文字列と非Unicode文字列だ。しかし、実際にはこの二つ以外に<code><dfn>basestring</dfn></code>という型があった。これは抽象型ではなく、文字列型とUnicode文字列型のスーパークラスだった。この型は呼び出すことも直接インスタンス化することもできなかったが、これをグローバル関数の<code>isinstance()</code>に渡すことで。オブジェクトがUnicode文字列と非Unicode文字列のいずれかであるかを判別できた。文字列型が一つしかないPython 3に<code><dfn>basestring</dfn></code>を残す意味はないので、すでに削除されている。
+
+
+en:<h2 id=itertools><code>itertools</code> module</h2>
+ja:<h2 id=itertools><code>itertools</code>モジュール</h2>
+
+
+en:<p>Python 2.3 introduced the <code>itertools</code> module, which defined variants of the global <code>zip()</code>, <code>map()</code>, and <code>filter()</code> functions that returned iterators instead of lists. In Python 3, those global functions return iterators, so those functions in the <code>itertools</code> module have been eliminated. (There are still <a href=advanced-iterators.html#more-itertools>lots of useful functions in the <code>itertools</code> module</a>, just not these.)
+ja:<p>Python 2.3から<code>itertools</code>モジュールが加わったが、これはグローバル関数の<code>zip()</code>、<code>map()</code>、<code>filter()</code>の各々について、リストではなくイテレータを返すように改変したものを定義していた。Python 3では、これらのグローバル関数はイテレータを返すようになっているので、この3つの関数は<code>itertools</code>から削除されている(ただし、<code>itertools</code>モジュールに含まれているのはこの3つの関数だけではないことに注意。<a href=advanced-iterators.html#more-itertools><code>itertools</code>には他にも便利な関数がまだまだたくさん入っている</a>）。
+
+
+en:<li>Instead of <code>itertools.izip()</code>, just use the global <code>zip()</code> function.
+ja:<li><code>itertools.izip()</code>の代わりとしては、単純にグローバル関数の<code>zip()</code>を使えばいい。
+
+
+en:<li>Instead of <code>itertools.imap()</code>, just use <code>map()</code>.
+ja:<li><code>itertools.imap()</code>の代わりには<code>map()</code>を使う。
+
+
+en:<li><code>itertools.ifilter()</code> becomes <code>filter()</code>.
+ja:<li><code>itertools.ifilter()</code>は<code>filter()</code>になる。
+
+
+en:<li>The <code>itertools</code> module still exists in Python 3, it just doesn&#8217;t have the functions that have migrated to the global namespace. The <code>2to3</code> script is smart enough to remove the specific imports that no longer exist, while leaving other imports intact.
+ja:<li><code>itertools</code>モジュールはPython 3にもまだ残っている。今回の変更では、単にグローバル名前空間に移った関数が消えただけだ。<code>2to3</code>スクリプトは賢いので、もはや存在していない関数をインポートしている部分だけを修正し、その他の部分には手をつけないでいてくれる。
+
+
+en:<h2 id=sys_exc><code>sys.exc_type</code>, <code>sys.exc_value</code>, <code>sys.exc_traceback</code></h2>
+ja:<h2 id=sys_exc><code>sys.exc_type</code>, <code>sys.exc_value</code>, <code>sys.exc_traceback</code></h2>
+
+
+en:<p>Python 2 had three variables in the <code>sys</code> module that you could access while an exception was being handled: <code>sys.exc_type</code>, <code>sys.exc_value</code>, <code>sys.exc_traceback</code>. (Actually, these date all the way back to Python 1.)  Ever since Python 1.5, these variables have been deprecated in favor of <code>sys.exc_info()</code>, which is a function that returns a tuple containing those three values. In Python 3, these individual variables have finally gone away; you must use the <code>sys.exc_info()</code> function.
+ja:<p>Python 2の<code>sys</code>モジュールには、例外が処理されている最中に参照できる変数が3つ入っていた: <code>sys.exc_type</code>、<code>sys.exc_value</code>、<code>sys.exc_traceback</code>の3つだ（実のところ、この3つのデータはPython 1のころからあるものだ）。Python 1.5でこの3つの値が入ったタプルを返す<code>sys.exc_info</code>関数ができたため、それ以後これらの変数は非推奨となっていたが、Python 3でついに削除されることになった。これからは<code>sys.exc_info</code>を使わなくてはならない。
+
+
+en:<h2 id=paren>List comprehensions over tuples</h2>
+ja:<h2 id=paren>タプルを利用したリスト内包表記</h2>
+
+
+en:<p>In Python 2, if you wanted to code a list comprehension that iterated over a tuple, you did not need to put parentheses around the tuple values. In Python 3, explicit parentheses are required.
+ja:<p>Python 2では、リスト内包表記がタプルをイテレートするときは、そのタプルの値を丸括弧で括る必要はなかった。しかし、Python 3では明示的に括弧で括る必要がある。
+
+
+en:<h2 id=getcwdu><code>os.getcwdu()</code> function</h2>
+ja:<h2 id=getcwdu><code>os.getcwdu()</code> 関数</h2>
+
+
+en:<p>Python 2 had a function named <code>os.getcwd()</code>, which returned the current working directory as a (non-Unicode) string. Because modern file systems can handle directory names in any character encoding, Python 2.3 introduced <code>os.getcwdu()</code>. The <code>os.getcwdu()</code> function returned the current working directory as a Unicode string. In Python 3, there is <a href=strings.html#divingin>only one string type (Unicode)</a>, so <code>os.getcwd()</code> is all you need.
+ja:<p>Python 2には現在の作業ディレクトリを（非Unicode）文字列で返す<code>os.getcwd()</code>という関数があった。現代的なファイルシステムはどんな文字エンコードのディレクトリ名も扱えるので、Python2.3では<code>os.get.cwdu()</code>が導入された。この<code>os.getcwdu()</code>とは現在の作業ディレクトリ名をUnicode文字列で返すものだ。Python 3では、<a href=strings.html#divingin>文字列型は（Unicode文字列の）1つしかない</a>ので、<code>os.getcwd()</code>だけでこと足りるようになっている。
+
+
+en:<h2 id=metaclass>Metaclasses</h2>
+ja:<h2 id=metaclass>メタクラス</h2>
+
+
+en:<p>In Python 2, you could create metaclasses either by defining the <code>metaclass</code> argument in the class declaration, or by defining a special class-level <code><dfn>__metaclass__</dfn></code> attribute. In Python 3, the class-level attribute has been eliminated.
+ja:<p>Python 2では、クラスを定義する際に<code>metaclass</code>に値を渡すか、クラスレベルを表す特別な属性である<code><dfn>__metaclass__</dfn></code>を定義することでメタクラスを作ることができた。Python 3では、このクラスレベル属性は削除されている。
+
+
+en:<li>Declaring the metaclass in the class declaration worked in Python 2, and it still works the same in Python 3.
+ja:<li>Python 2ではクラスを定義する際にメタクラスを定義できたが、これはPython 3でもできる。
+
+
+en:<li>Declaring the metaclass in a class attribute worked in Python 2, but doesn&#8217;t work in Python 3.
+ja:<li>Python 2ではクラス属性でメタクラスを定義できたが、Python 3ではできない。
+
+
+en:<li>The <code>2to3</code> script is smart enough to construct a valid class declaration, even if the class is inherited from one or more base classes.
+ja:<li><code>2to3</code>スクリプトは賢いので、仮にそのクラスが1つ以上の基底クラスから継承したものであっても、正しくクラスを定義する部分を書き換えてくれる。
+
+
+en:<h2 id=nitpick>Matters of style</h2>
+ja:<h2 id=nitpick>スタイルの問題</h2>
+
+
+en:<p>The rest of the &#8220;fixes&#8221; listed here aren&#8217;t really fixes per se. That is, the things they change are matters of style, not substance. They work just as well in Python 3 as they do in Python 2, but the developers of Python have a vested interest in making Python code as uniform as possible. To that end, there is an <a href=http://www.python.org/dev/peps/pep-0008/>official Python style guide</a> which outlines&nbsp;&mdash;&nbsp;in excruciating detail&nbsp;&mdash;&nbsp;all sorts of nitpicky details that you almost certainly don&#8217;t care about. And given that <code>2to3</code> provides such a great infrastructure for converting Python code from one thing to another, the authors took it upon themselves to add a few optional features to improve the readability of your Python programs.
+ja:<p>以下にリストされている残りの「修正」は、実のところ本質的な修正が加えられたものではない。つまり、スタイルは変更されたがその実質は何も変えられていないので、結局のところ、これらはPython 3でも従来通り動くのだ。しかし、Pythonの開発者はコードをできるかぎり統一的なものにすることに大きな関心を寄せていて、この目的のために、<a href=http://www.python.org/dev/peps/pep-0008/>公式のPythonスタイルガイド</a>というものがあって、読者の皆様が特に気にする必要がないような、本当に細かい部分までいちいち&nbsp;&mdash;&nbsp;しかも気が滅入るほど詳しく&nbsp;&mdash;&nbsp;説明がなされているぐらいなのだ。まあ、Pythonのコードを次から次へと変換してくる<code>2to3</code>というすばらしいツールがあるのだから、コードの作成者は可読性を高めるために、ついでに修正を施していくべきだろう。
+
+
+en:<h3 id=set_literal><code>set()</code> literals (explicit)</h3>
+ja:<h3 id=set_literal><code>set()</code>リテラル (explicit)</h3>
+
+
+en:<p>In Python 2, the only way to define a literal set in your code was to call <code>set(a_sequence)</code>. This still works in Python 3, but a clearer way of doing it is to use the new set literal notation: curly braces. This works for everything except empty sets, because dictionaries also use curly braces, so <a href=native-datatypes.html#emptyset><code>{}</code> is an empty dictionary, not an empty set</a>.
+ja:<p>Python 2では、集合を定義するには<code>set(a_sequence)</code>というように呼び出すほか無かった。この方法はPython 3でも使えるが、より明解に表したいなら、新しく導入された記法を用いればいい: 波括弧だ。これは基本的にどんな集合を作るのにも使えるが、空集合だけは生成できない。辞書も波括弧を記法に使うため、<a href=native-datatypes.html#emptyset><code>{}</code>は空集合ではなく空の辞書を生成してしまう</a>のだ。
+
+
+en:<p><span class=u>&#x261E;</span>The <code>2to3</code> script will not fix <code>set()</code> literals by default. To enable this fix, specify <kbd>-f set_literal</kbd> on the command line when you call <code>2to3</code>.
+ja:<p><span class=u>&#x261E;</span><code>2to3</code>は<code>set()</code>をデフォルトでは修正しない。これを修正させるには、コマンドラインで<code>2to3</code>を起動するときに、明示的に<kbd>-f set_literal</kbd>というオプションをつけなくてはならない。
+
+
+en:<h3 id=buffer><code>buffer()</code> global function (explicit)</h3>
+ja:<h3 id=buffer><code>buffer()</code>グローバル関数 (explicit)</h3>
+
+
+en:<p>Python objects implemented in C can export a &#8220;buffer interface,&#8221; which allows other Python code to directly read and write a block of memory. (That is exactly as powerful and scary as it sounds.)  In Python 3, <code>buffer()</code> has been renamed to <code>memoryview()</code>. (It&#8217;s a little more complicated than that, but you can almost certainly ignore the differences.)
+ja:<p>Cで実装されたPythonオブジェクトは「バッファインターフェイス」を公開できる。これによって、他のPythonコードがメモリブロックを直接読み書きできるようになる（そう、これは強力だが、その半面とても恐ろしいことでもあるのだ）。Python 3では、<code>buffer()</code>は<code>memoryview()</code>に名前が変更された（実際はもっと複雑な変更が加えられているのだが、特にその違いを意識する必要はないだろう）。
+
+
+en:<p><span class=u>&#x261E;</span>The <code>2to3</code> script will not fix the <code>buffer()</code> function by default. To enable this fix, specify <kbd>-f buffer</kbd> on the command line when you call <code>2to3</code>.
+ja:<p><span class=u>&#x261E;</span><code>2to3</code>は<code>buffer()</code>をデフォルトでは修正しない。これを修正させるには、コマンドラインで<code>2to3</code>を起動するときに、明示的に<kbd>-f buffer</kbd>というオプションをつけなくてはならない。
+
+
+en:<h3 id=wscomma>Whitespace around commas (explicit)</h3>
+ja:<h3 id=wscomma>カンマの周りの空白文字 (explicit)</h3>
+
+
+en:<p>Despite being draconian about whitespace for indenting and outdenting, Python is actually quite liberal about whitespace in other areas. Within lists, tuples, sets, and dictionaries, whitespace can appear before and after commas with no ill effects. However, the Python style guide states that commas should be preceded by zero spaces and followed by one. Although this is purely an aesthetic issue (the code works either way, in both Python 2 and Python 3), the <code>2to3</code> script can optionally fix this for you.
+ja:<p>Pythonは字下げと字上げのための空白文字についてはひどく厳しいのに、他の部分での空白文字の扱いについてはかなりリベラルである。例えば、リストやタプル、集合、辞書の中においては、カンマの後にも前にも空白文字をつけることができ、それで何の問題も起きなかった。しかし、Pythonスタイルガイドは、カンマの直前にはスペースを置かず、直後にはスペースを一つだけ付けるべきだと明言している。これは純粋に審美的な問題なのだが（空白文字をどう置くにせよ、Python2でもPython3でもコードは動くのだ）、<code>2to3</code>はオプションでこれを修正する機能を備えている。
+
+
+en:<p><span class=u>&#x261E;</span>The <code>2to3</code> script will not fix whitespace around commas by default. To enable this fix, specify <kbd>-f wscomma</kbd> on the command line when you call <code>2to3</code>.
+ja:<p><span class=u>&#x261E;</span><code>2to3</code>はカンマの周りの空白文字をデフォルトでは修正しない。これを修正させるには、コマンドラインで<code>2to3</code>を起動するときに、明示的に<kbd>-f wscomma</kbd>というオプションをつけなくてはならない。
+
+
+en:<h3 id=idioms>Common idioms (explicit)</h3>
+ja:<h3 id=idioms>慣用的表現 (explicit)</h3>
+
+
+en:<p>There were a number of common idioms built up in the Python community. Some, like the <code>while 1:</code> loop, date back to Python 1. (Python didn&#8217;t have a true boolean type until version 2.3, so developers used <code>1</code> and 0 instead.)  Modern Python programmers should train their brains to use modern versions of these idioms instead.
+ja:<p>Pythonコミュニティの中で築き上げられてきた慣用的な表現は多数あるが、その中のいくつか（例えば、<code>while 1:</code> ループ）は、Python 1の頃にまで起源を遡ることができる（Pythonはバージョン2.3まで本物のブール型を持っていなかったので、開発者は代わりに<code>1</code>と<code>0</code>を使っていたのだ）。現代的なPythonプログラマは、新しい方の表現を使うように頭を慣らしていくべきだろう。
+
+
+en:<p><span class=u>&#x261E;</span>The <code>2to3</code> script will not fix common idioms by default. To enable this fix, specify <kbd>-f idioms</kbd> on the command line when you call <code>2to3</code>.
+ja:<p><span class=u>&#x261E;</span><code>2to3</code>はカンマの周りの空白文字をデフォルトでは修正しない。これを修正させるには、コマンドラインで<code>2to3</code>を起動するときに、明示的に<kbd>-f wscomma</kbd>というオプションをつけなくてはならない。
+
+
+en:<p class=v><a href=packaging.html rel=prev title='back to &#8220;Packaging Python Libraries&#8221;'><span class=u>&#x261C;</span></a> <a href=special-method-names.html rel=next title='onward to &#8220;Special Method Names&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=packaging.html rel=prev title='「Pythonのライブラリをパッケージングする」へ戻る'><span class=u>&#x261C;</span></a> <a href=special-method-names.html rel=next title='「特殊メソッド名」へ進む'><span class=u>&#x261E;</span></a>
+
+
+en:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+ja:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+
+

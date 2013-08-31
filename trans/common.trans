@@ -1,0 +1,60 @@
+en:<form action=http://www.google.com/cse><div><input type=hidden name=cx value=014021643941856155761:l5eihuescdw><input type=hidden name=ie value=UTF-8>&nbsp;<input type=search name=q size=25 placeholder="powered by Google&trade;">&nbsp;<input type=submit name=root value=Search></div></form>
+ja:<form action=http://www.google.com/cse><div><input type=hidden name=cx value=013033505435324793850:4zvq0vcs5zq><input type=hidden name=ie value=UTF-8>&nbsp;<input type=search name=q size=25 placeholder="powered by Google&trade;">&nbsp;<input type=submit name=sa value=検索></div></form>
+
+
+en:<form action=http://www.google.com/cse><div><input type=hidden name=cx value=014021643941856155761:l5eihuescdw><input type=hidden name=ie value=UTF-8>&nbsp;<input type=search name=q size=25 placeholder="powered by Google&trade;">&nbsp;<input type=submit name=sa value=Search></div></form>
+ja:<form action=http://www.google.com/cse><div><input type=hidden name=cx value=013033505435324793850:4zvq0vcs5zq><input type=hidden name=ie value=UTF-8>&nbsp;<input type=search name=q size=25 placeholder="powered by Google&trade;">&nbsp;<input type=submit name=sa value=検索></div></form>
+
+
+en:<form action=http://www.google.com/cse><div><input type=hidden name=cx value=014021643941856155761:l5eihuescdw><input type=hidden name=ie value=UTF-8><input type=search name=q size=25 placeholder="powered by Google&trade;">&nbsp;<input type=submit name=sa value=Search></div></form>
+ja:<form action=http://www.google.com/cse><div><input type=hidden name=cx value=013033505435324793850:4zvq0vcs5zq><input type=hidden name=ie value=UTF-8><input type=search name=q size=25 placeholder="powered by Google&trade;">&nbsp;<input type=submit name=sa value=検索></div></form>
+
+
+en:<meta charset=utf-8>
+ja:<html lang=ja-JP><meta charset=utf-8>
+
+
+en:<h2 id=divingin>Diving In</h2>
+ja:<h2 id=divingin>飛び込む</h2>
+
+
+en:<h2 id=furtherreading>Further Reading</h2>
+ja:<h2 id=furtherreading>もっと知りたい人のために</h2>
+
+
+en:<p id=level>Difficulty level: <span class=u title=novice>&#x2666;&#x2662;&#x2662;&#x2662;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=初心者>&#x2666;&#x2662;&#x2662;&#x2662;&#x2662;</span>
+
+
+en:<p id=level>Difficulty level: <span class=u title=beginner>&#x2666;&#x2666;&#x2662;&#x2662;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=初級>&#x2666;&#x2666;&#x2662;&#x2662;&#x2662;</span>
+
+
+en:<p id=level>Difficulty level: <span class=u title=intermediate>&#x2666;&#x2666;&#x2666;&#x2662;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=中級>&#x2666;&#x2666;&#x2666;&#x2662;&#x2662;</span>
+
+
+en:<p id=level>Difficulty level: <span class=u title=advanced>&#x2666;&#x2666;&#x2666;&#x2666;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=上級>&#x2666;&#x2666;&#x2666;&#x2666;&#x2662;</span>
+
+
+en:<p id=level>Difficulty level: <span class=u title=pro>&#x2666;&#x2666;&#x2666;&#x2666;&#x2666;</span>
+ja:<p id=level>難易度: <span class=u title=プロ>&#x2666;&#x2666;&#x2666;&#x2666;&#x2666;</span>
+
+
+en:# continued from the previous example
+ja:# 前の例から続く
+
+en:# continued from previous example
+ja:# 前の例から続く
+
+en:# continuing from previous example
+ja:# 前の例から続く
+
+en:# continuing from the previous example
+ja:# 前の例から続く
+
+
+en:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+ja:<p class=c>&copy; 2001&ndash; <a href=about.html>Mark Pilgrim</a><br>&copy; 2011- <a href=about-ja.html>Fukada, Fujimoto</a>（日本語版）
+

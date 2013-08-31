@@ -1,0 +1,564 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#strings>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#strings>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<title>Strings - Dive Into Python 3</title>
+ja:<title>文字列 - Dive Into Python 3 日本語版</title>
+
+
+en:<p id=level>Difficulty level: <span class=u title=intermediate>&#x2666;&#x2666;&#x2666;&#x2662;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=intermediate>&#x2666;&#x2666;&#x2666;&#x2662;&#x2662;</span>
+
+
+en:<h1>Strings</h1>
+ja:<h1>文字列</h1>
+
+
+en:<p><span class=u>&#x275D;</span> I&#8217;m telling you this &#8217;cause you&#8217;re one of my friends.<br>
+ja:<p><span class=u>&#x275D;</span> 私がこれを教えるのも、お前が私の友達だからだ。
+
+en:My alphabet starts where your alphabet ends! <span class=u>&#x275E;</span><br>&mdash; Dr. Seuss, On Beyond Zebra!
+ja:私のアルファベットは、お前のアルファベットが終わるところから始まるのだよ！<span class=u>&#x275E;</span><br>&mdash; Dr. Seuss, On Beyond Zebra!
+
+
+en:<p id=toc>&nbsp;
+ja:<p id=toc>&nbsp;
+
+
+en:<h2 id=boring-stuff>Some Boring Stuff You Need To Understand Before You Can Dive In</h2>
+ja:<h2 id=boring-stuff>飛び込む前に知っておくべき退屈なこと</h2>
+
+
+en:<p class=f>Few people think about it, but text is incredibly complicated. Start with the alphabet. The people of <a href=http://en.wikipedia.org/wiki/Bougainville_Province>Bougainville</a> have the smallest alphabet in the world; their <a href=http://en.wikipedia.org/wiki/Rotokas_alphabet>Rotokas alphabet</a> is composed of only 12 letters: A, E, G, I, K, O, P, R, S, T, U, and V. On the other end of the spectrum, languages like Chinese, Japanese, and Korean have thousands of characters. English, of course, has 26 letters&nbsp;&mdash;&nbsp;52 if you count uppercase and lowercase separately&nbsp;&mdash;&nbsp;plus a handful of <i class=baa>!@#$%&amp;</i> punctuation marks.
+ja:<p class=f>ほとんどの人は気にもとめないのだが、テキストというのは信じられないほど複雑だ。まずはアルファベットから始めていこう。<a href=http://en.wikipedia.org/wiki/Bougainville_Province>ブーゲンビル島</a>の人々は、世界で最も字数の少ないアルファベットを使っている。彼らの<a href=http://en.wikipedia.org/wiki/Rotokas_alphabet>ロトカスアルファベット</a>は、たったの12文字&nbsp;&mdash;&nbsp;A, E, G, I, K, O, P, R, S, T, U, V で構成されている。これとは対照的に、中国語・日本語・韓国語のように何千もの文字を持つ言語もある。もちろん英語には、26文字（大文字と小文字を分けて数えれば52文字）と、わずかな <i class=baa>!@#$%&amp;</i> 句読点がある。
+
+
+en:<p>When you talk about &#8220;text,&#8221; you&#8217;re probably thinking of &#8220;characters and symbols on my computer screen.&#8221; But computers don&#8217;t deal in characters and symbols; they deal in bits and bytes. Every piece of text you&#8217;ve ever seen on a computer screen is actually stored in a particular <i>character encoding</i>. Very roughly speaking, the character encoding provides a mapping between the stuff you see on your screen and the stuff your computer actually stores in memory and on disk. There are many different character encodings, some optimized for particular languages like Russian or Chinese or English, and others that can be used for multiple languages.
+ja:<p>皆さんが「テキスト」について話すとき、おそらく「コンピュータスクリーン上の文字とシンボル」のことを思い浮かべるだろう。ところが、コンピュータは文字やシンボルを扱わない。コンピュータはビットやバイトを扱うのだ。今までにコンピュータスクリーンの上で見たすべてのテキストは、実際には何らかの「文字コード」で記録されている。非常に大ざっぱに言えば、文字コードというのは、私たちが画面上で見るものと、コンピュータが実際にメモリやディスクに記録するものとを対応させるものといえる。多種多様な文字コードが存在していて、ロシア語・中国語・英語といった特定の言語に最適化されているものもあれば、複数の言語で使えるものもある。
+
+
+en:<p>In reality, it&#8217;s more complicated than that. Many characters are common to multiple encodings, but each encoding may use a different sequence of bytes to actually store those characters in memory or on disk. So you can think of the character encoding as a kind of decryption key. Whenever someone gives you a sequence of bytes&nbsp;&mdash;&nbsp;a file, a web page, whatever&nbsp;&mdash;&nbsp;and claims it&#8217;s &#8220;text,&#8221; you need to know what character encoding they used so you can decode the bytes into characters. If they give you the wrong key or no key at all, you&#8217;re left with the unenviable task of cracking the code yourself. Chances are you&#8217;ll get it wrong, and the result will be gibberish.
+ja:<p>現実の事情はもっと複雑だ。多くの文字は複数の文字コードに共通して存在するが、個々の文字コードは、それらの文字を実際にメモリやディスクに格納する際に異なるバイト列を用いているかもしれない。つまり、文字コードというのは、暗号解読のための鍵のようなものだと捉えられる。だから、誰かからバイト列（それがファイルであれ、Webページであれ、その他何であれ）を受け取って、その内容が「テキスト」だと告げられた場合、そのバイトを文字へデコードするには、彼らが何の文字コードを使用したのかを知る必要がある。もし間違った鍵を渡されたり、あるいは全く何も渡してくれなかったとしたら、自分自身で文字コードを解析するというイヤな作業をするしかなくなってしまう。たぶん、正しい文字コードを引き当てられず、メチャクチャな結果が返ってくるのがオチだろう。
+
+
+en:<aside>Everything you thought you knew about strings is wrong.</aside>
+ja:<aside>文字列について知っていると思っていたことはすべて間違いだ。</aside>
+
+
+en:<p>Surely you&#8217;ve seen web pages like this, with strange question-mark-like characters where apostrophes should be. That usually means the page author didn&#8217;t declare their character encoding correctly, your browser was left guessing, and the result was a mix of expected and unexpected characters. In English it&#8217;s merely annoying; in other languages, the result can be completely unreadable.
+ja:<p>おそらく、アポストロフィ記号が奇妙なクエスチョンマーク状の文字に化けてしまっているWebページを見た経験があると思う。大抵の場合、これはページの作者が文字コードを正しく宣言しておらず、ブラウザが文字コードを推測するしかなくなってしまい、本来表示されるべき文字とそうでない文字が混じり合った結果になってしまった、ということを意味している。英語では多少わずらわしいだけだが、他の言語においては、まったく読むことのできないページが表示される可能性がある。
+
+
+en:<p>There are character encodings for each major language in the world. Since each language is different, and memory and disk space have historically been expensive, each character encoding is optimized for a particular language. By that, I mean each encoding using the same numbers (0&ndash;255) to represent that language&#8217;s characters. For instance, you&#8217;re probably familiar with the <abbr>ASCII</abbr> encoding, which stores English characters as numbers ranging from 0 to 127. (65 is capital &#8220;A&#8221;, 97 is lowercase &#8220;a&#8221;, <i class=baa>&amp;</i>c.)  English has a very simple alphabet, so it can be completely expressed in less than 128 numbers. For those of you who can count in base 2, that&#8217;s 7 out of the 8 bits in a byte.
+ja:<p>世界の主要な言語には、その言語のための文字コードが存在している。言語はそれぞれが異なるものであるし、歴史的にはメモリもディスクも高価なものだったので、個々の文字コードは特定の1つの言語のために最適化されているのだ。要するに、私が言いたいのは、各々のエンコーディングは同じ数字 (0&ndash;255) を使ってその言語の文字を表現しているということだ。例えば、おそらく皆さんが慣れ親しんでいるであろう<abbr>ASCII</abbr>コードは英語の文字を0から127までの範囲の数字で格納している（65は大文字の"A"、97は小文字の"a"など）。英語は非常に単純なアルファベットを持っているので、128個以下の数字で完全に表現できる。2進数で数をかぞえられる皆さんのために言っておくと、128というのは1バイトを構成する8ビットのうちの7ビットだ。
+
+
+en:<p>Western European languages like French, Spanish, and German have more letters than English. Or, more precisely, they have letters combined with various diacritical marks, like the <code>&ntilde;</code> character in Spanish. The most common encoding for these languages is CP-1252, also called &#8220;windows-1252&#8221; because it is widely used on Microsoft Windows. The CP-1252 encoding shares characters with <abbr>ASCII</abbr> in the 0&ndash;127 range, but then extends into the 128&ndash;255 range for characters like n-with-a-tilde-over-it (241), u-with-two-dots-over-it (252), <i class=baa>&amp;</i>c. It&#8217;s still a single-byte encoding, though; the highest possible number, 255, still fits in one byte.
+ja:<p>フランス語・スペイン語・ドイツ語のような西欧の言語は、英語よりもたくさんの文字を持っている。もっと厳密に言うと、これらの言語には様々な発音区別符号と組み合わさったアルファベット（たとえばスペイン語の<code>&ntilde;</code>）があるのだ。これらの言語のための最も一般的な文字コードはCP-1252で、これはMicrosoft Windowsで広く使われているので "windows-1252" とも呼ばれている。CP-1252は、0&ndash;127の範囲では<abbr>ASCII</abbr>と同じ文字になっているが、n-with-a-tilde-over-it (241) や u-with-two-dots-over-it (252) といった文字のために128&ndash;255の範囲まで拡張されている。とはいえ、これは依然として1バイトの文字コードだ。つまり、取りうる最大の数値が255なので、やはり1バイトの範囲に収まるのだ。
+
+
+en:<p>Then there are languages like Chinese, Japanese, and Korean, which have so many characters that they require multiple-byte character sets. That is, each &#8220;character&#8221; is represented by a two-byte number from 0&ndash;65535. But different multi-byte encodings still share the same problem as different single-byte encodings, namely that they each use the same numbers to mean different things. It&#8217;s just that the range of numbers is broader, because there are many more characters to represent.
+ja:<p>中国語・日本語・韓国語のような言語は大量の文字を持っているので、マルチバイトの文字集合が必要になる。要するに、各々の「文字」が0から65535までの2バイトの数で表現されるのだ。しかし、マルチバイトの文字コードは、依然としてシングルバイトの文字コードと同じ問題を抱えている。すなわち、同じ数値であっても文字コードごとに表現している文字が異なるという問題だ。マルチバイトの文字コードは、表現する文字が多いために数値の範囲を広げたというだけにすぎない。
+
+
+en:<p>That was mostly OK in a non-networked world, where &#8220;text&#8221; was something you typed yourself and occasionally printed. There wasn&#8217;t much &#8220;plain text&#8221;. Source code was <abbr>ASCII</abbr>, and everyone else used word processors, which defined their own (non-text) formats that tracked character encoding information along with rich styling, <i class=baa>&amp;</i>c. People read these documents with the same word processing program as the original author, so everything worked, more or less.
+ja:<p>ネットワーク化されていない世界、つまり「テキスト」は自分自身で入力したものばかりで、たまにそれを印刷するような状況では、これでも概ねうまくいっていた。「プレーンテキスト」なんてものはそれほど多くなかった。ソースコードは<abbr>ASCII</abbr>で書かれていたし、他のみんなはワードプロセッサを使っていた。ワードプロセッサは（テキスト形式ではない）独自の形式を定義していて、文字装飾などの情報と一緒に文字コードの種類も管理している。人々は作者と同じワードプロセッサのプログラムを使って文章を読んでいたので、多かれ少なかれ、すべてがうまくいっていた。
+
+
+en:<p>Now think about the rise of global networks like email and the web. Lots of &#8220;plain text&#8221; flying around the globe, being authored on one computer, transmitted through a second computer, and received and displayed by a third computer. Computers can only see numbers, but the numbers could mean different things. Oh no! What to do? Well, systems had to be designed to carry encoding information along with every piece of &#8220;plain text.&#8221; Remember, it&#8217;s the decryption key that maps computer-readable numbers to human-readable characters. A missing decryption key means garbled text, gibberish, or worse.
+ja:<p>今度は、Webや電子メールのような世界規模のネットワークの出現について考えてみよう。大量の「プレーンテキスト」が地球上を飛び回っており、1台目のコンピュータ上で書かれたテキストが、2台目のコンピュータを経由して転送され、3台目のコンピュータで受信されて表示される。コンピュータは数字しか理解しないが、この数字は様々なものを意味しうる。まいった、どうしたら良いのだろうか？ そう、システムは「プレーンテキスト」と一緒に、文字コードの情報を送り届けるように設計しなければならないのだ。思い出してほしい。文字コードの情報は、機械が読める数字を人間が読める文字へマッピングする暗号解読の鍵だ。暗号解読の鍵がないということは、不明瞭なテキストか、ちんぷんかんぷんなテキストか、もっとメチャクチャな何かが得られることを意味する。
+
+
+en:<p>Now think about trying to store multiple pieces of text in the same place, like in the same database table that holds all the email you&#8217;ve ever received. You still need to store the character encoding alongside each piece of text so you can display it properly. Think that&#8217;s hard? Try searching your email database,  which means converting between multiple encodings on the fly. Doesn&#8217;t that sound fun?
+ja:<p>今度は、複数のテキストを同じ場所に格納しようとすることを考えてみよう。これは例えば、今までに受信したすべての電子メールを、データベースの同じテーブルに格納するような場合だ。ここでも、メールを正しく表示するためには、それぞれの文書と一緒にその文字コードを格納しておかなければならない。これは大変そうではないだろうか？ 電子メールのデータベースを検索しようとするときは、複数の文字コードを急いで変換しなければならない。これは面白そうに思えるだろうか？
+
+
+en:<p>Now think about the possibility of multilingual documents, where characters from several languages are next to each other in the same document. (Hint: programs that tried to do this typically used escape codes to switch &#8220;modes.&#8221; Poof, you&#8217;re in Russian koi8-r mode, so 241 means Я; poof, now you&#8217;re in Mac Greek mode, so 241 means ώ.) And of course you&#8217;ll want to search <em>those</em> documents, too.
+ja:<p>今度は、複数の言語で書かれた文章について考えよう。この文章では、様々な言語の文字が1つの文章の中でそれぞれ隣り合っている（ヒント: このようなことをするプログラムは、典型的にはエスケープコードを使って「モード」を切り替える。パッ！ 今はロシア語のkoi8-rモードなので、241はЯです。パッ！ 今はMacのギリシャ語モードなので、241はώです）。そしてもちろん、<em>このような</em>ドキュメントも検索したいと思うだろう。
+
+
+en:<p>Now cry a lot, because everything you thought you knew about strings is wrong, and there ain&#8217;t no such thing as &#8220;plain text.&#8221;
+ja:<p>もう泣くしかない。文字列について知っていると思っていたことはすべて間違いで、「プレーンテキスト」などというものは存在しないのだから。
+
+
+en:<h2 id=one-ring-to-rule-them-all>Unicode</h2>
+ja:<h2 id=one-ring-to-rule-them-all>Unicode</h2>
+
+
+en:<p><i>Enter <dfn>Unicode</dfn>.</i>
+ja:<p><i><dfn>Unicode</dfn>の話に入ろう。</i>
+
+
+en:<p>Unicode is a system designed to represent <em>every</em> character from <em>every</em> language. Unicode represents each letter, character, or ideograph as a 4-byte number. Each number represents a unique character used in at least one of the world&#8217;s languages. (Not all the numbers are used, but more than 65535 of them are, so 2 bytes wouldn&#8217;t be sufficient.) Characters that are used in multiple languages generally have the same number, unless there is a good etymological reason not to. Regardless, there is exactly 1 number per character, and exactly 1 character per number. Every number always means just one thing; there are no &#8220;modes&#8221; to keep track of. <code>U+0041</code> is always <code>'A'</code>, even if your language doesn&#8217;t have an <code>'A'</code> in it.
+ja:<p>Unicodeは、<em>すべて</em>の言語の<em>すべて</em>の文字を表現するために設計されたシステムだ。Unicodeは、すべての文字や記号を4バイトの数値で表現していて、各々の数値は少なくとも世界中のどれか1つの言語で使われているただ1つの文字を表している（4バイトの数値がすべて使われているわけではないが、65535より多くの数値が使われているので、2バイトでは十分ではないのだ）。複数の言語で使われる文字は語源的な理由がない限り基本的に同じ数値だ。とにかく、1つの文字は1つの数値に対応し、1つの数値は1つの文字に対応する。すべての数値は常にただ1つのものを意味しており、「モード」などというものは存在しない。たとえあなたの言語に<code>'A'</code>という文字が無いとしても、<code>U+0041</code>は常に<code>'A'</code>を表すのだ。
+
+
+en:<p>On the face of it, this seems like a great idea. One encoding to rule them all. Multiple languages per document. No more &#8220;mode switching&#8221; to switch between encodings mid-stream. But right away, the obvious question should leap out at you. Four bytes? For every single character<span class=u title='interrobang!'>&#8253;</span> That seems awfully wasteful, especially for languages like English and Spanish, which need less than one byte (256 numbers) to express every possible character. In fact, it&#8217;s wasteful even for ideograph-based languages (like Chinese), which never need more than two bytes per character.
+ja:<p>一見したところ、これは素晴らしいアイデアのように思える。全てを統括する1つの文字コード。1つの文書にいくつもの言語。言語エンコーディングを途中で切り替えるための「モードスイッチ」なんてもう必要ない。しかし、すぐに明らかな疑問が浮かび上がってくるだろう。4バイトだって？ すべての文字で？！ これはひどく無駄が多いように思えるし、英語やスペイン語のように、1バイト（256個の数値）以下で全ての文字を表現できるような言語に対しては特にそう感じられる。実をいうと（中国語のような）表意文字の言語でさえも2バイトしか必要としないので、これらの言語であっても無駄が多いのだ。
+
+
+en:<p>There is a Unicode encoding that uses four bytes per character. It&#8217;s called UTF-32, because 32 bits = 4 bytes. UTF-32 is a straightforward encoding; it takes each Unicode character (a 4-byte number) and represents the character with that same number. This has some advantages, the most important being that you can find the <var>Nth</var> character of a string in constant time, because the <var>Nth</var> character starts at the <var>4&times;Nth</var> byte. It also has several disadvantages, the most obvious being that it takes four freaking bytes to store every freaking character.
+ja:<p>1文字につき4バイトを使うUnicodeエンコーディングがある。4バイト = 32ビットなので、これはUTF-32と呼ばれる。UTF-32は率直な文字コードであり、Unicode文字（4バイトの数値）を受け取って、それと同じ数値でその文字を表現する。これはいくつかの利点を持つが、一番の利点は、<var>N</var>番目の文字が<var>4 &times; N</var>バイト目から始まるので、<var>N</var>番目の文字を定数時間で見つけられることだ。欠点もいくつかあるが、最も明らかなのは、1文字につき4バイトものバイト数を必要とすることだ。
+
+
+en:<p>Even though there are a lot of Unicode characters, it turns out that most people will never use anything beyond the first 65535. Thus, there is another Unicode encoding, called UTF-16 (because 16 bits = 2 bytes). UTF-16 encodes every character from 0&ndash;65535 as two bytes, then uses some dirty hacks if you actually need to represent the rarely-used &#8220;astral plane&#8221; Unicode characters beyond 65535. Most obvious advantage: UTF-16 is twice as space-efficient as UTF-32, because every character requires only two bytes to store instead of four bytes (except for the ones that don&#8217;t). And you can still easily find the <var>Nth</var> character of a string in constant time, if you assume that the string doesn&#8217;t include any astral plane characters, which is a good assumption right up until the moment that it&#8217;s not.
+ja:<p>たくさんのUnicode文字があるにも関わらず、結局のところ、ほとんどの人々は65535を超える文字を決して使わないということが分かった。そこで、もう一つのUnicodeエンコーディングとして、UTF-16（16ビット = 2バイトだから）がある。UTF-16は、0から65535までの文字を2バイトとしてエンコードするが、もしも滅多に使われない65535を超える「幻想世界」のUnicode文字を本当に表現しなければいけない場合は、汚い手法を使って解決される。UTF-16の最も明らかな利点は、各文字が（例外を除き）4バイトではなく2バイトで表現されるので、容量をUTF-32の半分しか使わないということだ。そして、文字列に幻想世界の文字が含まれていない限り（ほとんどの場合はそうだ）、依然として<var>N</var>番目の文字を定数時間で見つけることができる。
+
+
+en:<p>But there are also non-obvious disadvantages to both UTF-32 and UTF-16. Different computer systems store individual bytes in different ways. That means that the character <code>U+4E2D</code> could be stored in UTF-16 as either <code>4E 2D</code> or <code>2D 4E</code>, depending on whether the system is big-endian or little-endian. (For UTF-32, there are even more possible byte orderings.) As long as your documents never leave your computer, you&#8217;re safe&nbsp;&mdash;&nbsp;different applications on the same computer will all use the same byte order. But the minute you want to transfer documents between systems, perhaps on a world wide web of some sort, you&#8217;re going to need a way to indicate which order your bytes are stored. Otherwise, the receiving system has no way of knowing whether the two-byte sequence <code>4E 2D</code> means <code>U+4E2D</code> or <code>U+2D4E</code>.
+ja:<p>しかし、UTF-32とUTF-16の両者には、気づきにくい問題点も存在する。問題は個々のバイトを格納する方法がコンピューターシステムによってまちまちだということにある。例えば、<code>U+4E2D</code>という文字は、UTF-16では<code>4E 2D</code>と<code>2D 4E</code>のどちらの順番でも格納される可能性があり、これはシステムがリトルエンディアンとビッグエンディアンのどちらであるかによって決まる（UTF-32では、さらに考えうるバイトの順序が増える）。同じコンピュータ上では異なるアプリケーションであっても基本的に同じバイトオーダーが使われるので、文章がコンピュータの外に出ない限りは安全だ。しかし、World Wide Webか何かを使って文章を異なるシステム間で転送するとなれば、そのバイトがどのような順序で格納されているのかを示すための手段が必要になる。さもなければ、受け取ったシステムは、2バイトのシーケンス<code>4E 2D</code>が、<code>U+4E2D</code>と<code>U+2D4E</code>のどちらを表しているのか判断できない。
+
+
+en:<p>To solve <em>this</em> problem, the multi-byte Unicode encodings define a &#8220;Byte Order Mark,&#8221; which is a special non-printable character that you can include at the beginning of your document to indicate what order your bytes are in. For UTF-16, the Byte Order Mark is <code>U+FEFF</code>. If you receive a UTF-16 document that starts with the bytes <code>FF FE</code>, you know the byte ordering is one way; if it starts with <code>FE FF</code>, you know the byte ordering is reversed.
+ja:<p><em>この</em>問題を解決するために、マルチバイトのUnicodeエンコーディングは「バイトオーダーマーク」を定義している。これは特別な非印字文字であり、文章のバイトオーダーを知らせるために、文書の先頭に付けることができる。UTF-16でのバイトオーダーマークは<code>U+FEFF</code>だ。<code>FF FE</code>で始まる文書を受け取った場合には、バイトが一方の順序で並んでいることが分かるし、<code>FE FF</code>で始まる文章を受け取った場合は、バイトがそれとは逆の順序で並んでいるということが分かる。
+
+
+en:<p>Still, UTF-16 isn&#8217;t exactly ideal, especially if you&#8217;re dealing with a lot of <abbr>ASCII</abbr> characters. If you think about it, even a Chinese web page is going to contain a lot of <abbr>ASCII</abbr> characters&nbsp;&mdash;&nbsp;all the elements and attributes surrounding the printable Chinese characters. Being able to find the <var>Nth</var> character in constant time is nice, but there&#8217;s still the nagging problem of those astral plane characters, which mean that you can&#8217;t <em>guarantee</em> that every character is exactly two bytes, so you can&#8217;t <em>really</em> find the <var>Nth</var> character in constant time unless you maintain a separate index. And boy, there sure is a lot of <abbr>ASCII</abbr> text in the world&hellip;
+ja:<p>しかし、以上を踏まえてもUTF-16が完全に理想的だとは言いがたい。たくさんの<abbr>ASCII</abbr>文字を扱っている場合は特にそうだ。考えてみてほしい、中国語のWebページですら多くの<abbr>ASCII</abbr>文字を使っているのだ&nbsp;&mdash;&nbsp;実際に表示される中国語を囲んでいる（マークアップの）要素や属性はみんな<abbr>ASCII</abbr>だ。<var>N</var>番目の文字を定数時間で見つけられるのは良いことだが、依然として幻想世界の文字に関するしつこい問題が存在するため、すべての文字が確実に2バイトだという<em>保証</em>はない。だから、別途にインデックスでも保持しておかない限り、<var>N</var>番目の文字を<em>本当に</em>定数時間で見つけることは不可能だ。しかもおまけに、この世界には本当に大量の<abbr>ASCII</abbr>文章が存在するのだ&hellip;&hellip;
+
+
+en:<p>Other people pondered these questions, and they came up with a solution:
+ja:<p>この問題を深く考えた人たちがいて、彼らは1つの解決策を思いついた：
+
+
+en:<p class=xxxl>UTF-8
+ja:<p class=xxxl>UTF-8
+
+
+en:<p>UTF-8 is a <em>variable-length</em> encoding system for Unicode. That is, different characters take up a different number of bytes. For <abbr>ASCII</abbr> characters (A-Z, <i class=baa>&amp;</i>c.) <abbr>UTF-8</abbr> uses just one byte per character. In fact, it uses the exact same bytes; the first 128 characters (0&ndash;127) in <abbr>UTF-8</abbr> are indistinguishable from <abbr>ASCII</abbr>. &#8220;Extended Latin&#8221; characters like &ntilde; and &ouml; end up taking two bytes. (The bytes are not simply the Unicode code point like they would be in UTF-16; there is some serious bit-twiddling involved.) Chinese characters like &#x4E2D; end up taking three bytes. The rarely-used &#8220;astral plane&#8221; characters take four bytes.
+ja:<p>UTF-8は、Unicodeのための<em>可変長</em>のエンコード体系だ。すなわち、使うバイト数が文字によって異なるのだ。<abbr>ASCII</abbr>文字（A-Zなど）の範囲では、<abbr>UTF-8</abbr>は1文字につき1バイトしか使わない。実をいうと、<abbr>UTF-8</abbr>の最初の128文字（0から127まで）は、<abbr>ASCII</abbr>と全く同じバイト表現を使うので、両者は区別できない。&ntilde;や&ouml;のような「拡張ラテン」文字は2バイトを使うことになる（UTF-16で表したときとは違い、この2バイトはUnicodeのコードポイントそのものではない。ここには本格的なビット操作が加えられている）。「&#x4E2D;」のような中国語の文字は3バイトを使うことになる。そして、めったに使われない「幻想世界」の文字は4バイトを使う。
+
+
+en:<p>Disadvantages: because each character can take a different number of bytes, finding the <var>Nth</var> character is an O(N) operation&nbsp;&mdash;&nbsp;that is, the longer the string, the longer it takes to find a specific character. Also, there is bit-twiddling involved to encode characters into bytes and decode bytes into characters.
+ja:<p>欠点: それぞれの文字が異なるバイト数を使うので、<var>N</var>番目の文字見つけ出す処理はO(N)の演算になる。つまり、文字列が長くなるほど、特定の文字を見つけるのに時間が掛かってしまう。また、文字列からバイト列へのエンコードや、バイト列から文字列へのデコードを行う際にビット操作が必要になる。
+
+
+en:<p>Advantages: super-efficient encoding of common <abbr>ASCII</abbr> characters. No worse than UTF-16 for extended Latin characters. Better than UTF-32 for Chinese characters. Also (and you&#8217;ll have to trust me on this, because I&#8217;m not going to show you the math), due to the exact nature of the bit twiddling, there are no byte-ordering issues. A document encoded in <abbr>UTF-8</abbr> uses the exact same stream of bytes on any computer.
+ja:<p>利点: 一般の<abbr>ASCII</abbr>文字を扱う場合には非常に効率的な文字コードだ。拡張ラテン文字を扱う場合にもUTF-16より悪くなることはない。中国語をUTF-32で扱うよりは良い。そして、（詳細を示すつもりはないので、私の言うことを信じてもらうしかないのだが）このビット操作のもつ性質により、バイトオーダーの問題も発生しない。<abbr>UTF-8</abbr>でエンコードされた文章は、どのコンピュータ上でも全く同じバイトのストリームになる。
+
+
+en:<h2 id=divingin>Diving In</h2>
+ja:<h2 id=divingin>飛び込む</h2>
+
+
+en:<p>In Python 3, all strings are sequences of Unicode characters. There is no such thing as a Python string encoded in <abbr>UTF-8</abbr>, or a Python string encoded as CP-1252. &#8220;Is this string <abbr>UTF-8</abbr>?&#8221; is an invalid question. <abbr>UTF-8</abbr> is a way of encoding characters as a sequence of bytes. If you want to take a string and turn it into a sequence of bytes in a particular character encoding, Python 3 can help you with that. If you want to take a sequence of bytes and turn it into a string, Python 3 can help you with that too. Bytes are not characters; bytes are bytes. Characters are an abstraction. A string is a sequence of those abstractions.
+ja:<p>Python 3では、すべての文字列はUnicode文字のシーケンスだ。<abbr>UTF-8</abbr>でエンコードされたPython文字列や、CP-1252でエンコードされたPython文字列というものは存在しない。「この文字列は<abbr>UTF-8</abbr>なの？」という質問は当を得ないものだ。<abbr>UTF-8</abbr>は文字列をバイト列としてエンコードする方法の1つなのだ。文字列を特定の文字コードでバイト列に変換したいのであれば、Python 3がそれを助けてくれる。バイト列を文字列に変換したいのであれば、それもPython 3が助けてくれる。バイトは文字ではない。バイトはただのバイトで、文字というのは抽象化であり、文字列はその抽象化のシーケンスなのだ。
+
+
+en:<li>To create a string, enclose it in quotes. Python strings can be defined with either single quotes (<code>'</code>) or double quotes (<code>"</code>).<!--"-->
+ja:<li>文字列を作るには、クォート文字で囲めばよい。Pythonの文字列はシングルクォート(<code>'</code>)でもダブルクォート(<code>"</code>)でも定義できる。<!--"-->
+
+
+en:<li>The built-in <code><dfn>len</dfn>()</code> function returns the length of the string, <i>i.e.</i> the number of characters. This is the same function you use to <a href=native-datatypes.html#extendinglists>find the length of a list, tuple, set, or dictionary</a>. A string is like a tuple of characters.
+ja:<li>組み込みの<code><dfn>len</dfn>()</code>関数は、文字列の長さ（つまり文字数）を返す。この関数は、<a href=native-datatypes.html#extendinglists>リスト・タプル・辞書・集合の長さを調べる</a>ときに使った関数と同じものだ。文字列というのは文字のタプルのようなものなのだ。
+
+
+en:<li>Just like getting individual items out of a list, you can get individual characters out of a string using index notation.
+ja:<li>リストから個々の要素を取り出すのとちょうど同じように、インデックス記法を使って文字列から個々の文字を取り出せる。
+
+
+en:<li>Just like lists, you can <dfn>concatenate</dfn> strings using the <code>+</code> operator.
+ja:<li>リストと同様に、文字列は<code>+</code>演算子で<dfn>連結</dfn>できる。
+
+
+en:<h2 id=formatting-strings>Formatting Strings</h2>
+ja:<h2 id=formatting-strings>文字列をフォーマットする</h2>
+
+
+en:<aside>Strings can be defined with either single or double quotes.</aside>
+ja:<aside>文字列は、シングルクォートでもダブルクォートでも定義できる。</aside>
+
+
+en:<p>Let&#8217;s take another look at <a href=your-first-python-program.html#divingin><code>humansize.py</code></a>:
+ja:<p><a href=your-first-python-program.html#divingin><code>humansize.py</code>を別の視点から見てみよう</a>：
+
+
+en:<p class=d>[<a href=examples/humansize.py>download <code>humansize.py</code></a>]
+ja:<p class=d>[<a href=examples/humansize.py><code>humansize.py</code>をダウンロードする</a>]
+
+
+en:<li><code>'KB'</code>, <code>'MB'</code>, <code>'GB'</code>&hellip; those are each strings.
+ja:<li><code>'KB'</code>, <code>'MB'</code>, <code>'GB'</code>&hellip;&hellip; これらは文字列だ。
+
+
+en:<li>Function docstrings are strings. This docstring spans multiple lines, so it uses three-in-a-row quotes to start and end the string.
+ja:<li>関数のdocstringも文字列だ。このdocstringは複数行にわたるので、文字列の開始と終了に三重クォートを使っている。
+
+
+en:<li>These three-in-a-row quotes end the docstring.
+ja:<li>この三重クォートでdocstringが閉じられる。
+
+
+en:<li>There&#8217;s another string, being passed to the exception as a human-readable error message.
+ja:<li>ここにも文字列があり、人間が読むことのできるエラーメッセージとして例外に渡されている。
+
+
+en:<li>There&#8217;s a&hellip; whoa, what the heck is that?
+ja:<li>ここにも文字列が&hellip;&hellip; むむ、こいつは一体なんだ？
+
+
+en:<p>Python 3 supports <dfn>formatting</dfn> values into strings. Although this can include very complicated expressions, the most basic usage is to insert a value into a string with a single placeholder.
+ja:<p>Python 3は、値を文字列へ<dfn>フォーマット</dfn>する機能をサポートしている。これで非常に複雑な表現をすることもできるが、最も基本的な使い方は、1つのプレイスホルダを用いて文字列に値を挿入することだ。
+
+
+en:<li>No, my password is not really <kbd>PapayaWhip</kbd>.
+ja:<li>いや、私の本当のパスワードは<kbd>PapayaWhip</kbd>じゃないよ。
+
+
+en:<li>There&#8217;s a lot going on here. First, that&#8217;s a method call on a string literal. <em>Strings are objects</em>, and objects have methods. Second, the whole expression evaluates to a string. Third, <code>{0}</code> and <code>{1}</code> are <i>replacement fields</i>, which are replaced by the arguments passed to the <code><dfn>format</dfn>()</code> method.
+ja:<li>ここでは色々なことが起きている。第一に、これは文字列リテラルのメソッドを呼び出している。<em>文字列はオブジェクト</em>であり、オブジェクトはメソッドを持っているのだ。第二に、この式全体が評価された結果は文字列になる。第三に、<code>{0}</code>と<code>{1}</code>は「置換フィールド」であり、これらは<code><dfn>format</dfn>()</code>メソッドに渡された引数によって置換されるのだ。
+
+
+en:<h3 id=compound-field-names>Compound Field Names</h3>
+ja:<h3 id=compound-field-names>合成フィールド名</h3>
+
+
+en:<p>The previous example shows the simplest case, where the replacement fields are simply integers. Integer replacement fields are treated as positional indices into the argument list of the <code>format()</code> method. That means that <code>{0}</code> is replaced by the first argument (<var>username</var> in this case), <code>{1}</code> is replaced by the second argument (<var>password</var>), <i class=baa>&amp;</i>c. You can have as many positional indices as you have arguments, and you can have as many arguments as you want. But replacement fields are much more powerful than that.
+ja:<p>前の例は最も単純な場合であり、置換フィールドは単なる整数だった。整数の置換フィールドは、<code>format()</code>メソッドに渡した引数の位置を示すインデックスとして扱われる。<code>{0}</code>は1つ目の引数（この例では<var>username</var>）で置換され、<code>{1}</code>は2つ目の引数（この例では<var>password</var>）で置換される。引数は望むだけいくつでも与えることができ、その引数の数だけインデックスを使うことができる。しかし、置換フィールドはこれよりもっと強力な機能を持っている。
+
+
+en:<li>Rather than calling any function in the <code>humansize</code> module, you&#8217;re just grabbing one of the data structures it defines: the list of &#8220;SI&#8221; (powers-of-1000) suffixes.
+ja:<li><code>humansize</code>モジュールの何らかの関数を呼び出すだけではなく、モジュールが定義しているデータ構造を取り出すこともできる: これはSI接頭語（1000のべき乗）のリストだ。
+
+
+en:<li>This looks complicated, but it&#8217;s not. <code>{0}</code> would refer to the first argument passed to the <code>format()</code> method, <var>si_suffixes</var>. But <var>si_suffixes</var> is a list. So <code>{0[0]}</code> refers to the first item of the list which is the first argument passed to the <code>format()</code> method: <code>'KB'</code>. Meanwhile, <code>{0[1]}</code> refers to the second item of the same list: <code>'MB'</code>. Everything outside the curly braces&nbsp;&mdash;&nbsp;including <code>1000</code>, the equals sign, and the spaces&nbsp;&mdash;&nbsp;is untouched. The final result is the string <code>'1000KB = 1MB'</code>.
+ja:<li>これは複雑そうに見えるが、実際にはそうではない。<code>{0}</code>とすれば、<code>format()</code>関数に与えられた1つ目の引数、つまり<var>si_suffixes</var>を指すことになる。しかし<var>si_suffixes</var>はリストだ。したがって<code>{0[0]}</code>は、<code>format()</code>メソッドに1つ目の引数として与えられたリストの最初の要素、つまり<code>'KB'</code>を指している。それと同時に、<code>{0[1]}</code>は同じリストの2つ目の要素、つまり<code>'MB'</code>を指している。波括弧の外側にあるすべてのもの、つまり<code>1000</code>、イコール記号、空白などはすべてそのままにされる。最終的な結果として<code>'1000KB = 1MB'</code>という文字列が得られる。
+
+
+en:<aside>{0} is replaced by the 1<sup>st</sup> format() argument. {1} is replaced by the 2<sup>nd</sup>.</aside>
+ja:<aside>{0}は、format()の1つ目の引数で置き換えられる。{1}は、2つ目の引数で置き換えられる。</aside>
+
+
+en:<p>What this example shows is that <em>format specifiers can access items and properties of data structures using (almost) Python syntax</em>. This is called <i>compound field names</i>. The following compound field names &#8220;just work&#8221;:
+ja:<p>この例が示しているのは、<em>フォーマット指定子はPythonと（ほとんど）同じ構文でデータ構造の要素やプロパティにアクセスできる</em>ということだ。これは<em>合成フィールド名</em>と呼ばれる。次のような合成フィールド名が使える：
+
+
+en:<li>Passing a list, and accessing an item of the list by index (as in the previous example)
+ja:<li>リストを渡して、その要素にインデックスでアクセスする （これは先の例で示した）
+
+
+en:<li>Passing a dictionary, and accessing a value of the dictionary by key
+ja:<li>辞書を渡して、その値にキーでアクセスする
+
+
+en:<li>Passing a module, and accessing its variables and functions by name
+ja:<li>モジュールを渡して、その変数や関数に名前でアクセスする
+
+
+en:<li>Passing a class instance, and accessing its properties and methods by name
+ja:<li>クラスインスタンスを渡して、そのプロパティやメソッドに名前でアクセスする
+
+
+en:<li><em>Any combination of the above</em>
+ja:<li><em>これらのどんな組み合わせも可能だ</em>
+
+
+en:<p>Just to blow your mind, here&#8217;s an example that combines all of the above:
+ja:<p>びっくりさせるために、上記のものをすべて組み合わせた例を示そう：
+
+
+en:<p>Here&#8217;s how it works:
+ja:<p>この仕組みを説明すると次のようになる：
+
+
+en:<li>The <code>sys</code> module holds information about the currently running Python instance. Since you just imported it, you can pass the <code>sys</code> module itself as an argument to the <code>format()</code> method. So the replacement field <code>{0}</code> refers to the <code>sys</code> module.
+ja:<li><code>sys</code>モジュールは、現在動作中のPythonインスタンスに関する情報を持っている。2行目でこれをインポートしたので、<code>sys</code>モジュール自体を<code>format()</code>メソッドの引数として渡すことができる。したがって、<code>{0}</code>という置換フィールドは<code>sys</code>モジュールを指している。
+
+
+en:<li><code>sys.modules</code> is a dictionary of all the modules that have been imported in this Python instance. The keys are the module names as strings; the values are the module objects themselves. So the replacement field <code>{0.modules}</code> refers to the dictionary of imported modules.
+ja:<li><code>sys.modules</code>は、このPythonインスタンスにおいてインポートされているすべてのモジュールから構成される辞書だ。その辞書のキーはモジュール名の文字列で、値はモジュールオブジェクトそのものだ。つまり置換フィールド<code>{0.modules}</code>はインポートされたモジュールの辞書を指している。
+
+
+en:<li><code>sys.modules['humansize']</code> is the <code>humansize</code> module which you just imported. The replacement field <code>{0.modules[humansize]}</code> refers to the <code>humansize</code> module. Note the slight difference in syntax here. In real Python code, the keys of the <code>sys.modules</code> dictionary are strings; to refer to them, you need to put quotes around the module name (<i>e.g.</i> <code>'humansize'</code>). But within a replacement field, you skip the quotes around the dictionary key name (<i>e.g.</i> <code>humansize</code>). To quote <a href=http://www.python.org/dev/peps/pep-3101/>PEP 3101: Advanced String Formatting</a>, &#8220;The rules for parsing an item key are very simple. If it starts with a digit, then it is treated as a number, otherwise it is used as a string.&#8221;
+ja:<li><code>sys.modules['humansize']</code>は、たった今インポートした<code>humansize</code>モジュールだ。置換フィールドの<code>{0.modules[humansize]}</code>は<code>humansize</code>モジュールを指している。これはPythonのコードとはわずかに違う構文になっていることに注意しよう。実際のPythonコードでは、辞書<code>sys.modules</code>のキーは文字列なので、モジュール名の周りをクォートで囲む必要がある（つまり<code>'humansize'</code>とする）。しかし置換フィールドの中では、辞書のキーの周りのクォートは省略する（つまり<code>humansize</code>とする）。<a href=http://www.python.org/dev/peps/pep-3101/>PEP 3101: Advanced String Formatting</a>にはこう書かれている。「要素のキーをパースする方法は非常に単純だ。数字から始まる場合は数値として扱われ、それ以外の場合は文字列として扱われる」
+
+
+en:<li><code>sys.modules['humansize'].SUFFIXES</code> is the dictionary defined at the top of the <code>humansize</code> module. The replacement field <code>{0.modules[humansize].SUFFIXES}</code> refers to that dictionary.
+ja:<li><code>sys.modules['humansize'].SUFFIXES</code>は、<code>humansize</code>モジュールの先頭で定義されている辞書だ。置換フィールド<code>{0.modules[humansize].SUFFIXES}</code>は、この辞書を指している。
+
+
+en:<li><code>sys.modules['humansize'].SUFFIXES[1000]</code> is a list of <abbr>SI</abbr> suffixes: <code>['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']</code>. So the replacement field <code>{0.modules[humansize].SUFFIXES[1000]}</code> refers to that list.
+ja:<li><code>sys.modules['humansize'].SUFFIXES[1000]</code>は、<abbr>SI</abbr>接尾語のリスト<code>['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']</code>だ。つまり置換フィールド<code>{0.modules[humansize].SUFFIXES[1000]}</code>は、このリストを指している。
+
+
+en:<li><code>sys.modules['humansize'].SUFFIXES[1000][0]</code> is the first item of the list of <abbr>SI</abbr> suffixes: <code>'KB'</code>. Therefore, the complete replacement field <code>{0.modules[humansize].SUFFIXES[1000][0]}</code> is replaced by the two-character string <code>KB</code>.
+ja:<li><code>sys.modules['humansize'].SUFFIXES[1000][0]</code>は、<abbr>SI</abbr>接尾語のリストの最初の要素<code>'KB'</code>だ。従って、例に出てきた<code>{0.modules[humansize].SUFFIXES[1000][0]}</code>という置換フィールドは、2文字の文字列<code>KB</code>で置換されることになる。
+
+
+en:<h3 id=format-specifiers>Format Specifiers</h3>
+ja:<h3 id=format-specifiers>フォーマット指定子</h3>
+
+
+en:<p>But wait! There&#8217;s more! Let&#8217;s take another look at that strange line of code from <code>humansize.py</code>:
+ja:<p>待って！ 話はまだ残っている！ <code>humansize.py</code>にあった変なコード行を、ここで見直してみよう：
+
+
+en:<p><code>{1}</code> is replaced with the second argument passed to the <code>format()</code> method, which is <var>suffix</var>. But what is <code>{0:.1f}</code>? It&#8217;s two things: <code>{0}</code>, which you recognize, and <code>:.1f</code>, which you don&#8217;t. The second half (including and after the colon) defines the <i>format specifier</i>, which further refines how the replaced variable should be formatted.
+ja:<p><code>{1}</code>は、<code>format()</code>メソッドの2番目の引数<var>suffix</var>で置換される。しかし、<code>{0:.1f}</code>というのは何だろう？ これは2つの部分からなる: <code>{0}</code>の部分は分かるが、<code>:.1f</code>の部分は一体何なのか。この後半部分（コロン以降）は<em>フォーマット指定子</em>というもので、置換する変数をどのようにフォーマットするのかをさらに詳細に指定するためのものだ。
+
+
+en:<p><span class=u>&#x261E;</span>Format specifiers allow you to munge the replacement text in a variety of useful ways, like the <code><dfn>printf</dfn>()</code> function in C. You can add zero- or space-padding, align strings, control decimal precision, and even convert numbers to hexadecimal.
+ja:<p><span class=u>&#x261E;</span>フォーマット指定子は、C言語の<code><dfn>printf</dfn>()</code>関数のように、置換するテキストを様々な方法で加工できる。例えば、ゼロや空白でパディングしたり、文字列を揃えたり、小数の精度を整えたりできる。数値を16進数に変換することさえ可能だ。
+
+
+en:<p>Within a replacement field, a colon (<code>:</code>) marks the start of the format specifier. The format specifier &#8220;<code>.1</code>&#8221; means &#8220;round to the nearest tenth&#8221; (<i>i.e.</i> display only one digit after the decimal point). The format specifier &#8220;<code>f</code>&#8221; means &#8220;fixed-point number&#8221; (as opposed to exponential notation or some other decimal representation). Thus, given a <var>size</var> of <code>698.24</code> and <var>suffix</var> of <code>'GB'</code>, the formatted string would be <code>'698.2 GB'</code>, because <code>698.24</code> gets rounded to one decimal place, then the suffix is appended after the number.
+ja:<p>置換フィールドの中では、コロン（<code>:</code>）はフォーマット指定子の開始を表す。フォーマット指定子&#8220;<code>.1</code>&#8221;は「最も近い小数第1位の数へ丸める」ことを表す（つまり小数点の後ろには数字を1つだけ表示する）。フォーマット指定子 "<code>f</code>" は「固定小数表記」にすることを表す（指数表記やその他の小数記法ではなく）。このようにして、たとえば<code>698.24</code>という値を持つ<var>size</var>と、<code>'GB'</code>という値を持つ<var>suffix</var>を与えれば、<code>698.24</code>は小数第一位へ丸められ、そこに接尾語が付け足されることによって、フォーマット結果の文字列は<code>'698.2 GB'</code>になるだろう。
+
+
+en:<p>For all the gory details on format specifiers, consult the <a href=http://docs.python.org/3.1/library/string.html#format-specification-mini-language>Format Specification Mini-Language</a> in the official Python documentation.
+ja:<p>フォーマット指定子の複雑な詳細のすべてを知りたい場合は、Python公式ドキュメントの<a href=http://docs.python.org/3.1/library/string.html#format-specification-mini-language>Format Specification Mini-Language</a>を参照して欲しい。
+
+
+en:<h2 id=common-string-methods>Other Common String Methods</h2>
+ja:<h2 id=common-string-methods>その他の一般的な文字列メソッド</h2>
+
+
+en:<p>Besides formatting, strings can do a number of other useful tricks.
+ja:<p>フォーマットだけではなく、文字列には他にもいくつかの便利なテクニックがある。
+
+
+en:<li>You can input <dfn>multiline</dfn> strings in the Python interactive shell. Once you start a multiline string with triple quotation marks, just hit <kbd>ENTER</kbd> and the interactive shell will prompt you to continue the string. Typing the closing triple quotation marks ends the string, and the next <kbd>ENTER</kbd> will execute the command (in this case, assigning the string to <var>s</var>).
+ja:<li>Pythonの対話シェルで<dfn>複数行</dfn>文字列を入力できる。三重クォートで複数行文字列を開始して、 <kbd>ENTER</kbd>キーを押すと、対話シェルは次行の入力をうながしてくる。三重クォートで文字列を終了させ、<kbd>ENTER</kbd>キーを押すとコマンドが実行される（この例では文字列が<var>s</var>という変数に代入される）。
+
+
+en:<li>The <code><dfn>splitlines</dfn>()</code> method takes one multiline string and returns a list of strings, one for each line of the original. Note that the carriage returns at the end of each line are not included.
+ja:<li><code><dfn>splitlines</dfn>()</code>メソッドは、複数行の文字列を受け取って、その文字列の各行からなる文字列のリストを返す。各行の行末にある改行文字は含まれないことに注意しよう。
+
+
+en:<li>The <code>lower()</code> method converts the entire string to lowercase. (Similarly, the <code>upper()</code> method converts a string to uppercase.)
+ja:<li><code>lower()</code>メソッドは文字列の全体を小文字に変換する（同様に、<code>upper()</code>メソッドは文字列を大文字に変換する）。
+
+
+en:<li>The <code>count()</code> method counts the number of occurrences of a substring. Yes, there really are six &#8220;f&#8221;s in that sentence!
+ja:<li><code>count()</code>は、部分文字列が文字列中に出現する回数を数える。そう、この文には6つの&#8220;f&#8221;が含まれているのだ。本当だよ！
+
+
+en:<p>Here&#8217;s another common case. Let&#8217;s say you have a list of key-value pairs in the form <code><var>key1</var>=<var>value1</var>&amp;<var>key2</var>=<var>value2</var></code>, and you want to split them up and make a dictionary of the form <code>{key1: value1, key2: value2}</code>.
+ja:<p>ほかによく見かけるものを示そう。例えば、ここに<code><var>key1</var>=<var>value1</var>&amp;<var>key2</var>=<var>value2</var></code>という形式の、キーと値のペアからなるリストがあるとしよう。そして、これを分解して<code>{key1: value1, key2: value2}</code>のような辞書を作りたいとする。
+
+
+en:<li>The <code><dfn>split</dfn>()</code> string method has one required argument, a delimiter. The method splits a string into a list of strings based on the delimiter. Here, the delimiter is an ampersand character, but it could be anything.
+ja:<li>文字列の<code><dfn>split</dfn>()</code>メソッドには、必ず引数として区切り文字を渡さなくてはならない。その区切り文字に基づいて、このメソッドは文字列をリストへ分割する。ここでの区切り文字はアンパサンド（&amp;）だが、どんな文字列でも区切り文字として使える。
+
+
+en:<li>Now we have a list of strings, each with a key, followed by an equals sign, followed by a value. We can use a <a href=comprehensions.html#listcomprehension>list comprehension</a> to iterate over the entire list and split each string into two strings based on the first equals sign. The optional second argument to the <code>split()</code> method is the number of times you want to split. <code>1</code> means &#8220;only split once,&#8221; so the <code>split()</code> method will return a two-item list. (In theory, a value could contain an equals sign too. If you just used <code>'key=value=foo'.split('=')</code>, you would end up with a three-item list <code>['key', 'value', 'foo']</code>.)
+ja:<li>さて、文字列のリストを手に入れた。各々の文字列には、キーがあり、その後ろにはイコール記号が続き、さらにその後ろに値が続く。リスト全体をイテレートして、各々の文字列を1つ目のイコール記号に基づいて2つに分割していくには、<a href=comprehensions.html#listcomprehension>リスト内包表記</a>が使える。<code>split()</code>メソッドの２番目の引数（オプション）は、 分割したい回数だ。<code>1</code>は「１回だけ分割する」ことを意味するので、<code>split()</code>メソッドは２つの要素をもつリストを返す。（理論上は、値がイコール記号を含んでいる可能性がある。もし、単純に<code>'key=value=foo'.split('=')</code>としていたら、結果として3つの要素を持つリスト<code>['key'、'value'、'foo']</code>が得られてしまうかもしれないのだ）。
+
+
+en:<li>Finally, Python can turn that list-of-lists into a dictionary simply by passing it to the <code>dict()</code> function.
+ja:<li>最後に、リストのリストを<code>dict()</code>関数に渡すだけで、Pythonはそれを辞書に変換してくれる。
+
+
+en:<p><span class=u>&#x261E;</span>The previous example looks a lot like parsing query parameters in a <abbr>URL</abbr>, but real-life <abbr>URL</abbr> parsing is actually more complicated than this. If you&#8217;re dealing with <abbr>URL</abbr> query parameters, you&#8217;re better off using the <a href=http://docs.python.org/3.1/library/urllib.parse.html#urllib.parse.parse_qs><code>urllib.parse.parse_qs()</code></a> function, which handles some non-obvious edge cases.
+ja:<p><span class=u>&#x261E;</span>今の例は、<abbr>URL</abbr>のクエリパラメータをパースしているように見えるが、現実世界の<abbr>URL</abbr>はこれよりも複雑だ。<abbr>URL</abbr>のクエリパラメータを扱うときは、<a href=http://docs.python.org/3.1/library/urllib.parse.html#urllib.parse.parse_qs><code>urllib.parse.parse_qs()</code></a>関数を使うと楽だろう。この関数は特殊なケースもうまく扱ってくれる。
+
+
+en:<h3 id=slicingstrings>Slicing A String</h3>
+ja:<h3 id=slicingstrings>文字列をスライスする</h3>
+
+
+en:<p>Once you&#8217;ve defined a string, you can get any part of it as a new string. This is called <i>slicing</i> the string. Slicing strings works exactly the same as <a href=native-datatypes.html#slicinglists>slicing lists</a>, which makes sense, because strings are just sequences of characters.
+ja:<p>文字列を定義したら、その文字列の一部を新しい文字列として取り出すことができる。これは文字列の「スライス」と呼ばれる。文字列のスライスはリストのスライスとまったく同様に動作するが、それは理にかなっていて、なぜなら文字列は単なる文字のシーケンスだからだ。
+
+
+en:<li>You can get a part of a string, called a &#8220;slice&#8221;, by specifying two indices. The return value is a new string containing all the characters of the string, in order, starting with the first slice index.
+ja:<li>文字列の一部を取り出すことができる。この操作は「スライス」と呼ばれ、2つのインデックスを指定することによって行う。戻り値は新しい文字列であり、1つ目のスライスインデックス以降の文字を、順番どおりに含んでいる。
+
+
+en:<li>Like slicing lists, you can use negative indices to slice strings.
+ja:<li>リストのスライスと同様に、文字列のスライスには負のインデックスが使える。
+
+
+en:<li>Strings are zero-based, so <code>a_string[0:2]</code> returns the first two items of the string, starting at <code>a_string[0]</code>, up to but not including <code>a_string[2]</code>.
+ja:<li>文字列のインデックスは0から始まるので、<code>a_string[0:2]</code>は最初の2文字、つまり<code>a_string[0]</code>から<code>a_string[2]</code>の直前までを含む。
+
+
+en:<li>If the left slice index is 0, you can leave it out, and 0 is implied. So <code>a_string[:18]</code> is the same as <code>a_string[0:18]</code>, because the starting 0 is implied.
+ja:<li>左側のスライスインデックスが0のときはこれを省略できる。つまり、<code>a_string[:18]</code>は<code>a_string[0:18]</code>と同じだ。
+
+
+en:<li>Similarly, if the right slice index is the length of the string, you can leave it out. So <code>a_string[18:]</code> is the same as <code>a_string[18:44]</code>, because this string has 44 characters.  There is a pleasing symmetry here. In this 44-character string, <code>a_string[:18]</code> returns the first 18 characters, and <code>a_string[18:]</code> returns everything but the first 18 characters. In fact, <code>a_string[:<var>n</var>]</code> will always return the first <var>n</var> characters, and <code>a_string[<var>n</var>:]</code> will return the rest, regardless of the length of the string.
+ja:<li>同様に、右側のスライスインデックスが文字列の長さと同じときはこれを省略できる。つまり<code>a_string[18:]</code>は、文字列の長さが44文字なので<code>a_string[18:44]</code>と同じになる。ここには気持ちの良い対称性が存在する。この44文字の文字列では、<code>a_string[:18]</code>は最初の18文字を返し、<code>a_string[18:]</code>最初の18文字以外を返す。実際に、文字列の長さにかかわらず、<code>a_string[:<var>n</var>]</code>は常に最初の<var>n</var>文字を返すし、<code>a_string[<var>n</var>:]</code>はその残りを返すのだ。
+
+
+en:<h2 id=byte-arrays>Strings vs. Bytes</h2>
+ja:<h2 id=byte-arrays>文字列 vs. バイト列</h2>
+
+
+en:<p><dfn>Bytes</dfn> are bytes; characters are an abstraction. An immutable sequence of Unicode characters is called a <i>string</i>. An immutable sequence of numbers-between-0-and-255 is called a <i>bytes</i> object.
+ja:<p><dfn>バイト</dfn>は単なるバイトであり、文字は抽象化だ。Unicode文字のイミュータブルなシーケンスは「文字列」と呼ばれ、0から255までの数のイミュータブルなシーケンスは「バイト列」と呼ばれる。
+
+
+en:<li>To define a <code>bytes</code> object, use the <code>b''</code> &#8220;<dfn>byte</dfn> literal&#8221; syntax. Each byte within the byte literal can be an <abbr>ASCII</abbr> character or an encoded hexadecimal number from <code>\x00</code> to <code>\xff</code> (0&ndash;255).
+ja:<li><code>bytes</code>オブジェクトを定義するには、<code>b''</code>という「<dfn>バイトリテラル</dfn>」構文を使えばよい。バイトリテラルの各バイトには、<abbr>ASCII</abbr>文字と、16進数にエンコードされた<code>\x00</code>から<code>\xff</code>までの数値 (0&ndash;255) が使える。
+
+
+en:<li>The type of a <code>bytes</code> object is <code>bytes</code>.
+ja:<li><code>bytes</code>オブジェクトの型は<code>bytes</code>だ。
+
+
+en:<li>Just like lists and strings, you can get the length of a <code>bytes</code> object with the built-in <code>len()</code> function.
+ja:<li>リストや文字列と同様に、<code>len()</code>関数で<code>bytes</code>オブジェクトの長さを取得できる。
+
+
+en:<li>Just like lists and strings, you can use the <code>+</code> operator to concatenate <code>bytes</code> objects. The result is a new <code>bytes</code> object.
+ja:<li>リストや文字列と同様に、<code>+</code>演算子を使って<code>bytes</code>オブジェクトを連結できる。結果は新しい<code>bytes</code>オブジェクトだ。
+
+
+en:<li>Concatenating a 5-byte <code>bytes</code> object and a 1-byte <code>bytes</code> object gives you a 6-byte <code>bytes</code> object.
+ja:<li>5バイトの<code>bytes</code>オブジェクトと1バイトの<code>bytes</code>オブジェクトを連結すると、6バイトの<code>bytes</code>オブジェクトが得られる。
+
+
+en:<li>Just like lists and strings, you can use index notation to get individual bytes in a <code>bytes</code> object. The items of a string are strings; the items of a <code>bytes</code> object are integers. Specifically, integers between 0&ndash;255.
+ja:<li>リストや文字列と同様に、インデックス記法によって<code>bytes</code>オブジェクトの個々のバイトを取り出せる。文字列の要素は文字列だが、<code>bytes</code>オブジェクトの要素は整数だ。厳密に言えば、0から255までの整数だ。
+
+
+en:<li>A <code>bytes</code> object is immutable; you can not assign individual bytes. If you need to change individual bytes, you can either use <a href=#slicingstrings>string slicing</a> and concatenation operators (which work the same as strings), or you can convert the <code>bytes</code> object into a <code>bytearray</code> object.
+ja:<li><code>bytes</code>オブジェクトはイミュータブルだ。個々のバイトへ代入することはできない。もし個々のバイトを変更する必要があるときは、<a href=#slicingstrings>文字列スライス</a>と結合演算子（これは文字列と同様に機能する）を使うこともできるし、<code>bytes</code>オブジェクトを<code>bytearray</code>オブジェクトに変換することもできる。
+
+
+en:<li>To convert a <code>bytes</code> object into a mutable <code>bytearray</code> object, use the built-in <code>bytearray()</code> function.
+ja:<li><code>bytes</code>オブジェクトを変更可能な<code>bytearray</code>オブジェクトに変換するには、組み込みの<code>bytearray()</code>関数を使う。
+
+
+en:<li>All the methods and operations you can do on a <code>bytes</code> object, you can do on a <code>bytearray</code> object too.
+ja:<li><code>bytes</code>オブジェクトで使えるすべてのメソッドと操作は、<code>bytearray</code>オブジェクトでも同様に使える。
+
+
+en:<li>The one difference is that, with the <code>bytearray</code> object, you can assign individual bytes using index notation. The assigned value must be an integer between 0&ndash;255.
+ja:<li>両者の1つの違いは、<code>bytearray</code>オブジェクトではインデックス記法を使って個々のバイトへ代入できるのだ。代入する値は0から255までの整数でなければならない。
+
+
+en:<p>The one thing you <em>can never do</em> is mix bytes and strings.
+ja:<p>バイト列と文字列は<em>決して混ぜることができない</em>。
+
+
+en:<li>You can&#8217;t concatenate bytes and strings. They are two different data types.
+ja:<li>バイト列と文字列を連結することはできない。この2つは異なるデータ型なのだ。
+
+
+en:<li>You can&#8217;t count the occurrences of bytes in a string, because there are no bytes in a string. A string is a sequence of characters. Perhaps you meant &#8220;count the occurrences of the string that you would get after decoding this sequence of bytes in a particular character encoding&#8221;? Well then, you&#8217;ll need to say that explicitly. Python 3 won&#8217;t <dfn>implicitly</dfn> convert bytes to strings or strings to bytes.
+ja:<li>バイト列が文字列中に出現する回数を数えることはできない。文字列の中にバイト列というものは存在しないからだ。文字列は文字のシーケンスだ。 もしかすると「バイト列を特定の文字コードを使って文字列にデコードし、その文字列の出現回数を数えよ」という趣旨だったのかもしれないが、そうしたいのであれば、それを明示的に行う必要がある。Python 3が<dfn>暗黙に</dfn>バイト列を文字列に変換したり、文字列をバイト列に変換することはないのだ。
+
+
+en:<li>By an amazing coincidence, this line of code says &#8220;count the occurrences of the string that you would get after decoding this sequence of bytes in this particular character encoding.&#8221;
+ja:<li>驚くべき偶然により、この行のコードは（英語で）次のような意味になっている。「このバイト列を指定した文字コードでデコードして得られる文字列の出現回数を数えよ」
+
+
+en:<p>And here is the link between strings and bytes: <code>bytes</code> objects have a <code><dfn>decode</dfn>()</code> method that takes a character encoding and returns a string, and strings have an <code><dfn>encode</dfn>()</code> method that takes a character encoding and returns a <code>bytes</code> object. In the previous example, the decoding was relatively straightforward&nbsp;&mdash;&nbsp;converting a sequence of bytes in the <abbr>ASCII</abbr> encoding into a string of characters. But the same process works with any encoding that supports the characters of the string&nbsp;&mdash;&nbsp;even legacy (non-Unicode) encodings.
+ja:<p>文字列とバイト列のあいだの関係を示そう: <code>bytes</code>オブジェクトは<code><dfn>decode</dfn>()</code>メソッドを持っていて、これは文字コードを受け取って文字列を返す。文字列は<code><dfn>encode</dfn>()</code>メソッドを持っていて、これは文字コードを受け取って<code>bytes</code>オブジェクトを返す。前の例は、<abbr>ASCII</abbr>コードのバイト列を文字列に変換するというもので、デコード処理は比較的単純だ。しかし同様の処理は、文字列に含まれている文字をサポートしているものなら、どんな文字コードでも（非Unicodeエンコーディングでも）動作する。
+
+
+en:<li>This is a string. It has nine characters.
+ja:<li>これは文字列だ。9つの文字を含んでいる。
+
+
+en:<li>This is a <code>bytes</code> object. It has 13 bytes. It is the sequence of bytes you get when you take <var>a_string</var> and encode it in <abbr>UTF-8</abbr>.
+ja:<li>これは<code>bytes</code>オブジェクトで、13バイトある。これは<var>a_string</var>を<abbr>UTF-8</abbr>でエンコードしたときに得られるバイト列だ。
+
+
+en:<li>This is a <code>bytes</code> object. It has 11 bytes. It is the sequence of bytes you get when you take <var>a_string</var> and encode it in <a href=http://en.wikipedia.org/wiki/GB_18030>GB18030</a>.
+ja:<li>これは<code>bytes</code>オブジェクトで、11バイトある。これは<var>a_string</var>を<a href=http://en.wikipedia.org/wiki/GB_18030>GB18030</a>でエンコードしたときに得られるバイト列だ。
+
+
+en:<li>This is a <code>bytes</code> object. It has 11 bytes. It is an <em>entirely different sequence of bytes</em> that you get when you take <var>a_string</var> and encode it in <a href=http://en.wikipedia.org/wiki/Big5>Big5</a>.
+ja:<li>これは<code>bytes</code>オブジェクトで、11バイトある。これは<var>a_string</var>を<a href=http://en.wikipedia.org/wiki/Big5>Big5</a>でエンコードしたときに得られるもので、先のものとは<em>全く異なったバイト列になっている。</em>
+
+
+en:<li>This is a string. It has nine characters. It is the sequence of characters you get when you take <var>by</var> and decode it using the Big5 encoding algorithm. It is identical to the original string.
+ja:<li>これは文字列で、9つの文字がある。これは<var>by</var>をBig5エンコーディングアルゴリズムでデコードしたときに得られる文字列だ。これは元の文字列に等しい。
+
+
+en:<h2 id=py-encoding>Postscript: Character Encoding Of Python Source Code</h2>
+ja:<h2 id=py-encoding>追記: Pythonのソースコードの文字コード</h2>
+
+
+en:<p>Python 3 assumes that your source code&nbsp;&mdash;&nbsp;<i>i.e.</i> each <code>.py</code> file&nbsp;&mdash;&nbsp;is encoded in <abbr>UTF-8</abbr>.
+ja:<p>Python3は、ソースコード（つまり<code>.py</code>ファイル）が<abbr>UTF-8</abbr>でエンコードされていると想定する。
+
+
+en:<p><span class=u>&#x261E;</span>In Python 2, the <dfn>default</dfn> encoding for <code>.py</code> files was <abbr>ASCII</abbr>. In Python 3, <a href=http://www.python.org/dev/peps/pep-3120/>the default encoding is <abbr>UTF-8</abbr></a>.
+ja:<p><span class=u>&#x261E;</span>Python2では、<code>.py</code>ファイルのデフォルトの文字コードは<abbr>ASCII</abbr>だった。Python3ではデフォルトの文字コードは<abbr>UTF-8</abbr>だ。
+
+
+en:<p>If you would like to use a different encoding within your Python code, you can put an encoding declaration on the first line of each file. This declaration defines a <code>.py</code> file to be windows-1252:
+ja:<p>もしPythonのコードで異なる文字コードを使いたい場合は、文字コード宣言を各ファイルの先頭に書くことができる。次の宣言は、<code>.py</code>ファイルの文字コードをwindows-1252に設定している：
+
+
+en:<p>Technically, the character encoding override can also be on the second line, if the first line is a <abbr>UNIX</abbr>-like hash-bang command.
+ja:<p>厳密に言うと、1行目が<abbr>UNIX</abbr>系環境で使われるシェバン (<code>#!</code>) である場合は、文字コードの宣言は2行目でもよい。
+
+
+en:<p>For more information, consult <a href=http://www.python.org/dev/peps/pep-0263/><abbr>PEP</abbr> 263: Defining Python Source Code Encodings</a>.
+ja:<p>詳細は、<a href=http://www.python.org/dev/peps/pep-0263/><abbr>PEP</abbr> 263: Defining Python Source Code Encodings</a>を見てほしい。
+
+
+en:<p>On Unicode in Python:
+ja:<p>PythonでのUnicodeについて：
+
+
+en:<li><a href=http://docs.python.org/3.1/howto/unicode.html>Python Unicode HOWTO</a>
+ja:<li><a href=http://docs.python.org/3.1/howto/unicode.html>Python Unicode HOWTO</a>
+
+
+en:<li><a href=http://docs.python.org/3.0/whatsnew/3.0.html#text-vs-data-instead-of-unicode-vs-8-bit>What&#8217;s New In Python 3: Text vs. Data Instead Of Unicode vs. 8-bit</a>
+ja:<li><a href=http://docs.python.org/3.0/whatsnew/3.0.html#text-vs-data-instead-of-unicode-vs-8-bit>What&#8217;s New In Python 3: Text vs.Data Instead Of Unicode vs.8-bit</a>
+
+
+en:<p>On Unicode in general:
+ja:<p>Unicode全般について：
+
+
+en:<li><a href=http://www.joelonsoftware.com/articles/Unicode.html>The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)</a>
+ja:<li><a href=http://www.joelonsoftware.com/articles/Unicode.html>The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!)</a>
+
+
+en:<li><a href=http://www.tbray.org/ongoing/When/200x/2003/04/06/Unicode>On the Goodness of Unicode</a>
+ja:<li><a href=http://www.tbray.org/ongoing/When/200x/2003/04/06/Unicode>On the Goodness of Unicode</a>
+
+
+en:<li><a href=http://www.tbray.org/ongoing/When/200x/2003/04/13/Strings>On Character Strings</a>
+ja:<li><a href=http://www.tbray.org/ongoing/When/200x/2003/04/13/Strings>On Character Strings</a>
+
+
+en:<li><a href=http://www.tbray.org/ongoing/When/200x/2003/04/26/UTF>Characters vs. Bytes</a>
+ja:<li><a href=http://www.tbray.org/ongoing/When/200x/2003/04/26/UTF>Characters vs.Bytes</a>
+
+en:<li><a href=http://www.python.org/dev/peps/pep-0261/><abbr>PEP 261</abbr></a> explains how Python handles astral characters outside of the Basic Multilingual Plane (<i>i.e.</i> characters whose ordinal value is greater than 65535)
+ja:<li><a href=http://www.python.org/dev/peps/pep-0261/><abbr>PEP 261</abbr></a> は、BMP (Basic Multilingual Plane) の範囲外にある文字（つまり65535より大きな値の文字）をPythonがどのように扱っているのかについて説明している。
+
+en:<p>On character encoding in other formats:
+ja:<p>他のフォーマットでの文字コードについて：
+
+
+en:<li><a href=http://feedparser.org/docs/character-encoding.html>Character encoding in XML</a>
+ja:<li><a href=http://feedparser.org/docs/character-encoding.html>Character encoding in XML</a>
+
+
+en:<li><a href=http://blog.whatwg.org/the-road-to-html-5-character-encoding>Character encoding in HTML</a>
+ja:<li><a href=http://blog.whatwg.org/the-road-to-html-5-character-encoding>Character encoding in HTML</a>
+
+
+en:<p>On strings and string formatting:
+ja:<p>文字列と文字列のフォーマットについて：
+
+
+en:<li><a href=http://docs.python.org/3.1/library/string.html><code>string</code>&nbsp;&mdash;&nbsp;Common string operations</a>
+ja:<li><a href=http://docs.python.org/3.1/library/string.html><code>string</code>&nbsp;&mdash;&nbsp;Common string operations</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/string.html#formatstrings>Format String Syntax</a>
+ja:<li><a href=http://docs.python.org/3.1/library/string.html#formatstrings>Format String Syntax</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/string.html#format-specification-mini-language>Format Specification Mini-Language</a>
+ja:<li><a href=http://docs.python.org/3.1/library/string.html#format-specification-mini-language>Format Specification Mini-Language</a>
+
+
+en:<li><a href=http://www.python.org/dev/peps/pep-3101/><abbr>PEP</abbr> 3101: Advanced String Formatting</a>
+ja:<li><a href=http://www.python.org/dev/peps/pep-3101/><abbr>PEP</abbr> 3101: Advanced String Formatting</a>
+
+
+en:<p class=v><a href=comprehensions.html rel=prev title='back to &#8220;Comprehensions&#8221;'><span class=u>&#x261C;</span></a> <a href=regular-expressions.html rel=next title='onward to &#8220;Regular Expressions&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=comprehensions.html rel=prev title='「内包表記」へ戻る'><span class=u>&#x261C;</span></a> <a href=regular-expressions.html rel=next title='「正規表現」へ進む'><span class=u>&#x261E;</span></a>
+

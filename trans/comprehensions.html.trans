@@ -1,0 +1,403 @@
+en:<title>Comprehensions - Dive Into Python 3</title>
+ja:<title>内包表記 - Dive Into Python 3 日本語版</title>
+
+
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#comprehensions>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#comprehensions>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<p id=level>Difficulty level: <span class=u title=beginner>&#x2666;&#x2666;&#x2662;&#x2662;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=初級>&#x2666;&#x2666;&#x2662;&#x2662;&#x2662;</span>
+
+
+en:<h1>Comprehensions</h1>
+ja:<h1>内包表記</h1>
+
+
+en:<p><span class=u>&#x275D;</span> Our imagination is stretched to the utmost, not, as in fiction, to imagine things which are not really there, but just to comprehend those things which are. <span class=u>&#x275E;</span><br>&mdash; <a href=http://en.wikiquote.org/wiki/Richard_Feynman>Richard Feynman</a>
+ja:<p><span class=u>&#x275D;</span>私たちの想像力は、フィクションにおけるように、存在しないものを想像する時に発揮されるのではありません。<br/>むしろ、現にそこにあるものをよく理解しようとする時にこそ想像力は大きく引き伸ばされるのです。<span class=u>&#x275E;</span><br>&mdash; <a href=http://en.wikiquote.org/wiki/Richard_Feynman>リチャード・ファインマン</a>
+
+
+en:<p class=f>Every programming language has that one feature, a complicated thing intentionally made simple. If you&#8217;re coming from another language, you could easily miss it, because your old language didn&#8217;t make that thing simple (because it was busy making something else simple instead). This chapter will teach you about list comprehensions, dictionary comprehensions, and set comprehensions: three related concepts centered around one very powerful technique. But first, I want to take a little detour into two modules that will help you navigate your local file system.
+ja:<p class=f>あらゆるプログラミング言語が、複雑なものを意図的にシンプルにする、そんな機能をもっているものだ。他の言語から来た人は、それをあっさり見逃してしまいかねない。その言語はそれをシンプルにしていなかったからね（何か他のものをシンプルにするのに忙しかったのだ）。この章では、リスト内包表記・辞書内包表記・集合内包表記について教える。これら3つの関連する概念は、とても強力な１つのテクニックを軸にしているのだが、まあその前に、少し回り道をして、ファイルシステムの操作を支援する2つのモジュールを紹介しよう。
+
+
+
+en:<h2 id=os>Working With Files And Directories</h2>
+ja:<h2 id=os>ファイルとディレクトリを扱う</h2>
+
+
+en:<p>Python 3 comes with a module called <code>os</code>, which stands for &#8220;operating system.&#8221; The <a href=http://docs.python.org/3.1/library/os.html><code>os</code> module</a> contains a plethora of functions to get information on&nbsp;&mdash;&nbsp;and in some cases, to manipulate&nbsp;&mdash;&nbsp;local directories, files, processes, and environment variables. Python does its best to offer a unified <abbr>API</abbr> across <a href=installing-python.html>all supported operating systems</a> so your programs can run on any computer with as little platform-specific code as possible.
+ja:<p>Python 3には<code>os</code>というモジュールが付属している。<code>os</code>は「オペレーティングシステム」の略だ。<a href=http://docs.python.org/3.1/library/os.html><code>os</code>モジュール</a>には、ローカルディレクトリ・ファイル・プロセス・環境変数の情報を取得（ときには操作）するための関数が山ほど入っている。Pythonは、<a href=installing-python.html>サポートするオペレーティングシステム</a>のどれに対しても、統一された<abbr>API</abbr>を提供できるように最善を尽くしているので、プログラムは、どのコンピュータ上でも最小限の環境依存コードだけで実行することができる。
+
+
+en:<h3 id=getcwd>The Current Working Directory</h3>
+ja:<h3 id=getcwd>現在の作業ディレクトリ</h3>
+
+
+en:<p>When you&#8217;re just getting started with Python, you&#8217;re going to spend a lot of time in <a href=installing-python.html#idle>the Python Shell</a>. Throughout this book, you will see examples that go like this:
+ja:<p>これからPythonを使っていこうとしているので、<a href=installing-python.html#idle>Pythonシェル</a>の中で長い時間を過ごすことになるだろう。この本を通して、次のような例を見ることになる：
+
+
+en:<li>Import one of the modules in the <a href=examples/><code>examples</code> folder</a>
+ja:<li><a href=examples/><code>examples</code></a>フォルダにあるモジュールの1つをインポートする
+
+
+en:<li>Call a function in that module
+ja:<li>そのモジュールの関数を呼び出す
+
+
+en:<li>Explain the result
+ja:<li>その結果について説明する
+
+
+en:<aside>There is always a current working directory.</aside>
+ja:<aside>現在の作業ディレクトリは、常に存在する</aside>
+
+
+en:<p>If you don&#8217;t know about the current working directory, step 1 will probably fail with an <code>ImportError</code>. Why? Because Python will look for the example module in <a href=your-first-python-program.html#importsearchpath>the import search path</a>, but it won&#8217;t find it because the <code>examples</code> folder isn&#8217;t one of the directories in the search path. To get past this, you can do one of two things:
+ja:<p>もし、現在の作業ディレクトリ (current working directory) について知らないのなら、ステップ1はおそらく<code>ImportError</code>を出して失敗するだろう。なぜかって？ なぜならPythonは、<a href=your-first-python-program.html#importsearchpath>Import検索パス</a>の中から<code>example</code>モジュールを探し出そうとするが、<code>examples</code>フォルダは検索パスのどこにも無いので見つけ出すことができないからだ。この問題を解決するには、次の2つのうちのどちらか1つを行えばいい：
+
+
+en:<li>Add the <code>examples</code> folder to the import search path
+ja:<li><code>examples</code>フォルダをimport検索パスに追加する
+
+
+en:<li>Change the current working directory to the <code>examples</code> folder
+ja:<li>現在の作業ディレクトリを<code>examples</code>フォルダに変更する
+
+
+en:<p>The current working directory is an invisible property that Python holds in memory at all times. There is always a current working directory, whether you&#8217;re in the Python Shell, running your own Python script from the command line, or running a Python <abbr>CGI</abbr> script on a web server somewhere.
+ja:<p>「現在の作業ディレクトリ」は、Pythonがメモリの中に常に保持している見えない属性だ。現在の作業ディレクトリは、Pythonシェルにいるときも、コマンドラインからPythonスクリプトを実行しているときも、Pythonの<abbr>CGI</abbr>スクリプトをWebサーバ上で実行しているときも、常に存在する。
+
+
+en:<p>The <code>os</code> module contains two functions to deal with the current working directory.
+ja:<p><code>os</code>モジュールには、現在の作業ディレクトリを扱うための2つの関数が入っている。
+
+
+en:<li>The <code>os</code> module comes with Python; you can import it anytime, anywhere.
+ja:<li><code>os</code>モジュールはPythonに付属しているので、いつでもどこでもこれをインポートできる。
+
+
+en:<li>Use the <code>os.getcwd()</code> function to get the current working directory. When you run the graphical Python Shell, the current working directory starts as the directory where the Python Shell executable is. On Windows, this depends on where you installed Python; the default directory is <code>c:\Python31</code>. If you run the Python Shell from the command line, the current working directory starts as the directory you were in when you ran <code>python3</code>.
+ja:<li>現在の作業ディレクトリを知るには、<code>os.getcwd()</code>関数を使えばいい。グラフィカルなPythonシェルを使っている場合、現在の作業ディレクトリの初期値は、Pythonシェルの実行ファイルがある場所になっている。Windowsでは、Pythonをインストールした場所に依存するが、デフォルトのディレクトリは<code>c:\Python31</code>だ。コマンドラインからPythonシェルを起動した場合の現在の作業ディレクトリは、<code>python3</code>を起動したときに居たディレクトリになっている。
+
+
+en:<li>Use the <code>os.chdir()</code> function to change the current working directory.
+ja:<li>現在の作業ディレクトリを変更するには、<code>os.chdir()</code>関数を使えばいい。
+
+en:<li>When I called the <code>os.chdir()</code> function, I used a Linux-style pathname (forward slashes, no drive letter) even though I&#8217;m on Windows. This is one of the places where Python tries to paper over the differences between operating systems.
+ja:<li><code>os.chdir()</code>関数を呼び出す際、Windows上であるのにもかかわらず、私はLinuxスタイルのパス名（普通のスラッシュ、ドライブレター無し）を使用した。これは、Pythonがオペレーティングシステムの差異を吸収しようと試みることの結果の1つだ。
+
+
+en:<h3 id=ospath>Working With Filenames and Directory Names</h3>
+ja:<h3 id=ospath>ファイル名とディレクトリ名を扱う</h3>
+
+
+en:<p>While we&#8217;re on the subject of directories, I want to point out the <code>os.path</code> module. <code>os.path</code> contains functions for manipulating filenames and directory names.
+ja:<p>ディレクトリについての話をしているので、<code>os.path</code>モジュールにも触れておきたい。<code>os.path</code>には、ファイル名とディレクトリ名を操作するための関数が入っている。
+
+
+en:<li>The <code>os.path.join()</code> function constructs a pathname out of one or more partial pathnames. In this case, it simply concatenates strings.
+ja:<li><code>os.path.join()</code>関数は、1つ以上のパス名の断片をもとにパス名を組み立てる。この例では、文字列を単純に連結している。
+
+
+en:<li>In this slightly less trivial case, calling the <code>os.path.join()</code> function will add an extra slash to the pathname before joining it to the filename. It&#8217;s a backslash instead of a forward slash, because I constructed this example on Windows. If you replicate this example on Linux or Mac OS X, you&#8217;ll see a forward slash instead. Don&#8217;t fuss with slashes; always use <code>os.path.join()</code> and let Python do the right thing.
+ja:<li>このような少し注意が必要な場合でも、<code>os.path.join()</code>がファイル名の前にスラッシュを追加してくれる。私はこの例をWindows上で作ったので、（フォワード）スラッシュではなくバックスラッシュになっている。LinuxやMac OS Xでこの例を再現すれば、これは（フォワード）スラッシュになるだろう。スラッシュで悩むのはよそう。常に<code>os.path.join()</code>を使って、Pythonに正しい処理をやらせればいいのだ。
+
+
+en:<li>The <code>os.path.expanduser()</code> function will expand a pathname that uses <code>~</code> to represent the current user&#8217;s home directory. This works on any platform where users have a home directory, including Linux, Mac OS X, and Windows. The returned path does not have a trailing slash, but the <code>os.path.join()</code> function doesn&#8217;t mind.
+ja:<li><code>os.path.expanduser()</code>は、現在のユーザのホームディレクトリを<code>~</code>（チルダ）で表現しているパスの展開を行う。これは、Linux, Mac OS X, Windowsといった、ユーザにホームディレクトリが与えられるすべてのプラットフォームで動作する。返されたパスの末尾にはスラッシュが付いていないが、<code>os.path.join()</code>関数を使えばこれは問題にならない。
+
+
+en:<li>Combining these techniques, you can easily construct pathnames for directories and files in the user&#8217;s home directory. The <code>os.path.join()</code> function can take any number of arguments. I was overjoyed when I discovered this, since <code>addSlashIfNecessary()</code> is one of the stupid little functions I always need to write when building up my toolbox in a new language. <em>Do not</em> write this stupid little function in Python; smart people have already taken care of it for you.
+ja:<li>以上のテクニックを組み合わせれば、ユーザのホームディレクトリにあるファイルやディレクトリのパス名を簡単に組み立てられる。<code>os.path.join()</code>関数は引数をいくつでも受け取ることができる。これを知ったとき私はとても嬉しかった。なぜなら、新たな言語で自分用のツールボックスを作るときには決まって<code>addSlashIfNecessary()</code>などというアホくさい関数を書かなければならなかったからだ。Pythonでこんな馬鹿げた関数を書いては<em>いけない</em>。そんな仕事は、賢い人たちが既に片付けてくれている。
+
+en:<p><code>os.path</code> also contains functions to split full pathnames, directory names, and filenames into their constituent parts.
+ja:<p><code>os.path</code>モジュールには、フルパス名・ディレクトリ名・ファイル名を構成要素に分解するための関数も入っている。
+
+
+en:<li>The <code>split</code> function splits a full pathname and returns a tuple containing the path and filename.
+ja:<li><code>split</code>関数は、フルパス名を分解して、パスとファイル名を含むタプルを返す。
+
+
+en:<li>Remember when I said you could use <a href=native-datatypes.html#multivar>multi-variable assignment</a> to return multiple values from a function? The <code>os.path.split()</code> function does exactly that. You assign the return value of the <code>split</code> function into a tuple of two variables. Each variable receives the value of the corresponding element of the returned tuple.
+ja:<li>以前、「<a href=native-datatypes.html#multivar>多値代入</a>を使えば、関数から複数の戻り値を返すことができる」、と言ったことを覚えているだろうか？ <code>os.path.split()</code>関数はまさにその処理を行っている。ここでは、<code>split</code>関数の戻り値を、2つの変数からなるタプルへ代入している。各々の変数は、対応する要素の値を戻り値のタプルから受け取るのだ。
+
+
+en:<li>The first variable, <var>dirname</var>, receives the value of the first element of the tuple returned from the <code>os.path.split()</code> function, the file path.
+ja:<li>1つ目の変数<var>dirname</var>は、<code>os.path.split()</code>関数から返されたタプルの1つ目の要素（ファイルパス）を受けとる。
+
+
+en:<li>The second variable, <var>filename</var>, receives the value of the second element of the tuple returned from the <code>os.path.split()</code> function, the filename.
+ja:<li>2つ目の変数<var>filename</var>は、<code>os.path.split()</code>関数から返されたタプルの2つ目の要素（ファイル名）を受けとる。
+
+
+en:<li><code>os.path</code> also contains the <code>os.path.splitext()</code> function, which splits a filename and returns a tuple containing the filename and the file extension.  You use the same technique to assign each of them to separate variables.
+ja:<li><code>os.path</code>には、<code>os.path.splitext()</code>という関数もある。この関数はファイル名を分解して、ファイル名と拡張子からなるタプルを返す。ここでも、同じテクニックを使って各要素を別々の変数に代入している。
+
+
+en:<h3 id=glob>Listing Directories</h3>
+ja:<h3 id=glob>ディレクトリの内容を見る</h3>
+
+
+en:<p>The <code>glob</code> module is another tool in the Python standard library. It&#8217;s an easy way to get the contents of a directory programmatically, and it uses the sort of wildcards that you may already be familiar with from working on the command line.
+ja:<p><code>glob</code>モジュールは、Python標準ライブラリに含まれるツールの１つで、ディレクトリの内容をプログラムから簡単に取得する方法を提供してくれる。このモジュールではワイルドカードの一種を使用するのだが、これはコマンドラインで作業する人にとっては既におなじみのものだろう。
+
+
+en:<aside>The <code>glob</code> module uses shell-like wildcards.</aside>
+ja:<aside><code>glob</code>モジュールはシェル風のワイルドカードを使う。</aside>
+
+
+en:<li>The <code>glob</code> module takes a wildcard and returns the path of all files and directories matching the wildcard. In this example, the wildcard is a directory path plus &#8220;<code>*.xml</code>&#8221;, which will match all <code>.xml</code> files in the <code>examples</code> subdirectory.
+ja:<li><code>glob</code>モジュールは、ワイルドカードを受け取って、そのワイルドカードにマッチするすべてのファイルとディレクトリのパスを返す。この例では、ワイルドカードはディレクトリパスに "<code>*.xml</code>" を加えたものであり、これは<code>examples</code>ディレクトリにあるすべての<code>.xml</code>ファイルにマッチする。
+
+
+en:<li>Now change the current working directory to the <code>examples</code> subdirectory. The <code>os.chdir()</code> function can take relative pathnames.
+ja:<li>今度は、現在の作業ディレクトリを<code>examples</code>に変更した。<code>os.chdir()</code>関数は相対パスを受け取れるのだ。
+
+
+en:<li>You can include multiple wildcards in your glob pattern. This example finds all the files in the current working directory that end in a <code>.py</code> extension and contain the word <code>test</code> anywhere in their filename.
+ja:<li>globパターンの中でワイルドカードを複数回使うこともできる。この例では、現在の作業ディレクトリの中から、<code>.py</code>という拡張子で終わり、<code>test</code>という単語をファイル名のどこかに含むファイルを見つけ出す。
+
+
+en:<h3 id=osstat>Getting File Metadata</h3>
+ja:<h3 id=osstat>ファイルのメタデータを取得する</h3>
+
+
+en:<p>Every modern file system stores metadata about each file: creation date, last-modified date, file size, and so on. Python provides a single <abbr>API</abbr> to access this metadata. You don&#8217;t need to open the file; all you need is the filename.
+ja:<p>あらゆる現代的なファイルシステムは、各ファイル毎にメタデータ&nbsp;&mdash;&nbsp;作成日・最終更新日・ファイルサイズなど&nbsp;&mdash;&nbsp;を格納している。Pythonは、これらのメタデータにアクセスするための単一の<abbr>API</abbr>を用意している。メタデータにアクセスするためにファイルを開く必要はなく、ファイル名だけがあればいい。
+
+
+en:<li>The current working directory is the <code>examples</code> folder.
+ja:<li>現在の作業ディレクトリは<code>examples</code>フォルダだ。
+
+
+en:<li><code>feed.xml</code> is a file in the <code>examples</code> folder. Calling the <code>os.stat()</code> function returns an object that contains several different types of metadata about the file.
+ja:<li><code>feed.xml</code>は<code>examples</code>の中にあるファイルだ。<code>os.stat()</code>関数を呼び出すと、そのファイルに関する何種類かのメタデータを含んだオブジェクトが返される。
+
+
+en:<li><code>st_mtime</code> is the modification time, but it&#8217;s in a format that isn&#8217;t terribly useful. (Technically, it&#8217;s the number of seconds since the Epoch, which is defined as the first second of January 1st, 1970. Seriously.)
+ja:<li><code>st_mtime</code>は最終更新日だが、この形式はひどく使いにくい（技術的に言えば、これはエポック時（1970年1月1日として定義されている）からの経過秒数だ）。
+
+
+en:<li>The <code>time</code> module is part of the Python standard library. It contains functions to convert between different time representations, format time values into strings, and fiddle with timezones.
+ja:<li><code>time</code>モジュールはPython標準ライブラリに含まれている。このモジュールには、異なる時間表現に変換するための関数や、時刻の値を文字列にする関数、タイムゾーンをいじる関数などが入っている。
+
+
+en:<li>The <code>time.localtime()</code> function converts a time value from seconds-since-the-Epoch (from the <code>st_mtime</code> property returned from the <code>os.stat()</code> function) into a more useful structure of year, month, day, hour, minute, second, and so on. This file was last modified on July 13, 2009, at around 5:25 PM.
+ja:<li><code>time.localtime()</code>関数は、（<code>os.stat()</code>関数の戻り値の<code>st_mtime</code>プロパティから取得した）エポック時からの経過秒数の時刻値を、年・月・日・時・分・秒などで構成されるもっと便利な構造へと変換する。このファイルの最終更新時刻は、2009年7月13日の午後5時25分くらいのようだ。
+
+
+en:<li>The <code>os.stat()</code> function also returns the size of a file, in the <code>st_size</code> property. The file <code>feed.xml</code> is <code>3070</code> bytes.
+ja:<li><code>os.stat()</code>関数は、<code>st_size</code>プロパティの中でファイルのサイズも返している。<code>feed.xml</code>ファイルのサイズは<code>3070</code>バイトだ。
+
+
+en:<li>You can pass the <code>st_size</code> property to the <a href=your-first-python-program.html#divingin><code>approximate_size()</code> function</a>.
+ja:<li><code>st_size</code>プロパティを<a href=your-first-python-program.html#divingin><code>approximate_size()</code>関数</a>に渡すことができる。
+
+
+en:<h3 id=abspath>Constructing Absolute Pathnames</h3>
+ja:<h3 id=abspath>絶対パス名を構築する</h3>
+
+
+en:<p>In <a href=#osstat>the previous section</a>, the <code>glob.glob()</code> function returned a list of relative pathnames. The first example had pathnames like <code>'examples\feed.xml'</code>, and the second example had even shorter relative pathnames like <code>'romantest1.py'</code>. As long as you stay in the same current working directory, these relative pathnames will work for opening files or getting file metadata. But if you want to construct an absolute pathname&nbsp;&mdash;&nbsp;<i>i.e.</i> one that includes all the directory names back to the root directory or drive letter&nbsp;&mdash;&nbsp;then you&#8217;ll need the <code>os.path.realpath()</code> function.
+ja:<p><a href=#osstat>前の節</a>では、<code>glob.glob()</code>関数が相対パスを返すことを見た。1つ目の例は<code>'examples\feed.xml'</code>のようなパス名であり、2つ目の例はさらに短い<code>'romantest1.py'</code>のような相対パス名だった。同じ作業ディレクトリにいる限り、このような相対パス名であっても、問題なくファイルを開いたりメタデータを取得したりできるだろう。しかし、絶対パス名（つまり、ルートディレクトリもしくはドライブレターに至るまでの、すべてのディレクトリを含むパス名）を作りたいのであれば、<code>os.path.realpath()</code>関数が必要になる。
+
+
+en:<h2 id=listcomprehension>List Comprehensions</h2>
+ja:<h2 id=listcomprehension>リスト内包表記</h2>
+
+
+en:<aside>You can use any Python expression in a list comprehension.</aside>
+ja:<aside>リスト内包表記の中では、どんなPythonの式も使える。</aside>
+
+
+en:<p>A <dfn>list comprehension</dfn> provides a compact way of mapping a list into another list by applying a function to each of the elements of the list.
+ja:<p><dfn>リスト内包表記</dfn>は、「リストの各要素に関数を適用することでリストを別のリストにマッピング」するコンパクトな方法を提供する。
+
+
+
+en:<li>To make sense of this, look at it from right to left. <var>a_list</var> is the list you&#8217;re mapping. The Python interpreter loops through <var>a_list</var> one element at a time, temporarily assigning the value of each element to the variable <var>elem</var>. Python then applies the function <code><var>elem</var> * 2</code> and appends that result to the returned list.
+ja:<li>これを理解するには右から左へ見ていけばいい。<var>a_list</var>はマッピングの元になるリストだ。Pythonのインタプリタは<var>a_list</var>の要素を一度に1つずつ取り出していき、その各々の値を一時変数の<var>elem</var>に代入する。次に、Pythonは関数<code><var>elem</var> * 2</code>を適用し、その結果を戻り値のリストに追加する。
+
+
+en:<li>A list comprehension creates a new list; it does not change the original list.
+ja:<li>リスト内包表記は新しいリストを作るので、元のリストには影響を与えない。
+
+
+en:<li>It is safe to assign the result of a list comprehension to the variable that you&#8217;re mapping. Python constructs the new list in memory, and when the list comprehension is complete, it assigns the result to the original variable.
+ja:<li>マッピングする変数にリスト内包表記の結果を代入しても問題は起きない。Pythonは新しいリストをメモリ上に作り、リスト内包表記の処理が完了したときに、その結果を元の変数に代入するからだ。
+
+
+en:<p>You can use any Python expression in a list comprehension, including the functions in the <code>os</code> module for manipulating files and directories.
+ja:<p>リスト内包表記の中ではPythonのすべての式が使える。もちろん、ファイルやディレクトリを操作するための<code>os</code>モジュールの関数もその式として使える。
+
+
+en:<li>This returns a list of all the <code>.xml</code> files in the current working directory.
+ja:<li>これは、現在の作業ディレクトリに含まれるすべての<code>.xml</code>ファイルのリストを返す。
+
+
+en:<li>This list comprehension takes that list of <code>.xml</code> files and transforms it into a list of full pathnames.
+ja:<li>このリスト内包表記は<code>.xml</code>ファイルのリストを受け取り、それをフルパス名のリストに変換する。
+
+
+en:<p>List comprehensions can also filter items, producing a result that can be smaller than the original list.
+ja:<p>リスト内包表記は、要素のフィルタリングを行うこともでき、これは元のリストよりも小さなリストを作り出す。
+
+
+en:<li>To filter a list, you can include an <code>if</code> clause at the end of the list comprehension. The expression after the <code>if</code> keyword will be evaluated for each item in the list. If the expression evaluates to <code>True</code>, the item will be included in the output. This list comprehension looks at the list of all <code>.py</code> files in the current directory, and the <code>if</code> expression filters that list by testing whether the size of each file is greater than <code>6000</code> bytes. There are six such files, so the list comprehension returns a list of six filenames.
+ja:<li>リストをフィルタリングするために、リスト内包表記の最後に<code>if</code>節を付け加えることができる。<code>if</code>キーワードの後ろの式はリストの各要素に対して評価され、各要素は式が<code>True</code>と評価された場合に出力に加えられる。このリスト内包表記は、現在の作業ディレクトリにあるすべての<code>.py</code>ファイルのリストを見て、各々のファイルが<code>6000</code>バイトよりも大きいかどうかを<code>if</code>式で検査している。そのようなファイルは6つあるので、リスト内包表記は6つのファイル名を含んだリストを返す。
+
+
+en:<p>All the examples of list comprehensions so far have featured simple expressions&nbsp;&mdash;&nbsp;multiply a number by a constant, call a single function, or simply return the original list item (after filtering). But there&#8217;s no limit to how complex a list comprehension can be.
+ja:<p>今までに説明したリスト内包表記は、単純な式だけ&nbsp;&mdash;&nbsp;定数による乗算・1つの関数の呼び出し・元のリストの要素（をフィルタリングしたもの）&nbsp;&mdash;&nbsp;を使用していた。しかし、リスト内包表記はいくらでも複雑にできる。
+
+
+en:<li>This list comprehension finds all the <code>.xml</code> files in the current working directory, gets the size of each file (by calling the <code>os.stat()</code> function), and constructs a tuple of the file size and the absolute path of each file (by calling the <code>os.path.realpath()</code> function).
+ja:<li>このリスト内包表記は現在の作業ディレクトリにあるすべての<code>.xml</code>ファイルを探しだし、そのファイルサイズを（<code>os.stat()</code>関数を呼びだして）取得し、ファイルサイズと（<code>os.path.realpath()</code>関数で取得した）絶対パスからなるタプルを返す。
+
+
+en:<li>This comprehension builds on the previous one to call the <a href=your-first-python-program.html#divingin><code>approximate_size()</code> function</a> with the file size of each <code>.xml</code> file.
+ja:<li>このリスト内包表記は、前の例を足がかりにして、<a href=your-first-python-program.html#divingin><code>approximate_size()</code>関数</a>を各々の<code>.xml</code>ファイルのファイルサイズと共に呼び出している。
+
+
+en:<h2 id=dictionarycomprehension>Dictionary Comprehensions</h2>
+ja:<h2 id=dictionarycomprehension>辞書内包表記</h2>
+
+
+en:<p>A <dfn>dictionary comprehension</dfn> is like a list comprehension, but it constructs a dictionary instead of a list.
+ja:<p><dfn>辞書内包表記</dfn>はリスト内包表記に似ているが、こちらはリストの代わりに辞書を構築する。
+
+
+en:<li>This is not a dictionary comprehension; it&#8217;s a <a href=#listcomprehension>list comprehension</a>. It finds all <code>.py</code> files with <code>test</code> in their name, then constructs a tuple of the filename and the file metadata (from calling the <code>os.stat()</code> function).
+ja:<li>これは辞書内包表記ではなく<a href=#listcomprehension>リスト内包表記</a>だ。ファイル名に<code>test</code>を含むすべての<code>.py</code>ファイルを探しだして、ファイル名と（<code>os.stat()</code>関数で取得した）メタデータを含むタプルを構築する。
+
+
+en:<li>Each item of the resulting list is a tuple.
+ja:<li>返されたリストの各要素はタプルになっている。
+
+
+en:<li>This is a dictionary comprehension. The syntax is similar to a list comprehension, with two differences. First, it is enclosed in curly braces instead of square brackets. Second, instead of a single expression for each item, it contains two expressions separated by a colon. The expression before the colon (<code>f</code> in this example) is the dictionary key; the expression after the colon (<code>os.stat(f)</code> in this example) is the value.
+ja:<li>辞書内包表記だ。この構文はリスト内包表記に似ているが、2つの違いがある。1つ目の違いは、角括弧の代わりに波括弧で包まれていることで、2つ目の違いは、1つの式ではなく、コロンで分けられた2つの式が入っていることだ。コロンの前にあるもの（この例では<code>f</code>）が辞書のキーであり、コロンの後ろにあるもの（この例では<code>os.stat(f)</code>）が辞書の値である。
+
+
+en:<li>A dictionary comprehension returns a dictionary.
+ja:<li>辞書内包表記は辞書を返す。
+
+
+en:<li>The keys of this particular dictionary are simply the filenames returned from the call to <code>glob.glob('*test*.py')</code>.
+ja:<li>この辞書のキーは、<code>glob.glob('*test*.py')</code>関数の呼び出しで返されたファイル名だ。
+
+
+en:<li>The value associated with each key is the return value from the <code>os.stat()</code> function. That means we can &#8220;look up&#8221; a file by name in this dictionary to get its file metadata. One of the pieces of metadata is <code>st_size</code>, the file size. The file <code>alphameticstest.py</code> is <code>2509</code> bytes long.
+ja:<li>各キーに関連づけられた値は<code>os.stat()</code>関数の戻り値だ。だから、この辞書にディレクトリ内にあるファイル名を渡せば、そのファイルのメタデータを取得できることになる。メタデータの1つはファイルサイズを表す <code>st_size</code> だ。<code>alphameticstest.py</code>というファイルは<code>2509</code>バイトの長さを持っていることがわかる。
+
+
+en:<p>Like list comprehensions, you can include an <code>if</code> clause in a dictionary comprehension to filter the input sequence based on an expression which is evaluated with each item.
+ja:<p>リスト内包表記と同様に、辞書内包表記の中に<code>if</code>節を含めることができ、各要素ごとに評価される式に基づいて入力シーケンスをフィルタリングできる。
+
+
+en:<li>This dictionary comprehension constructs a list of all the files in the current working directory (<code>glob.glob('*')</code>), gets the file metadata for each file (<code>os.stat(f)</code>), and constructs a dictionary whose keys are filenames and whose values are the metadata for each file.
+ja:<li>この辞書内包表記は、現在の作業ディレクトリのすべてのファイルのリストを作り（<code>glob.glob('*')</code>）、各ファイルのメタデータを取得し （<code>os.stat(f)</code>）、キーが各ファイルのファイル名で、値が各ファイルのメタデータになっている辞書を構築する。
+
+
+en:<li>This dictionary comprehension builds on the previous comprehension, filters out files smaller than <code>6000</code> bytes (<code>if meta.st_size > 6000</code>), and uses that filtered list to construct a dictionary whose keys are the filename minus the extension (<code>os.path.splitext(f)[0]</code>) and whose values are the approximate size of each file (<code>humansize.approximate_size(meta.st_size)</code>).
+ja:<li>この辞書内包表記は、先の内包表記をもとにしている。ファイルサイズが<code>6000</code>バイトよりも小さい（<code>if meta.st_size > 6000</code>）ものをフィルタで除外し、そのフィルタリング済みのリストをもとに、ファイル名から拡張子を取り除いたもの（<code>os.path.splitext(f)[0]</code>）をキーとして、ファイルのおおよその大きさ（<code>humansizei.approximate_size(meta.st_size)</code>）を値とした辞書を構築するのだ。
+
+
+en:<li>As you saw in a previous example, there are six such files, thus there are six items in this dictionary.
+ja:<li>前の例で見たように、そのようなファイルは6つあるので、辞書には6つの要素がある。
+
+
+en:<li>The value of each key is the string returned from the <code>approximate_size()</code> function.
+ja:<li>各キーの値は<code>approximate_size()</code>関数の戻り値だ。
+
+
+en:<h3 id=stupiddicttricks>Other Fun Stuff To Do With Dictionary Comprehensions</h3>
+ja:<h3 id=stupiddicttricks>辞書内包表記に関する他の愉快なもの</h3>
+
+
+en:<p>Here&#8217;s a trick with dictionary comprehensions that might be useful someday: swapping the keys and values of a dictionary.
+ja:<p>さて、いつか役に立つかもしれない、辞書内包表記を使った小技をお見せしよう。キーと値を交換するのだ。
+
+
+en:<p>Of course, this only works if the values of the dictionary are immutable, like strings or tuples. If you try this with a dictionary that contains lists, it will fail most spectacularly.
+ja:<p>もちろん、これは辞書の値が文字列やタプルのようにイミュータブルであるときにだけ動作する。例えば、リストを含んだ辞書でこれを行おうとすると、見事に失敗する。
+
+en:<h2 id=setcomprehension>Set Comprehensions</h2>
+ja:<h2 id=setcomprehension>集合内包表記</h2>
+
+
+en:<p>Not to be left out, sets have their own comprehension syntax as well. It is remarkably similar to the syntax for dictionary comprehensions. The only difference is that sets just have values instead of key:value pairs.
+ja:<p>仲間はずれにされないように、集合も独自の内包表記を持っている。辞書内包表記にとてもよく似ていて、唯一の違いは、キーと値のペアの代わりに値だけを持つことだ。
+
+
+en:<li>Set comprehensions can take a set as input. This set comprehension calculates the squares of the set of numbers from 0 to <code>9</code>.
+ja:<li>集合内包表記は入力として集合を受け取ることができる。この集合内包表記では、<code>0</code>から<code>9</code>までの数の集合の2乗を求めている。
+
+
+en:<li>Like list comprehensions and dictionary comprehensions, set comprehensions can contain an <code>if</code> clause to filter each item before returning it in the result set.
+ja:<li>リスト内包表記や辞書内包表記と同様に、集合内包表記にも、要素をフィルタリングするための<code>if</code>節を付けることができる。
+
+
+en:<li>Set comprehensions do not need to take a set as input; they can take any sequence.
+ja:<li>集合内包表記の入力が集合である必要はない。どんなシーケンスでも入力として受けとることができる。
+
+
+en:<h2 id=furtherreading>Further Reading</h2>
+ja:<h2 id=furtherreading>もっと知りたい人のために</h2>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/os.html><code>os</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/os.html><code>os</code>モジュール</a>
+
+
+en:<li><a href=http://www.doughellmann.com/PyMOTW/os/><code>os</code>&nbsp;&mdash;&nbsp;Portable access to operating system specific features</a>
+#ja:<li><a href=http://www.doughellmann.com/PyMOTW/os/><code>os</code>&nbsp;&mdash;&nbsp;オペレーティングシステム固有機能へのポータブルなアクセス</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/os.path.html><code>os.path</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/os.path.html><code>os.path</code>モジュール</a>
+
+
+en:<li><a href=http://www.doughellmann.com/PyMOTW/ospath/><code>os.path</code>&nbsp;&mdash;&nbsp;Platform-independent manipulation of file names</a>
+#ja:<li><a href=http://www.doughellmann.com/PyMOTW/ospath/><code>os.path</code>&nbsp;&mdash;&nbsp;プラットフォーム非依存のファイル名操作</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/glob.html><code>glob</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/glob.html><code>glob</code>モジュール</a>
+
+
+en:<li><a href=http://www.doughellmann.com/PyMOTW/glob/><code>glob</code>&nbsp;&mdash;&nbsp;Filename pattern matching</a>
+#ja:<li><a href=http://www.doughellmann.com/PyMOTW/glob/><code>glob</code>&nbsp;&mdash;&nbsp;ファイル名のパターンマッチ</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/time.html><code>time</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/time.html><code>time</code>モジュール</a>
+
+
+en:<li><a href=http://www.doughellmann.com/PyMOTW/time/><code>time</code>&nbsp;&mdash;&nbsp;Functions for manipulating clock time</a>
+#ja:<li><a href=http://www.doughellmann.com/PyMOTW/time/><code>time</code>&nbsp;&mdash;&nbsp;時刻操作のための関数群</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/tutorial/datastructures.html#list-comprehensions>List comprehensions</a>
+#ja:<li><a href=http://docs.python.org/3.1/tutorial/datastructures.html#list-comprehensions>リスト内包表記</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/tutorial/datastructures.html#nested-list-comprehensions>Nested list comprehensions</a>
+#ja:<li><a href=http://docs.python.org/3.1/tutorial/datastructures.html#nested-リスト-comprehensions>ネストされたリスト内包表記</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/tutorial/datastructures.html#looping-techniques>Looping techniques</a>
+#ja:<li><a href=http://docs.python.org/3.1/tutorial/datastructures.html#looping-techniques>ループのテクニック</a>
+
+
+en:<p class=v><a href=native-datatypes.html rel=prev title='back to &#8220;Native Datatypes&#8221;'><span class=u>&#x261C;</span></a> <a href=strings.html rel=next title='onward to &#8220;Strings&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=native-datatypes.html rel=prev title='「ネイティブデータ型」に戻る'><span class=u>&#x261C;</span></a> <a href=strings.html rel=next title='「文字列」に進む'><span class=u>&#x261E;</span></a>
+
+
+en:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+ja:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+
+

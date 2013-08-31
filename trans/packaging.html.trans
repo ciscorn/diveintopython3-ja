@@ -1,0 +1,529 @@
+en:<title>Packaging Python Libraries - Dive Into Python 3</title>
+ja:<title>Pythonライブラリをパッケージ化する - Dive Into Python 3 日本語版</title>
+
+
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#packaging>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#packaging>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<h1>Packaging Python Libraries</h1>
+ja:<h1>Pythonライブラリをパッケージ化する</h1>
+
+
+en:<p><span class=u>&#x275D;</span> You&#8217;ll find the shame is like the pain; you only feel it once. <span class=u>&#x275E;</span><br>&mdash; Marquise de Merteuil, <a href=http://www.imdb.com/title/tt0094947/quotes><cite>Dangerous Liaisons</cite></a>
+ja:<p><span class=u>&#x275D;</span> 恥は痛みと同じようなもの。どちらも一度しか感じない。<span class=u>&#x275E;</span><br>&mdash; メルトイユ侯爵夫人、<a href=http://www.imdb.com/title/tt0094947/quotes><cite>危険な関係</cite></a>
+
+
+en:<h2 id=divingin>Diving In</h2>
+ja:<h2 id=divingin>飛び込む</h2>
+
+
+
+en:<p class=f>Real artists ship. Or so says Steve Jobs. Do you want to release a Python script, library, framework, or application? Excellent. The world needs more Python code. Python 3 comes with a packaging framework called Distutils. Distutils is many things: a build tool (for you), an installation tool (for your users), a package metadata format (for search engines), and more. It integrates with the <a href=http://pypi.python.org/>Python Package Index</a> (&#8220;PyPI&#8221;), a central repository for open source Python libraries.
+ja:<p class=f>真のアーティストは出荷する&nbsp;&mdash;&nbsp;スティーブ・ジョブズはそんなことを言っている。Pythonのスクリプト、ライブラリ、フレームワーク、アプリケーションをリリースしたいだって？ 素晴らしい。世界はより多くのPythonコードを求めている。Python 3にはDistutilsと呼ばれるパッケージング用のフレームワークが付属している。このDistutilsはたくさんのものがつまったライブラリだ&nbsp;&mdash;&nbsp;（あなたのための）ビルドツール、（ユーザのための）インストールツール、（検索エンジンのための）パッケージのメタデータの形式、などなど。さらに、Distutilsは、オープンソースのPythonライブラリのための中央リポジトリである <a href=http://pypi.python.org/>Python Package Index</a> (&#8220;PyPI&#8221;) に統合されている。
+
+
+en:<p>All of these facets of Distutils center around the <i>setup script</i>, traditionally called <code>setup.py</code>. In fact, you&#8217;ve already seen several Distutils setup scripts in this book. You used Distutils to install <code>httplib2</code> in <a href=http-web-services.html#introducing-httplib2>HTTP Web Services</a> and again to install <code>chardet</code> in <a href=case-study-porting-chardet-to-python-3.html>Case Study: Porting <code>chardet</code> to Python 3</a>.
+ja:<p>このようなDistutilsの様々な面の中核にあるのが「セットアップスクリプト」だ（このスクリプトは伝統的に<code>setup.py</code>と呼ばれている）。実際、既に本書の中で何度かDistutilsセットアップスクリプトを目にしている。<a href=http-web-services.html#introducing-httplib2>HTTPウェブサービス</a>の章では<code>httplib2</code>をインストールするためにDistutilsを使用したし、<a href=case-study-porting-chardet-to-python-3.html>ケーススタディ: <code>chardet</code>をPython 3へ移植する</a>の章で<code>chardet</code>をインストールするときにも利用した。
+
+
+en:<p>In this chapter, you&#8217;ll learn how the setup scripts for <code>chardet</code> and <code>httplib2</code> work, and you&#8217;ll step through the process of releasing your own Python software.
+ja:<p>この章では、<code>chardet</code>と<code>httplib2</code>のセットアップスクリプトがどのような仕組みで動いているのかを説明するが、その解説はそのままPythonソフトウェアをリリースするための手引きになっている。
+
+
+en:<pre class=pp><code># chardet's setup.py
+ja:<pre class=pp><code># chardetのsetup.py
+
+
+en:<p><span class=u>&#x261E;</span><code>chardet</code> and <code>httplib2</code> are open source, but there&#8217;s no requirement that you release your own Python libraries under any particular license. The process described in this chapter will work for any Python software, regardless of license.
+ja:<p><span class=u>&#x261E;</span><code>chardet</code>と<code>httplib2</code>はオープンソースだが、Pythonライブラリを何か特定のライセンスでリリースしなければならないという制約は存在しない。この章で説明する手順は、ライセンスに関係なく、どんなPythonのソフトウェアにも使える。
+
+
+en:<h2 id=cantdo>Things Distutils Can&#8217;t Do For You</h2>
+ja:<h2 id=cantdo>Distutilsがやってくれないこと</h2>
+
+
+en:<p>Releasing your first Python package is a daunting process. (Releasing your second one is a little easier.) Distutils tries to automate as much of it as possible, but there are some things you simply must do yourself.
+ja:<p>初めてのPythonパッケージをリリースする作業は手ごわいものだ（2つ目は少し簡単になる）。Distutilsはできる限りの自動化を試みてくれるが、自分自身でやらなければいけないこともいくつか存在する。
+
+
+en:<li><b>Choose a license</b>. This is a complicated topic, fraught with politics and peril. If you wish to release your software as open source, I humbly offer five pieces of advice:
+ja:<li><b>ライセンスの選択</b>。これは、政治と危険に満ちた複雑な話題だ。自分のソフトウェアをオープンソースとしてリリースしたいのであれば、私はつつましく5つのアドバイスをしておく：
+
+
+en:<li>Don&#8217;t write your own license.
+ja:<li>独自のライセンスを書いてはならない。
+
+
+en:<li>It doesn&#8217;t need to be <abbr>GPL</abbr>, but <a href=http://www.dwheeler.com/essays/gpl-compatible.html>it needs to be <abbr>GPL</abbr>-compatible</a>.
+ja:<li>ライセンスが<abbr>GPL</abbr>である必要はないが、<a href=http://www.dwheeler.com/essays/gpl-compatible.html><abbr>GPL</abbr>互換である必要がある</a>。
+
+
+en:<li><b>Classify your software</b> using the PyPI classification system. I&#8217;ll explain what this means later in this chapter.
+ja:<li><b>ソフトウェアの分類</b>。この分類にはPyPIの分類システムを使うが、その詳細についてはこの章のもう少し後で説明する。
+
+
+en:<li><b>Write a &#8220;read me&#8221; file</b>. Don&#8217;t skimp on this. At a minimum, it should give your users an overview of what your software does and how to install it.
+ja:<li><b>&#8220;read me&#8221;ファイルの作成</b>。これをいい加減に済ませてはならない。最低でも、ソフトウェアが何をするのかについての概要と、インストールの方法ぐらいは書くようにしよう。
+
+
+en:<h2 id=structure>Directory Structure</h2>
+ja:<h2 id=structure>ディレクトリ構造</h2>
+
+
+en:<p>To start packaging your Python software, you need to get your files and directories in order. The <code>httplib2</code> directory looks like this:
+ja:<p>Pythonソフトウェアのパッケージ化を始めるには、ファイルとディレクトリを整理する必要がある。<code>httplib2</code>ディレクトリは以下のようになる：
+
+
+en:<li>Make a root directory to hold everything. Give it the same name as your Python module.
+ja:<li>すべてのディレクトリとファイルを入れるルートディレクトリを作ろう。これにはPythonモジュールと同じ名前を付けておく。
+
+
+en:<li>To accomodate Windows users, your &#8220;read me&#8221; file should include a <code>.txt</code> extension, and it should use Windows-style carriage returns. Just because <em>you</em> use a fancy text editor that runs from the command line and includes its own macro language, that doesn&#8217;t mean you need to make life difficult for your users. (Your users use Notepad. Sad but true.) Even if you&#8217;re on Linux or Mac OS X, your fancy text editor undoubtedly has an option to save files with Windows-style carriage returns.
+ja:<li>Windowsユーザのために、&#8220;read me&#8221; ファイルには<code>.txt</code>という拡張子を付け、さらにWindowsスタイルの改行文字を使っておこう。<em>自分は</em>コマンドラインから起動する独自のマクロ言語を備えたクールなテキストエディタを使っているからといって、ユーザーの人生を難しくする必要はない（ユーザは「メモ帳」を使っている。悲しいけれどこれは事実だ）。あなたがLinuxやMac OS Xを使っているとしても、そのクールなテキストエディタには、まず間違いなくファイルをWindowsスタイルの改行文字で保存するオプションがある。
+
+
+en:<li>Your Distutils setup script should be named <code>setup.py</code> unless you have a good reason not to. You do not have a good reason not to.
+ja:<li>何かもっともな理由がない限り、Distutilsのセットアップスクリプトには<code>setup.py</code>という名前を付けておくべきだ。そして、おそらく「もっともな理由」など無いだろう。
+
+
+en:<li>If your Python software is a single <code>.py</code> file, you should put it in the root directory along with your &#8220;read me&#8221; file and your setup script. But <code>httplib2</code> is not a single <code>.py</code> file; it&#8217;s <a href=case-study-porting-chardet-to-python-3.html#multifile-modules>a multi-file module</a>. But that&#8217;s OK! Just put the <code>httplib2</code> directory in the root directory, so you have an <code>__init__.py</code> file within an <code>httplib2/</code> directory within the <code>httplib2/</code> root directory. That&#8217;s not a problem; in fact, it will simplify your packaging process.
+ja:<li>Pythonソフトウェアが単一の<code>.py</code>ファイルで構成されているのであれば、そのファイルは&#8220;read me&#8221;ファイルやセットアップスクリプトと一緒にルートディレクトリに置いておけばいい。しかし、<code>httplib2</code>は単一の<code>.py</code>ファイルではない。<code>httplib2</code>は<a href=case-study-porting-chardet-to-python-3.html#multifile-modules>マルチファイルモジュール</a>なのだ。しかしそれでも問題はない！ ルートディレクトリの中に<code>httplib2</code>ディレクトリを置こう。つまり、<code>httplib2/</code>というルートディレクトリの中にある<code>httplib2/</code>ディレクトリの中に<code>__init__.py</code>ファイルがあることになる。これで問題ない。実は、これによってパッケージ化の処理が単純化されるのだ。
+
+
+en:<p>The <code>chardet</code> directory looks slightly different. Like <code>httplib2</code>, it&#8217;s <a href=case-study-porting-chardet-to-python-3.html#multifile-modules>a multi-file module</a>, so there&#8217;s a <code>chardet/</code> directory within the <code>chardet/</code> root directory. In addition to the <code>README.txt</code> file, <code>chardet</code> has <abbr>HTML</abbr>-formatted documentation in the <code>docs/</code> directory. The <code>docs/</code> directory contains several <code>.html</code> and <code>.css</code> files and an <code>images/</code> subdirectory, which contains several <code>.png</code> and <code>.gif</code> files. (This will be important later.) Also, in keeping with the convention for <abbr>(L)GPL</abbr>-licensed software, it has a separate file called <code>COPYING.txt</code> which contains the complete text of the <abbr>LGPL</abbr>.
+ja:<p><code>chardet</code>ディレクトリの方はこれとは微妙に異なっている。<code>httplib2</code>と同じく<code>chardet</code>は<a href=case-study-porting-chardet-to-python-3.html#multifile-modules>マルチファイルモジュール</a>なので、<code>chardet/</code>というルートディレクトリの中に<code>chardet/</code>ディレクトリが存在する。しかし、<code>chardet</code>の場合は、<code>README.txt</code>ファイルに加えて<abbr>HTML</abbr>形式のドキュメントが<code>docs/</code>ディレクトリの中に用意されているのだ。この<code>docs/</code>ディレクトリには、<code>.html</code>ファイルや<code>.css</code>ファイルがいくつか入っており、さらに<code>images/</code>というサブディレクトリの中には複数の<code>.png</code>ファイルや<code>.gif</code>ファイルも入っている（これは後で重要になる）。また、<abbr>(L)GPL</abbr>でライセンスされたソフトウェアの慣例として、<abbr>LGPL</abbr>の全文を収めた<code>COPYING.txt</code>というファイルも入っている。
+
+
+en:<h2 id=setuppy>Writing Your Setup Script</h2>
+ja:<h2 id=setuppy>セットアップスクリプトを書く</h2>
+
+
+en:<p>The Distutils setup script is a Python script. In theory, it can do anything Python can do. In practice, it should do as little as possible, in as standard a way as possible. Setup scripts should be boring. The more exotic your installation process is, the more exotic your bug reports will be.
+ja:<p>DistutilsのセットアップスクリプトはPythonスクリプトだ。このスクリプトは理論的にはPythonができることなら何でもできる。しかし実際には、このスクリプトでは最小限の処理を可能な限り標準的な方法で行うべきだ。セットアップスクリプトは退屈なものであるべきなのだ。インストール処理をエキゾチックなものにすれば、エキゾチックなバグレポートが返ってくることになるだろう。
+
+
+en:<p>The first line of every Distutils setup script is always the same:
+ja:<p>どんなDistutilsセットアップスクリプトだろうと、1行目は常に同じものになる：
+
+
+en:<p>This imports the <code>setup()</code> function, which is the main entry point into Distutils. 95% of all Distutils setup scripts consist of a single call to <code>setup()</code> and nothing else. (I totally just made up that statistic, but if your Distutils setup script is doing more than calling the Distutils <code>setup()</code> function, you should have a good reason. Do you have a good reason? I didn&#8217;t think so.)
+ja:<p>これは<code>setup()</code>関数をインポートしている。この関数がDistutilsのメインのエントリポイントだ。すべてのDistutilsセットアップスクリプトのうちの95%は<code>setup()</code>の呼び出しだけで構成されており、他には何も含んでいない（この統計は単なるでっち上げだが、Distutilsのセットアップスクリプトが、Distutilsの<code>setup()</code>関数を呼び出す以上のことをするのであれば、何かそれ相応の理由を持っているべきだ。そんな理由を持っているだろうか？ 私はそう思わなかった）。
+
+
+en:<p>The <code>setup()</code> function <a href=http://docs.python.org/3.1/distutils/apiref.html#distutils.core.setup>can take dozens of parameters</a>. For the sanity of everyone involved, you must use <a href=your-first-python-program.html#optional-arguments>named arguments</a> for every parameter. This is not merely a convention; it&#8217;s a hard requirement. Your setup script will crash if you try to call the <code>setup()</code> function with non-named arguments.
+ja:<p><code>setup()</code>関数は<a href=http://docs.python.org/3.1/distutils/apiref.html#distutils.core.setup>何十ものパラメータを受け取ることができる</a>。これに関わるすべての人を正気に保つために、すべてのパラメータには<a href=your-first-python-program.html#optional-arguments>名前付き引数</a>を使わなければならない。これは単なる慣例ではなく、コード上要求されている条件だ。従って、名前付き引数を使わずに<code>setup()</code>関数を呼び出そうとすると、セットアップスクリプトはクラッシュする。
+
+
+en:<p>The following named arguments are required:
+ja:<p>次の名前付き引数は必須だ：
+
+
+en:<li><b>name</b>, the name of the package.
+ja:<li><b>name</b>: パッケージ名
+
+
+en:<li><b>version</b>, the version number of the package.
+ja:<li><b>version</b>: パッケージのバージョン番号
+
+
+en:<li><b>author</b>, your full name.
+ja:<li><b>author</b>: フルネーム
+
+
+en:<li><b>author_email</b>, your email address.
+ja:<li><b>author_email</b>: 電子メールアドレス
+
+
+en:<li><b>url</b>, the home page of your project. This can be your <a href=http://pypi.python.org/>PyPI</a> package page if you don&#8217;t have a separate project website.
+ja:<li><b>url</b>: プロジェクトのホームページ。プロジェクト用のウェブサイトを別個に持っていないのであれば、自分の<a href=http://pypi.python.org/>PyPI</a>パッケージのページでもいい。
+
+
+en:<p>Although not required, I recommend that you also include the following in your setup script:
+ja:<p>必須ではないが、以下もセットアップスクリプトに含めておくことを推奨する：
+
+
+en:<li><b>description</b>, a one-line summary of the project.
+ja:<li><b>description</b>: プロジェクトの一行要約
+
+
+en:<li><b>long_description</b>, a multi-line string in <a href=http://docutils.sourceforge.net/rst.html>reStructuredText format</a>. <a href=http://pypi.python.org/>PyPI</a> converts this to <abbr>HTML</abbr> and displays it on your package page.
+ja:<li><b>long_description</b>: <a href=http://docutils.sourceforge.net/rst.html>reStructuredText形式</a>で書かれた複数行の文字列。<a href=http://pypi.python.org/>PyPI</a>はこれを<abbr>HTML</abbr>に変換し、あなたのパッケージのページに表示する。
+
+
+en:<li><b>classifiers</b>, a list of specially-formatted strings described in the next section.
+ja:<li><b>classifiers</b>: 次節で説明する特別な形式の文字列のリスト
+
+
+en:<p><span class=u>&#x261E;</span>Setup script metadata is defined in <a href=http://www.python.org/dev/peps/pep-0314/><abbr>PEP</abbr> 314</a>.
+ja:<p><span class=u>&#x261E;</span>セットアップスクリプトのメタデータは<a href=http://www.python.org/dev/peps/pep-0314/><abbr>PEP</abbr> 314</a>で定義されている。
+
+
+en:<p>Now let&#8217;s look at the <code>chardet</code> setup script. It has all of these required and recommended parameters, plus one I haven&#8217;t mentioned yet: <code>packages</code>.
+ja:<p>では、<code>chardet</code>のセットアップスクリプトを見てみよう。ここでは先ほど説明した必須/推奨のパラメーター全部に加えて、さらにもう一つ、まだ言及していなかった<code>packages</code>というパラメータを使っている。
+
+
+en:<p>The <code>packages</code> parameter highlights an unfortunate vocabulary overlap in the distribution process. We&#8217;ve been talking about the &#8220;package&#8221; as the thing you&#8217;re building (and potentially listing in The Python &#8220;Package&#8221; Index). But that&#8217;s not what this <code>packages</code> parameter refers to. It refers to the fact that the <code>chardet</code> module is <a href=case-study-porting-chardet-to-python-3.html#multifile-modules>a multi-file module</a>, sometimes known as&hellip; a &#8220;package.&#8221; The <code>packages</code> parameter tells Distutils to include the <code>chardet/</code> directory, its <code>__init__.py</code> file, and all the other <code>.py</code> files that constitute the <code>chardet</code> module. That&#8217;s kind of important; all this happy talk about documentation and metadata is irrelevant if you forget to include the actual code!
+ja:<p><code>packages</code>パラメータは、配布プロセスにおける用語の不幸な重複を浮き彫りにする。私たちは、いま構築しているものを「パッケージ」と呼んできた（そして、これがPythonの「パッケージ」インデックスに登録されるわけだ）。しかし、この<code>packages</code>パラメータが指しているものはそれとは違う。これは、<code>chardet</code>モジュールが<a href=case-study-porting-chardet-to-python-3.html#multifile-modules>マルチファイルモジュール</a>（これは時に&hellip;&hellip;「パッケージ」と呼ばれる）であるという事実を指しているのだ。この<code>packages</code>パラメータは、<code>chardet/</code>ディレクトリ、<code>__init__.py</code>ファイル、そして<code>chardet</code>モジュールを構成するすべての<code>.py</code>ファイルをビルドに加えるようにDistutilsに伝える。これは重要だ。もし実際のソースコードを入れ忘れてしまったら、ドキュメントやメタデータの話はすべて無意味なものになってしまうからだ。
+
+
+en:<h2 id=trove>Classifying Your Package</h2>
+ja:<h2 id=trove>パッケージを分類する</h2>
+
+
+en:<p>The Python Package Index (&#8220;PyPI&#8221;) contains thousands of Python libraries. Proper classification metadata will allow people to find yours more easily. PyPI lets you <a href='http://pypi.python.org/pypi?:action=browse'>browse packages by classifier</a>. You can even select multiple classifiers to narrow your search. Classifiers are not invisible metadata that you can just ignore!
+ja:<p>Python Package Index (&#8220;PyPI&#8221;) には何千ものPythonライブラリが存在している。適切な分類用メタデータを用意しておけば、他の人々があなたのライブラリを簡単に見つけられるようになるだろう。PyPIは、<a href='http://pypi.python.org/pypi?:action=browse'>分類タグをもとにパッケージを探せる</a>ようになっていて、分類タグをいくつか選んで絞り込みをかけることもできる。分類タグは無視できるような見えないメタデータではないのだ！
+
+
+en:<p>To classify your software, pass a <code>classifiers</code> parameter to the Distutils <code>setup()</code> function. The <code>classifiers</code> parameter is a list of strings. These strings are <em>not</em> freeform. All classifier strings should come from <a href='http://pypi.python.org/pypi?:action=list_classifiers'>this list on PyPI</a>.
+ja:<p>ソフトウェアを分類するには、<code>classifiers</code>パラメータをDistutilsの<code>setup()</code>関数に渡せばよい。<code>classifiers</code>は文字列のリストだが、この文字列は自由形式<em>ではない</em>。すべての分類タグは<a href='http://pypi.python.org/pypi?:action=list_classifiers'>PyPIのこのリスト</a>にあるものを使う必要がある。
+
+
+en:<p>Classifiers are optional. You can write a Distutils setup script without any classifiers at all. <strong>Don&#8217;t do that.</strong> You should <em>always</em> include at least these classifiers:
+ja:<p>分類タグはオプションなので、Distutilsのセットアップスクリプトを書く時には全て省略することもできる。しかし<strong>それをやってはいけない</strong>。少なくとも次の分類タグは<em>必ず</em>入れておくべきだ。
+
+
+en:<li><b>Programming Language</b>. In particular, you should include both <code>"Programming Language :: Python"</code> and <code>"Programming Language :: Python :: 3"</code>. If you do not include these, your package will not show up in <a href='http://pypi.python.org/pypi?:action=browse&amp;c=533&amp;show=all'>this list of Python 3-compatible libraries</a>, which linked from the sidebar of every single page of <code>pypi.python.org</code>.
+ja:<li><b>Programming Language</b>（プログラミング言語）: 具体的には、<code>"Programming Language :: Python"</code>と<code>"Programming Language :: Python :: 3"</code>の両方を入れておくべきだ。この2つのタグを抜かすと、パッケージは<code>pypi.python.org</code>の全ページのサイドバーからリンクされている<a href='http://pypi.python.org/pypi?:action=browse&amp;c=533&amp;show=all'>この Python 3 互換ライブラリのリスト</a>に表示されなくなってしまう。
+
+
+en:<li><b>License</b>. This is <em>the absolute first thing I look for</em> when I&#8217;m evaluating third-party libraries. Don&#8217;t make me hunt for this vital information. Don&#8217;t include more than one license classifier unless your software is explicitly available under multiple licenses. (And don&#8217;t release software under multiple licenses unless you&#8217;re forced to do so. And don&#8217;t force other people to do so. Licensing is enough of a headache; don&#8217;t make it worse.)
+ja:<li><b>License</b>（ライセンス）: これは、私がサードパーティのライブラリを評価するときに<em>必ず真っ先に探す</em>ものだ。私がこの情報を探し回ることのないようにしてほしい。複数のライセンスの下で配布しているライブラリだとはっきり示しているのでなければ、複数のライセンスタグを入れてはいけない（そして、強制されている場合でなければ、ソフトウェアを複数のライセンスで公開しないでほしい。また、他の人に複数ライセンスを強制するのもやめてほしい。ライセンスは十分に頭痛の元だ。これ以上悪化させてはいけない）。
+
+
+en:<li><b>Operating System</b>. If your software only runs on Windows (or Mac OS X, or Linux), I want to know sooner rather than later. If your software runs anywhere without any platform-specific code, use the classifier <code>"Operating System :: OS Independent"</code>. Multiple <code>Operating System</code> classifiers are only necessary if your software requires specific support for each platform. (This is not common.)
+ja:<li><b>Operating System</b>（オペレーティングシステム）: もしソフトウェアがWindows（あるいはMac OS XやLinux）上でのみ動くものなら、私は、後になってそれを知るよりも早めに知っておきたい。ソフトウェアがプラットフォーム依存のコードを使わずにどこでも動作するのであれば、<code>"Operating System :: OS Independent"</code>という分類タグを使おう。複数の<code>Oparating System</code>分類タグを書かなければならないのは、ソフトウェアが個々のプラットフォームについて特別なサポートを必要とするときだけだ（これは一般的ではない）。
+
+
+en:<p>I also recommend that you include the following classifiers:
+ja:<p>以下の分類タグも含めておくことを奨める：
+
+
+en:<li><b>Development Status</b>. Is your software beta quality? Alpha quality? Pre-alpha? Pick one. Be honest.
+ja:<li><b>Development Status</b>（開発状況）: ソフトウェアはベータ版の品質だろうか？ それともアルファ版の品質？ プリアルファ？ 一つだけ選ぼう。それも正直に。
+
+
+en:<li><b>Intended Audience</b>. Who would download your software? The most common choices are <code>Developers</code>, <code>End Users/Desktop</code>, <code>Science/Research</code>, and <code>System Administrators</code>.
+ja:<li><b>Intended Audience</b>（対象とする利用者）: どんな人がソフトウェアをダウンロードするだろうか？ 最も一般的な選択肢としては<code>Developers</code>、<code>End Users/Desktop</code>、<code>Science/Research</code>、<code>System Administrators</code>がある。
+
+
+en:<li><b>Framework</b>. If your software is a plugin for a larger Python framework like <a href=http://www.djangoproject.com/>Django</a> or <a href=http://www.zope.org/>Zope</a>, include the appropriate <code>Framework</code> classifier. If not, omit it.
+ja:<li><b>Framework</b>（フレームワーク）: もしソフトウェアが、<a href=http://www.djangoproject.com/>Django</a>や<a href=http://www.zope.org/>Zope</a>などのもっと大きなフレームワークのためのプラグインである場合は、適当な<code>Framework</code>タグを付けておこう。そうでないのならこれは省略する。
+
+
+en:<li><b>Topic</b>. There are <a href='http://pypi.python.org/pypi?:action=list_classifiers'>a large number of topics to choose from</a>; choose all that apply.
+ja:<li><b>Topic</b>（トピック）: <a href='http://pypi.python.org/pypi?:action=list_classifiers'>たくさんの選択肢</a>が存在する。該当するものをすべて選択しよう。
+
+
+en:<h3 id=trove-examples>Examples of Good Package Classifiers</h3>
+ja:<h3 id=trove-examples>良いパッケージ分類タグの例</h3>
+
+
+en:<p>By way of example, here are the classifiers for <a href=http://pypi.python.org/pypi/Django/>Django</a>, a production-ready, cross-platform, <abbr>BSD</abbr>-licensed web application framework that runs on your web server. (Django is not yet compatible with Python 3, so the <code>Programming Language :: Python :: 3</code> classifier is not listed.)
+ja:<p>例を挙げるために、ここに<a href=http://pypi.python.org/pypi/Django/>Django</a>の分類タグを示す。Djangoは、製品レベルの品質を持ち、クラスプラットフォームで、Webサーバ上で動作する、<abbr>BSD</abbr>ライセンスのウェブアプリケーションフレームワークだ（DjangoはまだPython 3に対応していないので、<code>Programming Language :: Python :: 3</code>というタグは含まれていない）。
+
+
+en:<p>Here are the classifiers for <a href=http://pypi.python.org/pypi/chardet><code>chardet</code></a>, the character encoding detection library covered in <a href=case-study-porting-chardet-to-python-3.html>Case Study: Porting <code>chardet</code> to Python 3</a>. <code>chardet</code> is beta quality, cross-platform, Python 3-compatible, <abbr>LGPL</abbr>-licensed, and intended for developers to integrate into their own products.
+ja:<p>次は<a href=http://pypi.python.org/pypi/chardet><code>chardet</code></a>の分類タグだ。<code>chardet</code>は、<a href=case-study-porting-chardet-to-python-3.html>ケーススタディ: <code>chardet</code>をPython 3に移植する</a>の章で取り上げている、文字コード自動判定用のライブラリだ。これはベータ版の品質で、クラスプラットフォームで、Python 3互換で、<abbr>LGPL</abbr>でライセンスされていて、開発者が自身の製品に組み込んで使うことを想定している。
+
+
+en:<p>And here are the classifiers for <a href=http://pypi.python.org/pypi/httplib2><code>httplib2</code></a>, the library featured in the <a href=http-web-services.html><abbr>HTTP</abbr> Web Services</a> chapter. <code>httplib2</code> is beta quality, cross-platform, <abbr>MIT</abbr>-licensed, and intended for Python developers.
+ja:<p>そして、次は<a href=http://pypi.python.org/pypi/httplib2><code>httplib2</code></a>の分類タグだ。これは、<a href=http-web-services.html><abbr>HTTP</abbr>ウェブサービス</a>で詳しく見たライブラリだ。<code>httplib2</code>はベータ版の品質で、クロスプラットフォームで、<abbr>MIT</abbr>ライセンスで、Python開発者を対象としている。
+
+
+en:<h2 id=manifest>Specifying Additional Files With A Manifest</h2>
+ja:<h2 id=manifest>マニフェストを使って追加ファイルを指定する</h2>
+
+
+en:<p>By default, Distutils will include the following files in your release package:
+ja:<p>デフォルトでは、Distutilsは次のファイルをリリースパッケージに入れる：
+
+
+en:<li><code>README.txt</code>
+ja:<li><code>README.txt</code>
+
+
+en:<li><code>setup.py</code>
+ja:<li><code>setup.py</code>
+
+
+en:<li>The <code>.py</code> files needed by the multi-file modules listed in the <code>packages</code> parameter
+ja:<li><code>packages</code>パラメータにリストされたマルチファイルモジュールが必要とする<code>.py</code>ファイル。
+
+
+en:<li>The individual <code>.py</code> files listed in the <code>py_modules</code> parameter
+ja:<li><code>py_modules</code>パラメータにリストされた個々の<code>.py</code>ファイル。
+
+
+en:<p>That will cover <a href=#structure>all the files in the <code>httplib2</code> project</a>. But for the <code>chardet</code> project, we also want to include the <code>COPYING.txt</code> license file and the entire <code>docs/</code> directory that contains images and  <abbr>HTML</abbr> files. To tell Distutils to include these additional files and directories when it builds the <code>chardet</code> release package, you need a <i>manifest file</i>.
+ja:<p>これで<a href=#structure><code>httplib2</code>プロジェクトのファイルは網羅できている</a>。しかし<code>chardet</code>プロジェクトでは、これに加えて<code>COPYING.txt</code>ライセンスファイルと、画像や<abbr>HTML</abbr>ファイルを収めた<code>docs/</code>ディレクトリもパッケージに入れておくつもりだった。このファイルやディレクトリを<code>chardet</code>のリリースパッケージに追加してもらうには、<i>マニフェストファイル</i>が必要となる。
+
+
+en:<p>A manifest file is a text file called <code>MANIFEST.in</code>. Place it in the project&#8217;s root directory, next to <code>README.txt</code> and <code>setup.py</code>. Manifest files are <em>not</em> Python scripts; they are text files that contain a series of &#8220;commands&#8221; in a Distutils-defined format. Manifest commands allow you to include or exclude specific files and directories.
+ja:<p>マニフェストファイルは<code>MANIFEST.in</code>という名のテキストファイルだ。このファイルを<code>README.txt</code>や<code>setup.py</code>ファイルと一緒にルートディレクトリに置こう。マニフェストファイルは、Pythonスクリプト<em>ではなく</em>、Distutilsが定義する一連の「コマンド」を並べたテキストファイルだ。マニフェストコマンドを使うことで、特定のファイルやディレクトリをパッケージに含めたり除外したりできる。
+
+
+en:<p>This is the entire manifest file for the <code>chardet</code> project:
+ja:<p>これは<code>chardet</code>プロジェクト用のマニフェストファイル全体だ：
+
+
+en:<li>The first line is self-explanatory: include the <code>COPYING.txt</code> file from the project&#8217;s root directory.
+ja:<li>1行目はそのままの意味だ。このコマンドはプロジェクトのルートディレクトリにある<code>COPYING.txt</code>ファイルをパッケージに追加する。
+
+
+en:<li>The second line is a bit more complicated. The <code>recursive-include</code> command takes a directory name and one or more filenames. The filenames aren&#8217;t limited to specific files; they can include wildcards. This line means &#8220;See that <code>docs/</code> directory in the project&#8217;s root directory? Look in there (recursively) for <code>.html</code>, <code>.css</code>, <code>.png</code>, and <code>.gif</code> files. I want all of them in my release package.&#8221;
+ja:<li>2行目はもうすこし複雑だ。<code>recursive-include</code>はディレクトリ名と1つ以上のファイル名を受け取る。このファイル名の部分ではファイルを個別に指定するだけではなく、ワイルドカードを使って指定することもできる。この行は「ルートディレクトリの中に<code>docs/</code>ディレクトリがあるだろう？ その中から<code>.html</code>・<code>.css</code>・<code>.png</code>・<code>.gif</code>ファイルを（再帰的に）探してほしい。それらをすべてリリースパッケージに入れたいんだ」という意味だ。
+
+
+en:<p>All manifest commands preserve the directory structure that you set up in your project directory. That <code>recursive-include</code> command is not going to put a bunch of <code>.html</code> and <code>.png</code> files in the root directory of the release package. It&#8217;s going to maintain the existing <code>docs/</code> directory structure, but only include those files inside that directory that match the given wildcards. (I didn&#8217;t mention it earlier, but the <code>chardet</code> documentation is actually written in <abbr>XML</abbr> and converted to <abbr>HTML</abbr> by a separate script. I don&#8217;t want to include the <abbr>XML</abbr> files in the release package, just the <abbr>HTML</abbr> and the images.)
+ja:<p>すべてのマニフェストコマンドは、プロジェクトディレクトリのディレクトリ構造をそのまま維持する。<code>recursive-include</code>コマンドが<code>.html</code>と<code>.png</code>ファイルをリリースパッケージのルートディレクトリに置くことはない。このコマンドは<code>docs/</code>ディレクトリの構造を保ちつつ、このディレクトリの中にあるファイルのうちワイルドカードにマッチしたものだけをパッケージに含める（今まで言っていなかったが、<code>chardet</code>のドキュメントは、実際には<abbr>XML</abbr>で書かれており、別のスクリプトによって<abbr>HTML</abbr>に変換されている。私はこの<abbr>XML</abbr>ファイルをリリースパッケージに含めずに、<abbr>HTML</abbr>と画像だけを含めておきたいのだ）。
+
+
+en:<p><span class=u>&#x261E;</span>Manifest files have their own unique format. See <a href=http://docs.python.org/3.1/distutils/sourcedist.html#manifest>Specifying the files to distribute</a> and <a href=http://docs.python.org/3.1/distutils/commandref.html#sdist-cmd>the manifest template commands</a> for details.
+ja:<p><span class=u>&#x261E;</span>マニフェストファイルの形式は独自のものだ。詳しくは、<a href=http://docs.python.org/3.1/distutils/sourcedist.html#manifest>Specifying the files to distribute</a>と、<a href=http://docs.python.org/3.1/distutils/commandref.html#sdist-cmd>the manifest template commands</a>を見てほしい。
+
+
+en:<p>To reiterate: you only need to create a manifest file if you want to include files that Distutils doesn&#8217;t include by default. If you do need a manifest file, it should only include the files and directories that Distutils wouldn&#8217;t otherwise find on its own.
+ja:<p>繰り返すが、マニフェストファイルが必要になるのは、Distutilsがデフォルトでは無視するファイルをパッケージに入れる場合だけだ。マニフェストファイルが本当に必要なら、Distutilsがデフォルトで見つけないファイルやディレクトリだけを書くようにしよう。
+
+
+en:<h2 id=check>Checking Your Setup Script for Errors</h2>
+ja:<h2 id=check>セットアップスクリプトにエラーがないかを確認する</h2>
+
+
+en:<p>There&#8217;s a lot to keep track of. Distutils comes with a built-in validation command that checks that all the required metadata is present in your setup script. For example, if you forget to include the <code>version</code> parameter, Distutils will remind you.
+ja:<p>把握しておかなければいけないことはたくさんある。Distutilsには、必須なメタデータがセットアップスクリプト中にすべて存在しているかどうかをチェックするための組み込みの検証コマンドが付属している。例えば、<code>version</code>パラメータを入れ忘れたとしたら、Distutilsがそれを思い出させてくれる。
+
+
+en:<p>Once you include a <code>version</code> parameter (and all the other required bits of metadata), the <code>check</code> command will look like this:
+ja:<p><code>version</code>パラメータ（とその他の必要なメタデータ全て）を入れると、<code>check</code>コマンドはこのようになる：
+
+
+en:<h2 id=sdist>Creating a Source Distribution</h2>
+ja:<h2 id=sdist>ソースディストリビューションを作る</h2>
+
+
+en:<p>Distutils supports building multiple types of release packages. At a minimum, you should build a &#8220;source distribution&#8221; that contains your source code, your Distutils setup script, your &#8220;read me&#8221; file, and whatever <a href=#manifest>additional files you want to include</a>. To build a source distribution, pass the <code>sdist</code> command to your Distutils setup script.
+ja:<p>Distutilsは、複数の種類のリリースパッケージを構築できる。最低でも、ソースコードと、Disturilsのセットアップスクリプトと、&#8220;read me&#8221;ファイルと、<a href=#manifest>その他任意の追加ファイル</a>を入れた「ソースディストリビューション」を構築すべきだ。ソースディストリビューションを構築するには、Distutilsのセットアップスクリプトに<code>sdist</code>コマンドを渡せばよい。
+
+
+en:<p>Several things to note here:
+ja:<p>指摘しておきたいことがいくつかある：
+
+
+en:<li>Distutils noticed the manifest file (<code>MANIFEST.in</code>).
+ja:<li>Distutilsはマニフェストファイル (<code>MANIFEST.in</code>) に気づいている。
+
+
+en:<li>Distutils successfully parsed the manifest file and added the additional files we wanted&nbsp;&mdash;&nbsp;<code>COPYING.txt</code> and the <abbr>HTML</abbr> and image files in the <code>docs/</code> directory.
+ja:<li>Distutilsは、マニフェストファイルのパースに成功し、指定した追加ファイル（<code>COPYING.txt</code>と<code>docs/</code>ディレクトリにある<code>HTML</code>ファイルと画像）を追加している。
+
+
+en:<li>If you look in your project directory, you&#8217;ll see that Distutils created a <code>dist/</code> directory. Within the <code>dist/</code> directory the <code>.zip</code> file that you can distribute.
+ja:<li>プロジェクトディレクトリの中を覗くと、Distutilsが<code>dist/</code>というディレクトリを作成したことが分かるだろう。<code>dist/</code>ディレクトリの中には配布可能な<code>.zip</code>ファイルがある。
+
+
+en:<h2 id=bdist>Creating a Graphical Installer</h2>
+ja:<h2 id=bdist>グラフィカルインストーラを作る</h2>
+
+
+en:<p>In my opinion, every Python library deserves a graphical installer for Windows users. It&#8217;s easy to make (even if you don&#8217;t run Windows yourself), and Windows users appreciate it.
+ja:<p>私の考えでは、どんなPythonライブラリにもWindowsユーザのためのグラフィカルインストーラを付ける価値がある。このインストーラは（Windowsを使ってない人でも）簡単に作ることができるし、Windowsユーザはこれをありがたく思うだろう。
+
+
+en:<p>Distutils can <a href=http://docs.python.org/3.1/distutils/builtdist.html#creating-windows-installers>create a graphical Windows installer for you</a>, by passing the <code>bdist_wininst</code> command to your Distutils setup script.
+ja:<p>Distutilsを使えば、<a href=http://docs.python.org/3.1/distutils/builtdist.html#creating-windows-installers>グラフィカルなWindowsインストーラを作成できる</a>。この機能を使うには<code>bdist_wininst</code>コマンドをDistutilsのセットアップスクリプトに渡せばよい。
+
+
+en:<h3 id=linux>Building Installable Packages for Other Operating Systems</h3>
+ja:<h3 id=linux>他のオペレーティングシステムのためのパッケージを構築する</h3>
+
+
+en:<p>Distutils can help you <a href=http://docs.python.org/3.1/distutils/builtdist.html#creating-rpm-packages>build installable packages for Linux users</a>. In my opinion, this probably isn&#8217;t worth your time. If you want your software distributed for Linux, your time would be better spent working with community members who specialize in packaging software for major Linux distributions.
+ja:<p>Distutilsは、<a href=http://docs.python.org/3.1/distutils/builtdist.html#creating-rpm-packages>Linuxユーザ向けのインストールパッケージを構築する</a>手助けをしてくれる。私の考えでは、これに時間をかける価値はおそらくない。Linuxでソフトウェアを配布してもらいたいなら、主要なLinuxディストリビューションでソフトウェアのパッケージ化を専門としているコミュニティメンバと協力したほうがいいだろう。
+
+
+en:<p>For example, my <code>chardet</code> library is <a href=http://packages.debian.org/python-chardet>in the Debian GNU/Linux repositories</a> (and therefore <a href=http://packages.ubuntu.com/python-chardet>in the Ubuntu repositories</a> as well). I had nothing to do with this; the packages just showed up there one day. The Debian community has <a href=http://www.debian.org/doc/packaging-manuals/python-policy/>their own policies for packaging Python libraries</a>, and the Debian <code>python-chardet</code> package is designed to follow these conventions. And since the package lives in Debian&#8217;s repositories, Debian users will receive security updates and/or new versions, depending on the system-wide settings they&#8217;ve chosen to manage their own computers.
+ja:<p>例として、私の<code>chardet</code>ライブラリは<a href=http://packages.debian.org/python-chardet>Debian GNU/Linux リポジトリ</a>の中にある（従って、これは<a href=http://packages.ubuntu.com/python-chardet>Ubuntu リポジトリ</a>の中にもある）。私はこれに関して何もしていない。このパッケージはある日突然姿を現したのだ。Debianコミュニティは<a href=http://www.debian.org/doc/packaging-manuals/python-policy/>Pythonライブラリをパッケージングする独自のポリシーを持っており</a>、Debianの<code>python-chardet</code>ライブラリはこれらの慣習に従うように作られている。このパッケージはDebianのリポジトリの中に存続しているので、コンピュータの管理のために選択したシステムの設定にもよるがDebianのユーザはセキュリティアップデートや新しいバージョンを受け取ることになる。
+
+
+en:<p>The Linux packages that Distutils builds offer none of these advantages. Your time is better spent elsewhere.
+ja:<p>Distutilsが構築するLinuxパッケージはこれらの利点を全く提供しない。時間は他のことに使ったほうが良い。
+
+
+en:<h2 id=pypi>Adding Your Software to The Python Package Index</h2>
+ja:<h2 id=pypi>ソフトウェアをPython Package Indexに追加する</h2>
+
+
+en:<p>Uploading software to the Python Package Index is a three step process.
+ja:<p>ソフトウェアをPython Package Indexにアップデートするプロセスには3つのステップがある。
+
+
+en:<li>Register yourself
+ja:<li>アカウントを作成する
+
+
+en:<li>Register your software
+ja:<li>ソフトウェアを登録する
+
+
+en:<li>Upload the packages you created with <code>setup.py sdist</code> and <code>setup.py bdist_*</code>
+ja:<li><code>setup.py sdist</code>と<code>setup.py bdist_*</code>で作成したパッケージをアップロードする。
+
+
+en:<p>To register yourself, go to <a href="http://pypi.python.org/pypi?:action=register_form">the PyPI user registration page</a>. Enter your desired username and password, provide a valid email address, and click the <code>Register</code> button. (If you have a <abbr>PGP</abbr> or <abbr>GPG</abbr> key, you can also provide that. If you don&#8217;t have one or don&#8217;t know what that means, don&#8217;t worry about it.) Check your email; within a few minutes, you should receive a message from PyPI with a validation link. Click the link to complete the registration process.
+ja:<p>アカウントを作成するために<a href="http://pypi.python.org/pypi?:action=register_form">PyPI ユーザ登録ページ</a>へ行こう。希望のユーザ名、パスワード、有効な電子メールアドレスを入力し、<code>Register</code>ボタンをクリックしよう（<abbr>PGP</abbr>キーや<abbr>GPG</abbr>キーを提供することもできる。これらを持っていなかったり、これらの意味が分からなくても、心配は要らない）。PyPIから数分以内に、メールアドレスを検証するためのリンクが書かれている電子メールが届くはずなのでそれを確認してほしい。登録処理を完了させるためにそのリンクをクリックしよう。
+
+
+en:<p>Now you need to register your software with PyPI and upload it. You can do this all in one step.
+ja:<p>今度は、ソフトウェアをPyPIに登録し、それをアップロードする必要がある。これは1つのステップですべて実行できる。
+
+
+en:<li>When you release your project for the first time, Distutils will add your software to the Python Package Index and give it its own <abbr>URL</abbr>. Every time after that, it will simply update the project metadata with any changes you may have made in your <code>setup.py</code> parameters. Next, it builds a source distribution (<code>sdist</code>) and a Windows installer (<code>bdist_wininst</code>), then uploads them to PyPI (<code>upload</code>).
+ja:<li>プロジェクトを初めてリリースするときは、DistutilsがソフトウェアをPython Package Indexに追加し、それに専用の<abbr>URL</abbr>を与える。それ以降の場合は、プロジェクトのメタデータを、変更された<code>setup.py</code>のパラメータへと更新するだけだ。次に、ソースディストリビューションの構築 (<code>sdist</code>) と、Windowsインストーラの構築 (<code>bdist_wininst</code>) を行って、それらをPyPIにアップロードする (<code>upload</code>)。
+
+
+en:<li>Type <kbd>1</kbd> or just press <kbd>ENTER</kbd> to select &#8220;use your existing login.&#8221;
+ja:<li>&#8220;use your existing login.&#8221; を選択するために、<kbd>1</kbd>と入力して<kbd>ENTER</kbd>キーを押そう。
+
+
+en:<li>Enter the username and password you selected on the <a href="http://pypi.python.org/pypi?:action=register_form">the PyPI user registration page</a>. Distuils will not echo your password; it will not even echo asterisks in place of characters. Just type your password and press <kbd>ENTER</kbd>.
+ja:<li><a href="http://pypi.python.org/pypi?:action=register_form">PyPIユーザ登録ページ</a>で入力したユーザ名とパスワードを入力しよう。Distuilsは入力したパスワードをエコーしないし、文字の代わりにアスタリスクをエコーすることもない。パスワードを入力して<kbd>ENTER</kbd>を押そう。
+
+
+en:<li>Distutils registers your package with the Python Package Index&hellip;
+ja:<li>DistutilsはパッケージをPython Package Indexに登録し&hellip;&hellip;
+
+
+en:<li>&hellip;builds your source distribution&hellip;
+ja:<li>&hellip;&hellip;ソースディストリビューションを構築し&hellip;&hellip;
+
+
+en:<li>&hellip;builds your Windows installer&hellip;
+ja:<li>&hellip;&hellip;Windows用インストーラを構築し&hellip;&hellip;
+
+
+en:<li>&hellip;and uploads them both to the Python Package Index.
+ja:<li>&hellip;&hellip;そして、これら両方をPython Package Indexにアップロードする。
+
+
+en:<li>If you want to automate the process of releasing new versions, you need to save your PyPI credentials in a local file. This is completely insecure and completely optional.
+ja:<li>もし新しいバージョンのリリース処理を自動化したいのであれば、PyPIの証明書をローカルファイルに保存しておく必要がある。これはまったくセキュアではないので、まったく任意だ。
+
+
+en:<p>Congratulations, you now have your own page on the Python Package Index! The address is <code>http://pypi.python.org/pypi/<i>NAME</i></code>, where <i>NAME</i> is the string you passed in the <var>name</var> parameter in your <code>setup.py</code> file.
+ja:<p>おめでとう。Python Package Indexに自分のページを手に入れた！ アドレスは<code>http://pypi.python.org/pypi/<i>NAME</i></code>だ（<code><i>NAME</i></code>には<code>setup.py</code>ファイルの<var>name</var>パラメータに渡した文字列が入る）。
+
+
+en:<p>If you want to release a new version, just update your <code>setup.py</code> with the new version number, then run the same upload command again:
+ja:<p>新しいバージョンをリリースしたいときは、<code>setup.py</code>を単に新しいバージョン番号で更新して、同じアップロードコマンドを再び実行しよう：
+
+
+en:<h2 id=future>The Many Possible Futures of Python Packaging</h2>
+ja:<h2 id=future>Pythonのパッケージ化のありうる未来</h2>
+
+
+en:<p>Distutils is not the be-all and end-all of Python packaging, but as of this writing (August 2009), it&#8217;s the only packaging framework that works in Python 3. There are a number of other frameworks for Python 2; some focus on installation, others on testing and deployment. Some or all of these may end up being ported to Python 3 in the future.
+ja:<p>Distutilsは、Pythonのパッケージ化のすべてだというわけではないが、これを書いている時点（2009年8月）において、Python 3で動作するパッケージングフレームワークはこれしかない。Python 2には他にも多くのフレームワークがあり、いくつかはインストールに焦点をあてているし、他のいくつかはテストやデプロイに焦点をあてている。このうち、いくつかは（あるいは全部が）将来的にはPython 3に移植されるかもしれない。
+
+
+en:<p>These frameworks focus on installation:
+ja:<p>インストールに焦点をあてたフレームワーク：
+
+en:<li><a href=http://pypi.python.org/pypi/setuptools>Setuptools</a>
+ja:<li><a href=http://pypi.python.org/pypi/setuptools>Setuptools</a>
+
+
+en:<li><a href=http://pypi.python.org/pypi/pip>Pip</a>
+ja:<li><a href=http://pypi.python.org/pypi/pip>Pip</a>
+
+
+en:<li><a href=http://bitbucket.org/tarek/distribute/>Distribute</a>
+ja:<li><a href=http://bitbucket.org/tarek/distribute/>Distribute</a>
+
+
+en:<p>These focus on testing and deployment:
+ja:<p>テストやデプロイに焦点をあてたフレームワーク：
+
+
+en:<li><a href=http://pypi.python.org/pypi/virtualenv><code>virtualenv</code></a>
+ja:<li><a href=http://pypi.python.org/pypi/virtualenv><code>virtualenv</code></a>
+
+
+en:<li><a href=http://pypi.python.org/pypi/zc.buildout><code>zc.buildout</code></a>
+ja:<li><a href=http://pypi.python.org/pypi/zc.buildout><code>zc.buildout</code></a>
+
+
+en:<li><a href=http://www.blueskyonmars.com/projects/paver/>Paver</a>
+ja:<li><a href=http://www.blueskyonmars.com/projects/paver/>Paver</a>
+
+
+en:<li><a href=http://fabfile.org/>Fabric</a>
+ja:<li><a href=http://fabfile.org/>Fabric</a>
+
+
+en:<li><a href=http://www.py2exe.org/><code>py2exe</code></a>
+ja:<li><a href=http://www.py2exe.org/><code>py2exe</code></a>
+
+
+en:<p>On Distutils:
+ja:<p>Distutilsについて：
+
+
+en:<li><a href=http://docs.python.org/3.1/distutils/>Distributing Python Modules with Distutils</a>
+ja:<li><a href=http://docs.python.org/3.1/distutils/>Distributing Python Modules with Distutils</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/distutils/apiref.html#module-distutils.core>Core Distutils functionality</a> lists all the possible arguments to the <code>setup()</code> function
+ja:<li><a href=http://docs.python.org/3.1/distutils/apiref.html#module-distutils.core>Core Distutils functionality</a> <code>setup()</code>関数で使えるすべての引数の一覧
+
+
+en:<li><a href=http://wiki.python.org/moin/Distutils/Cookbook>Distutils Cookbook</a>
+ja:<li><a href=http://wiki.python.org/moin/Distutils/Cookbook>Distutils Cookbook</a>
+
+
+en:<li><a href=http://www.python.org/dev/peps/pep-0370/><abbr>PEP</abbr> 370: Per user <code>site-packages</code> directory</a>
+ja:<li><a href=http://www.python.org/dev/peps/pep-0370/><abbr>PEP</abbr> 370: Per user <code>site-packages</code> directory</a>
+
+
+en:<li><a href=http://jessenoller.com/2009/07/19/pep-370-per-user-site-packages-and-environment-stew/><abbr>PEP</abbr> 370 and &#8220;environment stew&#8221;</a>
+ja:<li><a href=http://jessenoller.com/2009/07/19/pep-370-per-user-site-packages-and-environment-stew/><abbr>PEP</abbr> 370 and &#8220;environment stew&#8221;</a>
+
+
+en:<p>On other packaging frameworks:
+ja:<p>他のパッケージング用フレームワークについて：
+
+
+en:<li><a href=http://groups.google.com/group/django-developers/msg/5407cdb400157259>The Python packaging ecosystem</a>
+ja:<li><a href=http://groups.google.com/group/django-developers/msg/5407cdb400157259>The Python packaging ecosystem</a>
+
+
+en:<li><a href=http://www.b-list.org/weblog/2008/dec/14/packaging/>On packaging</a>
+ja:<li><a href=http://www.b-list.org/weblog/2008/dec/14/packaging/>On packaging</a>
+
+
+en:<li><a href=http://blog.ianbicking.org/2008/12/14/a-few-corrections-to-on-packaging/>A few corrections to &#8220;On packaging&#8221;</a>
+ja:<li><a href=http://blog.ianbicking.org/2008/12/14/a-few-corrections-to-on-packaging/>A few corrections to &#8220;On packaging&#8221;</a>
+
+
+en:<li><a href=http://www.b-list.org/weblog/2008/dec/15/pip/>Why I like Pip</a>
+ja:<li><a href=http://www.b-list.org/weblog/2008/dec/15/pip/>Why I like Pip</a>
+
+
+en:<li><a href=http://cournape.wordpress.com/2009/04/01/python-packaging-a-few-observations-cabal-for-a-solution/>Python packaging: a few observations</a>
+ja:<li><a href=http://cournape.wordpress.com/2009/04/01/python-packaging-a-few-observations-cabal-for-a-solution/>Python packaging: a few observations</a>
+
+
+en:<li><a href=http://jacobian.org/writing/nobody-expects-python-packaging/>Nobody expects Python packaging!</a>
+ja:<li><a href=http://jacobian.org/writing/nobody-expects-python-packaging/>Nobody expects Python packaging!</a>
+
+
+en:<p class=v><a rel=prev href=case-study-porting-chardet-to-python-3.html title='back to &#8220;Case Study: Porting chardet to Python 3&#8221;'><span class=u>&#x261C;</span></a> <a rel=next href=porting-code-to-python-3-with-2to3.html title='onward to &#8220;Porting Code to Python 3 with 2to3&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a rel=prev href=case-study-porting-chardet-to-python-3.html title='「ケーススタディ: chardetをPython 3に移植する」に戻る'><span class=u>&#x261C;</span></a> <a rel=next href=porting-code-to-python-3-with-2to3.html title='「2to3を使ってコードをPython 3に移植する」に進む'><span class=u>&#x261E;</span></a>
+
+
+en:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+ja:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+
+
+

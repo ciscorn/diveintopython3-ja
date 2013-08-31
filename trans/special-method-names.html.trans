@@ -1,0 +1,1158 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#special-method-names>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#special-method-names>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+en:<title>Special Method Names - Dive Into Python 3</title>
+ja:<title>特殊メソッド名 - Dive Into Python 3 日本語版</title>
+
+
+en:<h1>Special Method Names</h1>
+ja:<h1>特殊メソッド名</h1>
+
+
+en:<p><span class=u>&#x275D;</span> My specialty is being right when other people are wrong. <span class=u>&#x275E;</span><br>&mdash; <a href=http://en.wikiquote.org/wiki/George_Bernard_Shaw>George Bernard Shaw</a>
+ja:<p><span class=u>&#x275D;</span> 私の十八番は、他の誰もが間違っているときに、自分だけ正しい所にいるってことだね。<span class=u>&#x275E;</span><br>&mdash; <a href=http://en.wikiquote.org/wiki/George_Bernard_Shaw>ジョージ・バーナード・ショー</a>
+
+
+en:<p class=f>Throughout this book, you&#8217;ve seen examples of &#8220;special methods&#8221;&nbsp;&mdash;&nbsp;certain &#8220;magic&#8221; methods that Python invokes when you use certain syntax. Using special methods, your classes can act like sequences, like dictionaries, like functions, like iterators, or even like numbers. This appendix serves both as a reference for the special methods we&#8217;ve seen already and a brief introduction to some of the more esoteric ones.
+ja:<p class=f>この本の全体を通して、いくつかの「特殊メソッド」（特定の構文を使うときにPythonが呼び出す「魔法」のメソッド）の例を見てきた。特殊メソッドを使うことで、自作のクラスをシーケンスのように振る舞せたり、関数のように振る舞せたり、イテレータのように振る舞せたりすることができる。なんと数値として振る舞わせることさえできるのだ。このAppendixは、すでに目にした特殊メソッドのレファレンスを提供するとともに、より奥義的な特殊メソッドの一部を手短に紹介する。
+
+
+en:<h2 id=basics>Basics</h2>
+ja:<h2 id=basics>基礎</h2>
+
+
+en:<p>If you&#8217;ve read the <a href=iterators.html#divingin>introduction to classes</a>, you&#8217;ve already seen the most common special method: the <code>__init__()</code> method. The majority of classes I write end up needing some initialization. There are also a few other basic special methods that are especially useful for debugging your custom classes.
+ja:<p><a href=iterators.html#divingin>クラスの紹介</a>を読み終えているならば、最も有名な特殊メソッドである<code>__init__()</code>をすでに目にしているはずだ。私が書くクラスの大半は、結局なんらかの初期化を必要とすることになる。基礎的な特殊メソッドは他にもいくつか存在し、それらは自作のクラスをデバッグするときに特に便利だ。
+
+
+en:<th>You Want&hellip;
+ja:<th>望むものは&hellip;&hellip;
+
+
+en:<th>So You Write&hellip;
+ja:<th>よって、こう書く&hellip;&hellip;
+
+
+en:<th>And Python Calls&hellip;
+ja:<th>そして、Pythonが呼び出すのは&hellip;&hellip;
+
+
+en:<td>to initialize an instance
+ja:<td>インスタンスを初期化する
+
+
+en:<td><code class=pp>x = MyClass()</code>
+ja:<td><code class=pp>x = MyClass()</code>
+
+
+en:<td><a href=http://docs.python.org/3.1/reference/datamodel.html#object.__init__><code>x.<dfn>__init__</dfn>()</code></a>
+ja:<td><a href=http://docs.python.org/3.1/reference/datamodel.html#object.__init__><code>x.<dfn>__init__</dfn>()</code></a>
+
+
+en:<td>the &#8220;official&#8221; representation as a string
+ja:<td>文字列としての「正式な」表現
+
+
+en:<td><code class=pp><dfn>repr</dfn>(x)</code>
+ja:<td><code class=pp><dfn>repr</dfn>(x)</code>
+
+
+en:<td><a href=http://docs.python.org/3.1/reference/datamodel.html#object.__repr__><code>x.<dfn>__repr__</dfn>()</code></a>
+ja:<td><a href=http://docs.python.org/3.1/reference/datamodel.html#object.__repr__><code>x.<dfn>__repr__</dfn>()</code></a>
+
+
+en:<td>the &#8220;informal&#8221; value as a string
+ja:<td>文字列としての「インフォーマルな」値
+
+
+en:<td><a href=http://docs.python.org/3.1/reference/datamodel.html#object.__str__><code><dfn>str</dfn>(x)</code></a>
+ja:<td><a href=http://docs.python.org/3.1/reference/datamodel.html#object.__str__><code><dfn>str</dfn>(x)</code></a>
+
+
+en:<td><code class=pp>x.<dfn>__str__</dfn>()</code>
+ja:<td><code class=pp>x.<dfn>__str__</dfn>()</code>
+
+
+en:<td>the &#8220;informal&#8221; value as a byte array
+ja:<td>バイト列としての「インフォーマルな」値
+
+
+en:<td><code class=pp><dfn>bytes</dfn>(x)</code>
+ja:<td><code class=pp><dfn>bytes</dfn>(x)</code>
+
+
+en:<td><code class=pp>x.<dfn>__bytes__</dfn>()</code>
+ja:<td><code class=pp>x.<dfn>__bytes__</dfn>()</code>
+
+
+en:<td>the value as a formatted string
+ja:<td>フォーマットされた文字列としての値
+
+
+en:<td><code class=pp>format(x, <var>format_spec</var>)</code>
+ja:<td><code class=pp>format(x, <var>format_spec</var>)</code>
+
+
+en:<td><a href=http://docs.python.org/3.1/reference/datamodel.html#object.__format__><code>x.<dfn>__format__</dfn>(<var>format_spec</var>)</code></a>
+ja:<td><a href=http://docs.python.org/3.1/reference/datamodel.html#object.__format__><code>x.<dfn>__format__</dfn>(<var>format_spec</var>)</code></a>
+
+
+en:<li>The <code>__init__()</code> method is called <em>after</em> the instance is created. If you want to control the actual creation process, use <a href=#esoterica>the <code>__new__()</code> method</a>.
+ja:<li><code>__init__()</code>メソッドは、インスタンスが作成された<em>後に</em>呼び出される。もし実際の生成プロセスを制御したい場合は<a href=#esoterica><code>__new__()</code>メソッド</a>を使用する。
+
+
+en:<li>By convention, the <code>__repr__()</code> method should return a string that is a valid Python expression.
+ja:<li>慣例により、<code>__repr__()</code>メソッドは、有効なPythonの式を表す文字列を返すべきだ。
+
+
+en:<li>The <code>__str__()</code> method is also called when you <code>print(x)</code>.
+ja:<li><code>__str__()</code>メソッドは、<code>print(x)</code>するときにも呼び出される。
+
+
+en:<li><em>New in Python 3</em>, since the <code>bytes</code> type was introduced.
+ja:<li><code>bytes</code>型の導入にともない、<em>Python 3で新たに加わった</em>。
+
+
+en:<li>By convention, <var>format_spec</var> should conform to the <a href=http://www.python.org/doc/3.1/library/string.html#formatspec>Format Specification Mini-Language</a>. <code>decimal.py</code> in the Python standard library provides its own <code>__format__()</code> method.
+ja:<li>慣例により、<var>format_spec</var>は<a href=http://www.python.org/doc/3.1/library/string.html#formatspec>Format Specification Mini-Language</a>に従うべきである。Python標準ライブラリの<code>decimal.py</code>は、独自の<code>__format__()</code>メソッドを持っている。
+
+
+en:<h2 id=acts-like-iterator>Classes That Act Like Iterators</h2>
+ja:<h2 id=acts-like-iterator>イテレータのように振る舞うクラス</h2>
+
+
+en:<p>In <a href=iterators.html>the Iterators chapter</a>, you saw how to build an iterator from the ground up using the <code>__iter__()</code> and <code>__next__()</code> methods.
+ja:<p><a href=iterators.html>イテレータの章</a>では、<code>__iter__()</code>メソッドと<code>__next__()</code>メソッドを使ってイテレータをゼロから作り上げる方法を見た。
+
+
+en:<td>to iterate through a sequence
+ja:<td>シーケンスをイテレートする
+
+
+en:<td><code class=pp><dfn>iter</dfn>(seq)</code>
+ja:<td><code class=pp><dfn>iter</dfn>(seq)</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__iter__><code>seq.<dfn>__iter__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__iter__><code>seq.<dfn>__iter__</dfn>()</code></a>
+
+
+en:<td>to get the next value from an iterator
+ja:<td>イテレータから次の値を取得する
+
+
+en:<td><code class=pp><dfn>next</dfn>(seq)</code>
+ja:<td><code class=pp><dfn>next</dfn>(seq)</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__next__><code>seq.<dfn>__next__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__next__><code>seq.<dfn>__next__</dfn>()</code></a>
+
+
+en:<td>to create an iterator in reverse order
+ja:<td>逆順のイテレータを作る
+
+
+en:<td><code class=pp><dfn>reversed</dfn>(seq)</code>
+ja:<td><code class=pp><dfn>reversed</dfn>(seq)</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__reversed__><code>seq.<dfn>__reversed__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__reversed__><code>seq.<dfn>__reversed__</dfn>()</code></a>
+
+
+en:<li>The <code>__iter__()</code> method is called whenever you create a new iterator. It&#8217;s a good place to initialize the iterator with initial values.
+ja:<li><code>__iter__()</code>メソッドは、新しいイテレータを作るときに呼び出される。このメソッドは、イテレータの初期値を設定するのに適した場所だ。
+
+
+en:<li>The <code>__next__()</code> method is called whenever you retrieve the next value from an iterator.
+ja:<li><code>__next__()</code>メソッドは、イテレータから次の値を取得するときに呼び出される。
+
+
+en:<li>The <code>__reversed__()</code> method is uncommon. It takes an existing sequence and returns an iterator that yields the items in the sequence in reverse order, from last to first.
+ja:<li><code>__reversed__()</code>メソッドはあまり使われない。これは、既存のシーケンスを受け取って、そのシーケンスの要素を逆順に（末尾から先頭へ）生み出すイテレータを返す。
+
+
+en:<p>As you saw in <a href=iterators.html#a-fibonacci-iterator>the Iterators chapter</a>, a <code>for</code> loop can act on an iterator. In this loop:
+ja:<p><a href=iterators.html#a-fibonacci-iterator>イテレータの章</a>で見たように、<code>for</code>ループはイテレータに従って役目を果せる。以下のループでは：
+
+
+en:<p>Python 3 will call <code>seq.__iter__()</code> to create an iterator, then call the <code>__next__()</code> method on that iterator to get each value of <var>x</var>. When the <code>__next__()</code> method raises a <code>StopIteration</code> exception, the <code>for</code> loop ends gracefully.
+ja:<p>Python 3は、<code>seq.__iter__()</code>を呼び出してイテレータを作り、次にイテレータの<code>__next__()</code>メソッドを呼び出して各々の<var>x</var>の値を取得する。<code>__next__()</code>メソッドが<code>StopIteration</code>例外を送出すると、<code>for</code>ループは静かに終了する。
+
+
+en:<h2 id=computed-attributes>Computed Attributes</h2>
+ja:<h2 id=computed-attributes>算出属性</h2>
+
+
+en:<td>to get a computed attribute (unconditionally)
+ja:<td>算出属性を取得する（無条件）
+
+
+en:<td><code class=pp>x.my_property</code>
+ja:<td><code class=pp>x.my_property</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__getattribute__><code>x.<dfn>__getattribute__</dfn>(<var>'my_property'</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__getattribute__><code>x.<dfn>__getattribute__</dfn>(<var>'my_property'</var>)</code></a>
+
+
+en:<td>to get a computed attribute (fallback)
+ja:<td>算出属性を取得する（フォールバック）
+
+
+en:<td><code class=pp>x.my_property</code>
+ja:<td><code class=pp>x.my_property</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__getattr__><code>x.<dfn>__getattr__</dfn>(<var>'my_property'</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__getattr__><code>x.<dfn>__getattr__</dfn>(<var>'my_property'</var>)</code></a>
+
+
+en:<td>to set an attribute
+ja:<td>属性を設定する
+
+
+en:<td><code class=pp>x.my_property = value</code>
+ja:<td><code class=pp>x.my_property = value</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__setattr__><code>x.<dfn>__setattr__</dfn>(<var>'my_property'</var>, <var>value</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__setattr__><code>x.<dfn>__setattr__</dfn>(<var>'my_property'</var>, <var>value</var>)</code></a>
+
+
+en:<td>to delete an attribute
+ja:<td>属性を削除する
+
+
+en:<td><code class=pp>del x.my_property</code>
+ja:<td><code class=pp>del x.my_property</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__delattr__><code>x.<dfn>__delattr__</dfn>(<var>'my_property'</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__delattr__><code>x.<dfn>__delattr__</dfn>(<var>'my_property'</var>)</code></a>
+
+
+en:<td>to list all attributes and methods
+ja:<td>全ての属性とメソッドをリストアップする
+
+
+en:<td><code class=pp>dir(x)</code>
+ja:<td><code class=pp>dir(x)</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__dir__><code>x.<dfn>__dir__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__dir__><code>x.<dfn>__dir__</dfn>()</code></a>
+
+
+en:<li>If your class defines a <code>__getattribute__()</code> method, Python will call it on <em>every reference to any attribute or method name</em> (except special method names, since that would cause an unpleasant infinite loop).
+ja:<li>クラスが<code>__getattribute__()</code>メソッドを定義している場合は、<em>すべての属性名/メソッド名に対するすべての参照において</em>Pythonがこのメソッドを呼び出す（ただし特殊メソッド名は、不快な無限ループを引き起こすので除外される）。
+
+
+en:<li>If your class defines a <code>__getattr__()</code> method, Python will call it only after looking for the attribute in all the normal places. If an instance <var>x</var> defines an attribute <var>color</var>, <code>x.color</code> will <em>not</em> call <code>x.__getattr__('color')</code>; it will simply return the already-defined value of <var>x.color</var>.
+ja:<li>クラスが<code>__getattr__()</code>メソッドを定義している場合は、通常通りのすべての場所から属性を探したあとに限って、Pythonがこのメソッドを呼び出す。インスタンス<var>x</var>が属性<var>color</var>を定義している場合には、<code>x.color</code>は<code>x.__getattr__('color')</code>を呼び出さ<em>ない</em>。これは、すでに定義された<var>x.color</var>の値を返すだけだ。
+
+
+en:<li>The <code>__setattr__()</code> method is called whenever you assign a value to an attribute.
+ja:<li><code>__setattr__()</code>メソッドは、属性に値を代入しようとするときに呼び出される。
+
+
+en:<li>The <code>__delattr__()</code> method is called whenever you delete an attribute.
+ja:<li><code>__delattr__()</code>メソッドは、属性を削除しようとするときに呼び出される。
+
+
+en:<li>The <code>__dir__()</code> method is useful if you define a <code>__getattr__()</code> or <code>__getattribute__()</code> method. Normally, calling <code>dir(x)</code> would only list the regular attributes and methods. If your <code>__getattr__()</code> method handles a <var>color</var> attribute dynamically, <code>dir(x)</code> would not list <var>color</var> as one of the available attributes. Overriding the <code>__dir__()</code> method allows you to list <var>color</var> as an available attribute, which is helpful for other people who wish to use your class without digging into the internals of it.
+ja:<li><code>__dir__()</code>メソッドは、<code>__getattr__()</code>メソッドや<code>__getattribute__()</code>メソッドを定義するときに便利だ。通常、<code>dir(x)</code>を呼び出すと、標準の属性とメソッドだけがリストアップされる。つまり、<code>__getattr()__</code>メソッドが<var>color</var>属性を動的に提供する場合は、<code>dir(x)</code>は<var>color</var>を利用可能な属性としてリストアップしてくれないのだ。<code>__dir__()</code>をオーバーライドすることによって、<var>color</var>属性が利用可能な属性としてリストアップされるようできる。そうしておけば、あなたのクラスを使いたいと思う人にとって助けになるだろう。さもないと、コードの内部を掘り起こさないといけなくなるかもしれない。
+
+
+en:<p>The distinction between the <code>__getattr__()</code> and <code>__getattribute__()</code> methods is subtle but important. I can explain it with two examples:
+ja:<p><code>__getattr__()</code>メソッドと<code>__getattribute__()</code>メソッドの違いはわずかだが重要だ。これは2つの例で説明できる：
+
+
+en:<li>The attribute name is passed into the <code>__getattr__()</code> method as a string.  If the name is <code>'color'</code>, the method returns a value. (In this case, it&#8217;s just a hard-coded string, but you would normally do some sort of computation and return the result.)
+ja:<li>属性名は、<code>__getattr()__</code>メソッドに文字列として渡される。その名前が<code>'color'</code>であれば、このメソッドは値を返す（この例ではハードコードされた文字列を返しているだけだが、実際には、いくつかの計算などを行なって、その結果を返すのがふつうだ）。
+
+
+en:<li>If the attribute name is unknown, the <code>__getattr__()</code> method needs to raise an <code>AttributeError</code> exception, otherwise your code will silently fail when accessing undefined attributes. (Technically, if the method doesn&#8217;t raise an exception or explicitly return a value, it returns <code>None</code>, the Python null value. This means that <em>all</em> attributes not explicitly defined will be <code>None</code>, which is almost certainly not what you want.)
+ja:<li>不明な属性名が与えられた場合、<code>__getattr()__</code>メソッドは<code>AttributeError</code>例外を発生させる必要がある。さもなければ、未定義の属性にアクセスしたときに、コードは密やかに誤動作を始めるだろう（詳しく言うと、このメソッドは、例外を送出しなかったり明示的に値を返さない場合にはPythonの無効値である<code>None</code>を返すのだ。これは、明示的に定義されていない<em>すべての</em>属性値が<code>None</code>になることを意味するが、ほぼ確実に、それは望ましい振る舞いではない）。
+
+
+en:<li>The <var>dyn</var> instance does not have an attribute named <var>color</var>, so the <code>__getattr__()</code> method is called to provide a computed value.
+ja:<li>インスタンス<var>dyn</var>は<var>color</var>という名前の属性を持っていないので、<code>__getattr__()</code>メソッドが呼び出されて、算出された値が提供される。
+
+
+en:<li>After explicitly setting <var>dyn.color</var>, the <code>__getattr__()</code> method will no longer be called to provide a value for <var>dyn.color</var>, because <var>dyn.color</var> is already defined on the instance.
+ja:<li><var>dyn.color</var>を明示的に設定した後は、もはや<code>__getattr__()</code>メソッドは<var>dyn.color</var>を提供するために呼び出されない。インスタンス上にすでに<var>dyn.color</var>が定義されているからだ。
+
+
+en:<p>On the other hand, the <code>__getattribute__()</code> method is absolute and unconditional.
+ja:<p>その一方で、<code>__getattribute__()</code>メソッドは絶対的なものであり、無条件で使われる。
+
+
+en:<li>The <code>__getattribute__()</code> method is called to provide a value for <var>dyn.color</var>.
+ja:<li><var>dyn.color</var>の値を提供するために<code>__getattribute__()</code>メソッドが呼び出される。
+
+
+en:<li>Even after explicitly setting <var>dyn.color</var>, the <code>__getattribute__()</code> method <em>is still called</em> to provide a value for <var>dyn.color</var>. If present, the <code>__getattribute__()</code> method <em>is called unconditionally</em> for every attribute and method lookup, even for attributes that you explicitly set after creating an instance.
+ja:<li>明示的に<var>dyn.color</var>を設定した後でさえも、<code>__getattribute__()</code>メソッドは<em>依然として呼び出され</em>、<var>dyn.color</var>の値を提供する。<code>__getattribute__()</code>メソッドが存在する場合は、全ての属性とメソッドを探すために、無条件で呼び出されるのだ。属性がインスタンスの生成後に明示的に設定されている場合でさえも呼び出される。
+
+
+en:<p><span class=u>&#x261E;</span>If your class defines a <code>__getattribute__()</code> method, you probably also want to define a <code>__setattr__()</code> method and coordinate between them to keep track of attribute values. Otherwise, any attributes you set after creating an instance will disappear into a black hole.
+ja:<p><span class=u>&#x261E;</span>クラスに<code>__getattribute__()</code>を定義する場合は、おそらく<code>__setattr__()</code>メソッドも定義して、2つのメソッド間で属性値が追跡されるように連携させたいだろう。さもなければ、インスタンス作成後に設定した全ての属性はブラックホールへと消えてしまうことになる。
+
+
+en:<p>You need to be extra careful with the <code>__getattribute__()</code> method, because it is also called when Python looks up a method name on your class.
+ja:<p><code>__getattribute__()</code>メソッドにはさらなる注意を払う必要がある。このメソッドは、Pythonがメソッド名を探すときにも呼び出されるからだ。
+
+
+en:<li>This class defines a <code>__getattribute__()</code> method which always raises an <code>AttributeError</code> exception. No attribute or method lookups will succeed.
+ja:<li>このクラスは、常に<code>AttributeError</code>例外を送出する<code>__getattribute__()</code>メソッドを定義している。属性やメソッドの参照はすべて成功しなくなる。
+
+
+en:<li>When you call <code>hero.swim()</code>, Python looks for a <code>swim()</code> method in the <code>Rastan</code> class. This lookup goes through the <code>__getattribute__()</code> method, <em>because all attribute and method lookups go through the <code>__getattribute__()</code> method</em>. In this case, the <code>__getattribute__()</code> method raises an <code>AttributeError</code> exception, so the method lookup fails, so the method call fails.
+ja:<li><code>hero.swim()</code>を呼び出すとき、Pythonは<code>Rastan</code>クラスから<code>swim()</code>メソッドを探し出す。<em>全ての属性とメソッドの参照が<code>__getattribute__()</code>メソッドを通して行われるので</em>、この参照も<code>__getattribute__()</code>メソッドを通して行われる。この場合は、<code>__getattribute__()</code>メソッドが<code>AttributeError</code>例外を送出するので、メソッドの参照は失敗し、したがってこのメソッド呼び出しは失敗する。
+
+
+en:<h2 id=acts-like-function>Classes That Act Like Functions</h2>
+ja:<h2 id=acts-like-function>関数のように振る舞うクラス</h2>
+
+
+en:<p>You can make an instance of a class callable&nbsp;&mdash;&nbsp;exactly like a function is callable&nbsp;&mdash;&nbsp;by defining the <code>__call__()</code> method.
+ja:<p><code>__call__()</code>メソッドを定義すると、（関数が呼び出せるのと同じように）クラスのインスタンスを呼び出せるようにできる。
+
+
+en:<td>to &#8220;call&#8221; an instance like a function
+ja:<td>インスタンスを関数のように「呼び出す」
+
+
+en:<td><code class=pp>my_instance()</code>
+ja:<td><code class=pp>my_instance()</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__call__><code>my_instance.<dfn>__call__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__call__><code>my_instance.<dfn>__call__</dfn>()</code></a>
+
+
+en:<p>The <a href=http://docs.python.org/3.1/library/zipfile.html><code>zipfile</code> module</a> uses this to define a class that can <dfn>decrypt</dfn> an <dfn>encrypted</dfn> <dfn>zip</dfn> file with a given password. The zip <dfn>decryption</dfn> algorithm requires you to store state during decryption. Defining the decryptor as a class allows you to maintain this state within a single instance of the decryptor class.  The state is initialized in the <code>__init__()</code> method and updated as the file is <dfn>decrypted</dfn>. But since the class is also &#8220;callable&#8221; like a function, you can pass the instance as the first argument of the <code>map()</code> function, like so:
+ja:<p><a href=http://docs.python.org/3.1/library/zipfile.html><code>zipfile</code>モジュール</a>は、これを使って、<dfn>暗号化</dfn>された<dfn>zip</dfn>ファイルを与えられたパスワードで<dfn>復号</dfn>するクラスを定義している。zipの<dfn>復号</dfn>アルゴリズムは、復号を行っているあいだ、内部状態を保持する必要がある。復号器をクラスとして定義することによって、復号器クラスの個々のインスタンスの中に内部状態を保持できるようになる。この状態は<code>__init__()</code>メソッドで初期化され、ファイルが<dfn>復号</dfn>されるにつれて更新される。しかし、このクラスは関数のように「呼び出し可能」でもあるので、そのインスタンスを<code>map()</code>関数の最初の引数として渡せるのだ：
+
+
+en:<li>The <code>_ZipDecryptor</code> class maintains state in the form of three rotating keys, which are later updated in the <code>_UpdateKeys()</code> method (not shown here).
+ja:<li><code>_ZipDecryptor</code>クラスは、3つの回転キーの形で状態を保持する。これらは後に<code>_UpdateKeys()</code>メソッド（ここには示されていない）の中で更新される。
+
+
+en:<li>The class defines a <code>__call__()</code> method, which makes class instances callable like functions. In this case, the <code>__call__()</code> method decrypts a single byte of the zip file, then updates the rotating keys based on the byte that was decrypted.
+ja:<li>このクラスは<code>__call__()</code>メソッドを定義している。このメソッドは、クラスインスタンスを関数のように呼び出せるようにする。この例での<code>__call__()</code>メソッドは、zipファイルの1つのバイトを復号し、復号されたバイトに基づいて回転キーを更新する。
+
+
+en:<li><var>zd</var> is an instance of the <code>_ZipDecryptor</code> class. The <var>pwd</var> variable is passed to the <code>__init__()</code> method, where it is stored and used to update the rotating keys for the first time.
+ja:<li><var>zd</var>は<code>_ZipDecryptor</code>クラスのインスタンスだ。変数<var>pwd</var>は、<code>__init__()</code>メソッドに渡され、そこで格納されて、回転キーの最初の更新に使われる。
+
+
+en:<li>Given the first 12 bytes of a zip file, decrypt them by mapping the bytes to <var>zd</var>, in effect &#8220;calling&#8221; <var>zd</var> 12 times, which invokes the <code>__call__()</code> method 12 times, which updates its internal state and returns a resulting byte 12 times.
+ja:<li>zipファイルの最初の12バイトが得られたら、そのバイトを<var>zd</var>にマッピングすることで復号を行う。これは実質的には<var>zd</var>を12回「呼び出す」ことになり、それは<code>__call__()</code>メソッドを12回呼び出し、それは内部状態を12回更新して結果のバイトを12回返す。
+
+
+en:<h2 id=acts-like-list>Classes That Act Like Sequences</h2>
+ja:<h2 id=acts-like-list>シーケンスのように振る舞うクラス</h2>
+
+
+en:<p>If your class acts as a container for a set of values&nbsp;&mdash;&nbsp;that is, if it makes sense to ask whether your class &#8220;contains&#8221; a value&nbsp;&mdash;&nbsp;then it should probably define the following special methods that make it act like a sequence.
+ja:<p>クラスが、値の集合のためのコンテナとして振る舞うのなら（つまり、そのクラスは値を「含んでいる」か？という質問が意味をなすのであれば）、おそらくそのクラスは、シーケンスとして振る舞えるようにするための特殊メソッドを定義すべきだろう。
+
+
+en:<td>the length of a sequence
+ja:<td>シーケンスの長さ
+
+
+en:<td><code class=pp><dfn>len</dfn>(seq)</code>
+ja:<td><code class=pp><dfn>len</dfn>(seq)</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__len__><code>seq.<dfn>__len__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__len__><code>seq.<dfn>__len__</dfn>()</code></a>
+
+
+en:<td>to know whether a sequence contains a specific value
+ja:<td>シーケンスが特定の値を含んでいるかどうかを知る
+
+
+en:<td><code class=pp>x in seq</code>
+ja:<td><code class=pp>x in seq</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__contains__><code>seq.<dfn>__contains__</dfn>(<var>x</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__contains__><code>seq.<dfn>__contains__</dfn>(<var>x</var>)</code></a>
+
+
+en:<p id=acts-like-list-example>The <a href=http://docs.python.org/3.1/library/cgi.html><code>cgi</code> module</a> uses these methods in its <code>FieldStorage</code> class, which represents all of the form fields or query parameters submitted to a dynamic web page.
+ja:<p id=acts-like-list-example><a href=http://docs.python.org/3.1/library/cgi.html><code>cgi</code>モジュール</a>は、これらのメソッドを<code>FieldStorage</code>クラスの中で使っている。このクラスは、動的なWebページに送信されたすべてのフォームフィールドやクエリクエリパラメータを表現するものだ。
+
+
+en:# An excerpt from cgi.py that explains how that works
+ja:# An excerpt from cgi.py that explains how that works
+
+
+en:<li>Once you create an instance of the <code>cgi.FieldStorage</code> class, you can use the &#8220;<code>in</code>&#8221; operator to check whether a particular parameter was included in the query string.
+ja:<li><code>cgi.FieldStorage</code>クラスのインスタンスを作成すると、クエリ文字列に特定のパラメータが含まれているかどうかを<code>in</code>演算子を使って確認できる。
+
+
+en:<li>The <code>__contains__()</code> method is the magic that makes this work.
+ja:<li><code>__contains__()</code>メソッドがこれを可能にしている魔法だ。
+
+
+en:<li>When you say <code>if 'q' in fs</code>, Python looks for the <code>__contains__()</code> method on the <var>fs</var> object, which is defined in <code>cgi.py</code>. The value <code>'q'</code> is passed into the <code>__contains__()</code> method as the <var>key</var> argument.
+ja:<li><code>if 'q' in fs</code>と書くと、Pythonは<code>__contains__()</code>メソッドを<var>fs</var>オブジェクトの中から探し出す。このメソッドは<code>cgi.py</code>に定義されている。<code>'q'</code>の値は引数<var>key</var>として<code>__contains__()</code>メソッドに渡される。
+
+
+en:<li>The same <code>FieldStorage</code> class also supports returning its length, so you can say <code>len(<var>fs</var>)</code> and it will call the <code>__len__()</code> method on the <code>FieldStorage</code> class to return the number of query parameters that it identified.
+ja:<li>この<code>FieldStorage</code>クラスは長さを返す機能もサポートしているので、<code>len(<var>fs</var>)</code>と書くことができる。これは<code>FieldStorage</code>クラスの<code>__len__()</code>メソッドを呼び出し、このクラスが認識したクエリパラメータの数が返される。
+
+
+en:<li>The <code>self.keys()</code> method checks whether <code>self.list is None</code>, so the <code>__len__</code> method doesn&#8217;t need to duplicate this error checking.
+ja:<li><code>self.list is None</code>であるかどうかは<code>self.keys()</code>メソッドが確認するので、<code>__len__</code>メソッドが余計なエラーチェックをする必要はない。
+
+
+en:<h2 id=acts-like-dict>Classes That Act Like Dictionaries</h2>
+ja:<h2 id=acts-like-dict>辞書のように振る舞うクラス</h2>
+
+
+en:<p>Extending the previous section a bit, you can define classes that not only respond to the &#8220;<code>in</code>&#8221; operator and the <code>len()</code> function, but they act like full-blown dictionaries, returning values based on keys.
+ja:<p>前節の内容を少し拡張することで、<code>in</code>演算子と<code>len()</code>関数に応答するだけでなく、キーに基づいて値を返す完全な辞書として振る舞うクラスを定義できる。
+
+
+en:<td>to get a value by its key
+ja:<td>キーに対応する値を得る
+
+
+en:<td><code class=pp>x[key]</code>
+ja:<td><code class=pp>x[key]</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__getitem__><code>x.<dfn>__getitem__</dfn>(<var>key</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__getitem__><code>x.<dfn>__getitem__</dfn>(<var>key</var>)</code></a>
+
+
+en:<td>to set a value by its key
+ja:<td>キーに対応する値を設定する
+
+
+en:<td><code class=pp>x[key] = value</code>
+ja:<td><code class=pp>x[key] = value</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__setitem__><code>x.<dfn>__setitem__</dfn>(<var>key</var>, <var>value</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__setitem__><code>x.<dfn>__setitem__</dfn>(<var>key</var>, <var>value</var>)</code></a>
+
+
+en:<td>to delete a key-value pair
+ja:<td>キーと値のペアを削除する
+
+
+en:<td><code class=pp>del x[key]</code>
+ja:<td><code class=pp>del x[key]</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__delitem__><code>x.<dfn>__delitem__</dfn>(<var>key</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__delitem__><code>x.<dfn>__delitem__</dfn>(<var>key</var>)</code></a>
+
+
+en:<td>to provide a default value for missing keys
+ja:<td>存在しないキーのためのデフォルト値を提供する
+
+
+en:<td><code class=pp>x[nonexistent_key]</code>
+ja:<td><code class=pp>x[nonexistent_key]</code>
+
+
+en:<td><a href=http://docs.python.org/3.1/library/collections.html#collections.defaultdict.__missing__><code>x.<dfn>__missing__</dfn>(<var>nonexistent_key</var>)</code></a>
+ja:<td><a href=http://docs.python.org/3.1/library/collections.html#collections.defaultdict.__missing__><code>x.<dfn>__missing__</dfn>(<var>nonexistent_key</var>)</code></a>
+
+
+en:<p>The <a href=#acts-like-list-example><code>FieldStorage</code> class</a> from the <a href=http://docs.python.org/3.1/library/cgi.html><code>cgi</code> module</a> also defines these special methods, which means you can do things like this:
+ja:<p><a href=http://docs.python.org/3.1/library/cgi.html><code>cgi</code>モジュール</a>にある<a href=#acts-like-list-example><code>FieldStorage</code>クラス</a>もこれらの特殊メソッドを実装しており、これは次のようなことができることを意味している：
+
+
+en:# An excerpt from cgi.py that shows how it works
+ja:# An excerpt from cgi.py that shows how it works
+
+
+en:<li>The <var>fs</var> object is an instance of <code>cgi.FieldStorage</code>, but you can still evaluate expressions like <code>fs['q']</code>.
+ja:<li><var>fs</var>オブジェクトは<code>cgi.FieldStorage</code>のインスタンスだが、<code>fs['q']</code>のような式を評価することもできる。
+
+
+en:<li><code>fs['q']</code> invokes the <code>__getitem__()</code> method with the <var>key</var> parameter set to <code>'q'</code>. It then looks up in its internally maintained list of query parameters (<var>self.list</var>) for an item whose <code>.name</code> matches the given key.
+ja:<li><code>fs['q']</code>は、<var>key</var>引数に<code>'q'</code>を設定して<code>__getitem__()</code>メソッドを呼び出す。このメソッドは、内部に保持されたクエリパラメータのリスト (<var>self.list</var>) の中から、その<code>.name</code>が与えられたキーと一致する要素を探し出す。
+
+
+en:<h2 id=acts-like-number>Classes That Act Like Numbers</h2>
+ja:<h2 id=acts-like-number>数値のように振る舞うクラス</h2>
+
+
+en:<p>Using the appropriate special methods, you can define your own classes that act like numbers. That is, you can add them, subtract them, and perform other mathematical operations on them. This is how <dfn>fractions</dfn> are implemented&nbsp;&mdash;&nbsp;the <code><dfn>Fraction</dfn></code> class implements these special methods, then you can do things like this:
+ja:<p>適切な特殊メソッドを使うと、数値のように振る舞う独自のクラスを定義できる。要するに、それらを足したり、引いたり、その他の数学的な演算を行うことができるようになるのだ。<code><dfn>fractions</dfn></code>モジュールはこの方法で実装されている&nbsp;&mdash;&nbsp;つまり<code><dfn>Fraction</dfn></code>クラスはこれらの特殊メソッドを実装しており、それによって次のようなことができるようになっている：
+
+
+en:<p>Here is the comprehensive list of special methods you need to implement a number-like class.
+ja:<p>数値のように振る舞うクラスを実装する際に必要となる特殊メソッドの包括的なリストを示す。
+
+
+en:<td>addition
+ja:<td>加算
+
+
+en:<td><code class=pp>x + y</code>
+ja:<td><code class=pp>x + y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__add__><code>x.<dfn>__add__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__add__><code>x.<dfn>__add__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>subtraction
+ja:<td>減算
+
+
+en:<td><code class=pp>x - y</code>
+ja:<td><code class=pp>x - y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__sub__><code>x.<dfn>__sub__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__sub__><code>x.<dfn>__sub__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>multiplication
+ja:<td>乗算
+
+
+en:<td><code class=pp>x * y</code>
+ja:<td><code class=pp>x * y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__mul__><code>x.<dfn>__mul__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__mul__><code>x.<dfn>__mul__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>division
+ja:<td>除算
+
+
+en:<td><code class=pp>x / y</code>
+ja:<td><code class=pp>x / y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__truediv__><code>x.<dfn>__truediv__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__truediv__><code>x.<dfn>__truediv__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>floor division
+ja:<td>整数除算
+
+
+en:<td><code>x // y</code>
+ja:<td><code>x // y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__floordiv__><code>x.<dfn>__floordiv__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__floordiv__><code>x.<dfn>__floordiv__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>modulo (remainder)
+ja:<td>モジュロ （余り）
+
+
+en:<td><code class=pp>x % y</code>
+ja:<td><code class=pp>x % y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__mod__><code>x.<dfn>__mod__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__mod__><code>x.<dfn>__mod__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>floor division <i class=baa>&amp;</i> modulo
+ja:<td>整数除算とモジュロ
+
+
+en:<td><code class=pp>divmod(x, y)</code>
+ja:<td><code class=pp>divmod(x, y)</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__divmod__><code>x.<dfn>__divmod__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__divmod__><code>x.<dfn>__divmod__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>raise to power
+ja:<td>べき乗
+
+
+en:<td><code class=pp>x ** y</code>
+ja:<td><code class=pp>x ** y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__pow__><code>x.<dfn>__pow__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__pow__><code>x.<dfn>__pow__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>left bit-shift
+ja:<td>左ビットシフト
+
+
+en:<td><code class=pp>x &lt;&lt; y</code>
+ja:<td><code class=pp>x &lt;&lt; y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__lshift__><code>x.<dfn>__lshift__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__lshift__><code>x.<dfn>__lshift__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>right bit-shift
+ja:<td>右ビットシフト
+
+
+en:<td><code class=pp>x >> y</code>
+ja:<td><code class=pp>x >> y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__rshift__><code>x.<dfn>__rshift__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__rshift__><code>x.<dfn>__rshift__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>bitwise <code>and</code>
+ja:<td>ビット単位の<code>and</code>
+
+
+en:<td><code class=pp>x &amp; y</code>
+ja:<td><code class=pp>x &amp; y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__and__><code>x.<dfn>__and__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__and__><code>x.<dfn>__and__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>bitwise <code>xor</code>
+ja:<td>ビット単位の<code>xor</code>
+
+
+en:<td><code class=pp>x ^ y</code>
+ja:<td><code class=pp>x ^ y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__xor__><code>x.<dfn>__xor__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__xor__><code>x.<dfn>__xor__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>bitwise <code>or</code>
+ja:<td>ビット単位の<code>or</code>
+
+
+en:<td><code class=pp>x | y</code>
+ja:<td><code class=pp>x | y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__or__><code>x.<dfn>__or__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__or__><code>x.<dfn>__or__</dfn>(<var>y</var>)</code></a>
+
+
+en:<p>That&#8217;s all well and good if <var>x</var> is an instance of a class that implements those methods. But what if it doesn&#8217;t implement one of them? Or worse, what if it implements it, but it can&#8217;t handle certain kinds of arguments? For example:
+ja:<p><var>x</var>がこれらのメソッドを実装したクラスのインスタンスであれば、すべてがうまく動作する。しかし、<var>x</var>がこれらのメソッドを実装していない場合はどうなるのだろうか？ または、さらに悪いことに、これらを実装しているのに、ある種の引数を扱うことができない場合はどうなるのだろうか？ 例えばこういうことだ：
+
+
+en:<p>This is <em>not</em> a case of taking a <code>Fraction</code> and dividing it by an integer (as in the previous example). That case was straightforward: <code>x / 3</code> calls <code>x.__truediv__(3)</code>, and the <code>__truediv__()</code> method of the <code>Fraction</code> class handles all the math. But integers don&#8217;t &#8220;know&#8221; how to do arithmetic operations with fractions. So why does this example work?
+ja:<p>この例は（前の例のように）<code>Fraction</code>を整数で割っているのでは<em>ない</em>。前の例は分かりやすかった。前の例は、<code>x / 3</code>が<code>x.__truediv__(3)</code>を呼び出し、<code>Fraction</code>の<code>__truediv__()</code>メソッドがすべての計算を処理していた。しかし整数型は分数を使った算術演算のやり方を「知らない」。だとすると、この例はどのように動作しているのだろうか？
+
+
+en:<p>There is a second set of arithmetic special methods with <i>reflected operands</i>. Given an arithmetic operation that takes two operands (<i>e.g.</i> <code>x / y</code>), there are two ways to go about it:
+ja:<p>算術演算の特殊メソッドには、<em>演算対象を反転させた</em>2つ目のセットが存在する。被演算子を2つとる算術演算（例えば <code>x / y</code>）が与えられた場合、これを実行する方法は2通り存在する：
+
+
+en:<li>Tell <var>x</var> to divide itself by <var>y</var>, or
+ja:<li><var>x</var>に対して、自身を<var>y</var>で割るように告げる、もしくは
+
+
+en:<li>Tell <var>y</var> to divide itself into <var>x</var>
+ja:<li><var>y</var>に対して、<var>x</var>を自身で割るように告げる。
+
+
+en:<p>The set of special methods above take the first approach: given <code>x / y</code>, they provide a way for <var>x</var> to say &#8220;I know how to divide myself by <var>y</var>.&#8221; The following set of special methods tackle the second approach: they provide a way for <var>y</var> to say &#8220;I know how to be the denominator and divide myself into <var>x</var>.&#8221;
+ja:<p>先に挙げた特殊メソッドのセットは1つ目のアプローチを取る。つまりこれらの特殊メソッドは、<code>x / y</code>が与えられたときに<var>x</var>が「私は自分を<code>y</code>で割る方法を知っているよ」と言うための手段を提供する。以下に挙げる特殊メソッドの集合は2つ目のアプローチを取る。つまりこれらの特殊メソッドは、<var>y</var>が「私は、自分が分母になって<var>x</var>を割る方法を知っている」と言うための手段を提供するのだ。
+
+
+en:<p>But wait! There&#8217;s more! If you&#8217;re doing &#8220;in-place&#8221; operations, like <code>x /= 3</code>, there are even more special methods you can define.
+ja:<p>ちょっと待って！ これで終わりじゃない！ <code>x /= 3</code>のような「インプレイス」の演算を行おうとする場合は、定義可能な特殊メソッドがさらに存在するのだ。
+
+
+en:<td>in-place addition
+ja:<td>インプレイスの加算
+
+
+en:<td><code class=pp>x += y</code>
+ja:<td><code class=pp>x += y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__iadd__><code>x.<dfn>__iadd__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__iadd__><code>x.<dfn>__iadd__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>in-place subtraction
+ja:<td>インプレイスの減算
+
+
+en:<td><code class=pp>x -= y</code>
+ja:<td><code class=pp>x -= y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__isub__><code>x.<dfn>__isub__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__isub__><code>x.<dfn>__isub__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>in-place multiplication
+ja:<td>インプレイスの乗算
+
+
+en:<td><code class=pp>x *= y</code>
+ja:<td><code class=pp>x *= y</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__imul__><code>x.<dfn>__imul__</dfn>(<var>y</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__imul__><code>x.<dfn>__imul__</dfn>(<var>y</var>)</code></a>
+
+
+en:<td>in-place division
+ja:<td>インプレイスの除算
+
+
+en:<td>in-place floor division
+ja:<td>インプレイスの整数除算
+
+
+en:<td>in-place modulo
+ja:<td>インプレイスのモジュロ
+
+
+en:<td>in-place raise to power
+ja:<td>インプレイスのべき乗
+
+
+en:<td>in-place left bit-shift
+ja:<td>インプレイスの左ビットシフト
+
+
+en:<td>in-place right bit-shift
+ja:<td>インプレイスの右シフト
+
+
+en:<td>in-place bitwise <code>and</code>
+ja:<td>インプレイスのビット単位の<code>and</code>
+
+
+en:<td>in-place bitwise <code>xor</code>
+ja:<td>インプレイスのビット単位の<code>xor</code>
+
+
+en:<td>in-place bitwise <code>or</code>
+ja:<td>インプレイスのビット単位の<code>or</code>
+
+
+en:<p>Note: for the most part, the in-place operation methods are not required. If you don&#8217;t define an in-place method for a particular operation, Python will try the methods. For example, to execute the expression <code>x /= y</code>, Python will:
+ja:<p>注: ほとんどの状況において、インプレイス演算のメソッドは必要ない。特定の演算用のインプレイスメソッドが定義されていない場合、Pythonは別の方法でそれらのメソッドを試みようとする。例えば、<code>x /= y</code>を実行するとき、Pythonは次のように動作する：
+
+
+en:<li>Try calling <code>x.__itruediv__(<var>y</var>)</code>. If this method is defined and returns a value other than <code>NotImplemented</code>, we&#8217;re done.
+ja:<li><code>x.__itruediv__(<var>y</var>)</code>の呼び出しを試みる。このメソッドが定義されていて<code>NotImplemented</code>以外の値を返すのであれば、もう完了だ。
+
+
+en:<li>Try calling <code>x.__truediv__(<var>y</var>)</code>. If this method is defined and returns a value other than <code>NotImplemented</code>, the old value of <var>x</var> is discarded and replaced with the return value, just as if you had done <code> x = x / y</code> instead.
+ja:<li><code>x.__truediv__(<var>y</var>)</code>の呼び出しを試みる。このこのメソッドが定義されていて<code>NotImplemented</code>以外の文字を返すのであれば、<var>x</var>の古い値を捨てて、戻り値で置き換える。つまり、代わりに<code> x = x / y</code>を実行したのとちょうど同じことだ。
+
+
+en:<li>Try calling <code>y.__rtruediv__(<var>x</var>)</code>. If this method is defined and returns a value other than <code>NotImplemented</code>, the old value of <var>x</var> is discarded and replaced with the return value.
+ja:<li><code>y.__rtruediv__(<var>x</var>)</code>の呼び出しを試みる。このメソッドが定義されていて<code>NotImplemented</code>以外の文字を返すのであれば、<var>x</var>の古い値を捨てて、戻り値で置き換える。
+
+
+en:<p>So you only need to define in-place methods like the <code>__itruediv__()</code> method if you want to do some special optimization for in-place operands. Otherwise Python will essentially reformulate the in-place operand to use a regular operand + a variable assignment.
+ja:<p>したがって、<code>__itruediv__()</code>のようなインプレイス演算のメソッドを定義しなければならないのは、インプレイス演算子に対して何か特別な最適化を施したい場合だけだ。そうでなければ、原則的にPythonは、通常の+演算子と変数代入を組合せてインプレイス演算の式を作り上げる。
+
+
+en:<p>There are also a few &#8220;unary&#8221; mathematical operations you can perform on number-like objects by themselves.
+ja:<p>「単項」演算もいくつか存在し、これらは、数値としてふるまうオブジェクト1つに対して実行できる。
+
+
+en:<td>negative number
+ja:<td>負の数
+
+
+en:<td>positive number
+ja:<td>正の数
+
+
+en:<td>absolute value
+ja:<td>絶対値
+
+
+en:<td>inverse
+ja:<td>反転
+
+
+en:<td>complex number
+ja:<td>複素数
+
+
+en:<td>integer
+ja:<td>整数
+
+
+en:<td>floating point number
+ja:<td>浮動小数点数
+
+
+en:<td>number rounded to nearest integer
+ja:<td>最も近い整数へ丸めた数値
+
+
+en:<td>number rounded to nearest <var>n</var> digits
+ja:<td>最も近いn桁へ丸めた数値
+
+
+en:<td>smallest integer <code>>= x</code>
+ja:<td>最小の整数 <code>>= x</code>
+
+
+en:<td>largest integer <code>&lt;= x</code>
+ja:<td>最大の整数 <code>&lt;= x</code>
+
+
+en:<td>truncate <code>x</code> to nearest integer toward 0
+ja:<td>0に向けた最も近い整数への切り捨て
+
+
+en:<td>number as a list index
+ja:<td>リストのインデックスとしての数
+
+
+en:<h2 id=rich-comparisons>Classes That Can Be Compared</h2>
+ja:<h2 id=rich-comparisons>比較可能なクラス</h2>
+
+
+en:<p>I broke this section out from the previous one because comparisons are not strictly the purview of numbers. Many datatypes can be compared&nbsp;&mdash;&nbsp;strings, lists, even dictionaries. If you&#8217;re creating your own class and it makes sense to compare your objects to other objects, you can use the following special methods to implement comparisons.
+ja:<p>比較というのは厳密には数値の範疇ではないので、私はこの節を前節とは分けることにした。多くのデータ型は比較できる&nbsp;&mdash;&nbsp;文字列、リスト、そして辞書でさえも比較可能だ。クラスを作る際に、そのオブジェクト同士の比較が意味をなすのであれば、以下の特殊メソッドを使って比較を実装できる。
+
+
+en:<td>equality
+ja:<td>等式
+
+
+en:<td>inequality
+ja:<td>不等
+
+
+en:<td>less than
+ja:<td>より小さい
+
+
+en:<td>less than or equal to
+ja:<td>より小さいか等しい
+
+
+en:<td>greater than
+ja:<td>より大きい
+
+
+en:<td>greater than or equal to
+ja:<td>より大きいか等しい
+
+
+en:<td>truth value in a boolean context
+ja:<td>ブール値のコンテクストでの真偽値
+
+
+en:<p><span class=u>&#x261E;</span>If you define a <code>__lt__()</code> method but no <code>__gt__()</code> method, Python will use the <code>__lt__()</code> method with operands swapped. However, Python will not combine methods. For example, if you define a <code>__lt__()</code> method and a <code>__eq__()</code> method and try to test whether <code>x &lt;= y</code>, Python will not call <code>__lt__()</code> and <code>__eq__()</code> in sequence. It will only call the <code>__le__()</code> method.
+ja:<p><span class=u>&#x261E;</span><code>__lt__()</code>メソッドが定義されているが<code>__gt__()</code>メソッドは定義されていない場合、Pythonは被演算子の順番を入れ替えて<code>__lt__()</code>メソッドを使用する。しかし、Pythonが演算子を組み合わせることはない。例えば、<code>__lt__()</code>メソッドと<code>__eq()__</code>を実装して<code>x &lt;= y</code>が成り立つかを確認しようとしても、Pythonが<code>__lt__()</code>と<code>__eq()__</code>を順に呼び出すことはない。Pythonは<code>__le__()</code>メソッドしか呼び出さないのだ。
+
+
+en:<h2 id=pickle>Classes That Can Be Serialized</h2>
+ja:<h2 id=pickle>シリアライズ可能なクラス</h2>
+
+
+en:<p>Python supports <a href=serializing.html>serializing and unserializing arbitrary objects</a>. (Most Python references call this process &#8220;pickling&#8221; and &#8220;unpickling.&#8221;) This can be useful for saving state to a file and restoring it later. All of the <a href=native-datatypes.html>native datatypes</a> support pickling already. If you create a custom class that you want to be able to pickle, read up on <a href=http://docs.python.org/3.1/library/pickle.html>the pickle protocol</a> to see when and how the following special methods are called.
+ja:<p>Pythonは、<a href=serializing.html>任意のオブジェクトのシリアライズとアンシリアライズ</a>をサポートしている（Pythonの文献の多くは、これを「Pickle化」や「非Pickle化」と呼んでいる）。この機能は、ファイルに状態を保存して後でそれを復元するのに役立つ。すべての<a href=native-datatypes.html>ネイティブデータ型</a>はあらかじめPickle化をサポートしている。作成したクラスをPickle化に対応させたい場合は、<a href=http://docs.python.org/3.1/library/pickle.html>Pickleプロトコル</a>に関する説明を読み、下記の特殊メソッドがいつ・どのように呼び出されるのかを確認してほしい。
+
+
+en:<td>a custom object copy
+ja:<td>オブジェクトのカスタマイズされたコピー
+
+
+en:<td>a custom object deepcopy
+ja:<td>オブジェクトのカスタマイズされた深いコピー
+
+
+en:<td>to get an object&#8217;s state before pickling
+ja:<td>Pickle化する前のオブジェクトの状態の取得
+
+
+en:<td>to serialize an object
+ja:<td>オブジェクトのシリアライズ
+
+
+en:<td>to serialize an object (new pickling protocol)
+ja:<td>オブジェクトのシリアライズ （新Pickle化プロトコル）
+
+
+en:<td>control over how an object is created during unpickling
+ja:<td>非Pickle化時にどのようにオブジェクトを生成するかの制御
+
+
+en:<td>to restore an object&#8217;s state after unpickling
+ja:<td>非Pickle化の後にオブジェクトの状態を復元する
+
+
+en:<p>* To recreate a serialized object, Python needs to create a new object that looks like the serialized object, then set the values of all the attributes on the new object. The <code>__getnewargs__()</code> method controls how the object is created, then the <code>__setstate__()</code> method controls how the attribute values are restored.
+ja:<p>* シリアライズされたオブジェクトを再作成するには、Pythonは、シリアライズされたオブジェクトに似せた新しいオブジェクトを作り、その新しいオブジェクトにすべての属性値を設定しなければならない。<code>__getnewargs__()</code>メソッドはオブジェクトがどのように作られるのかを制御し、<code>__setstate__()</code>メソッドは属性値がどのように設定されるのかを制御する。
+
+
+en:<h2 id=context-managers>Classes That Can Be Used in a <code>with</code> Block</h2>
+ja:<h2 id=context-managers><code>with</code>ブロックで使えるクラス</h2>
+
+
+en:<p>A <code>with</code> block defines a <a href=http://www.python.org/doc/3.1/library/stdtypes.html#typecontextmanager>runtime context</a>; you &#8220;enter&#8221; the context when you execute the <code>with</code> statement, and you &#8220;exit&#8221; the context after you execute the last statement in the block.
+ja:<p><code>with</code>ブロックは<a href=http://www.python.org/doc/3.1/library/stdtypes.html#typecontextmanager>実行時コンテクスト</a>を定義する。<code>with</code>文を実行するとそのコンテクストに「入り」、そのブロックの最後の文を実行し終えるとそのコンテクストから「出る」。
+
+
+en:<td>do something special when entering a <code>with</code> block
+ja:<td><code>with</code>ブロックに入るときに何か特別なことをする
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__enter__><code>x.<dfn>__enter__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__enter__><code>x.<dfn>__enter__</dfn>()</code></a>
+
+
+en:<td>do something special when leaving a <code>with</code> block
+ja:<td><code>with</code>ブロックから出るときに何か特別なことをする
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__exit__><code>x.<dfn>__exit__</dfn>(<var>exc_type</var>, <var>exc_value</var>, <var>traceback</var>)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__exit__><code>x.<dfn>__exit__</dfn>(<var>exc_type</var>、<var>exc_value</var>、<var>traceback</var>)</code></a>
+
+
+en:<p>This is how the <a href=files.html#with><code>with <var>file</var></code> idiom</a> works.
+ja:<p>これは、<a href=files.html#with><code>with <var>file</var></code>イディオム</a>がどのように動作するのかを示している。
+
+
+en:<li>The file object defines both an <code>__enter__()</code> and an <code>__exit__()</code> method. The <code>__enter__()</code> method checks that the file is open; if it&#8217;s not, the <code>_checkClosed()</code> method raises an exception.
+ja:<li>ファイルオブジェクトは<code>__enter__()</code>メソッドと<code>__exit__()</code>メソッドを定義している。<code>__enter__()</code>メソッドはファイルが開かれていることを確認する。もしそうでない場合は<code>_checkClosed()</code>メソッドが例外を発生する。
+
+
+en:<li>The <code>__enter__()</code> method should almost always return <var>self</var>&nbsp;&mdash;&nbsp;this is the object that the <code>with</code> block will use to dispatch properties and methods.
+ja:<li><code>__enter__()</code>メソッドは、ほぼすべての場合において<var>self</var>を返すべきだ。このオブジェクトは、<code>with</code>ブロックがプロパティやメソッドをディスパッチするために使用する。
+
+
+en:<li>After the <code>with</code> block, the file object automatically closes. How? In the <code>__exit__()</code> method, it calls <code>self.close()</code>.
+ja:<li><code>with</code>ブロックが終わると、ファイルオブジェクトは自動的に閉じられる。これはどのように実現されているのだろうか？ <code>__exit__()</code>メソッドの中で、<code>self.close()</code>を呼び出しているのだ。
+
+
+en:<p><span class=u>&#x261E;</span>The <code>__exit__()</code> method will always be called, even if an exception is raised inside the <code>with</code> block. In fact, if an exception is raised, the exception information will be passed to the <code>__exit__()</code> method. See <a href=http://www.python.org/doc/3.1/reference/datamodel.html#with-statement-context-managers>With Statement Context Managers</a> for more details.
+ja:<p><span class=u>&#x261E;</span>The <code>__exit__()</code>メソッドは、たとえ<code>with</code>ブロックの中で例外が発生したとしても必ず呼び出される。事実、例外が発生した場合は、例外の情報が<code>__exit__()</code>メソッドに渡される。詳細は<a href=http://www.python.org/doc/3.1/reference/datamodel.html#with-statement-context-managers>With Statement Context Managers</a>を見てほしい。
+
+
+en:<p>For more on context managers, see <a href=files.html#with>Closing Files Automatically</a> and <a href=files.html#redirect>Redirecting Standard Output</a>.
+ja:<p>コンテクストマネージャについての説明は、<a href=files.html#with>ファイルを自動的に閉じる</a>と<a href=files.html#redirect>標準出力をリダイレクトする</a>を見てほしい。
+
+
+en:<h2 id=esoterica>Really Esoteric Stuff</h2>
+ja:<h2 id=esoterica>完全に奥義的なもの</h2>
+
+
+en:<p>If you know what you&#8217;re doing, you can gain almost complete control over how classes are compared, how attributes are defined, and what kinds of classes are considered subclasses of your class.
+ja:<p>自分が何をしているのかを理解しているのであれば、クラスがどのように比較されるか、属性がどのように定義されるか、どんなクラスがそのクラスのサブクラスと見なされるか、などの制御をほぼ完全に掌握できる。
+
+
+en:<td>a class constructor
+ja:<td>クラスのコンストラクタ
+
+
+en:<td><code class=pp>x = MyClass()</code>
+ja:<td><code class=pp>x = MyClass()</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__new__><code>x.<dfn>__new__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__new__><code>x.<dfn>__new__</dfn>()</code></a>
+
+
+en:<td>a class destructor
+ja:<td>クラスのデストラクタ
+
+
+en:<td><code class=pp>del x</code>
+ja:<td><code class=pp>del x</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__del__><code>x.<dfn>__del__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__del__><code>x.<dfn>__del__</dfn>()</code></a>
+
+
+en:<td>only a specific set of attributes to be defined
+ja:<td>指定した属性のみを定義できるようにする
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__slots__><code>x.<dfn>__slots__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__slots__><code>x.<dfn>__slots__</dfn>()</code></a>
+
+
+en:<td>a custom hash value
+ja:<td>カスタムのハッシュ値
+
+
+en:<td><code class=pp>hash(x)</code>
+ja:<td><code class=pp>hash(x)</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__hash__><code>x.<dfn>__hash__</dfn>()</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__hash__><code>x.<dfn>__hash__</dfn>()</code></a>
+
+
+en:<td>to get a property&#8217;s value
+ja:<td>プロパティの値を取得する
+
+
+en:<td><code class=pp>x.color</code>
+ja:<td><code class=pp>x.color</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__get__><code>type(x).<dfn>__dict__</dfn>['color'].__get__(x, type(x))</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__get__><code>type(x).<dfn>__dict__</dfn>['color'].__get__(x, type(x))</code></a>
+
+
+en:<td>to set a property&#8217;s value
+ja:<td>プロパティの値を設定する
+
+
+en:<td><code class=pp>x.color = 'PapayaWhip'</code>
+ja:<td><code class=pp>x.color = 'PapayaWhip'</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__set__><code>type(x).<dfn>__dict__</dfn>['color'].__set__(x, 'PapayaWhip')</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__set__><code>type(x).<dfn>__dict__</dfn>['color'].__set__(x, 'PapayaWhip')</code></a>
+
+
+en:<td>to delete a property
+ja:<td>プロパティを削除する
+
+
+en:<td><code class=pp>del x.color</code>
+ja:<td><code class=pp>del x.color</code>
+
+
+en:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__delete__><code>type(x).<dfn>__dict__</dfn>['color'].__del__(x)</code></a>
+ja:<td><a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__delete__><code>type(x).<dfn>__dict__</dfn>['color'].__delete__(x)</code></a>
+
+
+en:<td>to control whether an object is an instance of your class
+ja:<td>オブジェクトがあなたのクラスのインスタンスかどうかの判断を制御する
+
+
+en:<td><code class=pp>isinstance(x, MyClass)</code>
+ja:<td><code class=pp>isinstance(x, MyClass)</code>
+
+
+en:<td><a href=http://www.python.org/dev/peps/pep-3119/#overloading-isinstance-and-issubclass><code>MyClass.<dfn>__instancecheck__</dfn>(x)</code></a>
+ja:<td><a href=http://www.python.org/dev/peps/pep-3119/#overloading-isinstance-and-issubclass><code>MyClass.<dfn>__instancecheck__</dfn>(x)</code></a>
+
+
+en:<td>to control whether a class is a subclass of your class
+ja:<td>クラスがあなたのクラスのサブクラスかどうかの判断を制御する
+
+
+en:<td><code class=pp>issubclass(C, MyClass)</code>
+ja:<td><code class=pp>issubclass(C, MyClass)</code>
+
+
+en:<td><a href=http://www.python.org/dev/peps/pep-3119/#overloading-isinstance-and-issubclass><code>MyClass.<dfn>__subclasscheck__</dfn>(C)</code></a>
+ja:<td><a href=http://www.python.org/dev/peps/pep-3119/#overloading-isinstance-and-issubclass><code>MyClass.<dfn>__subclasscheck__</dfn>(C)</code></a>
+
+
+en:<td>to control whether a class is a subclass of your abstract base class
+ja:<td>クラスがあなたの抽象基底クラスのサブクラスかどうかの判断を制御する
+
+
+en:<td><code class=pp>issubclass(C, MyABC)</code>
+ja:<td><code class=pp>issubclass(C, MyABC)</code>
+
+
+en:<td><a href=http://docs.python.org/3.1/library/abc.html#abc.ABCMeta.__subclasshook__><code>MyABC.<dfn>__subclasshook__</dfn>(C)</code></a>
+ja:<td><a href=http://docs.python.org/3.1/library/abc.html#abc.ABCMeta.__subclasshook__><code>MyABC.<dfn>__subclasshook__</dfn>(C)</code></a>
+
+
+en:<p><sup>*</sup> Exactly when Python calls the <code>__del__()</code> special method <a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__del__>is incredibly complicated</a>. To fully understand it, you need to know how <a href=http://www.python.org/doc/3.1/reference/datamodel.html#objects-values-and-types>Python keeps track of objects in memory</a>. Here&#8217;s a good article on <a href=http://www.electricmonk.nl/log/2008/07/07/python-destructor-and-garbage-collection-notes/>Python garbage collection and class destructors</a>. You should also read about <a href=http://mindtrove.info/articles/python-weak-references/>weak references</a>, the <a href=http://docs.python.org/3.1/library/weakref.html><code>weakref</code> module</a>, and probably the <a href=http://www.python.org/doc/3.1/library/gc.html><code>gc</code> module</a> for good measure.
+ja:<p><sup>*</sup> Pythonが特殊メソッド<code>__del__()</code>を呼び出す正確なタイミングは<a href=http://www.python.org/doc/3.1/reference/datamodel.html#object.__del__>信じられないほど複雑</a>だ。これを完全に理解するには、<a href=http://www.python.org/doc/3.1/reference/datamodel.html#objects-values-and-types>Pythonがメモリ上でオブジェクトを追跡する方法</a>を知る必要がある。これについての良い記事が<a href=http://www.electricmonk.nl/log/2008/07/07/python-destructor-and-garbage-collection-notes/>Python garbage collection and class destructors</a>にある。それに加えて<a href=http://mindtrove.info/articles/python-weak-references/>weak references</a>、<a href=http://docs.python.org/3.1/library/weakref.html><code>weakref</code> モジュール</a>、おまけとして<a href=http://www.python.org/doc/3.1/library/gc.html><code>gc</code> モジュール</a>も読むと良いだろう。
+
+
+en:<h2 id=furtherreading>Further Reading</h2>
+ja:<h2 id=furtherreading>さらに読む</h2>
+
+
+en:<p>Modules mentioned in this appendix:
+ja:<p>このAppendixで言及したモジュール：
+
+
+en:<li><a href=http://docs.python.org/3.1/library/zipfile.html><code>zipfile</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/zipfile.html><code>zipfile</code>モジュール</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/cgi.html><code>cgi</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/cgi.html><code>cgi</code>モジュール</a>
+
+
+en:<li><a href=http://www.python.org/doc/3.1/library/collections.html><code>collections</code> module</a>
+ja:<li><a href=http://www.python.org/doc/3.1/library/collections.html><code>collections</code>モジュール</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/math.html><code>math</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/math.html><code>math</code>モジュール</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/pickle.html><code>pickle</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/pickle.html><code>pickle</code>モジュール</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/copy.html><code>copy</code> module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/copy.html><code>copy</code>モジュール</a>
+
+
+en:<li><a href=http://docs.python.org/3.1/library/abc.html><code>abc</code> (&#8220;Abstract Base Classes&#8221;) module</a>
+ja:<li><a href=http://docs.python.org/3.1/library/abc.html><code>abc</code> (&#8220;Abstract Base Classes&#8221;) モジュール</a>
+
+
+en:<p>Other light reading:
+ja:<p>その他の軽い読みもの：
+
+
+en:<li><a href=http://www.python.org/doc/3.1/library/string.html#formatspec>Format Specification Mini-Language</a>
+ja:<li><a href=http://www.python.org/doc/3.1/library/string.html#formatspec>Format Specification Mini-Language</a>
+
+
+en:<li><a href=http://www.python.org/doc/3.1/reference/datamodel.html>Python data model</a>
+ja:<li><a href=http://www.python.org/doc/3.1/reference/datamodel.html>Python data model</a>
+
+
+en:<li><a href=http://www.python.org/doc/3.1/library/stdtypes.html>Built-in types</a>
+ja:<li><a href=http://www.python.org/doc/3.1/library/stdtypes.html>Built-in types</a>
+
+
+en:<li><a href=http://www.python.org/dev/peps/pep-0357/><abbr>PEP</abbr> 357: Allowing Any Object to be Used for Slicing</a>
+ja:<li><a href=http://www.python.org/dev/peps/pep-0357/><abbr>PEP</abbr> 357: Allowing Any Object to be Used for Slicing</a>
+
+
+en:<li><a href=http://www.python.org/dev/peps/pep-3119/><abbr>PEP</abbr> 3119: Introducing Abstract Base Classes</a>
+ja:<li><a href=http://www.python.org/dev/peps/pep-3119/><abbr>PEP</abbr> 3119: Introducing Abstract Base Classes</a>
+
+
+en:<p class=v><a href=porting-code-to-python-3-with-2to3.html rel=prev title='back to &#8220;Porting code to Python 3 with 2to3&#8221;'><span class=u>&#x261C;</span></a> <a rel=next href=where-to-go-from-here.html title='onward to &#8220;Where To Go From Here&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=porting-code-to-python-3-with-2to3.html rel=prev title='back to &#8220;Porting code to Python 3 with 2to3&#8221;'><span class=u>&#x261C;</span></a> <a rel=next href=where-to-go-from-here.html title='onward to &#8220;Where To Go From Here&#8221;'><span class=u>&#x261E;</span></a>
+
+
+en:# An excerpt from cgi.py that explains how that works
+ja:# 動作を説明するために、cgi.pyから抜粋
+
+
+en:# An excerpt from cgi.py that shows how it works
+ja:# 動作を示すために、cgi.pyから抜粋
+

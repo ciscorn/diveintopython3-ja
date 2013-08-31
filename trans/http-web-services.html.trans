@@ -1,0 +1,987 @@
+en:<title>HTTP Web Services - Dive Into Python 3</title>
+ja:<title>HTTPウェブサービス - Dive Into Python 3 日本語版</title>
+
+
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#http-web-services>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#http-web-services>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<p id=level>Difficulty level: <span class=u title=advanced>&#x2666;&#x2666;&#x2666;&#x2666;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=上級>&#x2666;&#x2666;&#x2666;&#x2666;&#x2662;</span>
+
+
+en:<h1>HTTP Web Services</h1>
+ja:<h1>HTTPウェブサービス</h1>
+
+
+en:<p><span class=u>&#x275D;</span> A ruffled mind makes a restless pillow. <span class=u>&#x275E;</span><br>&mdash; Charlotte Bront&euml;
+ja:<p><span class=u>&#x275D;</span>かき乱れた心で眠れば、枕も落ち着かなくなる。<span class=u>&#x275E;</span><br>&mdash; シャーロット・ブロンテ
+
+
+en:<p class=f>Philosophically, I can describe HTTP web services in 12 words: exchanging data with remote servers using nothing but the operations of <abbr>HTTP</abbr>. If you want to get data from the server, use <abbr>HTTP</abbr> <code>GET</code>. If you want to send new data to the server, use <abbr>HTTP</abbr> <code>POST</code>. Some more advanced <abbr>HTTP</abbr> web service <abbr>API</abbr>s also allow creating, modifying, and deleting data, using <abbr>HTTP</abbr> <code>PUT</code> and <abbr>HTTP</abbr> <code>DELETE</code>. That&#8217;s it. No registries, no envelopes, no wrappers, no tunneling. The &#8220;verbs&#8221; built into the <abbr>HTTP</abbr> protocol (<code>GET</code>, <code>POST</code>, <code>PUT</code>, and <code>DELETE</code>) map directly to application-level operations for retrieving, creating, modifying, and deleting data.
+ja:<p class=f><abbr>HTTP</abbr>の命令だけを用いて遠隔にあるサーバーとデータをやりとりする&nbsp;&mdash;&nbsp;HTTPウェブサービスの概念はこの33文字に集約される。サーバーからデータを取得したければ、<abbr>HTTP</abbr> <code>GET</code>を使えばいい。サーバーにデータを送信したければ<abbr>HTTP</abbr> <code>POST</code>を使えばいい。もっと高度な<abbr>HTTP</abbr>ウェブサービスの<abbr>API</abbr>もあって、これらは<abbr>HTTP</abbr> <code>PUT</code>や<abbr>HTTP</abbr> <code>DELETE</code>を利用して、データの作成・修正・削除を行えるようにしてくれる。そう、本当に<abbr>HTTP</abbr>の命令だけで全て処理できるのだ。ここにはレジストリも、エンベロープも、ラッパも、トンネリングも必要ない。要するに、<abbr>HTTP</abbr>プロトコル内に構築されているこれらの「動詞」(<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>) は、データの取得・作成・修正・消去を行うアプリケーションレベルの命令に直接対応するものなのだ。
+
+
+en:<p>The main advantage of this approach is simplicity, and its simplicity has proven popular. Data&nbsp;&mdash;&nbsp;usually <a href=xml.html><abbr>XML</abbr></a> or <a href=serializing.html#json><abbr>JSON</abbr></a>&nbsp;&mdash;&nbsp;can be built and stored statically, or generated dynamically by a server-side script, and all major programming languages (including Python, of course!) include an <abbr>HTTP</abbr> library for downloading it. Debugging is also easier; because each resource in an <abbr>HTTP</abbr> web service has a unique address (in the form of a <abbr>URL</abbr>), you can load it in your web browser and immediately see the raw data.
+ja:<p>このやり方の主たる利点はその単純さにあり、またこの単純さゆえに広く使われているのだ。データ&nbsp;&mdash;&nbsp;普通は<a href=xml.html><abbr>XML</abbr></a>か<a href=serializing.html#json><abbr>JSON</abbr></a>&nbsp;&mdash;&nbsp;は静的に構築して保存することもできるし、サーバーサイドスクリプトを使って動的に生成することもできる。そして、メジャーなプログラミング言語はすべて（もちろんPythonも！）このデータをダウンロードするための<abbr>HTTP</abbr>ライブラリを備えている。さらに、この方式だとデバッグも容易だ。というのも、<abbr>HTTP</abbr>ウェブサービスの個々のリソースにはユニークなアドレスが（<abbr>URL</abbr>の形式で）割り振られているため、ウェブブラウザにロードすればすぐに生のデータを見ることができるからだ。
+
+
+en:<p>Examples of <abbr>HTTP</abbr> web services:
+ja:<p><abbr>HTTP</abbr>ウェブサービスの例：
+
+
+en:<li><a href=http://code.google.com/apis/gdata/>Google Data <abbr>API</abbr>s</a> allow you to interact with a wide variety of Google services, including <a href=http://www.blogger.com/>Blogger</a> and <a href=http://www.youtube.com/>YouTube</a>.
+ja:<li><a href=http://code.google.com/apis/gdata/>Google Data <abbr>API</abbr></a>を使えば、<a href=http://www.blogger.com/>Blogger</a>や<a href=http://www.youtube.com/>YouTube</a>といった様々なGoogleのサービスとやりとりすることができる。
+
+
+en:<li><a href=http://www.flickr.com/services/api/>Flickr Services</a> allow you to upload and download photos from <a href=http://www.flickr.com/>Flickr</a>.
+ja:<li><a href=http://www.flickr.com/services/api/>Flickr Services</a>を使えば<a href=http://www.flickr.com/>Flickr</a>に写真をアップロードしたり、ダウンロードしたりすることができる。
+
+
+en:<li><a href=http://apiwiki.twitter.com/>Twitter <abbr>API</abbr></a> allows you to publish status updates on <a href=http://twitter.com/>Twitter</a>.
+ja:<li><a href=http://apiwiki.twitter.com/>Twitter <abbr>API</abbr></a>を使えば、<a href=http://twitter.com/>Twitter</a>に投稿することができる。
+
+
+en:<li><a href='http://www.programmableweb.com/apis/directory/1?sort=mashups'>&hellip;and many more</a>
+ja:<li><a href='http://www.programmableweb.com/apis/directory/1?sort=mashups'>&hellip;&hellip;など、その他いろいろ</a>
+
+
+en:<p>Python 3 comes with two different libraries for interacting with <abbr>HTTP</abbr> web services:
+ja:<p>Python 3には<abbr>HTTP</abbr>ウェブサービスと情報をやりとりするためのライブラリが二つ用意されている。
+
+
+en:<li><a href=http://docs.python.org/3.1/library/http.client.html><code>http.client</code></a> is a low-level library that implements <a href=http://www.w3.org/Protocols/rfc2616/rfc2616.html><abbr>RFC</abbr> 2616</a>, the <abbr>HTTP</abbr> protocol.
+ja:<li><a href=http://docs.python.org/3.1/library/http.client.html><code>http.client</code></a>は<abbr>HTTP</abbr>プロトコルの<a href=http://www.w3.org/Protocols/rfc2616/rfc2616.html><abbr>RFC</abbr> 2616</a>を実装した低級ライブラリだ。
+
+
+en:<li><a href=http://docs.python.org/3.1/library/urllib.request.html><code>urllib.request</code></a> is an abstraction layer built on top of <code>http.client</code>. It provides a standard <abbr>API</abbr> for accessing both <abbr>HTTP</abbr> and <abbr>FTP</abbr> servers, automatically follows <abbr>HTTP</abbr> redirects, and handles some common forms of <abbr>HTTP</abbr> authentication.
+ja:<li><a href=http://docs.python.org/3.1/library/urllib.request.html><code>urllib.request</code></a>は<code>http.client</code>上に構築された抽象化レイヤだ。これは<abbr>HTTP</abbr>サーバーと<abbr>FTP</abbr>サーバーの両方にアクセスするための標準<abbr>API</abbr>を提供してくれるもので、<abbr>HTTP</abbr>リダイレクトを自動でたどることもできれば、いくつかの一般的な<abbr>HTTP</abbr>認証方式も扱える。
+
+
+en:<p>So which one should you use? Neither of them. Instead, you should use <a href=http://code.google.com/p/httplib2/><code>httplib2</code></a>, an open source third-party library that implements <abbr>HTTP</abbr> more fully than <code>http.client</code> but provides a better abstraction than <code>urllib.request</code>.
+ja:<p>じゃあ、どちらを使うべきなのかって？ 実はどちらでもない。代わりに、<a href=http://code.google.com/p/httplib2/><code>httplib2</code></a>をお勧めする。これはオープンソースなサードパーティ製ライブラリで、<code>http.client</code>よりも完全に<abbr>HTTP</abbr>を実装しているのだが、しかも<code>urllib.request</code>よりも優れた抽象化を施しているという代物だ。
+
+
+en:<p>To understand why <code>httplib2</code> is the right choice, you first need to understand <abbr>HTTP</abbr>.
+ja:<p>どうして<code>httplib2</code>が正しい選択なのかを理解するには、まず<abbr>HTTP</abbr>について知っておかねばならない。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=http-features>Features of HTTP</h2>
+ja:<h2 id=http-features>HTTPの諸機能</h2>
+
+
+en:<p>There are five important features which all <abbr>HTTP</abbr> clients should support.
+ja:<p><abbr>HTTP</abbr>クライエントならば必ず備えるべき五つの機能がある。
+
+
+en:<h3 id=caching>Caching</h3>
+ja:<h3 id=caching>キャッシュ</h3>
+
+
+en:<p>The most important thing to understand about any type of web service is that network access is incredibly expensive. I don&#8217;t mean &#8220;dollars and cents&#8221; expensive (although bandwidth ain&#8217;t free). I mean that it takes an extraordinary long time to open a connection, send a request, and retrieve a response from a remote server. Even on the fastest broadband connection, <i>latency</i> (the time it takes to send a request and start retrieving data in a response) can still be higher than you anticipated. A router misbehaves, a packet is dropped, an intermediate proxy is under attack&nbsp;&mdash;&nbsp;there&#8217;s <a href=http://isc.sans.org/>never a dull moment</a> on the public internet, and there may be nothing you can do about it.
+ja:<p>ウェブサービスの種類にかかわらず知っておくべき最も重要なことは、ネットワークアクセスはとても高くつくということだ。とは言っても「お金」がかかるという意味ではなく（帯域はタダではないけどね）、接続を開き、リクエストを送り、そして遠隔サーバーからレスポンスを取得するまでには非常に長い時間がかかるということだ。<i>レイテンシ</i>（リクエストの送信後、その応答としてデータが受信され始めるまでの時間）は、想像よりも大きくなりうるものなのだ。ルーターは処理を誤り、パケットは抜け落ち、さらに中継のプロキシはアタックを受ける&nbsp;&mdash;&nbsp;公衆に開かれたインターネットには<a href=http://isc.sans.org/>一刻も休まる時など無く</a>、そしてあなたがこれに対してできることは多分何もない。
+
+
+en:<aside><code>Cache-Control: max-age</code> means &#8220;don't bug me until next week.&#8221;</aside>
+ja:<aside><code>Cache-Control: max-age</code>とは「来週まで私に構わないで」ということだ。</aside>
+
+
+en:<p><abbr>HTTP</abbr> is designed with caching in mind. There is an entire class of devices (called &#8220;caching proxies&#8221;) whose only job is to sit between you and the rest of the world and minimize network access. Your company or <abbr>ISP</abbr> almost certainly maintains caching proxies, even if you&#8217;re unaware of them. They work because caching built into the <abbr>HTTP</abbr> protocol.
+ja:<p><abbr>HTTP</abbr>はキャッシュのことを念頭に置いて設計されている。実際に、あなたと世界との間に横たわって、ネットワークアクセスを最小限にするという仕事のみを行うデバイス（「キャッシュプロキシ」と呼ばれている）なんてものもあるのだ。あなたは気がついていないかもしれないが、あなたの会社や<abbr>ISP</abbr>はほぼ間違いなくこのキャッシュプロキシを運用している。これができるのも、キャッシュが<abbr>HTTP</abbr>プロトコルに組み込まれているからなのだ。
+
+
+en:<p>Here&#8217;s a concrete example of how caching works. You visit <a href=http://diveintomark.org/><code>diveintomark.org</code></a> in your browser. That page includes a background image, <a href=http://wearehugh.com/m.jpg><code>wearehugh.com/m.jpg</code></a>. When your browser downloads that image, the server includes the following <abbr>HTTP</abbr> headers:
+ja:<p>キャッシュがどのように機能するかの具体的な例を挙げよう。仮にブラウザで<a href=http://diveintomark.org/><code>diveintomark.org</code></a>にアクセスしたとする。このページの背景には<a href=http://wearehugh.com/m.jpg><code>wearehugh.com/m.jpg</code></a>という画像が置かれている。ここでブラウザがこの画像をダウンロードをすると、サーバーは次のような<abbr>HTTP</abbr>ヘッダを付けてくる：
+
+
+en:<p>The <code>Cache-Control</code> and <code>Expires</code> headers tell your browser (and any caching proxies between you and the server) that this image can be cached for up to a year. <em>A year!</em> And if, in the next year, you visit another page which also includes a link to this image, your browser will load the image from its cache <em>without generating any network activity whatsoever</em>.
+ja:<p>この<code>Cache-Control</code>と<code>Expires</code>のヘッダは、ブラウザ（それに加えて、あなたとサーバーとの間にあるキャッシュプロキシすべて）に対して「一年間はこの画像をキャッシュしてもいいよ」ということを伝えるものだ。<em>一年間！</em> だからもし、次の年にこの画像へのリンクを含む別のページにアクセスしたとすると、ブラウザはキャッシュにある画像を読み込むので、<em>ネットワークを介したやりとりは全く行われないのだ</em>。
+
+
+en:<p>But wait, it gets better. Let&#8217;s say your browser purges the image from your local cache for some reason. Maybe it ran out of disk space; maybe you manually cleared the cache. Whatever. But the <abbr>HTTP</abbr> headers said that this data could be cached by public caching proxies. (Technically, the important thing is what the headers <em>don&#8217;t</em> say; the <code>Cache-Control</code> header doesn&#8217;t have the <code>private</code> keyword, so this data is cacheable by default.) Caching proxies are designed to have tons of storage space, probably far more than your local browser has allocated.
+ja:<p>しかし待って欲しい、話はもっと良くなる。ブラウザが何かの理由でこの画像をローカルキャッシュから消してしまったとしよう。その原因はディスクスペースが尽きたということかもしれないし、あるいはあなたが自分でキャッシュを削除したのかもしれない。その原因が何であれ、<abbr>HTTP</abbr>ヘッダは「この画像のデータはパブリックなキャッシュプロキシで保存してもかまわないよ」と述べている（厳密に言えば、ここで重要なのはこのヘッダが述べて<em>いない</em>ことだ。つまり、<code>Cache-Control</code>ヘッダの中に<code>private</code>というキーワードが含まれていないので、このデータはデフォルトでキャッシュできるようになっているのだ）。キャッシュプロキシは膨大な記憶容量を持つように設計されていて、たぶんその容量はあなたのブラウザが用意したものよりもはるかに大きいだろう。
+
+
+en:<p>If your company or <abbr>ISP</abbr> maintain a caching proxy, the proxy may still have the image cached. When you visit <code>diveintomark.org</code> again, your browser will look in its local cache for the image, but it won&#8217;t find it, so it will make a network request to try to download it from the remote server. But if the caching proxy still has a copy of the image, it will intercept that request and serve the image from <em>its</em> cache. That means that your request will never reach the remote server; in fact, it will never leave your company&#8217;s network. That makes for a faster download (fewer network hops) and saves your company money (less data being downloaded from the outside world).
+ja:<p>もし、あなたの会社や<abbr>ISP</abbr>がキャッシュプロキシを運営していたら、そのプロキシにはまだこの画像がキャッシュされているかもしれない。ここで再び<code>diveintomark.org</code>にアクセスしたとしよう。すると、まずブラウザはこの画像を探してローカルキャッシュを漁る。しかし、見つけることができないので、今度は遠隔サーバーからダウンロードしようと、ネットワークを通してリクエストを送信するだろう。そこで、もしキャッシュプロキシの方にまだ画像のコピーがあれば、リクエストはそこで止められて、<em>プロキシの</em>キャッシュから画像が返される。つまり、リクエストが遠隔サーバーに到達することはないのだ。現に、このリクエストはあなたの会社のネットワークを離れてさえいない。この仕組みのおかげで、高速なダウンロード（より少ないホップ数での通信）が可能になり、会社側のコストも節約（外部からダウンロードされるデータをより少なく）できるのだ。
+
+
+en:<p><abbr>HTTP</abbr> caching only works when everybody does their part. On one side, servers need to send the correct headers in their response. On the other side, clients need to understand and respect those headers before they request the same data twice. The proxies in the middle are not a panacea; they can only be as smart as the servers and clients allow them to be.
+ja:<p><abbr>HTTP</abbr>キャッシュは各々が自分の仕事をしっかりこなしている場合にのみうまくいく。つまり、一方ではサーバーが正しいヘッダを返信しなくてはならないし、もう一方ではクライアントがそのヘッダを理解した上で、同じデータを二度リクエストする前にヘッダに従った処理を行わなければならない。その中間に置かれるプロキシは万能薬などではなく、サーバーとクライアントが上手く処理してくれる限りにおいて機能できるだけなのだ。
+
+
+en:<p>Python&#8217;s <abbr>HTTP</abbr> libraries do not support caching, but <code>httplib2</code> does.
+ja:<p>Pythonの<abbr>HTTP</abbr>ライブラリはキャッシュをサポートしていないが、<code>httplib2</code>はサポートしている。
+
+
+en:<h3 id=last-modified>Last-Modified Checking</h3>
+ja:<h3 id=last-modified>Last-Modifiedチェック</h3>
+
+
+en:<p>Some data never changes, while other data changes all the time. In between, there is a vast field of data that <em>might</em> have changed, but hasn&#8217;t. CNN.com&#8217;s feed is updated every few minutes, but my weblog&#8217;s feed may not change for days or weeks at a time. In the latter case, I don&#8217;t want to tell clients to cache my feed for weeks at a time, because then when I do actually post something, people may not read it for weeks (because they&#8217;re respecting my cache headers which said &#8220;don&#8217;t bother checking this feed for weeks&#8221;). On the other hand, I don&#8217;t want clients downloading my entire feed once an hour if it hasn&#8217;t changed!
+ja:<p>ひっきりなしに変更されるデータがある一方で、決して変わらないデータもある。その中間には、更新された<em>可能性があった</em>のだが、実際には何も変更されていなかったという類のデータが大量に存在している。CNN.comのフィードは数分おきに更新されるが、私のブログのフィードは数日か数週間は更新されない。後者の場合、私はクライアントに何週間もフィードをキャッシュしてもらいたいとは思わないだろう。そうすると、実際に何かをブログに投稿しても、読者が数週間その記事を目にしないということになりかねないからだ（これも読者の皆さんが「数週間はこのフィードをチェックしないで」としている私のヘッダに従ってくれるおかげだ）。その一方で、一時間ごとにフィード全体をダウンロードして更新をチェックされても困るのだ！
+
+
+en:<aside><code>304: Not Modified</code> means &#8220;same shit, different day.&#8221;</aside>
+ja:<aside><code>304: Not Modified</code>とは「毎日同じものの繰り返し」ということだ。</aside>
+
+
+en:<p><abbr>HTTP</abbr> has a solution to this, too. When you request data for the first time, the server can send back a <code>Last-Modified</code> header. This is exactly what it sounds like: the date that the data was changed. That background image referenced from <code>diveintomark.org</code> included a <code>Last-Modified</code> header.
+ja:<p><abbr>HTTP</abbr>にはこれを解決する方法も用意されている。最初にデータをリクエストされたときに、サーバーは<code>Last-Modified</code>ヘッダを付けて返信することができる。これはその名前のとおり、データが更新された日時を表すものだ。<code>diveintomark.org</code>が参照している背景画像にも<code>Last-Modified</code>ヘッダが付いている。
+
+
+en:<p>When you request the same data a second (or third or fourth) time, you can send an <code>If-Modified-Since</code> header with your request, with the date you got back from the server last time. If the data has changed since then, then the server ignores the <code>If-Modified-Since</code> header and just gives you the new data with a <code>200</code> status code. But if the data <em>hasn&#8217;t</em> changed since then, the server sends back a special <abbr>HTTP</abbr> <code>304</code> status code, which means &#8220;this data hasn&#8217;t changed since the last time you asked for it.&#8221; You can test this on the command line, using <a href=http://curl.haxx.se/>curl</a>:
+ja:<p>同じデータを二度目（三度目でも四度目でもいいのだが）にリクエストする時、前回サーバーから返された日時を入れた<code>If-Modified-Since</code>ヘッダをリクエストに付けて送ることができる。もし、データがその日時以降に変更されていれば、サーバーは<code>If-Modified-Since</code>ヘッダを無視し、ステータスコード<code>200</code>と一緒に新しいデータを送り返してくれる。しかし、データがその日時以降に何も変更されて<em>いなければ</em>、サーバーは<abbr>HTTP</abbr> <code>304</code>という特別なステータスコードを返す。これは「このデータは前回リクエストされた時から何も変更されていないよ」ということを表すものだ。ちなみに、<a href=http://curl.haxx.se/>curl</a>を使えばこれをコマンドライン上でテストすることもできる。
+
+
+en:<p>Why is this an improvement?  Because when the server sends a <code>304</code>, <em>it doesn&#8217;t re-send the data</em>. All you get is the status code. Even after your cached copy has expired, last-modified checking ensures that you won&#8217;t download the same data twice if it hasn&#8217;t changed. (As an extra bonus, this <code>304</code> response also includes caching headers. Proxies will keep a copy of data even after it officially &#8220;expires,&#8221; in the hopes that the data hasn&#8217;t <em>really</em> changed and the next request responds with a <code>304</code> status code and updated cache information.)
+ja:<p>どうしてこれで状況が改善されるのかって？ サーバーが<code>304</code>を返す場合には、<em>データ自体は再び送られてこないからだ</em>。返送されるのはステータスコードだけなのだ。キャッシュされたコピーの有効期限が切れていた場合でも、last-modifiedチェックを使えば、データが変更されていない限り、同じデータを再びダウンロードしなくても済むようになる（さらなるおまけとして、<code>304</code>が返される時もキャッシュに関するヘッダは送られてくる。データが<em>本当に</em>変更されておらず、さらに次のリクエストで<code>304</code>ステータスコードと最新のキャッシュ情報が返されるかもしれないので、正式には「有効期限切れ」とされているデータのコピーもプロキシは保存し続けるものなのだ）。
+
+
+en:<p>Python&#8217;s <abbr>HTTP</abbr> libraries do not support last-modified date checking, but <code>httplib2</code> does.
+ja:<p>Pythonの<abbr>HTTP</abbr>ライブラリはlast-modifiedチェックをサポートしていないが、<code>httplib2</code>はサポートしている。
+
+
+en:<h3 id=etags>ETag Checking</h3>
+ja:<h3 id=etags>ETagチェック</h3>
+
+
+en:<p>ETags are an alternate way to accomplish the same thing as the <a href=#last-modified>last-modified checking</a>. With Etags, the server sends a hash code in an <code>ETag</code> header along with the data you requested. (Exactly how this hash is determined is entirely up to the server. The only requirement is that it changes when the data changes.) That background image referenced from <code>diveintomark.org</code> had an <code>ETag</code> header.
+ja:<p>ETagとは<a href=#last-modified>last-modifiedチェック</a>と同じ役割を果たすものだ。Etagsを使った場合には、サーバーはリクエストされたデータに加えて、ハッシュを納めた<code>ETag</code>ヘッダを返してくる（このハッシュをどのように生成するかについては完全にサーバーに委ねられている。データが変更されたときにその値が変わりさえすればなんでもいいのだ）。<code>diveintomark.org</code>から参照されている背景画像にも<code>ETag</code>ヘッダが含まれている。
+
+
+en:<aside><code>ETag</code> means &#8220;there&#8217;s nothing new under the sun.&#8221;</aside>
+ja:<aside><code>ETag</code>とは「日の下には新しいものはない」ということだ。</aside>
+
+
+en:<p>The second time you request the same data, you include the ETag hash in an <code>If-None-Match</code> header of your request. If the data hasn&#8217;t changed, the server will send you back a <code>304</code> status code. As with the last-modified date checking, the server sends back <em>only</em> the <code>304</code> status code; it doesn&#8217;t send you the same data a second time. By including the ETag hash in your second request, you&#8217;re telling the server that there&#8217;s no need to re-send the same data if it still matches this hash, since <a href=#caching>you still have the data from the last time</a>.
+ja:<p>同じデータを二度目にリクエストする時には、Etagのハッシュを入れた<code>If-None-Match</code>ヘッダを付けて送る。データが変わっていなければ、サーバーは<code>304</code>ステータスコードを送り返してくれるだろう。この場合、last-modifiedチェックの時と同じく、サーバーは<code>304</code>ステータスコード<em>だけ</em>を返すので、同じデータが二度送信されることはない。つまり、Etagのハッシュを二度目のリクエストの際に一緒に送ることで「<a href=#caching>最後にリクエストした時のデータがまだ残っている</a>から、まだハッシュが一致するようなら同じデータを再送信する必要は無いよ」とサーバーに伝えていることになるのだ。
+
+
+en:<p>Again with the <kbd>curl</kbd>:
+ja:<p>再び<kbd>curl</kbd>を使ってみよう：
+
+
+en:<li>ETags are commonly enclosed in quotation marks, but <em>the quotation marks are part of the value</em>. That means you need to send the quotation marks back to the server in the <code>If-None-Match</code> header.
+ja:<li>ETagは一般に引用符で括られているのだが、実は<em>この引用符も値の一部だ</em>。だから、<code>If-None-Match</code>ヘッダをサーバーに送り返す時には引用符を付けて返さなくてはならない。
+
+
+en:<p>Python&#8217;s <abbr>HTTP</abbr> libraries do not support ETags, but <code>httplib2</code> does.
+ja:<p>Pythonの<abbr>HTTP</abbr>ライブラリはEtagをサポートしていないが、<code>httplib2</code>はサポートしている。
+
+
+en:<h3 id=compression>Compression</h3>
+ja:<h3 id=compression>圧縮</h3>
+
+
+en:<p>When you talk about <abbr>HTTP</abbr> web services, you&#8217;re almost always talking about moving text-based data back and forth over the wire. Maybe it&#8217;s <abbr>XML</abbr>, maybe it&#8217;s <abbr>JSON</abbr>, maybe it&#8217;s just <a href=strings.html#boring-stuff title='there ain&#8217;t no such thing as plain text'>plain text</a>. Regardless of the format, text compresses well. The example feed in <a href=xml.html>the XML chapter</a> is 3070 bytes uncompressed, but would be 941 bytes after gzip compression. That&#8217;s just 30% of the original size!
+ja:<p><abbr>HTTP</abbr>ウェブサービスということになると、ほとんどの場合、回線を通じてテキストベースのデータを行き来させるという話になる。そのデータは<abbr>XML</abbr>かもしれないし、<abbr>JSON</abbr>かもしれない。あるいは単なる<a href=strings.html#boring-stuff title='プレーンテキストなどというものは無い'>プレーンテキスト</a>かもしれない。形式が何であれ、テキストというのは圧縮効率が良いものだ。<a href=xml.html>XMLの章</a>で例に出したフィードは圧縮していない状態だと3070バイトなのだが、gzipで圧縮すると941バイトになる。元のサイズの30%になってしまうのだ！
+
+
+en:<p><abbr>HTTP</abbr> supports <a href=http://www.iana.org/assignments/http-parameters>several compression algorithms</a>. The two most common types are <a href=http://www.ietf.org/rfc/rfc1952.txt>gzip</a> and <a href=http://www.ietf.org/rfc/rfc1951.txt>deflate</a>. When you request a resource over <abbr>HTTP</abbr>, you can ask the server to send it in compressed format. You include an <code>Accept-encoding</code> header in your request that lists which compression algorithms you support. If the server supports any of the same algorithms, it will send you back compressed data (with a <code>Content-encoding</code> header that tells you which algorithm it used). Then it&#8217;s up to you to decompress the data.
+ja:<p><abbr>HTTP</abbr>は<a href=http://www.iana.org/assignments/http-parameters>いくつかの圧縮アルゴリズム</a>をサポートしているが、最も一般に用いられている形式は<a href=http://www.ietf.org/rfc/rfc1952.txt>gzip</a>と<a href=http://www.ietf.org/rfc/rfc1951.txt>deflate</a>の二つだ。<abbr>HTTP</abbr>を使ってリソースをリクエストする時には、圧縮形式で送るようにサーバーに頼むことができる。あなたがサポートしている圧縮アルゴリズムのリストが入った<code>Accept-encoding</code>ヘッダをリクエストに付け加えればいいのだ。サーバーがそのアルゴリズムのいずれかをサポートしていれば、圧縮したデータを返してくれることだろう（この場合、どのアルゴリズムが使われたかを示す<code>Content-encoding</code>ヘッダもついてくる）。後は、送られてきたデータを展開すればいい。
+
+
+en:<p><span class=u>&#x261E;</span>Important tip for server-side developers: make sure that the compressed version of a resource has a different <a href=#etags>Etag</a> than the uncompressed version. Otherwise, caching proxies will get confused and may serve the compressed version to clients that can&#8217;t handle it. Read the discussion of <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=39727">Apache bug 39727</a> for more details on this subtle issue.
+ja:<p><span class=u>&#x261E;</span>サーバーサイドの開発者向けの重要なメモ： 圧縮したデータと未圧縮のデータが異なる<a href=#etags>Etag</a>を持つようにすること。でないと、キャッシュプロキシが混乱して、クライアントが扱えないのに圧縮された形式で返してしまいかねないからだ。この微妙な問題の詳細については、<a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=39727">Apacheバグ 39727</a>に関する議論を読んでほしい。
+
+
+en:<p>Python&#8217;s <abbr>HTTP</abbr> libraries do not support compression, but <code>httplib2</code> does.
+ja:<p>Pythonの<abbr>HTTP</abbr>ライブラリは圧縮をサポートしていないが、<code>httplib2</code>はサポートしている。
+
+
+en:<h3 id=redirects>Redirects</h3>
+ja:<h3 id=redirects>リダイレクト</h3>
+
+
+en:<p><a href=http://www.w3.org/Provider/Style/URI>Cool <abbr>URI</abbr>s don&#8217;t change</a>, but many <abbr>URI</abbr>s are seriously uncool. Web sites get reorganized, pages move to new addresses. Even web services can reorganize. A syndicated feed at <code>http://example.com/index.xml</code> might be moved to <code>http://example.com/xml/atom.xml</code>. Or an entire domain might move, as an organization expands and reorganizes; <code>http://www.example.com/index.xml</code> becomes <code>http://server-farm-1.example.com/index.xml</code>.
+ja:<p><a href=http://www.w3.org/Provider/Style/URI>クールな<abbr>URI</abbr>は変更されない</a>ものなのだが、たいていの<abbr>URI</abbr>はどうしようもなくクールではない。ウェブサイトは再構成されて、ページは新しいアドレスに移されてしまう。ウェブサービスですら再編されることがあるのだ。例えば、<code>http://example.com/index.xml</code>で配信されていたフィードは、<code>http://example.com/xml/atom.xml</code>に移されてしまうかもしれない。あるいは、 組織の拡大や再編の一環として、ドメイン自体が変えられることだってある。例えば、<code>http://www.example.com/index.xml</code>は<code>http://server-farm-1.example.com/index.xml</code>に移転するかもしれない。
+
+
+en:<aside><code>Location</code> means &#8220;look over there!&#8221;</aside>
+ja:<aside><code>Location</code>とは「あっちを見ろ！」ということだ。</aside>
+
+
+en:<p>Every time you request any kind of resource from an <abbr>HTTP</abbr> server, the server includes a status code in its response. Status code <code>200</code> means &#8220;everything&#8217;s normal, here&#8217;s the page you asked for&#8221;. Status code <code>404</code> means &#8220;page not found&#8221;. (You&#8217;ve probably seen 404 errors while browsing the web.) Status codes in the 300&#8217;s indicate some form of redirection.
+ja:<p>リソースを<abbr>HTTP</abbr>サーバーにリクエストした場合にはいつも、サーバーはステータスコードも送り返してくる。ステータスコード<code>200</code>が意味するのは「万事異常無し。これがリクエストされたページだ」ということだ。ステータスコード<code>404</code>は「ページが見つかりません」ということを意味する（たぶんウェブブラウジングをしていて404エラーに出くわしたことがあるだろう）。300台のステータスコードは何らかの形のリダイレクトを表している。
+
+
+en:<p><abbr>HTTP</abbr> has several different ways of signifying that a resource has moved. The two most common techiques are status codes <code>302</code> and <code>301</code>. Status code <code>302</code> is a <i>temporary redirect</i>; it means &#8220;oops, that got moved over here temporarily&#8221; (and then gives the temporary address in a <code>Location</code> header). Status code <code>301</code> is a <i>permanent redirect</i>; it means &#8220;oops, that got moved permanently&#8221; (and then gives the new address in a <code>Location</code> header). If you get a <code>302</code> status code and a new address, the <abbr>HTTP</abbr> specification says you should use the new address to get what you asked for, but the next time you want to access the same resource, you should retry the old address. But if you get a <code>301</code> status code and a new address, you&#8217;re supposed to use the new address from then on.
+ja:<p><abbr>HTTP</abbr>にはリソースが移転したことを知らせる方法がいくつか用意されている。中でも最もよく使われているのはステータスコードの<code>302</code>と<code>301</code>を使う方法だ。ステータスコード<code>302</code>は<i>一時的なリダイレクト</i>を表す。つまり、「おっと、それは一時的にあっちに移転されてるよ」ということだ（その上で、一時的なアドレスを<code>Location</code>ヘッダに入れて渡してくれる）。一方で、ステータスコード<code>301</code>は<i>恒久的なリダイレクト</i>を表す。つまり、「おっと。それはあっちに完全に移転されてるよ」ということだ（その上で、新しいアドレスを<code>Location</code>に入れて渡してくれる）。ステータスコード<code>302</code>と一緒に新しいアドレスを受け取った場合について、<abbr>HTTP</abbr>の仕様は「リクエストしたリソースを取得するには新しいアドレスを使えばいいが、次に同じリソースにアクセスする時には古いアドレスを試すべし」としている。ステータスコード<code>301</code>と一緒に新しいアドレスを受け取った場合には、以後その新しいアドレスを使っていけばいい。
+
+
+en:<p>The <code>urllib.request</code> module automatically &#8220;follow&#8221; redirects when it receives the appropriate status code from the <abbr>HTTP</abbr> server, but it doesn&#8217;t tell you that it did so. You&#8217;ll end up getting data you asked for, but you&#8217;ll never know that the underlying library &#8220;helpfully&#8221; followed a redirect for you. So you&#8217;ll continue pounding away at the old address, and each time you&#8217;ll get redirected to the new address, and each time the <code>urllib.request</code> module will &#8220;helpfully&#8221; follow the redirect. In other words, it treats permanent redirects the same as temporary redirects. That means two round trips instead of one, which is bad for the server and bad for you.
+ja:<p><code>urllib.request</code>モジュールは<abbr>HTTP</abbr>サーバーから適切なステータスコードを受け取った場合に自動でそのリダイレクトをたどってくれるのだが、そのように処理したとは何も言ってくれない。要するに、最終的にリクエストしたデータは取得できるにしても、その処理を支えるライブラリが「ご親切にも」リダイレクトをたどってくれたとは分からないのだ。だから、あなたは古いアドレスに何度も何度もアクセスし続けることになり、その度に新しいアドレスにリダイレクトされて、しかも毎回<code>urllib.request</code>が「ご丁寧に」リダイレクトをたどってくれる。言い換えれば、これは恒久的なリダイレクトを一時的なリダイレクトと同じように扱っているわけだ。こうすると一回で済むところを二回往復することになるので、これはサーバーにとってもあなたにとっても良くないことなのだ。
+
+
+en:<p><code>httplib2</code> handles permanent redirects for you. Not only will it tell you that a permanent redirect occurred, it will keep track of them locally and automatically rewrite redirected <abbr>URL</abbr>s before requesting them.
+ja:<p><code>httplib2</code>は恒久的なリダイレクトを処理してくれる。恒久的なリダイレクトが生じたことを教えてくれるのみならず、そのリダイレクトをローカルに保存し、リダイレクトされた<abbr>URL</abbr>をリクエストの前に自動で書き直してくれるのだ。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=dont-try-this-at-home>How Not To Fetch Data Over HTTP</h2>
+ja:<h2 id=dont-try-this-at-home>HTTPを使ってデータを取得するまずいやり方</h2>
+
+
+en:<p>Let&#8217;s say you want to download a resource over <abbr>HTTP</abbr>, such as <a href=xml.html>an Atom feed</a>. Being a feed, you&#8217;re not just going to download it once; you&#8217;re going to download it over and over again. (Most feed readers will check for changes once an hour.) Let&#8217;s do it the quick-and-dirty way first, and then see how you can do better.
+ja:<p><abbr>HTTP</abbr>を使って<a href=xml.html>Atomフィード</a>などのリソースをダウンロードしたいと考えたとしよう。フィードということなので、一回ダウンロードするだけでは済まず、何回も何回もダウンロードすることになる（ほとんどのフィードリーダーは一時間に一回、更新をチェックする）。まずは、こいつを手早く雑に実装してみて、それからどうやったら改善できるかを考えることにしよう。
+
+
+en:<li>Downloading anything over <abbr>HTTP</abbr> is incredibly easy in Python; in fact, it&#8217;s a one-liner. The <code>urllib.request</code> module has a handy <code>urlopen()</code> function that takes the address of the page you want, and returns a file-like object that you can just <code>read()</code> from to get the full contents of the page. It just can&#8217;t get any easier.
+ja:<li>どんなものであれ<abbr>HTTP</abbr>を使ってダウンロードするのは、Pythonでは驚くほど簡単だ。実際に、たった一行でできてしまう。<code>urllib.request</code>モジュールには便利な<code>urlopen()</code>という関数が用意されていて、これはダウンロードしたいページのアドレスを引数にとり、ファイルに似たオブジェクトを返すものなのだが、このオブジェクトを<code>read()</code>するだけでページの内容を全て取得することができるのだ。これ以上簡単にしようがないだろう。
+
+
+en:<li>The <code>urlopen().read()</code> method always returns <a href=strings.html#byte-arrays>a <code>bytes</code> object, not a string</a>. Remember, bytes are bytes; characters are an abstraction. <abbr>HTTP</abbr> servers don&#8217;t deal in abstractions. If you request a resource, you get bytes. If you want it as a string, you&#8217;ll need to <a href=http://feedparser.org/docs/character-encoding.html>determine the character encoding</a> and explicitly convert it to a string.
+ja:<li><code>urlopen().read()</code>メソッドは常に<a href=strings.html#byte-arrays>文字列ではなく<code>bytes</code>オブジェクト</a>を返す。思い出してほしいのだが、 バイト列はバイト列であって、文字列はそれを抽象化したものだった。<abbr>HTTP</abbr>は抽象化されたものを扱わないので、リソースをリクエストした時には、バイト列の形で受け取ることになる。それを文字列として扱いたいなら、<a href=http://feedparser.org/docs/character-encoding.html>文字コード</a>を定めて明示的に文字列に変換しなくてはならない。
+
+
+en:<p>So what&#8217;s wrong with this? For a quick one-off during testing or development, there&#8217;s nothing wrong with it. I do it all the time. I wanted the contents of the feed, and I got the contents of the feed. The same technique works for any web page. But once you start thinking in terms of a web service that you want to access on a regular basis (<i>e.g.</i> requesting this feed once an hour), then you&#8217;re being inefficient, and you&#8217;re being rude.
+ja:<p>それで、この方法のどこがまずいのだろう？ テストや開発の際に一回だけ使うお手軽なコードとしては、これで何も悪くない。私もよくこれを使っている。フィードの中身を取得しようとしていて、それでフィードの中身が手に入っているわけだし、この方法でどのウェブページも取得できる。しかし、定期的にアクセスされるようなウェブサービス（<i>e.g.</i>このフィードを一時間に一回リクエストする場合）の観点からすると、これは効率が悪いというだけではなく、無礼な方法でもあるのだ。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=whats-on-the-wire>What&#8217;s On The Wire?</h2>
+ja:<h2 id=whats-on-the-wire>何が回線を通っているのか?</h2>
+
+
+en:<p>To see why this is inefficient and rude, let&#8217;s turn on the debugging features of Python&#8217;s <abbr>HTTP</abbr> library and see what&#8217;s being sent &#8220;on the wire&#8221; (<i>i.e.</i> over the network).
+ja:<p>これがなぜ非効率で無礼なのかを理解するために、Pythonの<abbr>HTTP</abbr>ライブラリのデバッグ機能をオンにして何が「回線を通じて」（<i>i.e.</i> ネットワークを介して）送られているのかを見てみよう。
+
+
+en:<li>As I mentioned at the beginning of the chapter, <code>urllib.request</code> relies on another standard Python library, <code>http.client</code>. Normally you don&#8217;t need to touch <code>http.client</code> directly. (The <code>urllib.request</code> module imports it automatically.) But we import it here so we can toggle the debugging flag on the <code>HTTPConnection</code> class that <code>urllib.request</code> uses to connect to the <abbr>HTTP</abbr> server.
+ja:<li>この章の最初で述べたように、<code>urllib.request</code>は<code>http.client</code>という他のPythonの標準ライブラリに依存している。本来なら<code>http.client</code>に直接触れる必要は無いのだが（<code>urllib.request</code>モジュールが自動でインポートしてくれる）、ここでは<code>urllib.request</code>が<abbr>HTTP</abbr>サーバーに接続する際に使っている<code>HTTPConnection</code>クラスのデバッグフラグをオンに切り替えるためにインポートしている。
+
+
+en:<li>Now that the debugging flag is set, information on the <abbr>HTTP</abbr> request and response is printed out in real time. As you can see, when you request the Atom feed, the <code>urllib.request</code> module sends five lines to the server.
+ja:<li>デバッグフラグが立っているので、<abbr>HTTP</abbr>のリクエストとレスポンスに関する情報がリアルタイムで出力される。ご覧のとおり、このAtomフィードをリクエストする際に、<code>urllib.request</code>モジュールは5行のコードを送っている。
+
+
+en:<li>The first line specifies the <abbr>HTTP</abbr> verb you&#8217;re using, and the path of the resource (minus the domain name).
+ja:<li>最初の行はあなたが使っている<abbr>HTTP</abbr>の動詞と、リソースのパス（からドメイン名を引いたもの）を明示している。
+
+
+en:<li>The second line specifies the domain name from which we&#8217;re requesting this feed.
+ja:<li>二行目はリクエストしているフィードのあるドメイン名を示している。
+
+
+en:<li>The third line specifies the compression algorithms that the client supports. As I mentioned earlier, <a href=#compression><code>urllib.request</code> does not support compression</a> by default.
+ja:<li>三行目はクライアントがサポートしている圧縮アルゴリズムを指定している。先ほど述べたように、標準では<a href=#compression><code>urllib.request</code>は圧縮をサポートしていない</a>。
+
+
+en:<li>The fourth line specifies the name of the library that is making the request. By default, this is <code>Python-urllib</code> plus a version number. Both <code>urllib.request</code> and <code>httplib2</code> support changing the user agent, simply by adding a <code>User-Agent</code> header to the request (which will override the default value).
+ja:<li>四行目はリクエストを行っているライブラリの名前を示している。標準では<code>Python-urllib</code>とバージョン番号が記される。<code>urllib.request</code>と<code>httplib2</code>ではこのユーザーエージェントを変更することができ、そのためには単に<code>User-Agent</code>ヘッダをリクエストに加えるだけでいい（こうするとデフォルトの値が置き換えられる）。
+
+
+en:<aside>We&#8217;re downloading 3070 bytes when we could have just downloaded 941.</aside>
+ja:<aside>941バイトで済むところを3070バイトもダウンロードしている。</aside>
+
+
+en:<p>Now let&#8217;s look at what the server sent back in its response.
+ja:<p>では、サーバーが何を送り返してきたのかを見てみよう。
+
+
+en:<li>The <var>response</var> returned from the <code>urllib.request.urlopen()</code> function contains all the <abbr>HTTP</abbr> headers the server sent back. It also contains methods to download the actual data; we&#8217;ll get to that in a minute.
+ja:<li><code>urllib.request.urlopen()</code>関数から返された<var>response</var>にはサーバーが返した<abbr>HTTP</abbr>ヘッダが全て入っている。加えて、このオブジェクトには実際のデータをダウンロードするためのメソッドも入っている。これについてはすぐに触れる。
+
+
+en:<li>The server tells you when it handled your request.
+ja:<li>サーバーはいつあなたのリクエストを処理したのかを教えてくれる。
+
+
+en:<li>This response includes a <a href=#last-modified><code>Last-Modified</code></a> header.
+ja:<li>このレスポンスには<a href=#last-modified><code>Last-Modified</code></a>ヘッダが含まれている。
+
+
+en:<li>This response includes an <a href=#etags><code>ETag</code></a> header.
+ja:<li>さらには<a href=#etags><code>ETag</code></a>ヘッダもこのレスポンスに入っている。
+
+
+en:<li>The data is 3070 bytes long. Notice what <em>isn&#8217;t</em> here: a <code>Content-encoding</code> header. Your request stated that you only accept uncompressed data (<code>Accept-encoding: identity</code>), and sure enough, this response contains uncompressed data.
+ja:<li>このデータは3070バイトだ。ここに何が<em>欠けている</em>かに注意してほしい。つまり、これには<code>Content-encoding</code>ヘッダが抜けているのだ。リクエストでは圧縮していないデータしか受け取れないと明示したので（<code>Accept-encoding: identity</code>）、当然のことながら、このレスポンスには圧縮されていないデータが入っている。
+
+
+en:<li>This response includes caching headers that state that this feed can be cached for up to 24 hours (86400 seconds).
+ja:<li>このレスポンスにはキャッシュヘッダが含まれていて、これは「24時間（86400秒）までならキャッシュしてもいいよ」と述べている。
+
+
+en:<li>And finally, download the actual data by calling <code>response.read()</code>. As you can tell from the <code>len()</code> function, this downloads all 3070 bytes at once.
+ja:<li>そして最後に、<code>response.read()</code>を呼び出すことで実際のデータをダウンロードしている。<code>len()</code>関数の戻り値を見れば分かるように、ここでは一度に3070バイトをダウンロードしている。
+
+
+en:<p>As you can see, this code is already inefficient: it asked for (and received) uncompressed data. I know for a fact that this server supports <a href=#compression>gzip compression</a>, but <abbr>HTTP</abbr> compression is opt-in. We didn&#8217;t ask for it, so we didn&#8217;t get it. That means we&#8217;re downloading 3070 bytes when we could have just downloaded 941. Bad dog, no biscuit.
+ja:<p>お分かりだと思うが、この時点で既にこのコードは非効率的だ。このコードは圧縮されていないデータをリクエストしている（そしてその通り受け取っている）のだ。私はこのサーバーが<a href=#compression>gzip圧縮</a>をサポートしていることを事実として知っているのだが、<abbr>HTTP</abbr>の圧縮機能を利用するにはそのように指定しておかなければならないのだ。今回はそう指定しなかったので、データは圧縮されなかった。だから、941バイトで済むところを、3070バイトもダウンロードすることになってしまったというわけだ。なんて悪い子だ。ビスケットはおあずけだな。
+
+
+en:<p>But wait, it gets worse! To see just how inefficient this code is, let&#8217;s request the same feed a second time.
+ja:<p>けどちょっと待って、これはもっと悪くなるんだ！ このコードがどれだけ非効率かを見るために、もう一度同じフィードをリクエストしてみよう。
+
+
+en:<p>Notice anything peculiar about this request? It hasn&#8217;t changed! It&#8217;s exactly the same as the first request. No sign of <a href=#last-modified><code>If-Modified-Since</code> headers</a>. No sign of <a href=#etags><code>If-None-Match</code> headers</a>. No respect for the caching headers. Still no compression.
+ja:<p>何かこのリクエストのおかしなところに気がついただろうか？ これは何も変わっていないのだ！ 内容は最初のリクエストと全く同じで、<a href=#last-modified><code>If-Modified-Since</code>ヘッダ</a>の影も形もなければ、<a href=#etags><code>If-None-Match</code>ヘッダ</a>もない。キャッシュのヘッダを気にかけた様子も全く無く、しかも依然として圧縮を利用していないのだ。
+
+
+en:<p>And what happens when you do the same thing twice? You get the same response. Twice.
+ja:<p>それで、同じことを二度やって何が起こると思う？ 同じレスポンスを受けとるんだ。それも二度ね。
+
+
+en:<li>The server is still sending the same array of &#8220;smart&#8221; headers: <code>Cache-Control</code> and <code>Expires</code> to allow caching, <code>Last-Modified</code> and <code>ETag</code> to enable &#8220;not-modified&#8221; tracking. Even the <code>Vary: Accept-Encoding</code> header hints that the server would support compression, if only you would ask for it. But you didn&#8217;t.
+ja:<li>サーバーはなおも「スマートな」ヘッダの配列を送ってくれている。つまり、キャッシュのための<code>Cache-Control</code>と<code>Expires</code>、更新チェックを可能にする<code>Last-Modified</code>と<code>ETag</code>だ。しかも、<code>Vary: Accept-Encoding</code>ヘッダは、このサーバーは要求さえあればデータの圧縮も扱えるということをほのめかしてさえいる。しかし、ここであなたはそのように要求しなかったのだ。
+
+
+en:<li>Once again, fetching this data downloads the whole 3070 bytes&hellip;
+ja:<li>またしても、データを取得するのに丸々3070バイトもダウンロードしている&hellip;&hellip;
+
+
+en:<li>&hellip;the exact same 3070 bytes you downloaded last time.
+ja:<li>&hellip;&hellip;先ほどダウンロードしたのと寸分違わぬ3070バイトだ。
+
+
+en:<p><abbr>HTTP</abbr> is designed to work better than this. <code>urllib</code> speaks <abbr>HTTP</abbr> like I speak Spanish&nbsp;&mdash;&nbsp;enough to get by in a jam, but not enough to hold a conversation. <abbr>HTTP</abbr> is a conversation. It&#8217;s time to upgrade to a library that speaks <abbr>HTTP</abbr> fluently.
+ja:<p><abbr>HTTP</abbr>は、これよりもっと上手く処理できるように設計されている。<code>urllib</code>は、まるで私がスペイン語を話すように<abbr>HTTP</abbr>を話している&nbsp;&mdash;&nbsp;困ったときには十分役立つが、会話をするには足りない。そして、<abbr>HTTP</abbr>とは会話なのだ。そろそろ、流暢に<abbr>HTTP</abbr>で話せるライブラリにアップグレードするとしようか。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=introducing-httplib2>Introducing <code>httplib2</code></h2>
+ja:<h2 id=introducing-httplib2><code>httplib2</code>の紹介</h2>
+
+
+en:<p>Before you can use <code>httplib2</code>, you&#8217;ll need to install it. Visit <a href=http://code.google.com/p/httplib2/><code>code.google.com/p/httplib2/</code></a> and download the latest version. <code>httplib2</code> is available for Python 2.x and Python 3.x; make sure you get the Python 3 version, named something like <code>httplib2-python3-0.5.0.zip</code>.
+ja:<p><code>httplib2</code>を使うには、まずこれをインストールする必要がある。それには、<a href=http://code.google.com/p/httplib2/><code>code.google.com/p/httplib2/</code></a>に行って最新のバージョンをダウンロードすればいい。<code>httplib2</code>はPython 2.xにもPython 3.xにも対応しているのだが、必ずPython 3用のバージョンを選んでほしい。<code>httplib2-python3-0.5.0.zip</code>みたいな名前のものがそれだ。
+
+
+en:<p>Unzip the archive, open a terminal window, and go to the newly created <code>httplib2</code> directory. On Windows, open the <code>Start</code> menu, select <code>Run...</code>, type <kbd>cmd.exe</kbd> and press <kbd>ENTER</kbd>.
+ja:<p>アーカイブを解凍して端末を開き、新しく作成された<code>httplib2</code>というディレクトリに入る。Windowsでは、<code>スタート</code>メニューから<code>ファイル名を指定して実行</code>を選んでから<kbd>cmd.exe</kbd>と打ち込み、<kbd>ENTER</kbd>を押せばいい。
+
+
+en:<p>On Mac OS X, run the <code>Terminal.app</code> application in your <code>/Applications/Utilities/</code> folder. On Linux, run the <code>Terminal</code> application, which is usually in your <code>Applications</code> menu under <code>Accessories</code> or <code>System</code>.
+ja:<p>Mac OS Xなら<code>/Applications/Utilities/</code>にある<code>Terminal.app</code>というアプリケーションを起動すればいい。Linuxなら<code>Terminal</code>を起動する。こちらは大抵の場合、<code>Accessories</code>か<code>System</code>以下に置かれている、<code>Applications</code>メニューにある。
+
+
+en:<p>To use <code>httplib2</code>, create an instance of the <code>httplib2.Http</code> class.
+ja:<p><code>httplib2</code>を使うには、<code>httplib2.Http</code>クラスのインスタンスを作成する。
+
+
+en:<li>The primary interface to <code>httplib2</code> is the <code>Http</code> object. For reasons you&#8217;ll see in the next section, you should always pass a directory name when you create an <code>Http</code> object. The directory does not need to exist; <code>httplib2</code> will create it if necessary.
+ja:<li><code>httplib2</code>の主要なインターフェイスは<code>Http</code>オブジェクトだ。理由は次の節で説明するが、<code>Http</code>オブジェクトを作る時は常にディレクトリ名を渡さなければならない。この時、そのディレクトリはまだ存在しないものであっても構わない。必要に応じて<code>httplib2</code>が作成してくれるからだ。
+
+
+en:<li>Once you have an <code>Http</code> object, retrieving data is as simple as calling the <code>request()</code> method with the address of the data you want. This will issue an <abbr>HTTP</abbr> <code>GET</code> request for that <abbr>URL</abbr>. (Later in this chapter, you&#8217;ll see how to issue other <abbr>HTTP</abbr> requests, like <code>POST</code>.)
+ja:<li><code>Http</code>オブジェクトができたら、データを取得するのは簡単で、<code>request()</code>メソッドに欲しいデータのアドレスを渡して呼び出すだけでいい。そうすれば、その<abbr>URL</abbr>に対する<abbr>HTTP</abbr> <code>GET</code>リクエストが送信される（<code>POST</code>などの他の<abbr>HTTP</abbr>リクエストを送信する方法についてはこの章の後半で説明する）。
+
+
+en:<li>The <code>request()</code> method returns two values. The first is an <code>httplib2.Response</code> object, which contains all the <abbr>HTTP</abbr> headers the server returned. For example, a <code>status</code> code of <code>200</code> indicates that the request was successful.
+ja:<li><code>request()</code>メソッドは二つの値を返す。一つ目が<code>httplib2.Response</code>オブジェクトで、これにはサーバーが送り返してきた<abbr>HTTP</abbr>ヘッダが全て入っている。例えば、<code>status</code>の<code>200</code>という値は、リクエストが成功したことを示している。
+
+
+en:<li>The <var>content</var> variable contains the actual data that was returned by the <abbr>HTTP</abbr> server. The data is returned as <a href=strings.html#byte-arrays>a <code>bytes</code> object, not a string</a>. If you want it as a string, you&#8217;ll need to <a href=http://feedparser.org/docs/character-encoding.html>determine the character encoding</a> and convert it yourself.
+ja:<li><var>content</var>変数には<abbr>HTTP</abbr>サーバーから送り返された実際のデータが入っている。このデータは<a href=strings.html#byte-arrays>文字列ではなく<code>bytes</code>オブジェクト</a>の形式で返されるので、<a href=http://feedparser.org/docs/character-encoding.html>文字コードを定めて</a>、自分で変換しなくてはならない。
+
+
+en:<p><span class=u>&#x261E;</span>You probably only need one <code>httplib2.Http</code> object. There are valid reasons for creating more than one, but you should only do so if you know why you need them. &#8220;I need to request data from two different <abbr>URL</abbr>s&#8221; is not a valid reason. Re-use the <code>Http</code> object and just call the <code>request()</code> method twice.
+ja:<p><span class=u>&#x261E;</span>一つの<code>httplib2.Http</code>オブジェクトだけで足りているかもしれないが、このオブジェクトを複数作成するのが適当な場合もある。しかし、そうは言っても、なぜ二つ以上必要なのかをしっかり理解している場合にしか、そうしてはならない。例えば、「二つの異なる<abbr>URL</abbr>からデータをリクエストする必要があるから」というのでは十分ではない。<code>Http</code>オブジェクトを再利用して<code>request()</code>メソッドを二度呼び出せばよいからだ。
+
+
+en:<h3 id=why-bytes>A Short Digression To Explain Why <code>httplib2</code> Returns Bytes Instead of Strings</h3>
+ja:<h3 id=why-bytes>補足: <code>httplib2</code>はなぜ文字列の代わりにバイト列を返すのか？</h3>
+
+
+en:<p>Bytes. Strings. What a pain. Why can&#8217;t <code>httplib2</code> &#8220;just&#8221; do the conversion for you? Well, it&#8217;s complicated, because the rules for determining the character encoding are specific to what kind of resource you&#8217;re requesting. How could <code>httplib2</code> know what kind of resource you&#8217;re requesting? It&#8217;s usually listed in the <code>Content-Type</code> <abbr>HTTP</abbr> header, but that&#8217;s an optional feature of <abbr>HTTP</abbr> and not all <abbr>HTTP</abbr> servers include it. If that header is not included in the <abbr>HTTP</abbr> response, it&#8217;s left up to the client to guess. (This is commonly called &#8220;content sniffing,&#8221; and it&#8217;s never perfect.)
+ja:<p>バイト列。文字列。なんて厄介なんだろう。こんなものは「単純に」<code>httplib2</code>が処理してくれればいいのに、と思ったかもしれない。しかし、これは現実には厄介な問題なのだ。その原因は、文字コードを決定する規則がリクエストされるリソースの種類によってまちまちだということにある。では、どうやって<code>httplib2</code>はリクエストされているリソースの種類を識別するのだろうか？ たいていの場合、リソースの種類は<code>Content-Type</code> <abbr>HTTP</abbr>ヘッダに記されている。しかし、これは<abbr>HTTP</abbr>のオプション機能なので、すべての<abbr>HTTP</abbr>サーバーがこのヘッダを返してくれるわけではない。仮に、<abbr>HTTP</abbr>レスポンスにこのヘッダが含まれていなかったとすると、あとはクライエント側でリソースの種類を推測するしかない（この作業は一般に「content sniffing」と呼ばれているが、こいつはどうやっても完璧にはならない）。
+
+
+en:<p>If you know what sort of resource you&#8217;re expecting (an <abbr>XML</abbr> document in this case), perhaps you could &#8220;just&#8221; pass the returned <code>bytes</code> object to the <a href=xml.html#xml-parse><code>xml.etree.ElementTree.parse()</code> function</a>. That&#8217;ll work as long as the <abbr>XML</abbr> document includes information on its own character encoding (as this one does), but that&#8217;s an optional feature and not all <abbr>XML</abbr> documents do that. If an <abbr>XML</abbr> document doesn&#8217;t include encoding information, the client is supposed to look at the enclosing transport&nbsp;&mdash;&nbsp;<i>i.e.</i> the <code>Content-Type</code> <abbr>HTTP</abbr> header, which can include a <code>charset</code> parameter.
+ja:<p>リクエストしているリソースの種類が分かっているなら（このケースだと<abbr>XML</abbr>ドキュメント）、返された<code>bytes</code>オブジェクトをそのまま<a href=xml.html#xml-parse><code>xml.etree.ElementTree.parse()</code>関数</a>に渡すこともできるかもしれない。しかし、これができるのは、この例のように<abbr>XML</abbr>ドキュメントが文字コードに関する情報を含んでいる場合だけだ。そして、これもオプション機能なので、あらゆる<abbr>XML</abbr>ドキュメントが文字コードを明示しているわけではない。<abbr>XML</abbr>ドキュメントに文字コードの種類が示されていない場合には、クライアントはドキュメントを運んできた<abbr>HTTP</abbr>レスポンスの方（<i>i.e.</i> <code>Content-Type</code> <abbr>HTTP</abbr>ヘッダ）を見ることになっている。ここには<code>charset</code>変数が含まれているかもしれないからだ。
+
+
+en:<p class=ss><a style=border:0 href=http://www.cafepress.com/feedparser><img src=http://feedparser.org/img/feedparser.jpg alt="[I support RFC 3023 t-shirt]" width=150 height=150></a>
+ja:<p class=ss><a style=border:0 href=http://www.cafepress.com/feedparser><img src=http://feedparser.org/img/feedparser.jpg alt="[I support RFC 3023 Tシャツ]" width=150 height=150></a>
+
+
+en:<p>But it&#8217;s worse than that. Now character encoding information can be in two places: within the <abbr>XML</abbr> document itself, and within the <code>Content-Type</code> <abbr>HTTP</abbr> header. If the information is in <em>both</em> places, which one wins? According to <a href=http://www.ietf.org/rfc/rfc3023.txt>RFC 3023</a> (I swear I am not making this up), if the media type given in the <code>Content-Type</code> <abbr>HTTP</abbr> header is <code>application/xml</code>, <code>application/xml-dtd</code>, <code>application/xml-external-parsed-entity</code>, or any one of the subtypes of <code>application/xml</code> such as <code>application/atom+xml</code> or <code>application/rss+xml</code> or even <code>application/rdf+xml</code>, then the encoding is
+ja:<p>話はもっと悪くなる。ここで、文字コードに関する情報は、<abbr>XML</abbr>ドキュメント自体と<code>Content-Type</code> <abbr>HTTP</abbr>ヘッダの二ヶ所に存在しうることになった。では、<em>両方に</em>文字コードの情報が入っていたら、どちらが優先されるのだろうか？ <a href=http://www.ietf.org/rfc/rfc3023.txt>RFC 3023</a>（誓ってもいいが、これは私がでっち上げたものじゃない）によると、<code>Content-Type</code> <abbr>HTTP</abbr>ヘッダに含まれているメディアタイプが<code>application/xml</code>、<code>application/xml-dtd</code>、<code>application/xml-external-parsed-entity</code>のいずれかであるか、あるいは<code>application/xml</code>のサブタイプ（例えば、<code>application/atom+xml</code>や<code>application/rss+xml</code>。ここには、さらに<code>application/rdf+xml</code>も含まれる）ならば、文字コードは
+
+
+en:<li>the encoding given in the <code>charset</code> parameter of the <code>Content-Type</code> <abbr>HTTP</abbr> header, or
+ja:<li><code>Content-Type</code> <abbr>HTTP</abbr>ヘッダの<code>charset</code>変数に入っている文字コードか、
+
+
+en:<li>the encoding given in the <code>encoding</code> attribute of the <abbr>XML</abbr> declaration within the document, or
+ja:<li>ドキュメント内の<abbr>XML</abbr>宣言に入っている<code>encoding</code>属性の文字コードか、
+
+
+en:<li><abbr>UTF-8</abbr>
+ja:<li><abbr>UTF-8</abbr>になる。
+
+
+en:<p>On the other hand, if the media type given in the <code>Content-Type</code> <abbr>HTTP</abbr> header is <code>text/xml</code>, <code>text/xml-external-parsed-entity</code>, or a subtype like <code>text/AnythingAtAll+xml</code>, then the encoding attribute of the <abbr>XML</abbr> declaration within the document is ignored completely, and the encoding is
+ja:<p>他方で、<code>Content-Type</code> <abbr>HTTP</abbr>ヘッダで与えられるメディアタイプが<code>text/xml</code>や<code>text/xml-external-parsed-entity</code>、あるいは<code>text/*+xml</code>という形式のサブタイプなら、ドキュメント中の<abbr>XML</abbr>宣言にあるencoding属性は全く無視されてしまい、文字コードは、
+
+
+en:<li>the encoding given in the charset parameter of the <code>Content-Type</code> <abbr>HTTP</abbr> header, or
+ja:<li><code>Content-Type</code> <abbr>HTTP</abbr>ヘッダに入っているcharset変数で与えられる文字コードか、
+
+
+en:<li><code>us-ascii</code>
+ja:<li><code>us-ascii</code>になる。
+
+
+en:<p>And that&#8217;s just for <abbr>XML</abbr> documents. For <abbr>HTML</abbr> documents, web browsers have constructed such <a type=application/pdf href=http://www.adambarth.com/papers/2009/barth-caballero-song.pdf>byzantine rules for content-sniffing</a> [<abbr>PDF</abbr>] that <a href='http://www.google.com/search?q=barth+content-type+processing+model'>we&#8217;re still trying to figure them all out</a>.
+ja:<p>そして以上のことは<abbr>XML</abbr>ドキュメントだけに当てはまる話だ。<abbr>HTML</abbr>ドキュメントについては、ウェブブラウザが<a type=application/pdf href=http://www.adambarth.com/papers/2009/barth-caballero-song.pdf>content sniffingのための複雑怪奇な規則</a>[<abbr>PDF</abbr>]を作り上げてしまっていて、<a href='http://www.google.com/search?q=barth+content-type+processing+model'>私たちはいまだ完全に解明できていない</a>。
+
+
+en:<p>&#8220;<a href=http://code.google.com/p/httplib2/source/checkout>Patches welcome</a>.&#8221;
+ja:<p>「<a href=http://code.google.com/p/httplib2/source/checkout>パッチ歓迎</a>」
+
+
+en:<h3 id=httplib2-caching>How <code>httplib2</code> Handles Caching</h3>
+ja:<h3 id=httplib2-caching><code>httplib2</code>はキャッシュをどのように扱うのか</h3>
+
+
+en:<p>Remember in the previous section when I said you should always create an <code>httplib2.Http</code> object with a directory name? Caching is the reason.
+ja:<p>少し前の節で、「<code>httplib2.Http</code>オブジェクトを作る時はいつもディレクトリ名を渡すように」と言ったのを覚えているだろうか？ その理由は実はキャッシュにある。
+
+
+en:<li>This shouldn&#8217;t be terribly surprising. It&#8217;s the same thing you did last time, except you&#8217;re putting the result into two new variables.
+ja:<li>ここにそんなに驚くようなことはないはずだ。戻り値を新しい二つの変数に代入していることを除けば、これは先ほどと全く同じだ。
+
+
+en:<li>The <abbr>HTTP</abbr> <code>status</code> is once again <code>200</code>, just like last time.
+ja:<li><abbr>HTTP</abbr>の<code>status</code>は同じく<code>200</code>で、前から何も変わっていない。
+
+
+en:<li>The downloaded content is the same as last time, too.
+ja:<li>ダウンロードした内容にも変化はない。
+
+
+en:<p>So&hellip; who cares? Quit your Python interactive shell and relaunch it with a new session, and I&#8217;ll show you.
+ja:<p>それで&hellip;&hellip;だから何なの？ では、Pythonの対話シェルを一度閉じて、新しいセッションで再起動してほしい。そうしたら、ご説明しよう。
+
+
+en:<li>Let&#8217;s turn on debugging and see <a href=#whats-on-the-wire>what&#8217;s on the wire</a>. This is the <code>httplib2</code> equivalent of turning on debugging in <code>http.client</code>. <code>httplib2</code> will print all the data being sent to the server and some key information being sent back.
+ja:<li>デバッグフラグをオンにして、<a href=#whats-on-the-wire>何が回線を通っているのか</a>を見てみよう。この行は<code>http.client</code>でデバッグをオンにするのと同じ役割を果たすもので、<code>httplib2</code>がサーバーに送信したデータ全部と、返送されてきた情報の中の主要なものを出力してくれるようになる。
+
+
+en:<li>Create an <code>httplib2.Http</code> object with the same directory name as before.
+ja:<li>前と同じディレクトリ名を渡して、<code>httplib2.Http</code>オブジェクトを作成する。
+
+
+en:<li>Request the same <abbr>URL</abbr> as before. <em>Nothing appears to happen.</em> More precisely, nothing gets sent to the server, and nothing gets returned from the server. There is absolutely no network activity whatsoever.
+ja:<li>前回と同様に、同じ<abbr>URL</abbr>をリクエストする。<em>しかし何も起こっていないようだ。</em>もっと正確に言えば、何もサーバーに送られていなければ、サーバーから返ってきてもいない。ここではネットワークを通したやりとりが全く行われていないのだ。
+
+
+en:<li>Yet we did &#8220;receive&#8221; some data&nbsp;&mdash;&nbsp;in fact, we received all of it.
+ja:<li>しかし、現実に何らかのデータを「受信」してはいる&nbsp;&mdash;&nbsp;実のところ、 すべてのデータを受け取っているのだ。
+
+
+en:<li>We also &#8220;received&#8221; an <abbr>HTTP</abbr> status code indicating that the &#8220;request&#8221; was successful.
+ja:<li>加えて、「リクエスト」が成功したことを示す<abbr>HTTP</abbr>ステータスコードも「受信」している。
+
+
+en:<li>Here&#8217;s the rub: this &#8220;response&#8221; was generated from <code>httplib2</code>&#8217;s local cache. That directory name you passed in when you created the <code>httplib2.Http</code> object&nbsp;&mdash;&nbsp;that directory holds <code>httplib2</code>&#8217;s cache of all the operations it&#8217;s ever performed.
+ja:<li>問題があるのはこの部分だ。この「レスポンス」は<code>httplib2</code>のローカルキャッシュから生成されたものなのだ。<code>httplib2.Http</code>オブジェクトを作るときにディレクトリ名を渡したが&nbsp;&mdash;&nbsp;そのディレクトリは<code>httplib2</code>がこれまでに行った処理全てをキャッシュしているのだ。
+
+
+en:<aside>What&#8217;s on the wire? Absolutely nothing.</aside>
+ja:<aside>何が回線を通っているのか？ 文字通り全く何も通っていない。</aside>
+
+
+en:<p><span class=u>&#x261E;</span>If you want to turn on <code>httplib2</code> debugging, you need to set a module-level constant (<code>httplib2.debuglevel</code>), then create a new <code>httplib2.Http</code> object. If you want to turn off debugging, you need to change the same module-level constant, then create a new <code>httplib2.Http</code> object.
+ja:<p><span class=u>&#x261E;</span><code>httplib2</code>のデバッグをオンにしたいなら、モジュールレベルの定数（<code>httplib2.debuglevel</code>）を設定してから、新しく<code>httplib2.Http</code>オブジェクトを作る必要がある。デバッグをオフにしたいなら、同じモジュールレベルの定数を変更して、また新しく<code>httplib2.Http</code>オブジェクトを作ればいい。
+
+
+en:<p>You previously requested the data at this <abbr>URL</abbr>. That request was successful (<code>status: 200</code>). That response included not only the feed data, but also a set of <a href=#caching>caching headers</a> that told anyone who was listening that they could cache this resource for up to 24 hours (<code>Cache-Control: max-age=86400</code>, which is 24 hours measured in seconds). <code>httplib2</code> understand and respects those caching headers, and it stored the previous response in the <code>.cache</code> directory (which you passed in when you create the <code>Http</code> object). That cache hasn&#8217;t expired yet, so the second time you request the data at this <abbr>URL</abbr>, <code>httplib2</code> simply returns the cached result without ever hitting the network.
+ja:<p>前回、この<abbr>URL</abbr>のデータをリクエストした時、そのリクエストは成功していた（<code>status: 200</code>）。これに対するレスポンスにはフィードのデータだけでなく、<a href=#caching>キャッシュのヘッダ</a>も一組入っていて、「このリソースは24時間までならキャッシュしてもいいよ」（<code>Cache-Control: max-age=86400</code>の部分。86400は24時間を秒に直したもの）と伝え回っていた。<code>httplib2</code>はこのキャッシュのヘッダの内容を理解した上で、それに従って<code>.cache</code>ディレクトリ（これは<code>Http</code>オブジェクトを作成したときに渡したものだ）に前回のレスポンスを保存しておいたのだ。そして、そのキャッシュの期限がまだ切れてなかったので、二度目にこの<abbr>URL</abbr>のデータをリクエストした時、<code>httplib2</code>はネットワークにあたることなく単純にキャッシュしておいた内容を返したというわけだ。
+
+
+en:<p>I say &#8220;simply,&#8221; but obviously there is a lot of complexity hidden behind that simplicity. <code>httplib2</code> handles <abbr>HTTP</abbr> caching <em>automatically</em> and <em>by default</em>. If for some reason you need to know whether a response came from the cache, you can check <code>response.fromcache</code>. Otherwise, it Just Works.
+ja:<p>「単純に」とは言ったが、当然ながらこの単純さの背後にはいくつもの複雑な処理が隠れている。<code>httplib2</code>は<em>デフォルトで</em><abbr>HTTP</abbr>キャッシュを<em>自動的に</em>処理してくれる。もし、何らかの理由でレスポンスがキャッシュから生成されたものなのかを知る必要があるなら、<code>response.fromcache</code>をチェックすればいい。そういう場合でなければ、これは何の問題もなく上手く動いてくれる。
+
+
+en:<p id=bypass-the-cache>Now, suppose you have data cached, but you want to bypass the cache and re-request it from the remote server. Browsers sometimes do this if the user specifically requests it. For example, pressing <kbd>F5</kbd> refreshes the current page, but pressing <kbd>Ctrl+F5</kbd> bypasses the cache and re-requests the current page from the remote server. You might think &#8220;oh, I&#8217;ll just delete the data from my local cache, then request it again.&#8221; You could do that, but remember that there may be more parties involved than just you and the remote server. What about those intermediate proxy servers? They&#8217;re completely beyond your control, and they may still have that data cached, and will happily return it to you because (as far as they are concerned) their cache is still valid.
+ja:<p id=bypass-the-cache>さて、データのキャッシュを持ってはいるが、そのキャッシュを無視して遠隔サーバーに再リクエストしたいと思ったとしよう。ブラウザはユーザーから特に要求があればこういう処理をする。例えば、<kbd>F5</kbd>を押すと現在見ているページが更新されるが、<kbd>Ctrl+F5</kbd>を押せばキャッシュを無視して遠隔サーバーにリクエストが行われる。ここで「単にキャッシュからデータを削除して、もう一度リクエストすればいいんじゃない？」と考えた人もいるだろう。もちろんそうすることもできるが、あなたと遠隔サーバー以外にもこの処理に関わっているものが存在しているかもしれないということを思い出してほしい。例えば、中間にあるプロキシサーバーはどうだろうか？ これについては完全にあなたの手の外にあるが、ここにまだデータがキャッシュされているかもしれない。その場合、（プロキシサーバーにとっては）キャッシュはまだ有効なので、特に何も気にとめることなくキャッシュの方を返してくることだろう。
+
+
+en:<p>Instead of manipulating your local cache and hoping for the best, you should use the features of <abbr>HTTP</abbr> to ensure that your request actually reaches the remote server.
+ja:<p>ローカルキャッシュの方に手を加えて「これでうまくいきますように」と願うのではなく、<abbr>HTTP</abbr>の機能を使ってリクエストが確実に遠隔サーバーに届くようにすべきだ。
+
+
+en:<li><code>httplib2</code> allows you to add arbitrary <abbr>HTTP</abbr> headers to any outgoing request. In order to bypass <em>all</em> caches (not just your local disk cache, but also any caching proxies between you and the remote server), add a <code>no-cache</code> header in the <var>headers</var> dictionary.
+ja:<li><code>httplib2</code>を使えば、どのリクエストにも任意の<abbr>HTTP</abbr>ヘッダを加えることができる。<em>全ての</em>キャッシュ（つまり、ローカルディスクにあるキャッシュだけではなく、あなたと遠隔サーバーの間にあるキャッシュプロキシ全て）を無視するには、<code>no-cache</code>ヘッダを<var>headers</var>辞書に加えればいい。
+
+
+en:<li>Now you see <code>httplib2</code> initiating a network request. <code>httplib2</code> understands and respects caching headers <em>in both directions</em>&nbsp;&mdash;&nbsp;as part of the incoming response <em>and as part of the outgoing request</em>. It noticed that you added the <code>no-cache</code> header, so it bypassed its local cache altogether and then had no choice but to hit the network to request the data.
+ja:<li><code>httplib2</code>がネットワークを通じたリクエストを開始している。<code>httplib2</code>は<em>双方向</em>&nbsp;&mdash;&nbsp;つまり、レスポンスの受信と<em>リクエストの送信</em>の両方においてキャッシュのヘッダを理解し、それに従ってくれるのだ。ここでは、<code>no-cache</code>ヘッダが追加されたことをちゃんと認識している。だからこそ、ローカルキャッシュを全て無視したのであり、その結果としてネットワークを介したデータのリクエストを行わざるを得なくなったのだ。
+
+
+en:<li>This response was <em>not</em> generated from your local cache. You knew that, of course, because you saw the debugging information on the outgoing request. But it&#8217;s nice to have that programmatically verified.
+ja:<li>このレスポンスはローカルキャッシュから生成されたもの<em>ではない</em>。このことはリクエスト送信に関するデバッグ情報が出力されているのを見れば明らかなのだが、これを手続的に確認できるのは良いことだ。
+
+
+en:<li>The request succeeded; you downloaded the entire feed again from the remote server. Of course, the server also sent back a full complement of <abbr>HTTP</abbr> headers along with the feed data. That includes caching headers, which <code>httplib2</code> uses to update its local cache, in the hopes of avoiding network access the <em>next</em> time you request this feed. Everything about <abbr>HTTP</abbr> caching is designed to maximize cache hits and minimize network access. Even though you bypassed the cache this time, the remote server would really appreciate it if you would cache the result for next time.
+ja:<li>リクエストが成功したので、遠隔サーバーからフィード全体を再びダウンロードすることができた。当然ながら、サーバーはフィードのデータと一緒に<abbr>HTTP</abbr>ヘッダも全て送り返してくれている。この中にはキャッシュのヘッダも入っていて、<code>httplib2</code>はこれを使ってローカルキャッシュを更新する。<em>次に</em>このフィードがリクエストされた時に、ネットワークを通じたアクセスを避けられるかもしれないからだ。<abbr>HTTP</abbr>キャッシュに関わるどの部分も、キャッシュの利用を最大にし、ネットワークを介したアクセスを最小にするように設計されている。今回はキャッシュを無視したが、遠隔サーバーはあなたが今回のリクエストの結果を次回のリクエストに備えてキャッシュしてくれていることを賞賛してくれるだろう。
+
+
+en:<h3 id=httplib2-etags>How <code>httplib2</code> Handles <code>Last-Modified</code> and <code>ETag</code> Headers</h3>
+ja:<h3 id=httplib2-etags><code>httplib2</code>はどのように<code>Last-Modified</code>ヘッダや<code>ETag</code>ヘッダを扱うのか</h3>
+
+
+en:<p>The <code>Cache-Control</code> and <code>Expires</code> <a href=#caching>caching headers</a> are called <i>freshness indicators</i>. They tell caches in no uncertain terms that you can completely avoid all network access until the cache expires. And that&#8217;s exactly the behavior you saw <a href=#httplib2-caching>in the previous section</a>: given a freshness indicator, <code>httplib2</code> <em>does not generate a single byte of network activity</em> to serve up cached data (unless you explicitly <a href=#bypass-the-cache>bypass the cache</a>, of course).
+ja:<p><code>Cache-Control</code>と<code>Expires</code>の二つの<a href=#caching>キャッシュヘッダ</a>は <i>freshness indicator</i> と呼ばれる。この二つのヘッダは「このキャッシュの期限が切れるまでは、ネットワークを介したアクセスを行う必要はまったくない」と断言するものだ。<a href=#httplib2-caching>前の章</a>で見たのはまさしくこの機能で、このヘッダがあれば、<code>httplib2</code>は<em>1バイトたりともネットワークを通してやりとりすることなく</em>、そのままキャッシュのデータを返すのだ（もちろん、明示的に<a href=#bypass-the-cache>キャッシュを無視した</a>場合は別だが）。
+
+
+en:<p>But what about the case where the data <em>might</em> have changed, but hasn&#8217;t? <abbr>HTTP</abbr> defines <a href=#last-modified><code>Last-Modified</code></a> and <a href=#etags><code>Etag</code></a> headers for this purpose. These headers are called <i>validators</i>. If the local cache is no longer fresh, a client can send the validators with the next request to see if the data has actually changed. If the data hasn&#8217;t changed, the server sends back a <code>304</code> status code <em>and no data</em>. So there&#8217;s still a round-trip over the network, but you end up downloading fewer bytes.
+ja:<p>しかし、データが更新された<em>可能性があった</em>のだが、リクエストを送信してみたら実際には更新されていなかった、という場合はどうだろう。<abbr>HTTP</abbr>はこういう時のために<a href=#last-modified><code>Last-Modified</code></a>と<a href=#etags><code>Etag</code></a>というヘッダを用意している。これらのヘッダは <i>validator</i> と呼ばれるもので、ローカルキャッシュの有効期限が既に切れている場合には、クライアントは次のリクエストにこのvalidatorを追加することで、データが実際に変更されたかどうかを確認することができる。データが変更されていなければ、サーバーは<em>データを返送せずに</em>、<code>304</code>ステータスコードをだけを送り返してくる。だから、一回だけはネットワークを通したやりとりが行われるのだが、はるかに少ないバイト数をダウンロードするだけで済むのだ。
+
+
+en:<li>Instead of the feed, this time we&#8217;re going to download the site&#8217;s home page, which is <abbr>HTML</abbr>. Since this is the first time you&#8217;ve ever requested this page, <code>httplib2</code> has little to work with, and it sends out a minimum of headers with the request.
+ja:<li>フィードの代わりに、今回はサイトのホームページ（<abbr>HTML</abbr>ドキュメント）をダウンロードする。このページをリクエストするのは今回が始めてなので、<code>httplib2</code>がやるべき仕事は少ない。実際、最小限のヘッダだけを付けてリクエストを送信している。
+
+
+en:<li>The response contains a multitude of <abbr>HTTP</abbr> headers&hellip; but no caching information. However, it does include both an <code>ETag</code> and <code>Last-Modified</code> header.
+ja:<li>返ってきたレスポンスには<abbr>HTTP</abbr>ヘッダがいくつも入っている&hellip;&hellip;が、キャッシュに関する情報は含まれていない。しかし、ここには<code>ETag</code>ヘッダと<code>Last-Modified</code>ヘッダが二つとも入っている。
+
+
+en:<li>At the time I constructed this example, this page was 6657 bytes. It&#8217;s probably changed since then, but don&#8217;t worry about it.
+ja:<li>私がこの例を作成した時には、このページは6657バイトだった。たぶんそれから変わっているとは思うが、別にご心配なく。
+
+
+en:<li>You request the same page again, with the same <code>Http</code> object (and the same local cache).
+ja:<li>同じページを、同じ<code>Http</code>オブジェクト（と同じローカルキャッシュ）を使って再びリクエストしてみよう。
+
+
+en:<li><code>httplib2</code> sends the <code>ETag</code> validator back to the server in the <code>If-None-Match</code> header.
+ja:<li><code>httplib2</code>は<code>If-None-Match</code>ヘッダに<code>ETag</code>のvalidatorを付けてサーバーに送っている。
+
+
+en:<li><code>httplib2</code> also sends the <code>Last-Modified</code> validator back to the server in the <code>If-Modified-Since</code> header.
+ja:<li><code>httplib2</code>は同様に<code>Last-Modified</code>のvalidatorを<code>If-Modified-Since</code>ヘッダに入れてサーバーに送信している。
+
+
+en:<li>The server looked at these validators, looked at the page you requested, and determined that the page has not changed since you last requested it, so it sends back a <code>304</code> status code <em>and no data</em>.
+ja:<li>サーバーはこれらのvalidatorとリクエストされたページを見て、そのページは前回のリクエストから何も変更されていないと判断する。だから、サーバーは<em>データを入れることなく</em>、<code>304</code>ステータスコードだけを送り返すのだ。
+
+
+en:<li>Back on the client, <code>httplib2</code> notices the <code>304</code> status code and loads the content of the page from its cache.
+ja:<li>クライエントの方に戻ると、<code>httplib2</code>は<code>304</code>ステータスコードを認識し、キャッシュからページの内容をロードしている。
+
+
+en:<li>This might be a bit confusing. There are really <em>two</em> status codes&nbsp;&mdash;&nbsp;<code>304</code> (returned from the server this time, which caused <code>httplib2</code> to look in its cache), and <code>200</code> (returned from the server <em>last time</em>, and stored in <code>httplib2</code>&#8217;s cache along with the page data). <code>response.status</code> returns the status from the cache.
+ja:<li>ここはちょっと分かりにくいかもしれない。ここには実際に<em>二つの</em>ステータスコードがあるのだ&nbsp;&mdash;&nbsp;すなわち、<code>304</code>（今回サーバーから返されたもの。これが返されたから<code>httplib2</code>はキャッシュの方を参照したのだ）と、<code>200</code>（<em>前回</em>サーバーから返されたもの。ページのデータと一緒に<code>httplib2</code>のキャッシュに保存されていた）だ。<code>response.status</code>はキャッシュのステータスコードを返す。
+
+
+en:<li>If you want the raw status code returned from the server, you can get that by looking in <code>response.dict</code>, which is a dictionary of the actual headers returned from the server.
+ja:<li>サーバーから返された本当のステータスコードが欲しいなら、<code>response.dict</code>を参照すればいい。これはサーバーから返された実際のヘッダを収めた辞書だ。
+
+
+en:<li>However, you still get the data in the <var>content</var> variable. Generally, you don&#8217;t need to know why a response was served from the cache. (You may not even care that it was served from the cache at all, and that&#8217;s fine too. <code>httplib2</code> is smart enough to let you act dumb.) By the time the <code>request()</code> method returns to the caller, <code>httplib2</code> has already updated its cache and returned the data to you.
+ja:<li>だが、どうであれ<var>content</var>変数にはちゃんとデータが入っている。一般論としては、なぜレスポンスがキャッシュから生成されたのかを知る必要はないだろう（もしかしたらキャッシュから生成されたということすら気にかけないかもしれないが、それでも全くかまわない。<code>httplib2</code>は賢いので、こちらがおろそかでもきちんと処理してくれる）。<code>request()</code>の処理が完了するころには、<code>httplib2</code>は既にキャッシュをアップデートして、データを返してくれているのだ。
+
+
+en:<h3 id=httplib2-compression>How <code>http2lib</code> Handles Compression</h3>
+ja:<h3 id=httplib2-compression><code>http2lib</code>はどのように圧縮を扱うのか</h3>
+
+
+en:<aside>&#8220;We have both kinds of music, country AND western.&#8221;</aside>
+ja:<aside>「ここでは二種類の音楽を流してるわ。カントリー音楽とウェスタン音楽の両方をね」</aside>
+
+
+en:<p><abbr>HTTP</abbr> supports <a href=#compression>several types of compression</a>; the two most common types are gzip and deflate. <code>httplib2</code> supports both of these.
+ja:<p><abbr>HTTP</abbr>は<a href=#compression>数種類の圧縮形式</a>をサポートしているが、中でも最もよく使われているのはgzipとdeflateの二つだ。<code>httplib2</code>はこの両方をサポートしている。
+
+
+en:<li>Every time <code>httplib2</code> sends a request, it includes an <code>Accept-Encoding</code> header to tell the server that it can handle either <code>deflate</code> or <code>gzip</code> compression.
+ja:<li><code>httplib2</code>が送信するリクエストには、必ず<code>Accept-Encoding</code>というヘッダが付けられている。このヘッダによって<code>deflate</code>か<code>gzip</code>のどちらかなら扱えるということをサーバーに伝えているのだ。
+
+
+en:<li>In this case, the server has responded with a gzip-compressed payload. By the time the <code>request()</code> method returns, <code>httplib2</code> has already decompressed the body of the response and placed it in the <var>content</var> variable. If you&#8217;re curious about whether or not the response was compressed, you can check <var>response['-content-encoding']</var>; otherwise, don&#8217;t worry about it.
+ja:<li>ここでは、サーバーはgzip形式で圧縮されたデータを返している。<code>request()</code>の処理が完了するころには、<code>httplib2</code>は既にデータを展開し、<var>content</var>変数に入れ終わっているのだ。返送されたデータが圧縮されたものだったかどうかを知りたいなら、<var>response['-content-encoding']</var>をチェックすればいい。そうでなければ、何も気にする必要はない。
+
+
+en:<h3 id=httplib2-redirects>How <code>httplib2</code> Handles Redirects</h3>
+ja:<h3 id=httplib2-redirects><code>httplib2</code>はどのようにリダイレクトを扱うのか</h3>
+
+
+en:<p><abbr>HTTP</abbr> defines <a href=#redirects>two kinds of redirects</a>: temporary and permanent. There&#8217;s nothing special to do with temporary redirects except follow them, which <code>httplib2</code> does automatically.
+ja:<p><abbr>HTTP</abbr>は<a href=#redirects>二種類のリダイレクト</a>を定義していた。つまり、一時的なものと恒久的なものだ。このうち、一時的なリダイレクトについては、そのリダイレクトをたどるということ（これは<code>httplib2</code>が自動でやってくれる）以外に、特に何か処理を行う必要はなかった。
+
+
+en:<li>There is no feed at this <abbr>URL</abbr>. I&#8217;ve set up my server to issue a temporary redirect to the correct address.
+ja:<li>この<abbr>URL</abbr>にはフィードが入っていない。正しいアドレスに一時的にリダイレクトするようサーバーを設定しておいた。
+
+
+en:<li>There&#8217;s the request.
+ja:<li>ここでリクエストが行われている。
+
+
+en:<li>And there&#8217;s the response: <code>302 Found</code>. Not shown here, this response also includes a <code>Location</code> header that points to the real <abbr>URL</abbr>.
+ja:<li>それに対するレスポンスは<code>302 Found</code>だ。ここには示されていないが、このレスポンスには正しい<abbr>URL</abbr>を示す<code>Location</code>ヘッダが入っている。
+
+
+en:<li><code>httplib2</code> immediately turns around and &#8220;follows&#8221; the redirect by issuing another request for the <abbr>URL</abbr> given in the <code>Location</code> header: <code>http://diveintopython3.org/examples/feed.xml</code>
+ja:<li><code>httplib2</code>はすぐに方向を変えて、<code>Location</code>ヘッダで与えられた<code>http://diveintopython3.org/examples/feed.xml</code>という<abbr>URL</abbr>に新たなリクエストを送信し、リダイレクトを「たどって」くれる。
+
+
+en:<p>&#8220;Following&#8221; a redirect is nothing more than this example shows. <code>httplib2</code> sends a request for the <abbr>URL</abbr> you asked for. The server comes back with a response that says &#8220;No no, look over there instead.&#8221; <code>httplib2</code> sends another request for the new <abbr>URL</abbr>.
+ja:<p>リダイレクトを「たどる」ということについては、この例以上のものはなにもない。<code>httplib2</code>が要求された<abbr>URL</abbr>にリクエストを送信し、サーバーが「違う違う。ここじゃなくてあちらを参照してよ」という内容のレスポンスを返す。そして、<code>httplib2</code>はその新しい<abbr>URL</abbr>に向けて別のリクエストを送信する。
+
+
+en:<li>The <var>response</var> you get back from this single call to the <code>request()</code> method is the response from the final <abbr>URL</abbr>.
+ja:<li><code>request()</code>メソッドを一度呼び出して取得した<var>response</var>には最後の<abbr>URL</abbr>から返されたレスポンスが入っている。
+
+
+en:<li><code>httplib2</code> adds the final <abbr>URL</abbr> to the <var>response</var> dictionary, as <code>content-location</code>. This is not a header that came from the server; it&#8217;s specific to <code>httplib2</code>.
+ja:<li><code>httplib2</code>は<var>response</var>辞書に<code>content-location</code>というキーワードを付けて、最終的にたどり着いた<abbr>URL</abbr>を追加してくれる。このヘッダはサーバーから送られてきたものではなく、<code>httplib2</code>固有のものだ。
+
+
+en:<li>Apropos of nothing, this feed is <a href=#httplib2-compression>compressed</a>.
+ja:<li>ちなみに、このフィードは<a href=#httplib2-compression>圧縮されている</a>。
+
+
+en:<li>And cacheable. (This is important, as you&#8217;ll see in a minute.)
+ja:<li>さらに、キャッシュすることもできる（この点は重要だ。これについてはすぐ後で説明する）。
+
+
+en:<p>The <var>response</var> you get back gives you information about the <em>final</em> <abbr>URL</abbr>. What if you want more information about the intermediate <abbr>URL</abbr>s, the ones that eventually redirected to the final <abbr>URL</abbr>? <code>httplib2</code> lets you do that, too.
+ja:<p>取得した<var>response</var>の中には<em>最後の</em><abbr>URL</abbr>に関する情報は含まれているのだが、では、その中間にあった<abbr>URL</abbr>、つまりこの最後の<abbr>URL</abbr>に至るまでに経由した<abbr>URL</abbr>の情報が欲しい時はどうすればいいのだろうか？ これについても<code>httplib2</code>を使えば調べることができる。
+
+
+en:<li>The <var>response.previous</var> attribute holds a reference to the previous response object that <code>httplib2</code> followed to get to the current response object.
+ja:<li><var>response.previous</var>属性を調べれば、<code>httplib2</code>が現在のレスポンスオブジェクトにたどり着く直前に経由したレスポンスオブジェクトを参照することができる。
+
+
+en:<li>Both <var>response</var> and <var>response.previous</var> are <code>httplib2.Response</code> objects.
+ja:<li><var>response</var>も<var>response.previous</var>のどちらも<code>httplib2.Response</code>オブジェクトだ。
+
+
+en:<li>That means you can check <var>response.previous.previous</var> to follow the redirect chain backwards even further. (Scenario: one <abbr>URL</abbr> redirects to a second <abbr>URL</abbr> which redirects to a third <abbr>URL</abbr>. It could happen!) In this case, we&#8217;ve already reached the beginning of the redirect chain, so the attribute is <code>None</code>.
+ja:<li>従って、<var>response.previous.previous</var>というように調べることで、リダイレクトの道筋をどんどん遡っていけることになる（これが必要になるのは次のような状況だ。つまり、ある<abbr>URL</abbr>が二番目の<abbr>URL</abbr>にリダイレクトし、さらにそこから三番目の<abbr>URL</abbr>にリダイレクトされる。本当にこういうこともあるんだよ！）。ここでは、既にリダイレクトの起点までたどり着いていたので、この属性の値は<code>None</code>になる。
+
+
+en:<p>What happens if you request the same <abbr>URL</abbr> again?
+ja:<p>同じ<abbr>URL</abbr>をもう一度リクエストしたらどうなるだろうか？
+
+
+en:<li>Same <abbr>URL</abbr>, same <code>httplib2.Http</code> object (and therefore the same cache).
+ja:<li>同じ<abbr>URL</abbr>に、同じ<code>httplib2.Http</code>オブジェクトだ（したがってキャッシュも同じだ）。
+
+
+en:<li>The <code>302</code> response was not cached, so <code>httplib2</code> sends another request for the same <abbr>URL</abbr>.
+ja:<li><code>302</code>レスポンスはキャッシュされなかったので、<code>httplib2</code>は別のリクエストを同じ<abbr>URL</abbr>に送信している。
+
+
+en:<li>Once again, the server responds with a <code>302</code>. But notice what <em>didn&#8217;t</em> happen: there wasn&#8217;t ever a second request for the final <abbr>URL</abbr>, <code>http://diveintopython3.org/examples/feed.xml</code>. That response was cached (remember the <code>Cache-Control</code> header that you saw in the previous example). Once <code>httplib2</code> received the <code>302 Found</code> code, <em>it checked its cache before issuing another request</em>. The cache contained a fresh copy of <code>http://diveintopython3.org/examples/feed.xml</code>, so there was no need to re-request it.
+ja:<li>またしても、サーバーは<code>302</code>を返している。しかし、ここに何が<em>欠けているか</em>に注意してほしい。ここでは最終的な<abbr>URL</abbr>の<code>http://diveintopython3.org/examples/feed.xml</code>に対する二回目のリクエストが送られていないのだ。つまり、先ほどのレスポンスはキャッシュされていて（前の例で見た<code>Cache-Control</code>を思い出して欲しい）、さらに<code>httplib2</code>は<code>302 Found</code>を受け取ると、<em>新しくリクエストを送信するのに先立ってまずキャッシュをチェックした</em>ということだ。キャッシュにはまだ新しい<code>http://diveintopython3.org/examples/feed.xml</code>のコピーがあったので、再びリクエストする必要が無かったのだ。
+
+
+en:<li>By the time the <code>request()</code> method returns, it has read the feed data from the cache and returned it. Of course, it&#8217;s the same as the data you received last time.
+ja:<li><code>request()</code>メソッドが処理を完了するころには、フィードのデータは既にキャッシュから読み出され、返されている。もちろん、これは前回受け取ったのと同じデータだ。
+
+
+en:<p>In other words, you don&#8217;t have to do anything special for temporary redirects. <code>httplib2</code> will follow them automatically, and the fact that one <abbr>URL</abbr> redirects to another has no bearing on <code>httplib2</code>&#8217;s support for compression, caching, <code>ETags</code>, or any of the other features of <abbr>HTTP</abbr>.
+ja:<p>要するに、一時的なリダイレクトについては特に何かをする必要はないということだ。<code>httplib2</code>は自動でリダイレクトをたどってくれるし、しかも、ある<abbr>URL</abbr>が別の<abbr>URL</abbr>にリダイレクトしているという事実は、<code>httplib2</code>が圧縮やキャッシュや<code>ETags</code>などの<abbr>HTTP</abbr>の諸機能を扱う上で何の妨げにもならないのだ。
+
+
+en:<p>Permanent redirects are just as simple.
+ja:<p>恒久的なリダイレクトも同じく簡単だ。
+
+
+en:<li>Once again, this <abbr>URL</abbr> doesn&#8217;t really exist. I&#8217;ve set up my server to issue a permanent redirect to <code>http://diveintopython3.org/examples/feed.xml</code>.
+ja:<li>前と同じく、この<abbr>URL</abbr>は実際には存在していない。そこで、<code>http://diveintopython3.org/examples/feed.xml</code>に向けた恒久的なリダイレクトを送信するようにサーバーを設定しておいた。
+
+
+en:<li>And here it is: status code <code>301</code>. But again, notice what <em>didn&#8217;t</em> happen: there was no request to the redirect <abbr>URL</abbr>. Why not? Because it&#8217;s already cached locally.
+ja:<li>ほら、ステータスコード<code>301</code>が返ってきた。だが、またここで何が<em>欠けているか</em>に注意してほしい。リダイレクト先の<abbr>URL</abbr>に対するリクエストが送信されていないのだ。なぜか？ その答えは「既にローカルにキャッシュされているから」だ。
+
+
+en:<li><code>httplib2</code> &#8220;followed&#8221; the redirect right into its cache.
+ja:<li><code>httplib2</code>はリダイレクトを「たどって」、そのままキャッシュに行き着いたのだ。
+
+
+en:<p>But wait! There&#8217;s more!
+ja:<p>だけど待って！ 話はまだあるんだ！
+
+
+en:<li>Here&#8217;s the difference between temporary and permanent redirects: once <code>httplib2</code> follows a permanent redirect, all further requests for that <abbr>URL</abbr> will transparently be rewritten to the target <abbr>URL</abbr> <em>without hitting the network for the original <abbr>URL</abbr></em>. Remember, debugging is still turned on, yet there is no output of network activity whatsoever.
+ja:<li>ここに一時的なリダイレクトと恒久的なリダイレクトの違いがある。一度<code>httplib2</code>が恒久的なリダイレクトをたどると、その<abbr>URL</abbr>に対するリクエストはそれから先、すべて自動でリダイレクト先の<abbr>URL</abbr>に書きかえられ、<em>元の<abbr>URL</abbr>にネットワークを介してリクエストが送られることはないのだ</em>。デバッグがまだオンになっていることを思い出して欲しい。それなのに、ネットワークを通じたやりとりは全く出力されていないのだ。
+
+
+en:<li>Yep, this response was retrieved from the local cache.
+ja:<li>そう、このレスポンスはキャッシュから取得したものだ。
+
+
+en:<li>Yep, you got the entire feed (from the cache).
+ja:<li>フィード全体を（キャッシュから）取得できている。
+
+
+en:<p><abbr>HTTP</abbr>. It works.
+ja:<p><abbr>HTTP</abbr>。こいつはちゃんと動くのだ。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=beyond-get>Beyond HTTP GET</h2>
+ja:<h2 id=beyond-get>HTTP GETの先へ</h2>
+
+
+en:<p><abbr>HTTP</abbr> web services are not limited to <code>GET</code> requests. What if you want to create something new? Whenever you post a comment on a discussion forum, update your weblog, publish your status on a microblogging service like <a href=http://twitter.com/>Twitter</a> or <a href=http://identi.ca/>Identi.ca</a>, you&#8217;re probably already using <abbr>HTTP</abbr> <code>POST</code>.
+ja:<p><abbr>HTTP</abbr>ウェブサービスは<code>GET</code>リクエストだけに限られない。何か新しいものを作ろうと思ったとしたらどうだろうか？ 議論が行われている掲示板にコメントを書き込む時であれ、ブログを更新する時であれ、また<a href=http://twitter.com/>Twitter</a>や<a href=http://identi.ca/>Identi.ca</a>といったマイクロブログにあなたのステータスを投稿する場合であっても、たいていの場合、そこでは<abbr>HTTP</abbr> <code>POST</code>が使われている。
+
+
+en:<p>Both Twitter and Identi.ca both offer a simple <abbr>HTTP</abbr>-based <abbr>API</abbr> for publishing and updating your status in 140 characters or less. Let&#8217;s look at <a href=http://laconi.ca/trac/wiki/TwitterCompatibleAPI>Identi.ca&#8217;s <abbr>API</abbr> documentation</a> for updating your status:
+ja:<p>TwitterもIdenti.caも、140字以内であなたのステータスを投稿し、更新できるようにしてくれるシンプルな<abbr>HTTP</abbr>ベースの<abbr>API</abbr>を公開している。ステータスを更新するための<a href=http://laconi.ca/trac/wiki/TwitterCompatibleAPI>Identi.caの<abbr>API</abbr>ドキュメント</a>を見てみよう。
+
+
+en:<p><b>Identi.ca <abbr>REST</abbr> <abbr>API</abbr> Method: statuses/update</b><br>
+ja:<p><b>Identi.ca <abbr>REST</abbr> <abbr>API</abbr>メソッド: ステータス/更新</b><br>
+
+
+en:<p>How does this work? To publish a new message on Identi.ca, you need to issue an <abbr>HTTP</abbr> <code>POST</code> request to <code>http://identi.ca/api/statuses/update.<i>format</i></code>. (The <var>format</var> bit is not part of the <abbr>URL</abbr>; you replace it with the data format you want the server to return in response to your request. So if you want a response in <abbr>XML</abbr>, you would post the request to <code>https://identi.ca/api/statuses/update.xml</code>.) The request needs to include a parameter called <code>status</code>, which contains the text of your status update. And the request needs to be authenticated.
+ja:<p>これはどのように動くのだろう？ 新しいメッセージをIdenti.caに投稿するには、<abbr>HTTP</abbr> <code>POST</code>リクエストを<code>http://identi.ca/api/statuses/update.<i>format</i></code>に送信しなければならない（<var>format</var>の部分は<abbr>URL</abbr>の一部ではない。ここには、リクエストに対して、サーバーにどんなデータ形式でレスポンスを返信してほしいのかを入れる。<abbr>XML</abbr>でレスポンスを返してほしければ、<code>https://identi.ca/api/statuses/update.xml</code>にリクエストを送信する）。また、リクエストには<code>status</code>という変数を含める必要があり、この変数にステータスを更新するメッセージが入ることになる。さらに、リクエストは認証を通らなくてはならない。
+
+
+en:<p>Authenticated? Sure. To update your status on Identi.ca, you need to prove who you are. Identi.ca is not a wiki; only you can update your own status. Identi.ca uses <a href=http://en.wikipedia.org/wiki/Basic_access_authentication><abbr>HTTP</abbr> Basic Authentication</a> (<i>a.k.a.</i> <a href=http://www.ietf.org/rfc/rfc2617.txt>RFC 2617</a>) over <abbr>SSL</abbr> to provide secure but easy-to-use authentication. <code>httplib2</code> supports both <abbr>SSL</abbr> and <abbr>HTTP</abbr> Basic Authentication, so this part is easy.
+ja:<p>認証だって？ もちろん。Identi.caでステータスを更新するには、あなたが誰であるかを証明しなくてはならない。Identi.caはwikiではないのだ。だから、あなただけがあなたのステータスを更新することができる。Identi.caは<abbr>SSL</abbr>を介した<a href=http://en.wikipedia.org/wiki/Basic_access_authentication><abbr>HTTP</abbr> Basic認証</a>（<i>a.k.a.</i> <a href=http://www.ietf.org/rfc/rfc2617.txt>RFC 2617</a>）を利用して、セキュアで扱いやすい認証を提供している。<code>httplib2</code>は<abbr>SSL</abbr>も<abbr>HTTP</abbr> Basic認証もサポートしているので、この部分は簡単に済ますことができる。
+
+
+en:<p>A <code>POST</code> request is different from a <code>GET</code> request, because it includes a <i>payload</i>. The payload is the data you want to send to the server. The one piece of data that this <abbr>API</abbr> method <em>requires</em> is <code>status</code>, and it should be <i><abbr>URL</abbr>-encoded</i>. This is a very simple serialization format that takes a set of key-value pairs (<i>i.e.</i> a <a href=native-datatypes.html#dictionaries>dictionary</a>) and transforms it into a string.
+ja:<p><code>POST</code>リクエストと<code>GET</code>リクエストとの違いは、<code>POST</code>リクエストには<i>ペイロード</i>が入っているということにある。このペイロードとはサーバーに送信したいデータのことだ。ここで、<abbr>API</abbr>メソッドはデータの一部として<code>status</code>を<em>要求している</em>が、これは<i><abbr>URL</abbr>エンコード</i>されている必要がある。この<abbr>URL</abbr>エンコードとは非常にシンプルな符号化形式で、キーと値のペアからなる集合（<i>i.e.</i> <a href=native-datatypes.html#dictionaries>辞書</a>）を引数にとり、それを文字列に変換するというものだ。
+
+
+en:<li>Python comes with a utility function to <abbr>URL</abbr>-encode a dictionary: <code>urllib.parse.urlencode()</code>.
+ja:<li>Pythonには辞書を<abbr>URL</abbr>エンコードするユーティリティ関数が用意されている。すなわち、<code>urllib.parse.urlencode()</code>だ。
+
+
+en:<li>This is the sort of dictionary that the Identi.ca <abbr>API</abbr> is looking for. It contains one key, <code>status</code>, whose value is the text of a single status update.
+ja:<li>Identi.ca <abbr>API</abbr>が要求しているのはこの種の辞書だ。ここには<code>status</code>というキーが一つだけ入っていて、それに対応する値は一回分のステータス更新のメッセージになっている。
+
+
+en:<li>This is what the <abbr>URL</abbr>-encoded string looks like. This is the <i>payload</i> that will be sent &#8220;on the wire&#8221; to the Identi.ca <abbr>API</abbr> server in your <abbr>HTTP</abbr> <code>POST</code> request.
+ja:<li><abbr>URL</abbr>エンコードされた文字列はこんな感じになる。これが<abbr>HTTP</abbr> <code>POST</code>リクエストの際に、「回線を通じて」Identi.ca <abbr>API</abbr>サーバーに送信される<i>ペイロード</i>なのだ。
+
+
+en:<li>This is how <code>httplib2</code> handles authentication. Store your username and password with the <code>add_credentials()</code> method. When <code>httplib2</code> tries to issue the request, the server will respond with a <code>401 Unauthorized</code> status code, and it will list which authentication methods it supports (in the <code>WWW-Authenticate</code> header). <code>httplib2</code> will automatically construct an <code>Authorization</code> header and re-request the <abbr>URL</abbr>.
+ja:<li>次のようにして<code>httplib2</code>は認証を扱う。まず、<code>add_credentials()</code>メソッドを用いてユーザー名とパスワードを記憶する。それから、<code>httplib2</code>がリクエストを出すと、サーバーは<code>401 Unauthorized</code>ステータスコードを返し、さらにどの認証方式をサポートしているかのリストを（<code>WWW-Authenticate</code>ヘッダに入れて）返送してくれる。<code>httplib2</code>は自動で<code>Authorization</code>ヘッダを組み立てて、この<abbr>URL</abbr>に再びリクエストを送信してくれる。
+
+
+en:<li>The second parameter is the type of <abbr>HTTP</abbr> request, in this case <code>POST</code>.
+ja:<li>二番目の変数は<abbr>HTTP</abbr>リクエストの種類だ。ここでは<code>POST</code>になる。
+
+
+en:<li>The third parameter is the <i>payload</i> to send to the server. We&#8217;re sending the <abbr>URL</abbr>-encoded dictionary with a status message.
+ja:<li>三番目の変数はサーバーに送信する<i>ペイロード</i>だ。ここではステータスメッセージの入った辞書を<abbr>URL</abbr>エンコードで変換して送信する。
+
+
+en:<li>Finally, we need to tell the server that the payload is <abbr>URL</abbr>-encoded data.
+ja:<li>最後に、ペイロードが<abbr>URL</abbr>エンコードで符号化されたものだということをサーバーに伝えなくてはならない。
+
+
+en:<p><span class=u>&#x261E;</span>The third parameter to the <code>add_credentials()</code> method is the domain in which the credentials are valid. You should always specify this! If you leave out the domain and later reuse the <code>httplib2.Http</code> object on a different authenticated site, <code>httplib2</code> might end up leaking one site&#8217;s username and password to the other site.
+ja:<p><span class=u>&#x261E;</span><code>add_credentials()</code>メソッドの三番目の変数は、その認証が通用するドメインを表す。この部分については必ず明記しておくこと！ このドメインを空白のままにしておくと、後で別の認証を必要とするサイトに対して<code>httplib2.Http</code>オブジェクトを再利用した時に、<code>httplib2</code>が元のサイト用のユーザー名とパスワードをその別のサイトに漏らしてしまいかねないからだ。
+
+
+en:<p>This is what goes over the wire:
+ja:<p>以下のものが回線を通じて送信された：
+
+
+en:<li>After the first request, the server responds with a <code>401 Unauthorized</code> status code. <code>httplib2</code> will never send authentication headers unless the server explicitly asks for them. This is how the server asks for them.
+ja:<li>最初のリクエストに対して、サーバーは<code>401 Unauthorized</code>ステータスコードを返している。<code>httplib2</code>はサーバーから明示的に要求されない限り認証ヘッダを送信しないからだ。そして、サーバーはこのようにステータスコードを返すことで認証を要求するのだ。
+
+
+en:<li><code>httplib2</code> immediately turns around and requests the same <abbr>URL</abbr> a second time.
+ja:<li><code>httplib2</code>はすぐに向き直って、同じ<abbr>URL</abbr>に二度目のリクエストを送信する。
+
+
+en:<li>This time, it includes the username and password that you added with the <code>add_credentials()</code> method.
+ja:<li>今回は、<code>add_credentials()</code>メソッドを用いて追加したユーザー名とパスワードをリクエストに含めている。
+
+
+en:<li>It worked!
+ja:<li>うまくいった！
+
+
+en:<p>What does the server send back after a successful request? That depends entirely on the web service <abbr>API</abbr>. In some protocols (like the <a href=http://www.ietf.org/rfc/rfc5023.txt>Atom Publishing Protocol</a>), the server sends back a <code>201 Created</code> status code and the location of the newly created resource in the <code>Location</code> header. Identi.ca sends back a <code>200 OK</code> and an <abbr>XML</abbr> document containing information about the newly created resource.
+ja:<p>リクエストは成功したが、そのあとサーバーは一体何を返してくるのだろう？ これは完全にそのウェブサービスの<abbr>API</abbr>しだいだ。ある種のプロトコル（例えば<a href=http://www.ietf.org/rfc/rfc5023.txt>Atom Publishing Protocol</a>）は<code>201 Created</code>ステータスコードに加えて、新しく作られたリソースの場所を<code>Location</code>ヘッダに入れて返してくれる。Identi.caは<code>200 OK</code>と、新しく作られたリソースに関する情報の入った<abbr>XML</abbr>ドキュメントを返す。
+
+
+en:<li>Remember, the data returned by <code>httplib2</code> is always <a href=strings.html#byte-arrays>bytes</a>, not a string. To convert it to a string, you need to decode it using the proper character encoding. Identi.ca&#8217;s <abbr>API</abbr> always returns results in <abbr>UTF-8</abbr>, so that part is easy.
+ja:<li>思い出して欲しいのだが、<code>httplib2</code>が返すデータは常に<a href=strings.html#byte-arrays>バイト列</a>であって、文字列ではなかった。これを文字列に直すには、適切な文字コードを使ってデコードしなくてはならない。Identi.caの<abbr>API</abbr>は常に結果を<abbr>UTF-8</abbr>で返してくれるので、この部分にさしたる問題はない。
+
+
+en:<li>There&#8217;s the text of the status message we just published.
+ja:<li>ここに先ほど投稿したステータスメッセージの本文がある。
+
+
+en:<li>There&#8217;s the unique identifier for the new status message. Identi.ca uses this to construct a <abbr>URL</abbr> for viewing the message on the web.
+ja:<li>ここにあるのは、この新しいステータスメッセージを表すユニークな識別子だ。Identi.caはこれをウェブ上でメッセージを見るための<abbr>URL</abbr>を生成するのに使う。
+
+
+en:<p>And here it is:
+ja:<p>ほら、ちゃんとできている。
+
+
+en:<p class=c><img class=fr src=i/identica-screenshot.png alt="screenshot showing published status message on Identi.ca" width=740 height=449>
+ja:<p class=c><img class=fr src=i/identica-screenshot.png alt="Identi.caに投稿されたステータスメッセージを示すスクリーンショット" width=740 height=449>
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=beyond-post>Beyond HTTP POST</h2>
+ja:<h2 id=beyond-post>HTTP POSTの先へ</h2>
+
+
+en:<p><abbr>HTTP</abbr> isn&#8217;t limited to <code>GET</code> and <code>POST</code>. Those are certainly the most common types of requests, especially in web browsers. But web service <abbr>API</abbr>s can go beyond <code>GET</code> and <code>POST</code>, and <code>httplib2</code> is ready.
+ja:<p><abbr>HTTP</abbr>は<code>GET</code>と<code>POST</code>だけには留まらない。確かに、この二つは（特にウェブブラウザにおいて）最もよく使われているリクエストだが、ウェブサービスの<abbr>API</abbr>は<code>GET</code>と<code>POST</code>以上のものを扱うことができるし、<code>httplib2</code>の方もそれに対応する準備ができている。
+
+
+en:<li>The server returned <abbr>XML</abbr>, right? You know <a href=xml.html#xml-parse>how to parse <abbr>XML</abbr></a>.
+ja:<li>サーバーは<abbr>XML</abbr>を返してきたんだったよね？ <a href=xml.html#xml-parse><abbr>XML</abbr>をパースする方法</a>はもう知ってるはずだ。
+
+
+en:<li>The <code>findtext()</code> method finds the first instance of the given expression and extracts its text content. In this case, we&#8217;re just looking for an <code>&lt;id></code> element.
+ja:<li><code>findtext()</code>メソッドは与えられた表現に最初に合致するものを探しだし、そこからそのテキストの内容を抽出する。ここでは単に<code>&lt;id></code>要素を探しているだけだ。
+
+
+en:<li>Based on the text content of the <code>&lt;id></code> element, we can construct a <abbr>URL</abbr> to delete the status message we just published.
+ja:<li></code>先ほど投稿したステータスメッセージを削除するために、<code>&lt;id></code>要素のテキストの内容に基づいて<abbr>URL</abbr>を構築する。
+
+
+en:<li>To delete a message, you simply issue an <abbr>HTTP</abbr> <code>DELETE</code> request to that <abbr>URL</abbr>.
+ja:<li>メッセージを削除するには、単純にこの<abbr>URL</abbr>に<abbr>HTTP</abbr> <code>DELETE</code>リクエストを送ればいい。
+
+
+en:<p>This is what goes over the wire:
+ja:<p>以下のものが回線を通じて送信された：
+
+
+en:<li>&#8220;Delete this status message.&#8221;
+ja:<li>「このメッセージを削除してくれ」
+
+
+en:<li>&#8220;I&#8217;m sorry, Dave, I&#8217;m afraid I can&#8217;t do that.&#8221;
+ja:<li>「ごめんなさい、残念だけどそれはできないんだ」
+
+
+en:<li>&#8220;Unauthorized<span class=u title='interrobang!'>&#8253;</span> Hmmph. Delete this status message, <em>please</em>&hellip;
+ja:<li>「認証されていませんだって<span class=u title='interrobang!'>&#8253;</span> ふーむ。このメッセージを削除してくれ、<em>頼むから</em>&hellip;&hellip;
+
+
+en:<li>&hellip;and here&#8217;s my username and password.&#8221;
+ja:<li>&hellip;&hellip;ほら、私のユーザー名とパスワードだ」
+
+
+en:<li>&#8220;Consider it done!&#8221;
+ja:<li>「お安いご用だ！」
+
+
+en:<p>And just like that, poof, it&#8217;s gone.
+ja:<p>そしてかくのごとく、メッセージはふっと消え去りぬ。
+
+
+en:<p class=c><img class=fr src=i/identica-deleted.png alt="screenshot showing deleted message on Identi.ca" width=740 height=449>
+ja:<p class=c><img class=fr src=i/identica-deleted.png alt="screenshot showing deleted message on Identi.ca" width=740 height=449>
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=furtherreading>Further Reading</h2>
+ja:<h2 id=furtherreading>もっと知りたい人のために</h2>
+
+
+en:<p><code>httplib2</code>:
+ja:<p><code>httplib2</code>：
+
+
+en:<li><a href=http://code.google.com/p/httplib2/><code>httplib2</code> project page</a>
+ja:<li><a href=http://code.google.com/p/httplib2/><code>httplib2</code>プロジェクトページ</a>
+
+
+en:<li><a href=http://code.google.com/p/httplib2/wiki/ExamplesPython3>More <code>httplib2</code> code examples</a>
+ja:<li>さらに多くの<a href=http://code.google.com/p/httplib2/wiki/ExamplesPython3><code>httplib2</code>のコード例</a>
+
+
+en:<li><a href=http://www.xml.com/pub/a/2006/02/01/doing-http-caching-right-introducing-httplib2.html>Doing <abbr>HTTP</abbr> Caching Right: Introducing <code>httplib2</code></a>
+ja:<li><a href=http://www.xml.com/pub/a/2006/02/01/doing-http-caching-right-introducing-httplib2.html>Doing <abbr>HTTP</abbr> Caching Right: Introducing <code>httplib2</code></a>
+
+
+en:<li><a href=http://www.xml.com/pub/a/2006/03/29/httplib2-http-persistence-and-authentication.html><code>httplib2</code>: <abbr>HTTP</abbr> Persistence and Authentication</a>
+ja:<li><a href=http://www.xml.com/pub/a/2006/03/29/httplib2-http-persistence-and-authentication.html><code>httplib2</code>: <abbr>HTTP</abbr> Persistence and Authentication</a>
+
+
+en:<p><abbr>HTTP</abbr> caching:
+ja:<p><abbr>HTTP</abbr>キャッシュ：
+
+
+en:<li><a href=http://www.mnot.net/cache_docs/><abbr>HTTP</abbr> Caching Tutorial</a> by Mark Nottingham
+ja:<li><a href=http://www.mnot.net/cache_docs/><abbr>HTTP</abbr>キャッシュチュートリアル</a> by Mark Nottingham
+
+
+en:<li><a href=http://code.google.com/p/doctype/wiki/ArticleHttpCaching>How to control caching with <abbr>HTTP</abbr> headers</a> on Google Doctype
+ja:<li><a href=http://code.google.com/p/doctype/wiki/ArticleHttpCaching><abbr>HTTP</abbr>を用いてキャッシュをコントロールする方法について</a> on Google Doctype
+
+
+en:<p><abbr>RFC</abbr>s:
+ja:<p><abbr>RFC</abbr>s：
+
+
+en:<li><a href=http://www.ietf.org/rfc/rfc2616.txt>RFC 2616: <abbr>HTTP</abbr></a>
+ja:<li><a href=http://www.ietf.org/rfc/rfc2616.txt>RFC 2616: <abbr>HTTP</abbr></a>
+
+
+en:<li><a href=http://www.ietf.org/rfc/rfc2617.txt>RFC 2617: <abbr>HTTP</abbr> Basic Authentication</a>
+ja:<li><a href=http://www.ietf.org/rfc/rfc2617.txt>RFC 2617: <abbr>HTTP</abbr> Basic認証</a>
+
+
+en:<li><a href=http://www.ietf.org/rfc/rfc1951.txt>RFC 1951: deflate compression</a>
+ja:<li><a href=http://www.ietf.org/rfc/rfc1951.txt>RFC 1951: deflate圧縮</a>
+
+
+en:<li><a href=http://www.ietf.org/rfc/rfc1952.txt>RFC 1952: gzip compression</a>
+ja:<li><a href=http://www.ietf.org/rfc/rfc1952.txt>RFC 1952: gzip圧縮</a>
+
+
+en:<p class=v><a rel=prev href=serializing.html title='back to &#8220;Serializing Python Objects&#8221;'><span class=u>&#x261C;</span></a> <a rel=next href=case-study-porting-chardet-to-python-3.html title='onward to &#8220;Case Study: Porting chardet to Python 3&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a rel=prev href=serializing.html title='&#8220;Pythonオブジェクトをシリアライズする&#8221;に戻る'><span class=u>&#x261C;</span></a> <a rel=next href=case-study-porting-chardet-to-python-3.html title='&#8220;ケーススタディ: chardetをPython 3に移植する&#8221;に進む'><span class=u>&#x261E;</span></a>
+
+
+en:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+ja:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+
+
+en:# continued from the <a href=#whats-on-the-wire>previous example</a>
+ja:# <a href=#whats-on-the-wire>前の例</a>から続く
+
+en:# continued from the <a href=#introducing-httplib2>previous example</a>
+ja:# <a href=#introducing-httplib2>前の例</a>から続く
+
+en:# NOT continued from previous example!
+ja:# 前の例の続きではない！
+
+en:# Please exit out of the interactive shell
+ja:# いまの対話シェルを終了して、
+
+en:# and launch a new one.
+ja:# 新しいシェルを立ち上げて欲しい
+
+
+en:<p class=ss><a style=border:0 href=http://www.cafepress.com/feedparser><img src=http://feedparser.org/img/feedparser.jpg alt="[I support RFC 3023 t-shirt]" width=150 height=150></a>
+ja:<!--removed-->
+

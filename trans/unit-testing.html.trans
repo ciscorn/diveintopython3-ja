@@ -1,0 +1,594 @@
+en:<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#unit-testing>Dive Into Python 3</a> <span class=u>&#8227;</span>
+ja:<p>現在地: <a href=index.html>ホーム</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#unit-testing>Dive Into Python 3</a> <span class=u>&#8227;</span>
+
+
+en:<title>Unit testing - Dive Into Python 3</title>
+ja:<title>ユニットテスト - Dive Into Python 3 日本語版</title>
+
+
+en:<p id=level>Difficulty level: <span class=u title=beginner>&#x2666;&#x2666;&#x2662;&#x2662;&#x2662;</span>
+ja:<p id=level>難易度: <span class=u title=初級>&#x2666;&#x2666;&#x2662;&#x2662;&#x2662;</span>
+
+
+en:<h1>Unit Testing</h1>
+ja:<h1>ユニットテスト</h1>
+
+
+en:<p><span class=u>&#x275D;</span> Certitude is not the test of certainty. We have been cocksure of many things that were not so. <span class=u>&#x275E;</span><br>&mdash; <a href=http://en.wikiquote.org/wiki/Oliver_Wendell_Holmes,_Jr.>Oliver Wendell Holmes, Jr.</a>
+ja:<p><span class=u>&#x275D;</span> 確信は確実性の証拠とはならない。我々はそれほど確かでないことを、幾度となく心から信じ込んできたのだ。 <span class=u>&#x275E;</span><br>&mdash; <a href=http://en.wikiquote.org/wiki/Oliver_Wendell_Holmes,_Jr.>Oliver Wendell Holmes, Jr.</a>
+
+
+en:<p id=toc>&nbsp;
+ja:<p id=toc>&nbsp;
+
+
+en:<h2 id=divingin>(Not) Diving In</h2>
+ja:<h2 id=divingin>飛び込（まない）</h2>
+
+
+en:<p class=f>Kids today. So spoiled by these fast computers and fancy &#8220;dynamic&#8221; languages. Write first, ship second, debug third (if ever). In my day, we had discipline. Discipline, I say! We had to write programs by <em>hand</em>, on <em>paper</em>, and feed them to the computer on <em>punchcards</em>. And we <em>liked it!</em>
+ja:<p class=f>まったく最近の若い連中ときたら、速いコンピュータとステキな「動的」言語に甘やかされてやがる。書くのが最初で、出荷が二番目、デバッグは（やるとしても）三番目だ。俺の時代には規律があった。規律だ、おい聞けよ。プログラムを<em>手</em>で<em>紙</em>に書いてだな、<em>パンチカード</em>でコンピュータに入力するんだ。あれは<em>楽しかったなあ！</em>
+
+
+en:<p>In this chapter, you&#8217;re going to write and debug a set of utility functions to convert to and from Roman numerals. You saw the mechanics of constructing and validating Roman numerals in <a href=regular-expressions.html#romannumerals>&#8220;Case study: roman numerals&#8221;</a>. Now step back and consider what it would take to expand that into a two-way utility.
+ja:<p>この章では、整数とローマ数字を相互変換する一組のユーティリティ関数を書いて、それをデバッグしてもらう。ローマ数字の組み立て方とその有効性の検証法については、<a href=regular-expressions.html#romannumerals>「ケーススタディ: ローマ数字」</a>で学んだ。では一度そこに立ち返って、どうやったらそこから双方向なユーティリティを作れるかを考えよう。
+
+
+en:<p><a href=regular-expressions.html#romannumerals>The rules for Roman numerals</a> lead to a number of interesting observations:
+ja:<p><a href=regular-expressions.html#romannumerals>ローマ数字の規則</a>を見ると、興味深い洞察がいくつか得られる：
+
+
+en:<li>There is only one correct way to represent a particular number as a Roman numeral.
+ja:<li>ある特定の数をローマ数字で表現する方法は一つしかない。
+
+
+en:<li>The converse is also true: if a string of characters is a valid Roman numeral, it represents only one number (that is, it can only be interpreted one way).
+ja:<li>逆もまた真なり。ある文字列が有効なローマ数字ならば、それは特定の一つの数を表している（つまり、ローマ数字は一通りにしか解釈できない）。
+
+
+en:<li>There is a limited range of numbers that can be expressed as Roman numerals, specifically <code>1</code> through <code>3999</code>. The Romans did have several ways of expressing larger numbers, for instance by having a bar over a numeral to represent that its normal value should be multiplied by <code>1000</code>. For the purposes of this chapter, let&#8217;s stipulate that Roman numerals go from <code>1</code> to <code>3999</code>.
+ja:<li>ローマ数字で表しうる数の範囲には限りがある。具体的に言えば<code>1</code>から<code>3999</code>までの数だ。実際には、ローマ数字でもっと大きな数を表す方法はいくつかあって、例えば数字の上に棒線を引くことでその数字の<code>1000</code>倍の数を表すことができた。だがまあ、とりあえずこの章ではローマ数字は<code>1</code>から<code>3999</code>までの数しか表せないものとしよう。
+
+
+en:<li>There is no way to represent 0 in Roman numerals.
+ja:<li>ローマ数字でゼロを表すことはできない。
+
+
+en:<li>There is no way to represent negative numbers in Roman numerals.
+ja:<li>ローマ数字で負の数を表すことはできない。
+
+
+en:<li>There is no way to represent fractions or non-integer numbers in Roman numerals.
+ja:<li>ローマ数字で分数や整数でない数を表すことはできない。
+
+
+en:<p>Let&#8217;s start mapping out what a <code>roman.py</code> module should do.  It will have two main functions, <code>to_roman()</code> and <code>from_roman()</code>. The <code>to_roman()</code> function should take an integer from <code>1</code> to <code>3999</code> and return the Roman numeral representation as a string&hellip;
+ja:<p>では、<code>roman.py</code>モジュールに何が必要なのかを考えていこう。まず、主たる関数として<code>to_roman()</code>と<code>from_roman()</code>の二つがいるだろう。<code>to_roman()</code>関数は<code>1</code>から<code>3999</code>までの整数を引数にとり、対応するローマ数字を文字列として返す&hellip;&hellip;
+
+
+en:<p>Stop right there. Now let&#8217;s do something a little unexpected: write a test case that checks whether the <code>to_roman()</code> function does what you want it to. You read that right: you&#8217;re going to write code that tests code that you haven&#8217;t written yet.
+ja:<p>一旦手を止めてほしい。唐突かもしれないが、ここでちょっと違ったことをやろう。<code>to_roman()</code>関数が望み通りの動きをするかをチェックするテストケースを書くのだ。大丈夫、読み間違えでもなんでもない。実際にこれから、まだ書かれてもいないコードをテストするコードを書いてもらう。
+
+
+en:<p>This is called <i>test-driven development</i>, or <abbr>TDD</abbr>. The set of two conversion functions&nbsp;&mdash;&nbsp;<code>to_roman()</code>, and later <code>from_roman()</code>&nbsp;&mdash;&nbsp;can be written and tested as a unit, separate from any larger program that imports them. Python has a framework for unit testing, the appropriately-named <code>unittest</code> module.
+ja:<p>これは<em>テスト駆動開発</em> (<abbr>TDD</abbr>) と呼ばれている手法だ。変換を行うこの二つの関数&nbsp;&mdash;&nbsp;<code>to_roman()</code>と後で出てくる<code>from_roman()</code>&nbsp;&mdash;&nbsp;は、これらをインポートする他のもっと大規模なプログラムとは独立に、一つの構成単位として書いたりテストしたりできる。Pythonにはユニットテストのためのフレームワークがある。その名もずばり<code>unittest</code>モジュールだ。
+
+
+en:<p>Unit testing is an important part of an overall testing-centric development strategy. If you write unit tests, it is important to write them early and to keep them updated as code and requirements change. Many people advocate writing tests before they write the code they&#8217;re testing, and that&#8217;s the style I&#8217;m going to demonstrate in this chapter. But unit tests are beneficial no matter when you write them.
+ja:<p>ユニットテストは、テストを中心に据える開発手法全般のかなめといえる存在だ。ユニットテストを書くなら、早い段階で書きあげた上で、コードや要件の変更に合わせてアップデートしていくことが重要になる。多くの人はコードを書く前にテストを書くやり方を推奨していて、実際にこの章でもこのスタイルを用いるのだが、ユニットテスト自体はいつ書いても有益なものなので間違えないように。
+
+
+en:<li>Before writing code, writing unit tests forces you to detail your requirements in a useful fashion.
+ja:<li>コードを書く前: ユニットテストを書こうとすれば、要件を実用的な形で練り上げざるをえなくなる。
+
+
+en:<li>While writing code, unit tests keep you from over-coding. When all the test cases pass, the function is complete.
+ja:<li>コードを書いている最中: ユニットテストがあれば過剰なコーディングを避けることができる。すべてのテストケースに通ったなら、その関数はもう完成なのだ。
+
+
+en:<li>When refactoring code, they can help prove that the new version behaves the same way as the old version.
+ja:<li>リファクタリングする時: 新しいコードが古いバージョンのコードと同じように動くかどうかを確認するのに役立つ。
+
+
+en:<li>When maintaining code, having tests will help you cover your ass when someone comes screaming that your latest change broke their old code. (&#8220;But <em>sir</em>, all the unit tests passed when I checked it in...&#8221;)
+ja:<li>コードを保守する時: 誰かがあなたの所にやって来て「お前が加えた変更のせいで古いコードが壊れたじゃないか」とわめいた時に、ユニットテストがあれば言い逃れができる（「<em>しかしですね</em>、私がコードをチェックインした時には、ユニットテストを全部パスしてましたよ...」）
+
+
+en:<li>When writing code in a team, having a comprehensive test suite dramatically decreases the chances that your code will break someone else&#8217;s code, because you can run their unit tests first. (I&#8217;ve seen this sort of thing in code sprints. A team breaks up the assignment, everybody takes the specs for their task, writes unit tests for it, then shares their unit tests with the rest of the team. That way, nobody goes off too far into developing code that doesn&#8217;t play well with others.)
+ja:<li>チームでコードを書く時: 包括的なテストスイートがあれば、あなたのコードが別の誰かのコードを壊してしまうといったことが非常に少なくなる。事前に他の人のユニットテストを走らせることができるからだ。（コードスプリントでこういうやり方をしているのを見たことがある。チームに割り当てられた仕事を分割した上で、各々が仕様書に目を通してユニットテストを書き、それをチームで共有する。こうすると、他の部分とうまくかみ合わないようなコードが早いうちに直されるようになる）
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=romantest1>A Single Question</h2>
+ja:<h2 id=romantest1>一つの問い</h2>
+
+
+en:<aside>Every test is an island.</aside>
+ja:<aside>すべてのテストはそれぞれ一つの島である。</aside>
+
+
+en:<p>A test case answers a single question about the code it is testing. A test case should be able to...
+ja:<p>一つのテストケースは、そのコードに関するただ一つの問いのみに答える。また、テストケースというものは...
+
+
+en:<li>...run completely by itself, without any human input. Unit testing is about automation.
+ja:<li>...単独で完全に機能し、人の入力を必要としないものでなくてはならない。ユニットテストの本質は自動化にある。
+
+
+en:<li>...determine by itself whether the function it is testing has passed or failed, without a human interpreting the results.
+ja:<li>...ある関数がテストをパスしたかどうかを、人の解釈によらず、自ら判定するものでなくてはならない。
+
+
+en:<li>...run in isolation, separate from any other test cases (even if they test the same functions). Each test case is an island.
+ja:<li>...（同じ関数をテストしているテストケースも含む）他のいかなるテストケースからも独立し、単体で動作するものでなくてはならない。すべてのテストはそれぞれが一つの島なのだ。
+
+
+en:<p>Given that, let&#8217;s build a test case for the first requirement:
+ja:<p>以上のことを前提に、一番最初の要件に対するテストケースを書いてみよう。
+
+
+en:<li>The <code>to_roman()</code> function should return the Roman numeral representation for all integers <code>1</code> to <code>3999</code>.
+ja:<li><code>to_roman()</code>は、<code>1</code>から<code>3999</code>までのすべての整数に対応するローマ数字を返せなくてはならない。
+
+
+en:<p>It is not immediately obvious how this code does&hellip; well, <em>anything</em>. It defines a class which has no <code>__init__()</code> method. The class <em>does</em> have another method, but it is never called. The entire script has a <code>__main__</code> block, but it doesn&#8217;t reference the class or its method. But it does do something, I promise.
+ja:<p>一見すると、「このコードって本当に<em>何かの</em>役に立つの？」と思われるかもしれない。一つのクラスが定義されているが、中には<code>__init__</code>メソッドが入っていない。別のメソッドも<em>あることはある</em>のだが、このメソッドは一度も呼び出されていない。 このスクリプトの<code>__main__</code>ブロックにしても、このクラスやメソッドを参照してすらいない。だが安心してほしい。これは実際に役に立つのだ。
+
+
+en:<p class=d>[<a href=examples/romantest1.py>download <code>romantest1.py</code></a>]
+ja:<p class=d>[<a href=examples/romantest1.py><code>romantest1.py</code>をダウンロードする</a>]
+
+
+en:<li>To write a test case, first subclass the <code>TestCase</code> class of the <code>unittest</code> module. This class provides many useful methods which you can use in your test case to test specific conditions.
+ja:<li>テストケースを書くには、まず<code>unittest</code>モジュールの<code>TestCase</code>クラスをサブクラス化する。このクラスには、テストケースで特定の条件をテストする時に便利なメソッドがたくさん入っている。
+
+
+en:<li>This is a list of integer/numeral pairs that I verified manually. It includes the lowest ten numbers, the highest number, every number that translates to a single-character Roman numeral, and a random sampling of other valid numbers. You don&#8217;t need to test every possible input, but you should try to test all the obvious edge cases.
+ja:<li>これは整数/数字のペアのリストで、検証は私が自ら行った。このリストには、最も小さい10個の数、最も大きい数、一文字のローマ数字で表される数すべて、さらにこれら以外の有効な数字からランダムに抽出された数が含まれている。ありとあらゆる入力値を試す必要はないが、境界事例だと分かっているものについてはすべてテストするべきだろう。
+
+
+en:<li>Every individual test is its own method. A test method takes no parameters, returns no value, and must have a name beginning with the four letters <code>test</code>. If a test method exits normally without raising an exception, the test is considered passed; if the method raises an exception, the test is considered failed.
+ja:<li>個々のテストはそれぞれメソッドとして表される。メソッドは引数を取らなければ値も返さないようなものであり、メソッド名は4文字の<code>test</code>で始まっていなければならない。もし、メソッドが例外を送出することなく普通に終了したならば、テストをパスしたものとみなされる。一方、例外が送出された場合には、テストは失敗したとみなされる。
+
+
+en:<li>Here you call the actual <code>to_roman()</code> function. (Well, the function hasn&#8217;t been written yet, but once it is, this is the line that will call it.)  Notice that you have now defined the <abbr>API</abbr> for the <code>to_roman()</code> function: it must take an integer (the number to convert) and return a string (the Roman numeral representation). If the <abbr>API</abbr> is different than that, this test is considered failed. Also notice that you are not trapping any exceptions when you call <code>to_roman()</code>. This is intentional. <code>to_roman()</code> shouldn&#8217;t raise an exception when you call it with valid input, and these input values are all valid. If <code>to_roman()</code> raises an exception, this test is considered failed.
+ja:<li>この部分では実際の<code>to_roman()</code>関数を呼び出している（正確に言えば<code>to_roman()</code>関数はまだ書かれていないのだが、まあどうにせよ、一度書けばここで呼び出されるようになる）。注意してほしいのは、ここで<code>to_roman()</code>の<abbr>API</abbr>が定められているということだ。つまり、この関数は一つの整数（変換する数）をとり、文字列（対応するローマ数字）を返さなくてはならない。もし<abbr>API</abbr>がこれと異なっていたら、このテストは失敗したものとみなされる。また、<code>to_roman()</code>を呼び出す時に、全く例外を捕捉していないことにも気を付けてほしい。これは意図的にそうしていることで、要するに<code>to_roman()</code>は、有効な入力値を与えられた場合に例外を送出するようなものであってはならないのだ。もし、<code>to_roman()</code>が例外を返したら、テストは失敗したものとみなされる。
+
+
+en:<li>Assuming the <code>to_roman()</code> function was defined correctly, called correctly, completed successfully, and returned a value, the last step is to check whether it returned the <em>right</em> value. This is a common question, and the <code>TestCase</code> class provides a method, <code>assertEqual</code>, to check whether two values are equal. If the result returned from <code>to_roman()</code> (<var>result</var>) does not match the known value you were expecting (<var>numeral</var>), <code>assertEqual</code> will raise an exception and the test will fail. If the two values are equal, <code>assertEqual</code> will do nothing. If every value returned from <code>to_roman()</code> matches the known value you expect, <code>assertEqual</code> never raises an exception, so <code>test_to_roman_known_values</code> eventually exits normally, which means <code>to_roman()</code> has passed this test.
+ja:<li><code>to_roman()</code>関数を正しく定義し、適切に呼び出し、そして何の問題もなく処理が終わって値が返ってきたものとしよう。最後に残ったステップは、<em>正しい</em>値が返されているかどうかチェックすることだ。これはテストケース一般でチェックされる項目なので、<code>TestCase</code>クラスに二つの値が等しいかどうかを調べる<code>assertEqual</code>メソッドが用意されている。<code>to_roman()</code>が返した値（<var>result</var>）が、返されるべき既知の値（<var>numeral</var>）と一致しなかったなら、<code>assertEqual</code>は例外を送出し、テストは失敗する。二つの値が等しければ、<code>assertEqual</code>は何もしない。だから、<code>to_roman()</code>のすべての戻り値が、返されるべき既知の値と一致したならば、<code>assertEqual</code>は一度も例外を送出せず、<code>test_to_roman_known_values</code>は正常に終了する。言い換えれば、<code>to_roman()</code>がこのテストをパスしたことになるのだ。
+
+
+en:<aside>Write a test that fails, then code until it passes.</aside>
+ja:<aside>通らないようなテストを書いて、パスするまでコーディングする。</aside>
+
+
+en:<p>Once you have a test case, you can start coding the <code>to_roman()</code> function. First, you should stub it out as an empty function and make sure the tests fail. If the tests succeed before you&#8217;ve written any code, your tests aren&#8217;t testing your code at all! Unit testing is a dance: tests lead, code follows. Write a test that fails, then code until it passes.
+ja:<p>テストケースが出来上がったら、<code>to_roman()</code>関数のコードを書き始めることができる。だが、まずは最初に中身が空の<code>to_roman()</code>関数を作って、テストが失敗することを確かめなくてはならない。もし、何も書いていないのにパスできてしまうようなら、何のテストにもならないじゃないか！ ユニットテストは例えるならばダンスのようなもので、テストがリードし、コードがフォローする。通らないようなテストを書いて、パスするまでコーディングするんだ。
+
+
+en:<li>At this stage, you want to define the <abbr>API</abbr> of the <code>to_roman()</code> function, but you don&#8217;t want to code it yet. (Your test needs to fail first.) To stub it out, use the Python reserved word <code>pass</code>, which does precisely nothing.
+ja:<li>この段階では、<code>to_roman()</code>の<abbr>API</abbr>を定義するだけで、中身をコーディングしようとは思ってはいない（まずはテストを失敗させなくてはならないからだ）。この場合にはPythonの予約語の<code>pass</code>を使えばいい。これは実行されても、全く何の処理も行わない。
+
+
+en:<p>Execute <code>romantest1.py</code> on the command line to run the test. If you call it with the <code>-v</code> command-line option, it will give more verbose output so you can see exactly what&#8217;s going on as each test case runs. With any luck, your output should look like this:
+ja:<p>コマンドラインで<code>romantest1.py</code>を起動してテストを実行しよう。コマンドラインのオプションとして<code>-v</code>をつければ、それぞれのテストケースが実行される際の処理の状況が詳しく出力されるようになる。運が良ければ、次のように出力されるはずだ：
+
+
+en:<li>Running the script runs <code>unittest.main()</code>, which runs each test case. Each test case is a method within a class in <code>romantest.py</code>. There is no required organization of these test classes; they can each contain a single test method, or you can have one class that contains multiple test methods. The only requirement is that each test class must inherit from <code>unittest.TestCase</code>.
+ja:<li>このスクリプトを走らせると<code>unittest.main()</code>が呼び出され、それぞれのテストケースが実行される。各々のテストケースは<code>romantest.py</code>の中のクラスに入っているメソッドだ。このテストクラスはどのような構成をしていてもよい。いくつかのクラスがあって、それぞれにテストメソッドが一つずつ入っているというのでもよいし、複数のメソッドが入ったクラスが一つあるというのでも構わない。ただすべてのテストクラスが<code>unittest.TestCase</code>を継承してさえいればいいのだ。
+
+
+en:<li>For each test case, the <code>unittest</code> module will print out the <code>docstring</code> of the method and whether that test passed or failed. As expected, this test case fails.
+ja:<li>各々のテストについて、<code>unittest</code>モジュールはそのメソッドの<code>docstring</code>とテストの成否を出力する。予想通り、このテストケースは失敗している。
+
+
+en:<li>For each failed test case, <code>unittest</code> displays the trace information showing exactly what happened. In this case, the call to <code>assertEqual()</code> raised an <code>AssertionError</code> because it was expecting <code>to_roman(1)</code> to return <code>'I'</code>, but it didn&#8217;t. (Since there was no explicit return statement, the function returned <code>None</code>, the Python null value.)
+ja:<li>失敗したテストケースについては、<code>unittest</code>は何が起こったのかをトレースして表示してくれる。このケースでは、<code>assertEqual()</code>を呼び出した際に<code>AssertionError</code>が送出されている。<code>to_roman(1)</code>は<code>'I'</code>を返すものとされていたのに、そうならなかったからだ（この関数にはreturn文が置かれて無いので、PythonのNull値にあたる<code>None</code>が返されている）。
+
+
+en:<li>After the detail of each test, <code>unittest</code> displays a summary of how many tests were performed and how long it took.
+ja:<li>それぞれのテストの詳細を出力した後で、<code>unittest</code>はいくつのテストが実行され、それにどれくらいの時間がかかったのかを表示する。
+
+
+en:<li>Overall, the test run failed because at least one test case did not pass. When a test case doesn&#8217;t pass, <code>unittest</code> distinguishes between failures and errors. A failure is a call to an <code>assertXYZ</code> method, like <code>assertEqual</code> or <code>assertRaises</code>, that fails because the asserted condition is not true or the expected exception was not raised. An error is any other sort of exception raised in the code you&#8217;re testing or the unit test case itself.
+ja:<li>まとめると、少なくとも一つのテストケースをパスしなかったので、このテストは失敗したことになる。なお、テストケースにパスしなかったという場合について、<code>unittest</code>はFailureとErrorを区別する。Failureとは、<code>assertEqual</code>や<code>assertRaises</code>といった<code>assertXYZ</code>メソッドを呼びだしたが、表明された条件が真でなかったり、期待通りに例外が送出されなかったせいで失敗してしまった場合を指す。これ以外の、テストしているコードやユニットテストのテストケース自体から送出された例外はすべてErrorとされる。
+
+
+en:<p><em>Now</em>, finally, you can write the <code>to_roman()</code> function.
+ja:<p><em>これで</em>ようやく、<code>to_roman()</code>関数を書くことができる。
+
+
+en:<p class=d>[<a href=examples/roman1.py>download <code>roman1.py</code></a>]
+ja:<p class=d>[<a href=examples/roman1.py><code>roman1.py</code>をダウンロードする</a>]
+
+
+en:<li><var>roman_numeral_map</var> is a tuple of tuples which defines three things: the character representations of the most basic Roman numerals; the order of the Roman numerals (in descending value order, from <code>M</code> all the way down to <code>I</code>); the value of each Roman numeral. Each inner tuple is a pair of <code>(<var>numeral</var>, <var>value</var>)</code>. It&#8217;s not just single-character Roman numerals; it also defines two-character pairs like <code>CM</code> (&#8220;one hundred less than one thousand&#8221;). This makes the <code>to_roman()</code> function code simpler.
+ja:<li><var>roman_numeral_map</var>はタプルのタプルで、次の三つのものを定めている。すなわち、最も基本的なローマ数字の文字表記、ローマ数字の順番（<code>M</code>から<code>I</code>まで、数が大きい順に並べてある）、そしてそれぞれのローマ数字が表す値だ。この内側のタプルはすべて<code>(<var>numeral</var>, <var>value</var>)</code>というペアからなっている。ちなみに、ここでは一文字のローマ数字だけではなく、<code>CM</code>（「1000引く100」）など二文字のものについても定めている。こうすることで、<code>to_roman()</code>関数のコードがより簡潔なものになるのだ。
+
+
+en:<li>Here&#8217;s where the rich data structure of <var>roman_numeral_map</var> pays off, because you don&#8217;t need any special logic to handle the subtraction rule. To convert to Roman numerals, simply iterate through <var>roman_numeral_map</var> looking for the largest integer value less than or equal to the input. Once found, add the Roman numeral representation to the end of the output, subtract the corresponding integer value from the input, lather, rinse, repeat.
+ja:<li><var>roman_numeral_map</var>にデータを詰め込んだことが功を奏していて、引き算を用いて数を表すルールを扱うための特別なロジックを組む必要がなくなっている。つまり、ローマ数字に変換するには次のようにすればいいのだ。まず、単純に<var>roman_numeral_map</var>をイテレートして、入力値以下の数の中で最大の整数値を探す。次に、そのような数が見つかったら、対応するローマ数字を出力値の末尾に付け加え、さらに入力値からその数を引く。後はこれを繰り返し、また繰り返してさらに繰り返せばいい。
+
+
+en:<p>If you&#8217;re still not clear how the <code>to_roman()</code> function works, add a <code>print()</code> call to the end of the <code>while</code> loop:
+ja:<p><code>to_roman()</code>関数がどのように動くのかまだよく分からないのなら、<code>print()</code>を<code>while</code>ループの末尾につけてみるといい：
+
+
+en:<p>With the debug <code>print()</code> statements, the output looks like this:
+ja:<p>デバッグ用の<code>print()</code>文をつけると、次のように出力されるようになる：
+
+
+en:<p>So the <code>to_roman()</code> function appears to work, at least in this manual spot check. But will it pass the test case you wrote?
+ja:<p>どうやら<code>to_roman()</code>関数はちゃんと動くようだ。少なくとも、この手作業の抜き取り検査ではうまくやっているように見える。だが、さっき書いたテストケースはパスするだろうか？
+
+
+en:<li>Hooray! The <code>to_roman()</code> function passes the &#8220;known values&#8221; test case. It&#8217;s not comprehensive, but it does put the function through its paces with a variety of inputs, including inputs that produce every single-character Roman numeral, the largest possible input (<code>3999</code>), and the input that produces the longest possible Roman numeral (<code>3888</code>). At this point, you can be reasonably confident that the function works for any good input value you could throw at it.
+ja:<li>やったー！<code>to_roman()</code>関数は「既知の値」のテストケースに通ったぞ。このテストはありうるケースすべてを試しているわけではないが、この関数を多様な入力値、例えば、一文字のローマ数字に対応するすべての数、最大の数（<code>3999</code>）、最も長いローマ数字に対応する数（<code>3888</code>）などでテストしている。だから、この関数は適切な入力値ならどれでもうまく処理できると考えても差し支えないだろう。
+
+
+en:<p>&#8220;Good&#8221; input? Hmm. What about bad input?
+ja:<p>「適切な」入力値だって？ ふーむ。じゃあ不適切な値を入力したらどうなるんだ？
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=romantest2>&#8220;Halt And Catch Fire&#8221;</h2>
+ja:<h2 id=romantest2>&#8220;Halt And Catch Fire&#8221;</h2>
+
+
+en:<aside>The Pythonic way to halt and catch fire is to raise an exception.</aside>
+ja:<aside>Pythonでは、例外の送出が halt and catch fire の役目を果たす。</aside>
+
+
+en:<p>It is not enough to test that functions succeed when given good input; you must also test that they fail when given bad input. And not just any sort of failure; they must fail in the way you expect.
+ja:<p>適切な入力を与えて成功するかをテストするだけでは十分ではなく、適切でない入力を与えられた時に失敗することも検証しなくてはならない。それもどんな失敗でも良いというわけではなく、狙った通りに失敗しなくてはならないのだ。
+
+
+en:<li>That&#8217;s definitely not what you wanted&nbsp;&mdash;&nbsp;that&#8217;s not even a valid Roman numeral! In fact, each of these numbers is outside the range of acceptable input, but the function returns a bogus value anyway. Silently returning bad values is <em>baaaaaaad</em>; if a program is going to fail, it is far better if it fails quickly and noisily. &#8220;Halt and catch fire,&#8221; as the saying goes. The Pythonic way to halt and catch fire is to raise an exception.
+ja:<li>明らかにこれは意図していない戻り値だ&nbsp;&mdash;&nbsp;そもそも、ちゃんとしたローマ数字ですらない！ 実を言うと、ここにある数はすべて入力値の制限範囲を越えているのだが、それでも関数はとりあえず戻り値をでっちあげているのだ。こっそり不適当な値を返すというのは<em>ものすごーく悪いこと</em>だ。どうせ落ちるプログラムなら、早いうちに騒々しく落ちてくれた方がずっと良い。言い習わされているように「Halt and catch fire」（中断の後、発火せよ）というやつだ。Pythonでは、例外の送出がHalt and Catch Fireの役目を果たす。
+
+
+en:<p>The question to ask yourself is, &#8220;How can I express this as a testable requirement?&#8221; How&#8217;s this for starters:
+ja:<p>考えるべき問題は「どうやったらこれをテストできる条件として表せられるのだろう？」ということだ。取っ掛かりとして、まずはこのようにしたらどうだろう：
+
+
+en:<p>The <code>to_roman()</code> function should raise an <code>OutOfRangeError</code> when given an integer greater than <code>3999</code>.
+ja:<p><code>to_roman()</code>関数は<code>3999</code>より大きい整数を与えられたら<code>OutOfRangeError</code>を送出しなければならない。
+
+
+en:<p>What would that test look like?
+ja:<p>このテストはどんな感じになるだろうか？
+
+
+en:<p class=d>[<a href=examples/romantest2.py>download <code>romantest2.py</code></a>]
+ja:<p class=d>[<a href=examples/romantest2.py><code>romantest2.py</code>をダウンロードする</a>]
+
+
+en:<li>Like the previous test case, you create a class that inherits from <code>unittest.TestCase</code>. You can have more than one test per class (as you&#8217;ll see later in this chapter), but I chose to create a new class here because this test is something different than the last one. We&#8217;ll keep all the good input tests together in one class, and all the bad input tests together in another.
+ja:<li>前のテストケースと同じように、<code>unittest.TestCase</code>を継承したクラスを作っている。一つのクラスに複数のテストを入れてもいいのだが（この章の後の方ではそうしている）、ここでは新しいクラスを作ることにする。このテストは先ほどのテストとは性質が異なったものだからだ。適切な入力値に対するテストを一つのクラスにまとめて、不適切な入力値に対するテストはまた別のクラスにまとめるのだ。
+
+
+en:<li>Like the previous test case, the test itself is a method of the class, with a name starting with <code>test</code>.
+ja:<li>前のテストケースと同様に、テストの実体はクラスに収められている、<code>test</code>で始まる名前のメソッドだ。
+
+
+en:<li>The <code>unittest.TestCase</code> class provides the <code>assertRaises</code> method, which takes the following arguments: the exception you&#8217;re expecting, the function you&#8217;re testing, and the arguments you&#8217;re passing to that function. (If the function you&#8217;re testing takes more than one argument, pass them all to <code>assertRaises</code>, in order, and it will pass them right along to the function you&#8217;re testing.)
+ja:<li><code>unittest.TestCase</code>クラスには<code>assertRaises</code>メソッドが用意されているが、これは次のような引数をとるものだ。すなわち、送出されるべき例外、テスト対象の関数、そして関数に渡す引数だ（テスト対象の関数が複数の引数をとる場合には、それらの引数を順に並べて<code>assertRaises</code>に渡せばいい。そうすれば、そのまま関数に渡してくれる）。
+
+
+en:<p>Pay close attention to this last line of code. Instead of calling <code>to_roman()</code> directly and manually checking that it raises a particular exception (by wrapping it in <a href=your-first-python-program.html#exceptions>a <code>try...except</code> block</a>), the <code>assertRaises</code> method has encapsulated all of that for us. All you do is tell it what exception you&#8217;re expecting (<code>roman2.OutOfRangeError</code>), the function (<code>to_roman()</code>), and the function&#8217;s arguments (<code>4000</code>). The <code>assertRaises</code> method takes care of calling <code>to_roman()</code> and checking that it raises <code>roman2.OutOfRangeError</code>.
+ja:<p>コードの最後の行をよく見てほしい。<code>to_roman()</code>を直接呼び出して、特定の例外を送出しているかどうかを（<a href=your-first-python-program.html#exceptions><code>try...except</code>ブロック</a>を使って）自ら調べなくても、<code>assertRaises</code>メソッドがこの処理を全部カプセル化してくれている。だから、どんな例外が送出されるべきなのか（<code>roman2.OutOfRangeError</code>）と、対象となる関数（<code>to_roman()</code>）、そして関数がとる引数（<code>4000</code>）を渡すだけでよいのだ。後は、<code>assertRaises</code>メソッドが<code>to_roman()</code>を呼び出して、<code>roman2.OutOfRangeError</code>が送出されるかどうかをチェックしてくれる。
+
+
+en:<p>Also note that you&#8217;re passing the <code>to_roman()</code> function itself as an argument; you&#8217;re not calling it, and you&#8217;re not passing the name of it as a string. Have I mentioned recently how handy it is that <a href=your-first-python-program.html#everythingisanobject>everything in Python is an object</a>?
+ja:<p>また、<code>to_roman()</code>関数自体が引数として渡されていることにも注意してほしい。この関数を呼び出しているわけでも、関数の名前を文字列として渡しているわけでもない。そういえば、少し前のところで、<a href=your-first-python-program.html#everythingisanobject>Pythonではあらゆるものがオブジェクト</a>だということがどれほど便利かってこと話したっけ？
+
+
+en:<p>So what happens when you run the test suite with this new test?
+ja:<p>それでは、この新しいテストを組み込んだテストスイートを走らせたらどうなるのだろうか？
+
+
+en:<li>You should have expected this to fail (since you haven&#8217;t written any code to pass it yet), but... it didn&#8217;t actually &#8220;fail,&#8221; it had an &#8220;error&#8221; instead. This is a subtle but important distinction. A unit test actually has <em>three</em> return values: pass, fail, and error. Pass, of course, means that the test passed&nbsp;&mdash;&nbsp;the code did what you expected. &#8220;Fail&#8221; is what the previous test case did (until you wrote code to make it pass)&nbsp;&mdash;&nbsp;it executed the code but the result was not what you expected. &#8220;Error&#8221; means that the code didn&#8217;t even execute properly.
+ja:<li>当然テストは失敗すると思っただろうが（このテストをパスするためのコードを何も書いてないからね）、しかし...「Fail」ではなく、代わりに「Error」が返ってくるのだ。これは微妙な差だが、違いは大きい。実は、ユニットテストにはPass、Fail、Errorの<em>三つ</em>の戻り値がある。Passというのはもちろん、テストをパスしたことを意味する&nbsp;&mdash;&nbsp;関数が期待通り動いてくれたということだ。「Fail」というのは、一つ前のテストケースが（そのためのコードを書き上げる直前まで）返していたものだ&nbsp;&mdash;&nbsp;つまり、コードを実行したが、予期した結果が出なかった場合を表す。「Error」というのは、そもそもコードを正しく実行できなかったことを示している。
+
+
+en:<li>Why didn&#8217;t the code execute properly? The traceback tells all. The module you&#8217;re testing doesn&#8217;t have an exception called <code>OutOfRangeError</code>. Remember, you passed this exception to the <code>assertRaises()</code> method, because it&#8217;s the exception you want the function to raise given an out-of-range input. But the exception doesn&#8217;t exist, so the call to the <code>assertRaises()</code> method failed. It never got a chance to test the <code>to_roman()</code> function; it didn&#8217;t get that far.
+ja:<li>どうしてコードを正しく実行できなかったのだろうか？ トレースバックを見れば答えが分かる。テストしたモジュールの中に<code>OutOfRangeError</code>という名前の例外が存在しなかったのだ。思い出して欲しいのだが、この例外は範囲外の入力値が渡された時に送出されるべき例外として<code>assertRaises()</code>メソッドに渡したものだった。しかし、そもそもこの例外は存在しなかったので、<code>assertRaises()</code>メソッドの呼び出しが失敗してしまったのだ。ここでは結局、<code>to_roman()</code>関数がテストされることはなかった。そこに行き着きさえしなかったのだ。
+
+
+en:<p>To solve this problem, you need to define the <code>OutOfRangeError</code> exception in <code>roman2.py</code>.
+ja:<p>この問題を解決するためには、<code>OutOfRangeError</code>例外を<code>roman2.py</code>の中で定義する必要がある。
+
+
+en:<li>Exceptions are classes. An &#8220;out of range&#8221; error is a kind of value error&nbsp;&mdash;&nbsp;the argument value is out of its acceptable range. So this exception inherits from the built-in <code>ValueError</code> exception. This is not strictly necessary (it could just inherit from the base <code>Exception</code> class), but it feels right.
+ja:<li>例外とはクラスだ。「Out of Range」エラーはValue Errorの一種だと言える&nbsp;&mdash;&nbsp;引数の値が受け取ることのできる範囲を越えているのだ。だから、この例外は組み込みの<code>ValueError</code>例外を継承している。これは絶対に必要というわけではないのだが（基底クラスの<code>Exception</code>を継承してもいい）、こうする方が良さそうだ。
+
+
+en:<li>Exceptions don&#8217;t actually do anything, but you need at least one line of code to make a class. Calling <code>pass</code> does precisely nothing, but it&#8217;s a line of Python code, so that makes it a class.
+ja:<li>例外というものは実際には何の処理も行わないのだが、クラスを作るには少なくとも一行のコードが必要だ。<code>pass</code>は呼び出してもまったく何もしない文で、しかしそれでもPythonのコード行としての役割は果たしてくれる。だからこのように書くとクラスが作れるわけだ。
+
+
+en:<p>Now run the test suite again.
+ja:<p>それではテストスイートをもう一度実行しよう。
+
+
+en:<li>The new test is still not passing, but it&#8217;s not returning an error either. Instead, the test is failing. That&#8217;s progress! It means the call to the <code>assertRaises()</code> method succeeded this time, and the unit test framework actually tested the <code>to_roman()</code> function.
+ja:<li>この新しいテストをパスするところまでは行かないが、エラーが返されることもなく、その代わりにテストは失敗している。これで一歩前進というわけだ！ これは要するに、<code>assertRaises()</code>メソッドが正しく呼び出され、実際に<code>to_roman()</code>関数がこのユニットテストフレームワークにテストされたということを意味しているのだ。
+
+
+en:<li>Of course, the <code>to_roman()</code> function isn&#8217;t raising the <code>OutOfRangeError</code> exception you just defined, because you haven&#8217;t told it to do that yet. That&#8217;s excellent news! It means this is a valid test case&nbsp;&mdash;&nbsp;it fails before you write the code to make it pass.
+ja:<li>もちろん、<code>to_roman()</code>関数は先ほど定義した<code>OutOfRangeError</code>例外を送出していない。まだそうするように修正を加えていないからだ。こいつは朗報じゃないか！ このテストケースが有効なテストケース&nbsp;&mdash;&nbsp;パスするためのコードを書くまで通らないようなテストケース&nbsp;&mdash;&nbsp;だということだからだ。
+
+
+en:<p>Now you can write the code to make this test pass.
+ja:<p>これで、このテストをパスするためのコードを書くことができる。
+
+
+en:<p class=d>[<a href=examples/roman2.py>download <code>roman2.py</code></a>]
+ja:<p class=d>[<a href=examples/roman2.py><code>roman2.py</code>をダウンロードする</a>]
+
+
+en:<li>This is straightforward: if the given input (<var>n</var>) is greater than <code>3999</code>, raise an <code>OutOfRangeError</code> exception. The unit test does not check the human-readable string that accompanies the exception, although you could write another test that did check it (but watch out for internationalization issues for strings that vary by the user&#8217;s language or environment).
+ja:<li>実に分かりやすいコードだ。与えられた入力値（<var>n</var>）が<code>3999</code>より大きければ、<code>OutOfRangeError</code>例外を送出する。ちなみに、このユニットテストは、例外と一緒に出力されるエラー文字列については何もチェックしていないが、これ用のテストはまた別に書くことができる（ただし、文字列の多言語化の問題に注意すること。この問題はユーザーの言語や環境に依存する）。
+
+
+en:<p>Does this make the test pass? Let&#8217;s find out.
+ja:<p>これでテストをパスするようになっただろうか？ 試してみよう。
+
+
+en:<li>Hooray! Both tests pass. Because you worked iteratively, bouncing back and forth between testing and coding, you can be sure that the two lines of code you just wrote were the cause of that one test going from &#8220;fail&#8221; to &#8220;pass.&#8221; That kind of confidence doesn&#8217;t come cheap, but it will pay for itself over the lifetime of your code.
+ja:<li>やった！ テストを二つともパスしたぞ。テストとコーディングの間を行ったり来たりしながら、繰り返し作業したので、テストが「Fail」から「Pass」になったのは、さっき書いた二行のコードのおかげだと確信できる。この種の確信を得るのは大変だが、そのコードが使われる年月を総じれば、きっとその元はとれるだろう。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=romantest3>More Halting, More Fire</h2>
+ja:<h2 id=romantest3>もっと中断させて、もっと発火させる</h2>
+
+
+en:<p>Along with testing numbers that are too large, you need to test numbers that are too small. As <a href=#divingin>we noted in our functional requirements</a>, Roman numerals cannot express 0 or negative numbers.
+ja:<p>大きすぎる数字と並んで、小さすぎる数字についてもテストしなくてはならない。<a href=#divingin>機能要件で述べた</a>ように、ローマ数字は0や負の数を表すことはできないのだ。
+
+
+en:<p>Well <em>that&#8217;s</em> not good. Let&#8217;s add tests for each of these conditions.
+ja:<p>うーむ。<em>これは</em>あまりよろしくない。それぞれの条件に対するテストを付け加えよう。
+
+
+en:<p class=d>[<a href=examples/romantest3.py>download <code>romantest3.py</code></a>]
+ja:<p class=d>[<a href=examples/romantest3.py><code>romantest3.py</code>をダウンロードする</a>]
+
+
+en:<li>The <code>test_too_large()</code> method has not changed since the previous step. I&#8217;m including it here to show where the new code fits.
+ja:<li><code>test_too_large()</code>メソッドは前の段階から変わっていない。このメソッドのコードをここに載せたのは、新しいコードがどこに付け加わったのかを示すためだ。
+
+
+en:<li>Here&#8217;s a new test: the <code>test_zero()</code> method. Like the <code>test_too_large()</code> method, it tells the <code>assertRaises()</code> method defined in <code>unittest.TestCase</code> to call our <code>to_roman()</code> function with a parameter of 0, and check that it raises the appropriate exception, <code>OutOfRangeError</code>.
+ja:<li>これが新しいテストの<code>test_zero()</code>メソッドだ。<code>test_too_large()</code>と同じように、<code>unittest.TestCase</code>の中に定められている<code>assertRaises()</code>メソッドを用いて、<code>to_roman()</code>を0を引数として呼び出し、適切な例外（<code>OutOfRangeError</code>）が送出されるかどうかを確認している。
+
+
+en:<li>The <code>test_negative()</code> method is almost identical, except it passes <code>-1</code> to the <code>to_roman()</code> function. If either of these new tests does <em>not</em> raise an <code>OutOfRangeError</code> (either because the function returns an actual value, or because it raises some other exception), the test is considered failed.
+ja:<li><code>test_negative()</code>メソッドもこれとほとんど同じで、<code>-1</code>を<code>to_roman()</code>に渡しているというだけの違いしかない。この新しいテストのいずれかにおいて<code>OutOfRangeError</code>が送出され<em>なかった</em>場合（その原因としては、関数が実際の値を返したか別の例外を返したかのどちらか）には、テストは失敗したものとみなされる。
+
+
+en:<p>Now check that the tests fail:
+ja:<p>それではテストが失敗することを確かめよう：
+
+
+en:<p>Excellent. Both tests failed, as expected. Now let&#8217;s switch over to the code and see what we can do to make them pass.
+ja:<p>すばらしい。予想通りどちらのテストも失敗している。さて、今度はコードに戻って、どうすればテストをパスできるようになるのかを考えてみよう。
+
+
+en:<p class=d>[<a href=examples/roman3.py>download <code>roman3.py</code></a>]
+ja:<p class=d>[<a href=examples/roman3.py><code>roman3.py</code>をダウンロードする</a>]
+
+
+en:<li>This is a nice Pythonic shortcut: multiple comparisons at once. This is equivalent to <code>if not ((0 &lt; n) and (n &lt; 4000))</code>, but it&#8217;s much easier to read. This one line of code should catch inputs that are too large, negative, or zero.
+ja:<li>この部分ではPython流のショートカットが上手に使われていて、複数の比較演算子が同時に評価されている。意味的には<code>if not ((0 &lt; n) and (n &lt; 4000))</code>と同じだが、こちらの方が読みやすいのだ。この一行のコードで、大きすぎる数、負の数、ゼロの三種類の入力値すべてが補足される。
+
+
+en:<li>If you change your conditions, make sure to update your human-readable error strings to match. The <code>unittest</code> framework won&#8217;t care, but it&#8217;ll make it difficult to do manual debugging if your code is throwing incorrectly-described exceptions.
+ja:<li>条件を変えたら、人が読む用のエラー文字列も修正するのを忘れないように。修正しなくても<code>unittest</code>フレームワークには何の影響も及ぼさないのだが、間違った説明のついた例外が送出されると、手作業でのデバッグが面倒になるからだ。
+
+
+en:<p>I could show you a whole series of unrelated examples to show that the multiple-comparisons-at-once shortcut works, but instead I&#8217;ll just run the unit tests and prove it.
+ja:<p>本筋とは関係のない例をいくつも挙げて、複数の比較演算子を同時に評価する方法が上手く動くことを示してもいいのだが、ここではユニットテストを実行することで直接証明してみせよう。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=romantest4>And One More Thing&hellip;</h2>
+ja:<h2 id=romantest4>さらにもう一つ&hellip;&hellip;</h2>
+
+
+en:<p>There was one more <a href=#divingin>functional requirement</a> for converting numbers to Roman numerals: dealing with non-integers.
+ja:<p>数字をローマ数字に変換する際の<a href=#divingin>機能要件</a>にはもう一つあった。整数以外の数の扱いだ。
+
+
+en:<li>Oh, that&#8217;s bad.
+ja:<li>こいつは良くない。
+
+
+en:<li>Oh, that&#8217;s even worse. Both of these cases should raise an exception. Instead, they give bogus results.
+ja:<li>こいつはもっと悪い。どちらのケースでも例外を送出するべきなのに、値をでっちあげて返してしまっている。
+
+
+en:<p>Testing for non-integers is not difficult. First, define a <code>NotIntegerError</code> exception.
+ja:<p>整数でない数をテストするのは難しいことではない。まず、<code>NotIntegerError</code>例外を定義しよう。
+
+
+en:<p>Next, write a test case that checks for the <code>NotIntegerError</code> exception.
+ja:<p>次に、<code>NotIntegerError</code>例外が送出されるかどうかをチェックするテストケースを書く。
+
+
+en:<p>Now check that the test fails properly.
+ja:<p>テストがちゃんと失敗するか確かめよう。
+
+
+en:<p>Write the code that makes the test pass.
+ja:<p>テストをパスするようなコードを書こう。
+
+
+en:<li>The built-in <code>isinstance()</code> function tests whether a variable is a particular type (or, technically, any descendant type).
+ja:<li>組み込みの<code>isinstance()</code>関数は、変数が特定の型（厳密に言えば、ここにはその型を継承した型も含む）かどうかを調べるものだ。
+
+
+en:<li>If the argument <var>n</var> is not an <code>int</code>, raise our newly minted <code>NotIntegerError</code> exception.
+ja:<li>引数の<var>n</var>が<code>int</code>でなかったら、さっき新しく作った<code>NotIntegerError</code>を送出する。
+
+
+en:<p>Finally, check that the code does indeed make the test pass.
+ja:<p>最後に、このコードで本当にテストにパスするようになったかをチェックする。
+
+
+en:<p>The <code>to_roman()</code> function passes all of its tests, and I can&#8217;t think of any more tests, so it&#8217;s time to move on to <code>from_roman()</code>.
+ja:<p><code>to_roman()</code>関数はすべてのテストを見事にパスした。もうこれ以上テストを思いつかないので、<code>from_roman()</code>の方に移ることにしよう。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=romantest5>A Pleasing Symmetry</h2>
+ja:<h2 id=romantest5>すばらしき対称性</h2>
+
+
+en:<p>Converting a string from a Roman numeral to an integer sounds more difficult than converting an integer to a Roman numeral. Certainly there is the issue of validation. It&#8217;s easy to check if an integer is greater than 0, but a bit harder to check whether a string is a valid Roman numeral. But we already constructed <a href=regular-expressions.html#romannumerals>a regular expression to check for Roman numerals</a>, so that part is done.
+ja:<p>ローマ数字の文字列を整数に直すのは、整数をローマ数字に直すことよりも難しいように見える。もちろん、ここには有効なローマ数字かどうかのチェックの問題が存在する。ある整数が0より大きいかどうかをチェックするのは簡単だが、ある文字列が有効なローマ数字かどうかをチェックするのは少し難しいことだ。しかし、私たちは既に<a href=regular-expressions.html#romannumerals>ローマ数字をチェックする正規表現</a>を作成している。だから、この部分はもう完成しているのだ。
+
+
+en:<p>That leaves the problem of converting the string itself. As we&#8217;ll see in a minute, thanks to the rich data structure we defined to map individual Roman numerals to integer values, the nitty-gritty of the <code>from_roman()</code> function is as straightforward as the <code>to_roman()</code> function.
+ja:<p>文字列をどう変換するかという問題自体はまだ残っているが、すぐ後で見るように、ローマ数字と整数値との対応関係を詰め込んだデータ構造があるおかげで、<code>from_roman()</code>関数のコードの核は<code>to_roman()</code>関数と同じくらい単純なものになるのだ。
+
+
+en:<p>But first, the tests. We&#8217;ll need a &#8220;known values&#8221; test to spot-check for accuracy. Our test suite already contains <a href=#romantest1>a mapping of known values</a>; let&#8217;s reuse that.
+ja:<p>しかし、まず最初はテストだ。ここでは正確に変換されているかどうかを抜き取り検査する「既知の値」のテストが必要だろう。テストスイートには既に<a href=#romantest1>既知の値の対応表</a>が入っているので、こいつを再利用しよう。
+
+
+en:<p>There&#8217;s a pleasing symmetry here. The <code>to_roman()</code> and <code>from_roman()</code> functions are inverses of each other. The first converts integers to specially-formatted strings, the second converts specially-formated strings to integers. In theory, we should be able to &#8220;round-trip&#8221; a number by passing to the <code>to_roman()</code> function to get a string, then passing that string to the <code>from_roman()</code> function to get an integer, and end up with the same number.
+ja:<p>ここにはすばらしい対称性がある。<code>to_roman()</code>関数と<code>from_roman()</code>関数は互いを逆にしたもので、前者は整数を特定の形式の文字列に変換し、後者は特定の形式の文字列を整数に変換する。理論的には、数を「往復」させることができなくてはならない。つまり、<code>to_roman()</code>関数に渡して文字列に直し、続いてその文字列を<code>from_roman()</code>関数に渡して整数に直した場合に、最初の数が戻ってこなくてはならないのだ。
+
+
+en:<p>In this case, &#8220;all values&#8221; means any number between <code>1..3999</code>, since that is the valid range of inputs to the <code>to_roman()</code> function. We can express this symmetry in a test case that runs through all the values <code>1..3999</code>, calls <code>to_roman()</code>, calls <code>from_roman()</code>, and checks that the output is the same as the original input.
+ja:<p>ここでは、「all values」とは<code>1..3999</code>の間のすべての数を指している。これが<code>to_roman()</code>関数の適切な入力値の範囲だからだ。さて、この対称性を用いて、<code>1..3999</code>のすべての値に対して<code>to_roman()</code>を呼び出し、さらに<code>to_roman()</code>で変換を施して、出力された値が元の入力値と同じかをチェックするテストケースを作ることができる。
+
+
+en:<p>These new tests won&#8217;t even fail yet. We haven&#8217;t defined a <code>from_roman()</code> function at all, so they&#8217;ll just raise errors.
+ja:<p>これらの新しいテストはまだ失敗すらしない。<code>from_roman()</code>をまったく定義していないので、実行してもエラーが送出されるだけだ。
+
+
+en:<p>A quick stub function will solve that problem.
+ja:<p>とりあえず空の関数を定義すれば、この問題は解決する。
+
+
+en:<p>(Hey, did you notice that? I defined a function with nothing but a <a href=your-first-python-program.html#docstrings>docstring</a>. That&#8217;s legal Python. In fact, some programmers swear by it. &#8220;Don&#8217;t stub; document!&#8221;)
+ja:<p>（気が付いただろうか？ この関数は<a href=your-first-python-program.html#docstrings>ドキュメンテーション文字列</a>のみで定義されているのだ。これはPythonでは正式に認められていることだ。実際に、これを推奨しているプログラマだっている。「スタブするな、ドキュメントせよ！」）
+
+
+en:<p>Now the test cases will actually fail.
+ja:<p>このテストケースはこれで実際に失敗するようになったはずだ。
+
+
+en:<p>Now it&#8217;s time to write the <code>from_roman()</code> function.
+ja:<p>それでは<code>from_roman()</code>関数を書こう。
+
+
+en:<li>The pattern here is the same as the <a href=#romantest1><code>to_roman()</code></a> function. You iterate through your Roman numeral data structure (a tuple of tuples), but instead of matching the highest integer values as often as possible, you match the &#8220;highest&#8221; Roman numeral character strings as often as possible.
+ja:<li>この部分のパターンは<a href=#romantest1><code>to_roman()</code></a>と同じで、ローマ数字のデータ構造（タプルからなるタプル）をイテレートしていっている。ただし、前のコードではできる限り大きな整数値にマッチするようにしていたが、ここではできる限り「最大の」ローマ数字の文字列にマッチするようにしている。
+
+
+en:<p>If you're not clear how <code>from_roman()</code> works, add a <code>print</code> statement to the end of the <code>while</code> loop:
+ja:<p><code>from_roman()</code>関数がどのように動いているのかよく分からなかったら、<code>print</code>文を<code>while</code>ループの末尾につけてみるといい：
+
+
+en:<p>Time to re-run the tests.
+ja:<p>テストをもう一度実行しよう。
+
+
+en:<p>Two pieces of exciting news here. The first is that the <code>from_roman()</code> function works for good input, at least for all the <a href=#romantest1>known values</a>. The second is that the &#8220;round trip&#8221; test also passed. Combined with the known values tests, you can be reasonably sure that both the <code>to_roman()</code> and <code>from_roman()</code> functions work properly for all possible good values. (This is not guaranteed; it is theoretically possible that <code>to_roman()</code> has a bug that produces the wrong Roman numeral for some particular set of inputs, <em>and</em> that <code>from_roman()</code> has a reciprocal bug that produces the same wrong integer values for exactly that set of Roman numerals that <code>to_roman()</code> generated incorrectly. Depending on your application and your requirements, this possibility may bother you; if so, write more comprehensive test cases until it doesn't bother you.)
+ja:<p>ここから興味深いことが二つ分かる。一つ目は、<code>from_roman()</code>は適切な入力値に関しては（少なくとも全ての<a href=#romantest1>既知の値</a>については）うまく動くということだ。二つ目は、この関数が「往復」テストもパスしているということだ。既知の値に関するテスト結果と合わせると、<code>to_roman()</code>と<code>from_roman()</code>は適切な値ならどんなものについても正しく処理できると考えてもよさそうだ。（ただし絶対ではない。理論上は、特定の入力値を間違ったローマ数字に変換するバグが<code>to_roman()</code>に存在していて、<em>かつ</em><code>from_roman()</code>にも対応するバグが存在し、<code>to_roman()</code>が誤って生成したローマ数字を元の入力値に誤変換しているということもありうる。アプリケーションや要件によってはこの可能性が問題になるかもしれないが、その場合には問題が解決するまでテストケースをより包括的なものにしていけばよい）。
+
+
+en:<p class=a>&#x2042;
+ja:<p class=a>&#x2042;
+
+
+en:<h2 id=romantest6>More Bad Input</h2>
+ja:<h2 id=romantest6>不適切な入力値</h2>
+
+
+en:<p>Now that the <code>from_roman()</code> function works properly with good input, it's time to fit in the last piece of the puzzle: making it work properly with bad input. That means finding a way to look at a string and determine if it's a valid Roman numeral. This is inherently more difficult than <a href=#romantest3>validating numeric input</a> in the <code>to_roman()</code> function, but you have a powerful tool at your disposal: regular expressions. (If you&#8217;re not familiar with regular expressions, now would be a good time to read <a href=regular-expressions.html>the regular expressions chapter</a>.)
+ja:<p>これで<code>from_roman()</code>は適切な入力値をうまく処理できるようになった。それでは最後のパズルのピース&nbsp;&mdash;&nbsp;不適切な入力値の処理の問題&mdash;に取り組むとしようか。この問題は結局のところ、文字列を調べて有効なローマ数字かどうかを判断する方法を見つけ出すことに帰着する。これは<code>to_roman()</code>関数の<a href=#romantest3>数字の入力値をチェックする処理</a>よりも本質的に難しいものだ。しかし、私たちには意のままに使える強力なツールがある。そう、正規表現だ（正規表現になじみがないなら、この折に<a href=regular-expressions.html>正規表現の章</a>を読んでおいて欲しい）。
+
+
+en:<p>As you saw in <a href=regular-expressions.html#romannumerals>Case Study: Roman Numerals</a>, there are several simple rules for constructing a Roman numeral, using the letters <code>M</code>, <code>D</code>, <code>C</code>, <code>L</code>, <code>X</code>, <code>V</code>, and <code>I</code>. Let's review the rules:
+ja:<p><a href=regular-expressions.html#romannumerals>ケーススタディ: ローマ数字</a>で見たように、<code>M</code>、 <code>D</code>、 <code>C</code>、 <code>L</code>、 <code>X</code>、 <code>V</code>、<code>I</code>の文字を使ってローマ数字を組み立てる場合には、いくつかの単純なルールがある。ルールを見直してみよう：
+
+
+en:<li>Sometimes characters are additive. <code>I</code> is <code>1</code>, <code>II</code> is <code>2</code>, and <code>III</code> is <code>3</code>. <code>VI</code> is <code>6</code> (literally, &#8220;<code>5</code> and <code>1</code>&#8221;), <code>VII</code> is <code>7</code>, and <code>VIII</code> is <code>8</code>.
+ja:<li>時に文字は足し算のように働く。<code>I</code>は<code>1</code>、<code>II</code>は<code>2</code>、そして<code>III</code>は<code>3</code>だ。<code>VI</code>は<code>6</code>で（文字通り「<code>5</code>と<code>1</code>」だ）、<code>VII</code>は<code>7</code>、<code>VIII</code>は<code>8</code>。
+
+
+en:<li>The tens characters (<code>I</code>, <code>X</code>, <code>C</code>, and <code>M</code>) can be repeated up to three times. At <code>4</code>, you need to subtract from the next highest fives character. You can't represent <code>4</code> as <code>IIII</code>; instead, it is represented as <code>IV</code> (&#8220;<code>1</code> less than <code>5</code>&#8221;). <code>40</code> is written as <code>XL</code> (&#8220;<code>10</code> less than <code>50</code>&#8221;), <code>41</code> as <code>XLI</code>, <code>42</code> as <code>XLII</code>, <code>43</code> as <code>XLIII</code>, and then <code>44</code> as <code>XLIV</code> (&#8220;<code>10</code> less than <code>50</code>, then <code>1</code> less than <code>5</code>&#8221;).
+ja:<li>10の文字（<code>I</code>、<code>X</code>、<code>C</code>、<code>M</code>）は三回まで繰り返せる。<code>4</code>については、次の5の文字から引いて表さなければならない。つまり、<code>4</code>を<code>IIII</code>と表すことはできず、代わりに<code>IV</code>としなければならないのだ（「<code>5</code>引く<code>1</code>」）。<code>40</code>は<code>XL</code>と書かれ（「<code>50</code>引く<code>10</code>」）、<code>41</code>は<code>XLI</code>、<code>42</code>は<code>XLII</code>、<code>43</code>は<code>XLIII</code>、そして<code>44</code>は<code>XLIV</code>と表せられる（「<code>50</code>引く<code>10</code>と<code>5</code>引く<code>1</code>」）。
+
+en:<li>Sometimes characters are&hellip; the opposite of additive. By putting certain characters before others, you subtract from the final value. For example, at <code>9</code>, you need to subtract from the next highest tens character: <code>8</code> is <code>VIII</code>, but <code>9</code> is <code>IX</code> (&#8220;<code>1</code> less than <code>10</code>&#8221;), not <code>VIIII</code> (since the <code>I</code> character can not be repeated four times). <code>90</code> is <code>XC</code>, <code>900</code> is <code>CM</code>.
+ja:<li>時に文字は&hellip;&hellip;足し算とは逆の役割を果たす。ある文字を他の文字の前に置くと、後の文字から値を引いたことになるのだ。例えば、<code>9</code>を作るには、次の10の数から引き算をしなければならない。つまり、<code>8</code>は<code>VIII</code>だが、<code>9</code>は<code>IX</code>となり（「<code>10</code>引く<code>1</code>」）、<code>VIIII</code>とは書けないのだ（なぜなら<code>I</code>の文字を4回繰り返すことはできないから）。<code>90</code>は<code>XC</code>、<code>900</code>は<code>CM</code>となる。
+
+
+en:<li>The fives characters can not be repeated. <code>10</code> is always represented as <code>X</code>, never as <code>VV</code>. <code>100</code> is always <code>C</code>, never <code>LL</code>.
+ja:<li>5の文字は繰り返すことができない。<code>10</code>は必ず<code>X</code>と表し、<code>VV</code>とすることはできない。<code>100</code>も<code>C</code>であって、<code>LL</code>とはならない。
+
+
+en:<li>Roman numerals are read left to right, so the order of characters matters very much. <code>DC</code> is <code>600</code>; <code>CD</code> is a completely different number (<code>400</code>, &#8220;<code>100</code> less than <code>500</code>&#8221;). <code>CI</code> is <code>101</code>; <code>IC</code> is not even a valid Roman numeral (because you can't subtract <code>1</code> directly from <code>100</code>; you would need to write it as <code>XCIX</code>, &#8220;<code>10</code> less than <code>100</code>, then <code>1</code> less than <code>10</code>&#8221;).
+ja:<li>ローマ数字は左から右に読むので、文字の並べ方が非常に重要になる。<code>DC</code>は<code>600</code>だが、<code>CD</code>はそれとは全く異なる数を表すのだ（<code>400</code>、「<code>500</code>引く<code>100</code>」）。また、<code>CI</code>は<code>101</code>だが<code>IC</code>は適切なローマ数字ですらない（<code>1</code>を直接<code>100</code>から引くことはできないからだ。代わりに<code>XCIX</code>と書かなくてはならない、「<code>100</code>引く<code>10</code>、加えて<code>10</code>引く<code>1</code>」）。
+
+
+en:<p>Thus, one useful test would be to ensure that the <code>from_roman()</code> function should fail when you pass it a string with too many repeated numerals. How many is &#8220;too many&#8221; depends on the numeral.
+ja:<p>使えそうなテストとしては、ある数字が繰り返し使われすぎているような文字列を<code>from_roman()</code>に渡した場合に例外が送出されるかどうか確かめるというのがあるだろう。どれぐらい繰り返されていれば多すぎると言えるのかは、その数字によって異なる。
+
+
+en:<p>Another useful test would be to check that certain patterns aren&#8217;t repeated. For example, <code>IX</code> is <code>9</code>, but <code>IXIX</code> is never valid.
+ja:<p>他にも、繰り返すことのできない特定のパターンをチェックするのもテストとして有用だろう。例えば、<code>IX</code>は<code>9</code>だが<code>IXIX</code>はローマ数字として有効ではない。
+
+
+en:<p>A third test could check that numerals appear in the correct order, from highest to lowest value. For example, <code>CL</code> is <code>150</code>, but <code>LC</code> is never valid, because the numeral for <code>50</code> can never come before the numeral for <code>100</code>. This test includes a randomly chosen set of invalid antecedents: <code>I</code> before <code>M</code>, <code>V</code> before <code>X</code>, and so on.
+ja:<p>三つ目のテストでは、数字が正しい順番、つまり大きいものから小さいものへと並んでいるかでチェックしよう。例えば、<code>CL</code>は<code>150</code>を表すが、<code>LC</code>は有効な数字ではない。<code>50</code>を表す数字が<code>100</code>を表す数字の前にくることはないからだ。このテストには不適切な数字が前に来ているパターンをランダムに選んで入れるとしよう。<code>M</code>の前に<code>I</code>があるとか、<code>X</code>の前に<code>V</code>があるとかいう場合だ。
+
+
+en:<p>Each of these tests relies the <code>from_roman()</code> function raising a new exception, <code>InvalidRomanNumeralError</code>, which we haven&#8217;t defined yet.
+ja:<p>これら三つのテストはすべて<code>from_roman()</code>が<code>InvalidRomanNumeralError</code>という新しい例外を送出することを前提としているが、この例外はまだ定義されていない。
+
+
+en:<p>All three of these tests should fail, since the <code>from_roman()</code> function doesn&#8217;t currently have any validity checking. (If they don&#8217;t fail now, then what the heck are they testing?)
+ja:<p>今のところ<code>from_roman()</code>関数にはローマ数字の有効性をチェックする部分がないので、この三つのテストはすべて失敗しなくてはならないはずだ（もしこれで失敗しなかったら、一体何のテストになってるっていうんだい？）。
+
+
+en:<p>Good deal. Now, all we need to do is add the <a href=regular-expressions.html#romannumerals>regular expression to test for valid Roman numerals</a> into the <code>from_roman()</code> function.
+ja:<p>よし、うまくいった。後は<a href=regular-expressions.html#romannumerals>有効なローマ数字かをチェックする正規表現</a>を<code>from_roman()</code>関数に組み込めばいい。
+
+
+en:<p>And re-run the tests&hellip;
+ja:<p>では再びテストを実行するとしよう&hellip;&hellip;
+
+
+en:<p>And the anticlimax award of the year goes to&hellip; the word &#8220;<code>OK</code>&#8221;, which is printed by the <code>unittest</code> module when all the tests pass.
+ja:<p>そして今年の拍子抜け賞に輝くのは&hellip;&hellip;「<code>OK</code>」の文字です。これはすべてのテストをパスした際に<code>unittest</code>モジュールが出力したものであります。
+
+
+en:<p class=v><a href=advanced-iterators.html rel=prev title='back to &#8220;Advanced Iterators&#8221;'><span class=u>&#x261C;</span></a> <a href=refactoring.html rel=next title='onward to &#8220;Refactoring&#8221;'><span class=u>&#x261E;</span></a>
+ja:<p class=v><a href=advanced-iterators.html rel=prev title='「高度なイテレータ」に戻る'><span class=u>&#x261C;</span></a> <a href=refactoring.html rel=next title='「リファクタリング」へ進む'><span class=u>&#x261E;</span></a>
+
+
+en:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+ja:<p class=c>&copy; 2001&ndash;10 <a href=about.html>Mark Pilgrim</a>
+
+
