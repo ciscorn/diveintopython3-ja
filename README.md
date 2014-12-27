@@ -14,3 +14,5 @@ License
 
 Creative Commons BY-SA 3.0
 
+by Fukada &amp; Fujimoto
+
